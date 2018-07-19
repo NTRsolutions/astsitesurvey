@@ -10,7 +10,7 @@
     android:weightSum="1">
 
 
-    <com.telecom.ast.sitesurvey.component.FNButton
+    <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_40dp"
@@ -27,7 +27,7 @@
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <com.telecom.ast.sitesurvey.component.FNButton
+    <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_40dp"

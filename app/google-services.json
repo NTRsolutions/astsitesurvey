@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "409109697664",
+    "firebase_url": "https://sitesurvey-c4446.firebaseio.com",
+    "project_id": "sitesurvey-c4446",
+    "storage_bucket": "sitesurvey-c4446.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409109697664:android:81acb8be8f50d3bc",
+        "android_client_info": {
+          "package_name": "com.telecom.ast.sitesurvey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409109697664-jld881l4trlaprdsd40cpv0kka5s7u69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFshsJpLkxoUcrtF5Sij3ehwKHu31oOBY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -40,22 +40,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:background="@color/red"
             android:gravity="center_vertical"
             android:minHeight="@dimen/_40dp"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <TextView
+            <com.telecom.ast.sitesurvey.component.FNTextView
                 android:id="@+id/error_msg"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="@dimen/_2dp"
+                android:text="errrrrrrr"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white" />
 
-            <com.telecom.ast.sitesurvey.component.FontViewField
+            <com.telecom.ast.sitesurvey.component.FNFontViewField
                 android:id="@+id/closeErrorIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

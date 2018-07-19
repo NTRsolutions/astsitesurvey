@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -214,6 +215,11 @@ public abstract class MainFragment extends Fragment implements View.OnClickListe
 
     protected Parcelable[] getParcelableArray(String key) {
         return this.getArguments().getParcelableArray(key);
+    }
+
+
+    protected void showErrorIndicator(@StringRes int messageResId, Object... args) {
+        ASTUIUtil.showErrorIndicator(getActivity(), getString(messageResId, args), getHostActivity().headerView());
     }
 
 }

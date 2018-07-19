@@ -16,13 +16,13 @@ public class HeaderFragment extends MainFragment {
 
     protected String headerTxt;
     protected TextView title;
-    protected FontViewField sliderBtn,backButton;
+    protected FontViewField sliderBtn, backButton;
     private boolean showBackButton;
     private boolean showMenuButton;
 
     @Override
     protected void getArgs() {
-        this.showMenuButton = getArguments().getBoolean("showMenuButton",true);
+        this.showMenuButton = getArguments().getBoolean("showMenuButton", true);
         headerTxt = this.getArguments().getString("headerTxt", "");
     }
 
@@ -79,4 +79,6 @@ public class HeaderFragment extends MainFragment {
             ASTUtil.setTextFromResourceName(ASTStringUtil.getStringForID(FNResources.string.get(this.headerTxt)), this.title);
         }
     }
+
+
 }

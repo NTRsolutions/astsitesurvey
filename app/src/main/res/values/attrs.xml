@@ -1,10 +1,5 @@
 <resources>
 
-    <declare-styleable name="TileView">
-        <attr name="imgHeight" format="dimension"/>
-        <attr name="imgWidth" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="FNImageView">
         <attr name="isCircular" format="boolean" />
     </declare-styleable>
@@ -19,5 +14,11 @@
     </declare-styleable>
 
 
+    <declare-styleable name="FNTileView">
+        <attr name="imgHeight" format="dimension" />
+        <attr name="imgWidth" format="dimension" />
+        <attr name="isCircularImg" format="boolean" />
+        <attr name="outerPadding" format="dimension" />
+    </declare-styleable>
 
 </resources>
