@@ -18,6 +18,7 @@
         android:padding="@dimen/_5dp"
         android:text="BASIC DATA INFORMATION"
         android:textAlignment="center"
+        android:textColor="@color/blackMedium"
         android:textSize="@dimen/_14dp"
         android:textStyle="bold" />
 
@@ -51,6 +52,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Date"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -91,6 +93,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Time"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -132,6 +135,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Surveyor Name"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -171,6 +175,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Site Id"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -210,6 +215,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Site Name"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -250,6 +256,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Address"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -290,6 +297,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Circle"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
 
@@ -303,7 +311,7 @@
                     android:gravity="left|center_vertical"
                     android:hint="Enter Address"
                     android:minHeight="@dimen/_28dp"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
             </LinearLayout>
 
@@ -322,6 +330,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="SSA"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
 
@@ -354,6 +363,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="District"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
 
@@ -384,6 +394,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="City"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -413,10 +424,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_3dp"
-                android:layout_marginLeft="@dimen/_8dp"
-                android:layout_marginRight="@dimen/_8dp"
-                android:layout_marginTop="@dimen/_10dp"
+                android:layout_margin="@dimen/_4dp"
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
@@ -427,6 +435,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Pincode"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -529,7 +538,7 @@
                         android:gravity="right|center"
                         android:padding="@dimen/_6dp"
                         android:text="Next"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
 
                     <ImageView

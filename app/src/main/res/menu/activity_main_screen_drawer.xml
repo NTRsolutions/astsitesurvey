@@ -6,24 +6,9 @@
             android:id="@+id/nav_home"
             android:title="HOME" />
         <item
-            android:id="@+id/nav_tvActivitySheet"
-            android:title="Activity Monitor" />
-        <item
-            android:id="@+id/nav_tvActivityEntryReport"
-            android:title="Activity Status Report" />
-        <item
-            android:id="@+id/nav_tvTransit"
-            android:title="Transit" />
-        <item
-            android:id="@+id/nav_tvExpenseScreen"
-            android:title="Expenses" />
-        <item
             android:id="@+id/nav_tvComplaint"
-            android:title="Complaint" />
-       <!-- <item
-            android:id="@+id/nav_tvAbout"
-            android:icon="@drawable/about_icon"
-            android:title="About" />-->
+            android:title="About" />
+
 
     </group>
 

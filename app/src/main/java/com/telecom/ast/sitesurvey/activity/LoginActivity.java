@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     //get data from UI
     public void datatoView() {
         commonFunctions = new ASTUIUtil();
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         userId = pref.getString("USER_ID", "");
         if (!userId.equals("")) {
             Intent intentHome = new Intent(LoginActivity.this, MainActivity.class);
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     private void parseLoginServiceData(String result) {
         if (result != null) {
             try {
-                pref = this.getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                pref = this.getApplicationContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
                 JSONObject jsonRootObject = new JSONObject(result);
                 String jsonStatus = jsonRootObject.optString("Status").toString();
                 if (jsonStatus.equals("1")) {

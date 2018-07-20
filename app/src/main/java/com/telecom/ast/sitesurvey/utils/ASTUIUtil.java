@@ -1571,7 +1571,7 @@ public class ASTUIUtil {
             context.startActivity(intent);
 
             /*SharedPreferences pref;
-            pref = context.getApplicationContext().getSharedPreferences("MyPref", context.MODE_PRIVATE);
+            pref = context.getApplicationContext().getSharedPreferences("SharedPref", context.MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             //editor.putString("appName", apkName);
             editor.putString("appName", apkName);

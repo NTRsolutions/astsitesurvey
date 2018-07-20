@@ -41,7 +41,7 @@ public class SiteOnDgSetFragment extends MainFragment {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
         this.nextLayout = findViewById(R.id.nextLayout);
-        this.perviousLayout = findViewById(R.id.nextLayout);
+        this.perviousLayout = findViewById(R.id.perviousLayout);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SiteOnDgSetFragment extends MainFragment {
 
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strDgCurrent = pref.getString("DgCurrent", "");
         strDgFrequency = pref.getString("DgFrequency", "");
         strDgVoltage = pref.getString("DgVoltage", "");

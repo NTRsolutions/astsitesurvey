@@ -15,7 +15,7 @@ import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnDgSetFragment
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsFragment;
 
 public class NewSurveyPagerAdapter extends FragmentStatePagerAdapter {
-    int mNumOfPage = 11;
+    int mNumOfPage = 10;
 
     public NewSurveyPagerAdapter(FragmentManager fm) {
         super(fm);

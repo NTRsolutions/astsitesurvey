@@ -18,6 +18,7 @@
         android:padding="@dimen/_5dp"
         android:text="EB Meter INFORMATION"
         android:textAlignment="center"
+        android:textColor="@color/blackMedium"
         android:textSize="@dimen/_14dp"
         android:textStyle="bold" />
 
@@ -50,6 +51,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Meter Reading"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -71,8 +73,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Meter Reading"
-                        android:textColor="@color/text_color"
                         android:inputType="number"
+                        android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
             </LinearLayout>
@@ -92,6 +94,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Meter Number"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -132,6 +135,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Available Hours"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -192,9 +196,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Photo EB Meter"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
@@ -229,9 +235,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Photo Monthly Bill"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
@@ -255,6 +263,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Supply Single Phase"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -296,6 +305,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Supply 3 Phase Meter"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -377,7 +387,7 @@
                         android:gravity="left|center"
                         android:padding="@dimen/_6dp"
                         android:text="Previous"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
                 </LinearLayout>
 
@@ -398,7 +408,7 @@
                         android:gravity="right|center"
                         android:padding="@dimen/_6dp"
                         android:text="Next"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
 
                     <ImageView

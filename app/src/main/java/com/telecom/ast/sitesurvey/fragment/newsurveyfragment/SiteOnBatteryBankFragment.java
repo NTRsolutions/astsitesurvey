@@ -54,7 +54,7 @@ public class SiteOnBatteryBankFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strVoltage = pref.getString("Voltage", "");
         strCurrent = pref.getString("Current", "");
         strSavedDateTime = pref.getString("SiteOnBBSavedDateTime", "");

@@ -16,8 +16,9 @@
         android:elevation="@dimen/_6dp"
         android:minWidth="@dimen/_30dp"
         android:padding="@dimen/_5dp"
-        android:text="SITE ON DG SET"
+        android:text="SITE ON EB SET"
         android:textAlignment="center"
+        android:textColor="@color/blackMedium"
         android:textSize="@dimen/_14dp"
         android:textStyle="bold" />
 
@@ -41,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4dp"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:textColor="@color/blackMedium">
 
                 <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="0dp"
@@ -91,6 +93,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="GRID Voltage"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -132,6 +135,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="GRID Frequency"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -211,7 +215,7 @@
                         android:gravity="left|center"
                         android:padding="@dimen/_6dp"
                         android:text="Previous"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
                 </LinearLayout>
 
@@ -231,8 +235,8 @@
                         android:layout_height="match_parent"
                         android:gravity="right|center"
                         android:padding="@dimen/_6dp"
-                        android:text="Next"
-                        android:textColor="@color/colorPrimary"
+                        android:text="Submitted"
+                        android:textColor="@color/green"
                         android:textSize="@dimen/_16dp" />
 
                     <ImageView

@@ -31,16 +31,15 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class EBMeterFragment extends MainFragment {
     TextView imgPrevious, imgNext;
-    static ImageView imageView1, imageView2;
+    static ImageView ebmeterImage, billImage;
     static boolean isImage1;
+    static String ebmPhoto, billPhoto;
     FNEditText etMeterReading, etMeterNumber, etAvailableHours, etSinglePhase, et3PhaseMeter;
-    String image1, image2, strUserId, strSavedDateTime;
-    Uri imageUri1, imageUri2;
+    String strUserId, strSavedDateTime;
     SharedPreferences pref;
-    String strMeterReading, strMeterNumber, strAvailableHours, strSupplySinglePhase, strSupplyThreePhase;
-    String strPhoto1, strPhoto2, strSiteId;
+    String strMeterReading, strMeterNumber, strAvailableHours, strSupplySinglePhase, strSupplyThreePhase, currentDateTime;
+    String strSiteId;
     LinearLayout perviousLayout, nextLayout;
-    String meterNumber, availableHours, singlePhase, threePhase, currentDateTime, meterReading;
 
     @Override
     protected int fragmentLayout() {
@@ -51,8 +50,8 @@ public class EBMeterFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        imageView1 = findViewById(R.id.image1);
-        imageView2 = findViewById(R.id.image2);
+        ebmeterImage = findViewById(R.id.image1);
+        billImage = findViewById(R.id.image2);
         etMeterReading = findViewById(R.id.etMeterReading);
         etMeterNumber = findViewById(R.id.etMeterNumber);
         etAvailableHours = findViewById(R.id.etAvailableHours);
@@ -66,8 +65,8 @@ public class EBMeterFragment extends MainFragment {
 
     @Override
     protected void setClickListeners() {
-        this.imageView1.setOnClickListener(this);
-        this.imageView2.setOnClickListener(this);
+        this.ebmeterImage.setOnClickListener(this);
+        this.billImage.setOnClickListener(this);
         this.imgNext.setOnClickListener(this);
         this.imgPrevious.setOnClickListener(this);
     }
@@ -78,15 +77,15 @@ public class EBMeterFragment extends MainFragment {
     }
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMeterReading = pref.getString("MeterReading", "");
         strMeterNumber = pref.getString("MeterNumber", "");
         strAvailableHours = pref.getString("AvailableHours", "");
         strSupplySinglePhase = pref.getString("SupplySinglePhase", "");
         strSupplyThreePhase = pref.getString("SupplyThreePhase", "");
-        strPhoto1 = pref.getString("Photo1", "");
-        strPhoto2 = pref.getString("Photo2", "");
+        ebmPhoto = pref.getString("Photo1", "");
+        billPhoto = pref.getString("Photo2", "");
         strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
@@ -95,21 +94,15 @@ public class EBMeterFragment extends MainFragment {
     protected void dataToView() {
         getSharedPrefData();
         if (!strMeterReading.equals("") || !strMeterNumber.equals("") || !strAvailableHours.equals("")
-                || !strSupplySinglePhase.equals("") || !strSupplyThreePhase.equals("") || !strPhoto1.equals("")
-                || !strPhoto2.equals("")) {
+                || !strSupplySinglePhase.equals("") || !strSupplyThreePhase.equals("")) {
             etMeterReading.setText(strMeterReading);
             etMeterNumber.setText(strMeterNumber);
             etAvailableHours.setText(strAvailableHours);
             etSinglePhase.setText(strSupplySinglePhase);
             et3PhaseMeter.setText(strSupplyThreePhase);
-
-            if (!strPhoto1.equals("")) {
-                //   image1.setText("Photo Selected");
-                image1 = strPhoto1;
-            }
-            if (!strPhoto2.equals("")) {
-                //  image2.setText("Photo Selected");
-                image2 = strPhoto2;
+            if (!ebmPhoto.equals("") || !billPhoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(ebmPhoto)).placeholder(R.drawable.noimage).into(ebmeterImage);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(billPhoto)).placeholder(R.drawable.noimage).into(billImage);
             }
         }
 
@@ -135,8 +128,8 @@ public class EBMeterFragment extends MainFragment {
                 editor.putString("AvailableHours", strAvailableHours);
                 editor.putString("SupplySinglePhase", strSupplySinglePhase);
                 editor.putString("SupplyThreePhase", strSupplyThreePhase);
-                editor.putString("Photo1", image1);
-                editor.putString("Photo2", image2);
+                editor.putString("Photo1", ebmPhoto);
+                editor.putString("Photo2", billPhoto);
                 editor.putString("EbMeterSavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
@@ -157,33 +150,33 @@ public class EBMeterFragment extends MainFragment {
 
 
     public boolean isValidate() {
-        meterReading = etMeterReading.getText().toString();
-        meterNumber = etMeterNumber.getText().toString();
-        availableHours = etAvailableHours.getText().toString();
-        singlePhase = etSinglePhase.getText().toString();
-        threePhase = et3PhaseMeter.getText().toString();
+        strMeterReading = etMeterReading.getText().toString();
+        strMeterNumber = etMeterNumber.getText().toString();
+        strAvailableHours = etAvailableHours.getText().toString();
+        strSupplySinglePhase = etSinglePhase.getText().toString();
+        strSupplyThreePhase = et3PhaseMeter.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
-        if (meterReading.equals("")) {
-            ASTUIUtil.showToast("Please Enter Meter Reading");
+        if (isEmptyStr(strMeterReading)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Meter Reading");
             return false;
-        } else if (isEmptyStr(meterNumber)) {
+        } else if (isEmptyStr(strMeterNumber)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Meter Number");
             return false;
-        } else if (isEmptyStr(availableHours)) {
+        } else if (isEmptyStr(strAvailableHours)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Available Hours");
             return false;
-        } else if (isEmptyStr(singlePhase)) {
+        } else if (isEmptyStr(strSupplySinglePhase)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Single Phase");
             return false;
-        } else if (isEmptyStr(threePhase)) {
+        } else if (isEmptyStr(strSupplyThreePhase)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Three Phase");
             return false;
-        } else if (isEmptyStr(image1)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Bill Amount for One Month Photo");
-            return true;
-        } else if (isEmptyStr(image2)) {
+        } else if (isEmptyStr(ebmPhoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select EB Meter Photo");
-            return true;
+            return false;
+        } else if (isEmptyStr(billPhoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Bill Amount for One Month Photo");
+            return false;
         }
         return true;
     }
@@ -193,12 +186,21 @@ public class EBMeterFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? imageView1 : imageView2);
-                    //compressPath.delete();
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? ebmeterImage : billImage);
+                    if (isImage1) {
+                        ebmPhoto = deviceFile.getFilePath().toString();
+                    } else {
+                        billPhoto = deviceFile.getFilePath().toString();
+                    }
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 // deviceFile.setEncodedString(ASTUtil.encodeFileTobase64(deviceFile.getFilePath()));
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? imageView1 : imageView2);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? ebmeterImage : billImage);
+                if (isImage1) {
+                    ebmPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    billPhoto = deviceFile.getFilePath().toString();
+                }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();
                 }

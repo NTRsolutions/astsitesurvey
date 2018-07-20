@@ -37,15 +37,14 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SmpsFragment extends MainFragment {
     TextView imgPrevious, imgNext;
-    static ImageView imageView1, imageView2;
+    static ImageView smpsshelifImage, smpsImag;
+    static String smpsshelifPhoto, smpsPhoto;
     static boolean isImage1;
     FNEditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etCapacity, etMake, etModel;
-    String image1 = "", image2 = "";
-    Uri imageUri1, imageUri2;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strPhoto1, strPhoto2, strSavedDateTime, strUserId, strSiteId;
+    String strSavedDateTime, strUserId, strSiteId;
     String strMakeId, strModelId, strDescriptionId;
     String[] arrMake;
     String[] arrModel;
@@ -66,8 +65,8 @@ public class SmpsFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        imageView1 = findViewById(R.id.image1);
-        imageView2 = findViewById(R.id.image2);
+        smpsshelifImage = findViewById(R.id.image1);
+        smpsImag = findViewById(R.id.image2);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
@@ -80,8 +79,8 @@ public class SmpsFragment extends MainFragment {
 
     @Override
     protected void setClickListeners() {
-        imageView1.setOnClickListener((this));
-        imageView2.setOnClickListener((this));
+        smpsshelifImage.setOnClickListener((this));
+        smpsImag.setOnClickListener((this));
         imgNext.setOnClickListener((this));
         imgPrevious.setOnClickListener((this));
         nextLayout.setOnClickListener(this);
@@ -100,7 +99,7 @@ public class SmpsFragment extends MainFragment {
      */
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("SMPS_Make", "");
         strModel = pref.getString("SMPS_Model", "");
@@ -111,8 +110,8 @@ public class SmpsFragment extends MainFragment {
         strSerialNum = pref.getString("SMPS_SerialNum", "");
         strYearOfManufacturing = pref.getString("SMPS_YearOfManufacturing", "");
         strDescription = pref.getString("SMPS_Description", "");
-        strPhoto1 = pref.getString("SMPS_Photo1", "");
-        strPhoto2 = pref.getString("SMPS_Photo2", "");
+        smpsshelifPhoto = pref.getString("SMPS_Photo1", "");
+        smpsPhoto = pref.getString("SMPS_Photo2", "");
         strSavedDateTime = pref.getString("SMPS_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
@@ -137,7 +136,7 @@ public class SmpsFragment extends MainFragment {
                 if (!strMake.equals("") && strMake.length() > 1) {
                     equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
 
-                    if (equipCapacityDataList.size() > 0) {
+                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
                             arrModel[i] = equipCapacityDataList.get(i).getName();
                         }
@@ -159,7 +158,7 @@ public class SmpsFragment extends MainFragment {
                     equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
                     arrCapacity = new String[equipDescriptionDataList.size()];
 
-                    if (equipDescriptionDataList.size() > 0) {
+                    if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
                         for (int i = 0; i < equipDescriptionDataList.size(); i++) {
                             arrCapacity[i] = equipDescriptionDataList.get(i).getName();
                         }
@@ -175,26 +174,20 @@ public class SmpsFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !strPhoto1.equals("")
-                || !strPhoto2.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-            if (!strPhoto1.equals("")) {
-                //    image1.setText("Photo Selected");
-                image1 = strPhoto1;
-            }
-            if (!strPhoto2.equals("")) {
-                // image2.setText("Photo Selected");
-                image2 = strPhoto2;
-            }
-
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
+            if (!smpsshelifPhoto.equals("") || !smpsPhoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(smpsshelifPhoto)).placeholder(R.drawable.noimage).into(smpsshelifImage);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(smpsPhoto)).placeholder(R.drawable.noimage).into(smpsImag);
+            }
         }
     }
 
@@ -210,7 +203,7 @@ public class SmpsFragment extends MainFragment {
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
             if (isValidate()) {
                 String newEquipment = "0";
-                if (equipCapacityDataList.size() > 0) {
+                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
                     for (int i = 0; i < equipCapacityDataList.size(); i++) {
                         if (capacity.equals(equipCapacityDataList.get(i).getName())) {
                             strDescriptionId = equipCapacityDataList.get(i).getId();
@@ -220,7 +213,7 @@ public class SmpsFragment extends MainFragment {
                 if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
                     strDescriptionId = "0";
                 }
-                if (arrEquipData.size() > 0) {
+                if (arrEquipData != null && arrEquipData.size() > 0) {
                     for (int i = 0; i < arrEquipData.size(); i++) {
                         if (make.equals(arrEquipData.get(i).getName())) {
                             strMakeId = arrEquipData.get(i).getId();
@@ -230,7 +223,7 @@ public class SmpsFragment extends MainFragment {
                 if (strMakeId.equals("") || strMakeId.equals("0")) {
                     strMakeId = "0";
                 }
-                if (equipDescriptionDataList.size() > 0) {
+                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
                     for (int i = 0; i < equipDescriptionDataList.size(); i++) {
                         if (make.equals(equipDescriptionDataList.get(i).getName())) {
                             strModelId = equipDescriptionDataList.get(i).getId();
@@ -251,8 +244,8 @@ public class SmpsFragment extends MainFragment {
                 editor.putString("SMPS_SerialNum", serialNumber);
                 editor.putString("SMPS_YearOfManufacturing", yearOfManufacturing);
                 editor.putString("SMPS_Description", description);
-                editor.putString("SMPS_Photo1", image1);
-                editor.putString("SMPS_Photo2", image2);
+                editor.putString("SMPS_Photo1", smpsshelifPhoto);
+                editor.putString("SMPS_Photo2", smpsPhoto);
                 editor.putString("SMPS_SavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
@@ -280,29 +273,29 @@ public class SmpsFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (isEmptyStr(make)) {
-            ASTUIUtil.showToast("Please Enter Make");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
             return false;
         } else if (isEmptyStr(model)) {
-            ASTUIUtil.showToast("Please Enter Model");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
             return false;
         } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.showToast("Please Enter Capacity");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
             return false;
         } else if (isEmptyStr(serialNumber)) {
-            ASTUIUtil.showToast("Please Enter Serial Number");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
             return false;
         } else if (isEmptyStr(yearOfManufacturing)) {
-            ASTUIUtil.showToast("Please Enter Manufacturing Year");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
             return false;
         } else if (isEmptyStr(description)) {
-            ASTUIUtil.showToast("Please Enter Description");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        } else if (isEmptyStr(image1)) {
-            ASTUIUtil.showToast("Please Select SMPS Shelf Photo");
-            return true;
-        } else if (isEmptyStr(image2)) {
-            ASTUIUtil.showToast("Please Select SMPS Photo");
-            return true;
+        } else if (isEmptyStr(smpsshelifPhoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select SMPS Shelf Photo");
+            return false;
+        } else if (isEmptyStr(smpsPhoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select SMPS Photo");
+            return false;
         }
         return true;
     }
@@ -312,10 +305,20 @@ public class SmpsFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? imageView1 : imageView2);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? smpsshelifImage : smpsImag);
+                    if (isImage1) {
+                        smpsshelifPhoto = deviceFile.getFilePath().toString();
+                    } else {
+                        smpsPhoto = deviceFile.getFilePath().toString();
+                    }
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? imageView1 : imageView2);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? smpsshelifImage : smpsImag);
+                if (isImage1) {
+                    smpsshelifPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    smpsPhoto = deviceFile.getFilePath().toString();
+                }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                 }
             }

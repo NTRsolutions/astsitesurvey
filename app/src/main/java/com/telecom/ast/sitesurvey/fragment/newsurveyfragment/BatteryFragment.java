@@ -33,15 +33,14 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
     TextView imgPrevious, imgNext;
-    static ImageView imageView1, imageView2;
+    static ImageView batteryimg, cellImg;
     static boolean isImage1;
+   static String bateryphoto, cellPhoto;
     FNEditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etMake, etModel, etCapacity;
-    String image1 = "", image2 = "";
-    Uri imageUri1, imageUri2;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strPhoto1, strPhoto2, strSavedDateTime, strUserId, strSiteId, strDescriptionId;
+    String strSavedDateTime, strUserId, strSiteId, strDescriptionId;
     String strMakeId, strModelId;
     ArrayList<EquipMakeDataModel> equipMakeList;
     AtmDatabase atmDatabase;
@@ -62,8 +61,8 @@ public class BatteryFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        imageView1 = findViewById(R.id.image1);
-        imageView2 = findViewById(R.id.image2);
+        batteryimg = findViewById(R.id.image1);
+        cellImg = findViewById(R.id.image2);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
@@ -78,8 +77,8 @@ public class BatteryFragment extends MainFragment {
     protected void setClickListeners() {
         imgPrevious.setOnClickListener(this);
         imgNext.setOnClickListener(this);
-        imageView1.setOnClickListener(this);
-        imageView2.setOnClickListener(this);
+        batteryimg.setOnClickListener(this);
+        cellImg.setOnClickListener(this);
         nextLayout.setOnClickListener(this);
         perviousLayout.setOnClickListener(this);
 
@@ -90,6 +89,10 @@ public class BatteryFragment extends MainFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void dataToView() {
@@ -109,7 +112,6 @@ public class BatteryFragment extends MainFragment {
                 String strMake = etMake.getText().toString();
                 if (!strMake.equals("") && strMake.length() > 1) {
                     ArrayList<EquipCapacityDataModel> equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-
                     if (equipCapacityDataList.size() > 0) {
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
                             arrModel[i] = equipCapacityDataList.get(i).getName();
@@ -139,21 +141,16 @@ public class BatteryFragment extends MainFragment {
             }
         });
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !strPhoto1.equals("")
-                || !strPhoto2.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-            if (!strPhoto1.equals("")) {
-                //     image1.setText("Photo Selected");
-                image1 = strPhoto1;
-            }
-            if (!strPhoto2.equals("")) {
-                //       image2.setText("Photo Selected");
-                image2 = strPhoto2;
+            if (!bateryphoto.equals("") || !cellPhoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(bateryphoto)).placeholder(R.drawable.noimage).into(batteryimg);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(cellPhoto)).placeholder(R.drawable.noimage).into(cellImg);
             }
         }
         makeDir();
@@ -166,7 +163,7 @@ public class BatteryFragment extends MainFragment {
      *     Shared Prefrences
      */
     public void getSharedprefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("Make", "");
         strModel = pref.getString("Model", "");
@@ -177,8 +174,8 @@ public class BatteryFragment extends MainFragment {
         strSerialNum = pref.getString("SerialNum", "");
         strYearOfManufacturing = pref.getString("YearOfManufacturing", "");
         strDescription = pref.getString("Description", "");
-        strPhoto1 = pref.getString("Photo1", "");
-        strPhoto2 = pref.getString("Photo2", "");
+        bateryphoto = pref.getString("Photo1", "");
+        cellPhoto = pref.getString("Photo2", "");
         strSavedDateTime = pref.getString("BbActivitySavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
 
@@ -187,7 +184,6 @@ public class BatteryFragment extends MainFragment {
 
     public void makeDir() {
         File direct = new File(Environment.getExternalStorageDirectory() + "/" + strSiteId);
-
         if (!direct.exists()) {
             File wallpaperDirectory = new File("/sdcard/" + strSiteId + "/");
             wallpaperDirectory.mkdirs();
@@ -208,7 +204,7 @@ public class BatteryFragment extends MainFragment {
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
             if (isValidate()) {
                 String newEquipment = "0";
-                if (equipCapacityList.size() > 0) {
+                if (equipCapacityList != null && equipCapacityList.size() > 0) {
                     for (int i = 0; i < equipCapacityList.size(); i++) {
                         if (capacity.equals(equipCapacityList.get(i).getName())) {
                             strDescriptionId = equipCapacityList.get(i).getId();
@@ -218,7 +214,7 @@ public class BatteryFragment extends MainFragment {
                 if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
                     strDescriptionId = "0";
                 }
-                if (equipMakeList.size() > 0) {
+                if (equipMakeList != null && equipMakeList.size() > 0) {
                     for (int i = 0; i < equipMakeList.size(); i++) {
                         if (make.equals(equipMakeList.get(i).getName())) {
                             strMakeId = equipMakeList.get(i).getId();
@@ -228,7 +224,7 @@ public class BatteryFragment extends MainFragment {
                 if (strMakeId.equals("") || strMakeId.equals("0")) {
                     strMakeId = "0";
                 }
-                if (equipCapacityList.size() > 0) {
+                if (equipCapacityList != null && equipCapacityList.size() > 0) {
                     for (int i = 0; i < equipCapacityList.size(); i++) {
                         if (make.equals(equipCapacityList.get(i).getName())) {
                             strModelId = equipCapacityList.get(i).getId();
@@ -249,8 +245,8 @@ public class BatteryFragment extends MainFragment {
                 editor.putString("SerialNum", serialNumber);
                 editor.putString("YearOfManufacturing", yearOfManufacturing);
                 editor.putString("Description", description);
-                editor.putString("Photo1", image1);
-                editor.putString("Photo2", image2);
+                editor.putString("Photo1", bateryphoto);
+                editor.putString("Photo2", cellPhoto);
                 editor.putString("BbActivitySavedDateTime", currentDateTime);
                 strMakeId = pref.getString("", "");
                 strModelId = pref.getString("", "");
@@ -290,12 +286,12 @@ public class BatteryFragment extends MainFragment {
         } else if (isEmptyStr(description)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        } else if (isEmptyStr(image1)) {
-            ASTUIUtil.showToast("Please Select Battery Bank Photo");
-            return true;
-        } else if (isEmptyStr(image2)) {
-            ASTUIUtil.showToast("Please Select One Cell Photo");
-            return true;
+        } else if (isEmptyStr(bateryphoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
+            return false;
+        } else if (isEmptyStr(cellPhoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
+            return false;
         }
         return true;
     }
@@ -308,29 +304,36 @@ public class BatteryFragment extends MainFragment {
     }
 
 
+
     public static void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? imageView1 : imageView2);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? batteryimg : cellImg);
+                    if (isImage1) {
+                        bateryphoto = deviceFile.getFilePath().toString();
+                    } else {
+                        cellPhoto = deviceFile.getFilePath().toString();
+                    }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                // deviceFile.setEncodedString(ASTUtil.encodeFileTobase64(deviceFile.getFilePath()));
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? imageView1 : imageView2);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? batteryimg : cellImg);
+                if (isImage1) {
+                    bateryphoto = deviceFile.getFilePath().toString();
+                } else {
+                    cellPhoto = deviceFile.getFilePath().toString();
+                }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();
                 }
             }
         }
-
     }
-
 
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
-
 }
 

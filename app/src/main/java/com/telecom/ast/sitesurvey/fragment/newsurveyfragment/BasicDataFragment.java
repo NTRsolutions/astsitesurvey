@@ -47,7 +47,8 @@ public class BasicDataFragment extends MainFragment {
     String strCirclePosition, strSSAPosition, strDistrictPosition;
     long currentMilli;
     String dateTime, finalDate, finalTime, finalSurveyorName, finalSiteId, finalSiteName, finalAddress,
-            finalPincode, finalCity;
+            finalCity, finalPincode;
+
     int finalCircle, finalSSA, finalDistrict;
 
     @Override
@@ -217,7 +218,7 @@ public class BasicDataFragment extends MainFragment {
 
     public void getSharedPrefSaveData() {
         commonFunctions = new ASTUIUtil();
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         userId = pref.getString("USER_ID", "");
         strMilli = pref.getString("MilliSeconds", "");
         strDate = pref.getString("Date", "");
@@ -286,14 +287,7 @@ public class BasicDataFragment extends MainFragment {
 
     }
 
-    public static String getFormattedDate(String dateFormat, long milliSeconds) {
-        // Create a DateFormatter object for displaying date in specified format.
-        DateFormat formatter = new SimpleDateFormat(dateFormat);
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliSeconds);
-        return formatter.format(calendar.getTime());
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -342,12 +336,12 @@ public class BasicDataFragment extends MainFragment {
         finalSurveyorName = getTextFromView(this.etSurveyorName);
         finalSiteId = getTextFromView(this.etSiteId);
         finalSiteName = getTextFromView(this.etSiteName);
-        String finalAddress = getTextFromView(this.etAddress);
+        finalAddress = getTextFromView(this.etAddress);
         finalCircle = spCircle.getSelectedItemPosition();
         finalSSA = spSSA.getSelectedItemPosition();
         finalDistrict = spDistrict.getSelectedItemPosition();
-        String finalCity = getTextFromView(this.etCity);
-        String finalPincode = getTextFromView(this.etPincode);
+        finalCity = getTextFromView(this.etCity);
+        finalPincode = getTextFromView(this.etPincode);
         if (isEmptyStr(finalSurveyorName)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter SurveyorName");
             return false;

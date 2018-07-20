@@ -18,6 +18,7 @@
         android:padding="@dimen/_5dp"
         android:text="SMPS"
         android:textAlignment="center"
+        android:textColor="@color/blackMedium"
         android:textSize="@dimen/_14dp"
         android:textStyle="bold" />
 
@@ -51,6 +52,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Make"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -91,6 +93,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Model"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -131,6 +134,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Capacity"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -171,6 +175,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Serial Number"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -211,6 +216,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Year of Manufacturing"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -252,6 +258,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Description"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -310,9 +317,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Photo(SMPS Shelf)"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
@@ -342,11 +351,13 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
-                            android:src="@drawable/noimage" />
+                            android:src="@drawable/noimage"
+                            android:textColor="@color/blackMedium" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Photo(SMPS)"
                             android:textAlignment="center"
@@ -411,7 +422,7 @@
                         android:gravity="left|center"
                         android:padding="@dimen/_6dp"
                         android:text="Previous"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
                 </LinearLayout>
 
@@ -432,7 +443,7 @@
                         android:gravity="right|center"
                         android:padding="@dimen/_6dp"
                         android:text="Next"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
 
                     <ImageView

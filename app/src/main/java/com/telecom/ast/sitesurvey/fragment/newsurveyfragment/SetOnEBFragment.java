@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SetOnEBFragment extends MainFragment {
     FNEditText etGridCurrent, etGridVoltage, etGridFrequency;
@@ -51,15 +52,16 @@ public class SetOnEBFragment extends MainFragment {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
         this.nextLayout = findViewById(R.id.nextLayout);
-        this.perviousLayout = findViewById(R.id.nextLayout);
+        this.perviousLayout = findViewById(R.id.perviousLayout);
 
     }
 
     @Override
     protected void setClickListeners() {
         imgNext.setOnClickListener(this);
-        imgPrevious.setOnClickListener(this);
+
         nextLayout.setOnClickListener(this);
+        imgPrevious.setOnClickListener(this);
         perviousLayout.setOnClickListener(this);
     }
 
@@ -68,16 +70,20 @@ public class SetOnEBFragment extends MainFragment {
 
     }
 
-    @Override
-    protected void dataToView() {
-        atmDatabase = new AtmDatabase(getContext());
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+    public void getSharedPrefData() {
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strGridCurrent = pref.getString("GridCurrent", "");
         strGridVoltage = pref.getString("GridVoltage", "");
         strGridFrequency = pref.getString("GridFrequency", "");
         strUserId = pref.getString("USER_ID", "");
         strSavedDateTime = pref.getString("SetOnEbSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+    }
+
+    @Override
+    protected void dataToView() {
+        atmDatabase = new AtmDatabase(getContext());
+        getSharedPrefData();
         if (!strGridCurrent.equals("") || !strGridVoltage.equals("") || !strGridFrequency.equals("")) {
             etGridCurrent.setText(strGridCurrent);
             etGridVoltage.setText(strGridVoltage);
@@ -86,7 +92,7 @@ public class SetOnEBFragment extends MainFragment {
     }
 
     public void saveBasicDataDetails() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String userId = pref.getString("USER_ID", "");
         String strMilli = pref.getString("MilliSeconds", "");
         String strDate = pref.getString("Date", "");
@@ -123,7 +129,7 @@ public class SetOnEBFragment extends MainFragment {
 
     public void saveEbMeterDataDetails() {
         EbMeterDataModel ebMeterDataModel = new EbMeterDataModel();
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strEbMeterUserId = pref.getString("USER_ID", "");
         String strEbMeterReading = pref.getString("MeterReading", "");
         String strEbMeterNumber = pref.getString("MeterNumber", "");
@@ -154,7 +160,7 @@ public class SetOnEBFragment extends MainFragment {
 
     public void saveSiteOnBb() {
         SiteOnBatteryBankDataModel siteOnBatteryBankDataModel = new SiteOnBatteryBankDataModel();
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strSiteOnBbVoltage = pref.getString("Voltage", "");
         String strSiteOnBbCurrent = pref.getString("Current", "");
         String strSiteOnBbSavedDateTime = pref.getString("SiteOnBBSavedDateTime", "");
@@ -171,7 +177,7 @@ public class SetOnEBFragment extends MainFragment {
 
     public void saveSiteOnDg() {
         SiteOnDG siteOnDGDataModel = new SiteOnDG();
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strDgCurrent = pref.getString("DgCurrent", "");
         String strDgFrequency = pref.getString("DgFrequency", "");
         String strDgVoltage = pref.getString("DgVoltage", "");
@@ -207,7 +213,7 @@ public class SetOnEBFragment extends MainFragment {
     public void saveEquipmentData() {
         SelectedEquipmentDataModel selectedEquipmentDataModel = new SelectedEquipmentDataModel();
         List<SelectedEquipmentDataModel> selectedEquipmentDataList = new ArrayList<>();
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         //----------------------------Adding Battery Data-----------------------------------------
         String strBbMake = pref.getString("Make", "");
@@ -499,11 +505,11 @@ public class SetOnEBFragment extends MainFragment {
             String dgCurrent = etGridCurrent.getText().toString().trim();
             String dgFrequency = etGridVoltage.getText().toString().trim();
             String dgVoltage = etGridFrequency.getText().toString().trim();
-            if (dgCurrent.equals("")) {
+            if (isEmptyStr(dgCurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
-            } else if (dgFrequency.equals("")) {
+            } else if (isEmptyStr(dgFrequency)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
-            } else if (dgVoltage.equals("")) {
+            } else if (isEmptyStr(dgVoltage)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
             } else {
                 SharedPreferences.Editor editor = pref.edit();
@@ -521,11 +527,12 @@ public class SetOnEBFragment extends MainFragment {
                 saveSiteOnDg();
                 saveSiteOnEb();
                 saveEquipmentData();
+
                 progressDialog.dismiss();
                 saveScreenData(false, true);
             }
         } else if (view.getId() == R.id.imgPrevious || view.getId() == R.id.perviousLayout) {
-            saveScreenData(true, false);
+            saveScreenData(false, false);
         }
 
     }

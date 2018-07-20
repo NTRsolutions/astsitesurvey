@@ -14,6 +14,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:elevation="@dimen/_6dp"
+        android:textColor="@color/blackMedium"
         android:minWidth="@dimen/_30dp"
         android:padding="@dimen/_5dp"
         android:text="DG INFORMATION"
@@ -49,6 +50,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
+                    android:textColor="@color/blackMedium"
                     android:text="Make"
                     android:textSize="@dimen/_14dp" />
 
@@ -91,6 +93,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Model"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -131,6 +134,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
+                    android:textColor="@color/blackMedium"
                     android:text="Capacity"
                     android:textSize="@dimen/_14dp" />
 
@@ -173,6 +177,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Serial Number"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -214,6 +219,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
+                    android:textColor="@color/blackMedium"
                     android:text="Date of Manufacturing"
                     android:textSize="@dimen/_14dp" />
 
@@ -257,6 +263,7 @@
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
                     android:text="Description"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
                 <android.support.v7.widget.CardView
@@ -311,6 +318,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:elevation="@dimen/_6dp"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -319,6 +327,7 @@
                             android:padding="@dimen/_5dp"
                             android:text="Photo(Set Plate)"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
@@ -355,6 +364,8 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_5dp"
                             android:text="Photo(Outside)"
+                            android:elevation="@dimen/_6dp"
+                            android:textColor="@color/blackMedium"
                             android:textAlignment="center"
                             android:textSize="@dimen/_13dp" />
 
@@ -418,8 +429,8 @@
                         android:layout_height="match_parent"
                         android:gravity="left|center"
                         android:padding="@dimen/_6dp"
+                        android:textColor="@color/blackMedium"
                         android:text="Previous"
-                        android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_16dp" />
                 </LinearLayout>
 
@@ -440,7 +451,7 @@
                         android:gravity="right|center"
                         android:padding="@dimen/_6dp"
                         android:text="Next"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/blackMedium"
                         android:textSize="@dimen/_16dp" />
 
                     <ImageView

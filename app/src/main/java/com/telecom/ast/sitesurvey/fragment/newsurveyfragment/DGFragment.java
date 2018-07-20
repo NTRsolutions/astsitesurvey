@@ -37,17 +37,15 @@ import static android.support.v4.provider.FontsContractCompat.FontRequestCallbac
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class DGFragment extends MainFragment {
-    TextView tvPartName;
     TextView imgPrevious, imgNext;
-    static ImageView imageView1, imageView2;
+    static ImageView plateImage, outSiteImage;
     static boolean isImage1;
     EditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etMake, etModel, etCapacity;
-    String image1 = "", image2 = "";
-    Uri imageUri1, imageUri2;
+    static String platePhoto, outsitePhoto;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strPhoto1, strPhoto2, strSavedDateTime, strUserId, strSiteId, strDescriptionId;
+    String strSavedDateTime, strUserId, strSiteId, strDescriptionId;
     String strMakeId, strModelId;
     String[] arrMake;
     String[] arrModel;
@@ -68,8 +66,8 @@ public class DGFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        imageView1 = findViewById(R.id.image1);
-        imageView2 = findViewById(R.id.image2);
+        plateImage = findViewById(R.id.image1);
+        outSiteImage = findViewById(R.id.image2);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
@@ -84,8 +82,8 @@ public class DGFragment extends MainFragment {
 
     @Override
     protected void setClickListeners() {
-        imageView1.setOnClickListener(this);
-        imageView2.setOnClickListener(this);
+        plateImage.setOnClickListener(this);
+        outSiteImage.setOnClickListener(this);
         imgNext.setOnClickListener(this);
         imgPrevious.setOnClickListener(this);
     }
@@ -99,7 +97,7 @@ public class DGFragment extends MainFragment {
      * Shared Prefrences
      */
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("DG_Make", "");
         strModel = pref.getString("DG_Model", "");
@@ -110,8 +108,8 @@ public class DGFragment extends MainFragment {
         strSerialNum = pref.getString("DG_SerialNum", "");
         strYearOfManufacturing = pref.getString("DG_YearOfManufacturing", "");
         strDescription = pref.getString("DG_Description", "");
-        strPhoto1 = pref.getString("DG_Photo1", "");
-        strPhoto2 = pref.getString("DG_Photo2", "");
+        platePhoto = pref.getString("DG_Photo1", "");
+        outsitePhoto = pref.getString("DG_Photo2", "");
         strSavedDateTime = pref.getString("DG_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
@@ -137,7 +135,7 @@ public class DGFragment extends MainFragment {
                 String strMake = etMake.getText().toString();
                 if (!strMake.equals("") && strMake.length() > 1) {
                     equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-                    if (equipCapacityDataList.size() > 0) {
+                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
                             arrModel[i] = equipCapacityDataList.get(i).getName();
                         }
@@ -169,26 +167,20 @@ public class DGFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !strPhoto1.equals("")
-                || !strPhoto2.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-            if (!strPhoto1.equals("")) {
-                //  image1.setText("Photo Selected");
-                image1 = strPhoto1;
-            }
-            if (!strPhoto2.equals("")) {
-                //  image2.setText("Photo Selected");
-                image2 = strPhoto2;
-            }
-
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
+            if (!platePhoto.equals("") || !outsitePhoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(platePhoto)).placeholder(R.drawable.noimage).into(plateImage);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(outsitePhoto)).placeholder(R.drawable.noimage).into(outSiteImage);
+            }
         }
     }
 
@@ -204,7 +196,7 @@ public class DGFragment extends MainFragment {
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
             if (isValidate()) {
                 String newEquipment = "0";
-                if (equipCapacityDataList.size() > 0) {
+                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
                     for (int i = 0; i < equipCapacityDataList.size(); i++) {
                         if (capacity.equals(equipCapacityDataList.get(i).getName())) {
                             strDescriptionId = equipCapacityDataList.get(i).getId();
@@ -214,7 +206,7 @@ public class DGFragment extends MainFragment {
                 if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
                     strDescriptionId = "0";
                 }
-                if (arrEquipData.size() > 0) {
+                if (arrEquipData != null && arrEquipData.size() > 0) {
                     for (int i = 0; i < arrEquipData.size(); i++) {
                         if (make.equals(arrEquipData.get(i).getName())) {
                             strMakeId = arrEquipData.get(i).getId();
@@ -224,7 +216,7 @@ public class DGFragment extends MainFragment {
                 if (strMakeId.equals("") || strMakeId.equals("0")) {
                     strMakeId = "0";
                 }
-                if (equipDescriptionDataList.size() > 0) {
+                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
                     for (int i = 0; i < equipDescriptionDataList.size(); i++) {
                         if (make.equals(equipDescriptionDataList.get(i).getName())) {
                             strModelId = equipDescriptionDataList.get(i).getId();
@@ -245,8 +237,8 @@ public class DGFragment extends MainFragment {
                 editor.putString("DG_SerialNum", serialNumber);
                 editor.putString("DG_YearOfManufacturing", yearOfManufacturing);
                 editor.putString("DG_Description", description);
-                editor.putString("DG_Photo1", image1);
-                editor.putString("DG_Photo2", image2);
+                editor.putString("DG_Photo1", platePhoto);
+                editor.putString("DG_Photo2", outsitePhoto);
                 editor.putString("DG_SavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
@@ -290,10 +282,10 @@ public class DGFragment extends MainFragment {
         } else if (isEmptyStr(description)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        } else if (isEmptyStr(image1)) {
+        } else if (isEmptyStr(platePhoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Set Plate Photo");
-            return true;
-        } else if (isEmptyStr(image2)) {
+            return false;
+        } else if (isEmptyStr(outsitePhoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Outside Photo");
             return false;
         }
@@ -307,11 +299,22 @@ public class DGFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? imageView1 : imageView2);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? plateImage : outSiteImage);
+                    if (isImage1) {
+                        platePhoto = deviceFile.getFilePath().toString();
+                    } else {
+                        outsitePhoto = deviceFile.getFilePath().toString();
+                    }
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? imageView1 : imageView2);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? plateImage : outSiteImage);
+                if (isImage1) {
+                    platePhoto = deviceFile.getFilePath().toString();
+                } else {
+                    outsitePhoto = deviceFile.getFilePath().toString();
+                }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
+
                 }
             }
         }

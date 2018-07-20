@@ -26,12 +26,12 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         ApplicationHelper.application().initIcons();
-        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getApplicationContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String userId = pref.getString("userId", "");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                pref = getApplicationContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
                 String userId = pref.getString("userId", "");
                 if (!userId.equals("")) {
                     Intent intentLoggedIn = new Intent(SplashScreen.this, MainActivity.class);

@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.fragment.HeaderFragment;
@@ -33,8 +34,8 @@ import com.telecom.ast.sitesurvey.fragment.HomeFragment;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.runtimepermission.PermissionResultCallback;
 import com.telecom.ast.sitesurvey.runtimepermission.PermissionUtils;
-import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTReqResCode;
+import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import java.util.ArrayList;
 
@@ -216,14 +217,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_home) {
             bundle.putString("headerTxt", "Home");
             bundle.putInt("MENU_ID", 0);
-        } else if (id == R.id.nav_tvActivitySheet) {
-            bundle.putString("headerTxt", "Activity Monitor");
-        } else if (id == R.id.nav_tvActivityEntryReport) {
-            bundle.putString("headerTxt", "Activity Status Report");
-        } else if (id == R.id.nav_tvTransit) {
-            bundle.putString("headerTxt", "Transit");
-        } else if (id == R.id.nav_tvExpenseScreen) {
-            bundle.putString("headerTxt", "Expenses");
         } else if (id == R.id.nav_tvComplaint) {
             bundle.putString("headerTxt", "Complaint");
             bundle.putString("headerTxt", "About");
@@ -420,29 +413,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String[] menuIds;
 
     public void showNavigationMenuItem() {
-        pref = getApplicationContext().getApplicationContext().getSharedPreferences("MyPref", getApplication().getApplicationContext().MODE_PRIVATE);
-        String userAccess = pref.getString("userAccess", "");
-        pref = getApplicationContext().getApplicationContext().getSharedPreferences("MyPref", getApplication().getApplicationContext().MODE_PRIVATE);
-        userName = pref.getString("userName", "");
-        menuIds = pref.getString("MenuId", "").split(",");
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
-
-        for (int i = 0; i < menuIds.length; i++) {
-            if (menuIds[i].equalsIgnoreCase("416")) {
-                nav_Menu.findItem(R.id.nav_home).setVisible(true);
-            } else if (menuIds[i].equalsIgnoreCase("417")) {
-            } else if (menuIds[i].equalsIgnoreCase("418")) {
-                nav_Menu.findItem(R.id.nav_tvActivitySheet).setVisible(true);
-            } else if (menuIds[i].equalsIgnoreCase("419")) {
-                nav_Menu.findItem(R.id.nav_tvActivityEntryReport).setVisible(true);
-            } else if (menuIds[i].equalsIgnoreCase("420")) {
-                nav_Menu.findItem(R.id.nav_tvTransit).setVisible(true);
-            } else if (menuIds[i].equalsIgnoreCase("421")) {
-                nav_Menu.findItem(R.id.nav_tvExpenseScreen).setVisible(true);
-            } else if (menuIds[i].equalsIgnoreCase("425")) {
-            }
-        }
     }
 
     //---------Run time permission---------

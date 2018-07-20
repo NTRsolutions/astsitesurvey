@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.HomeFeGridAdapter;
@@ -20,6 +21,7 @@ import com.telecom.ast.sitesurvey.model.EquipTypeDataModel;
 import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,7 @@ public class HomeFragment extends MainFragment {
     ASTUIUtil commonFunctions;
     AtmDatabase atmDatabase;
     ImageView imgRefresh;
+   ASTProgressBar _progrssBar;
 
     @Override
     protected int fragmentLayout() {
@@ -105,9 +108,10 @@ public class HomeFragment extends MainFragment {
         }
     }
 
-    ASTProgressBar _progrssBar = new ASTProgressBar(ApplicationHelper.application().getContext());
+
 
     public void getCircleMaster(String serviceURL) {
+        _progrssBar = new ASTProgressBar(getContext());
         _progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {
@@ -195,6 +199,7 @@ public class HomeFragment extends MainFragment {
      */
 
     public void getSiteMaster(String serviceURL) {
+        _progrssBar = new ASTProgressBar(getContext());
         _progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {
@@ -265,6 +270,7 @@ public class HomeFragment extends MainFragment {
      * @param serviceURL
      */
     public void getEquipmentListMaster(String serviceURL) {
+        _progrssBar = new ASTProgressBar(getContext());
         _progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {

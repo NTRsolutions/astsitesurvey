@@ -16,6 +16,7 @@ import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.ImagePickerCallback;
+import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
@@ -48,9 +49,9 @@ public class NewSurveyFragment extends MainFragment {
     protected void dataToView() {
         NewSurveyPagerAdapter mAdapter = new NewSurveyPagerAdapter(getActivity().getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
+        mPager.setOffscreenPageLimit(10);
     }
 
-    Bundle bundle = new Bundle();
     //for geting next previous click action
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -58,11 +59,12 @@ public class NewSurveyFragment extends MainFragment {
             if (intent.getAction().equalsIgnoreCase("ViewPageChange")) {
                 boolean DoneFlag = intent.getBooleanExtra("DoneFlag", false);
                 boolean NextPreviousFlag = intent.getBooleanExtra("NextPreviousFlag", false);
-
                 if (NextPreviousFlag) {
                     int currentPage = mPager.getCurrentItem();
                     mPager.setCurrentItem(currentPage + 1, true);
-                    bundle.putString("header", "header");
+                } else if (DoneFlag) {
+                    ASTUIUtil.showToast("Done All Page");
+                    getHostActivity().redirectToHomeMenu();
                 } else {
                     int currentPagepre = mPager.getCurrentItem();
                     if (currentPagepre > 0) {

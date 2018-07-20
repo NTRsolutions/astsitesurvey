@@ -37,15 +37,14 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class AirConditionerFragment extends MainFragment {
     TextView imgPrevious, imgNext;
-    static ImageView imageView1, imageView2;
+    static ImageView stickerImage, aircondImag;
     static boolean isImage1;
+    static String stickerPhoto1, aircondPhoto;
     FNEditText etSerialNum, etYear, etDescription, etType, etNumberOfAC;
     AutoCompleteTextView etCapacity, etMake, etModel;
-    String image1 = "", image2 = "";
-    Uri imageUri1, imageUri2;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
-    String strPhoto1, strPhoto2, strSavedDateTime, strUserId, strSiteId;
+    String strSavedDateTime, strUserId, strSiteId;
     String strMakeId, strModelId, strDescriptionId;
     String[] arrMake;
     String[] arrModel;
@@ -66,8 +65,8 @@ public class AirConditionerFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        imageView1 = findViewById(R.id.image1);
-        imageView2 = findViewById(R.id.image2);
+        stickerImage = findViewById(R.id.image1);
+        aircondImag = findViewById(R.id.image2);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
@@ -82,8 +81,8 @@ public class AirConditionerFragment extends MainFragment {
 
     @Override
     protected void setClickListeners() {
-        imageView1.setOnClickListener(this);
-        imageView2.setOnClickListener(this);
+        stickerImage.setOnClickListener(this);
+        aircondImag.setOnClickListener(this);
         imgNext.setOnClickListener(this);
         imgPrevious.setOnClickListener(this);
         nextLayout.setOnClickListener(this);
@@ -100,7 +99,7 @@ public class AirConditionerFragment extends MainFragment {
      */
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("AC_Make", "");
         strModel = pref.getString("AC_Model", "");
@@ -111,8 +110,8 @@ public class AirConditionerFragment extends MainFragment {
         strSerialNum = pref.getString("AC_SerialNum", "");
         strYearOfManufacturing = pref.getString("AC_YearOfManufacturing", "");
         strDescription = pref.getString("AC_Description", "");
-        strPhoto1 = pref.getString("AC_Photo1", "");
-        strPhoto2 = pref.getString("AC_Photo2", "");
+        stickerPhoto1 = pref.getString("AC_Photo1", "");
+        aircondPhoto = pref.getString("AC_Photo2", "");
         strSavedDateTime = pref.getString("AC_SavedDateTime", "");
         strType = pref.getString("AC_Type", "");
         strNumberOfAC = pref.getString("AC_Number", "");
@@ -173,8 +172,7 @@ public class AirConditionerFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !strPhoto1.equals("")
-                || !strPhoto2.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -183,18 +181,13 @@ public class AirConditionerFragment extends MainFragment {
             etDescription.setText(strDescription);
             etType.setText(strType);
             etNumberOfAC.setText(strNumberOfAC);
-
-            if (!strPhoto1.equals("")) {
-                //   image1.setText("Photo Selected");
-                image1 = strPhoto1;
-            }
-            if (!strPhoto2.equals("")) {
-                //   image2.setText("Photo Selected");
-                image2 = strPhoto2;
-            }
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
+            if (!stickerPhoto1.equals("") || !aircondPhoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(stickerPhoto1)).placeholder(R.drawable.noimage).into(stickerImage);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(aircondPhoto)).placeholder(R.drawable.noimage).into(aircondImag);
+            }
         }
     }
 
@@ -210,7 +203,7 @@ public class AirConditionerFragment extends MainFragment {
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
             if (isValidate()) {
                 String newEquipment = "0";
-                if (equipCapacityDataList.size() > 0) {
+                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
                     for (int i = 0; i < equipCapacityDataList.size(); i++) {
                         if (capacity.equals(equipCapacityDataList.get(i).getName())) {
                             strDescriptionId = equipCapacityDataList.get(i).getId();
@@ -222,7 +215,7 @@ public class AirConditionerFragment extends MainFragment {
                     strDescriptionId = "0";
                 }
 
-                if (arrEquipData.size() > 0) {
+                if (arrEquipData != null && arrEquipData.size() > 0) {
                     for (int i = 0; i < arrEquipData.size(); i++) {
                         if (make.equals(arrEquipData.get(i).getName())) {
                             strMakeId = arrEquipData.get(i).getId();
@@ -233,7 +226,7 @@ public class AirConditionerFragment extends MainFragment {
                     strMakeId = "0";
                 }
 
-                if (equipDescriptionDataList.size() > 0) {
+                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
                     for (int i = 0; i < equipDescriptionDataList.size(); i++) {
                         if (make.equals(equipDescriptionDataList.get(i).getName())) {
                             strModelId = equipDescriptionDataList.get(i).getId();
@@ -254,8 +247,8 @@ public class AirConditionerFragment extends MainFragment {
                 editor.putString("AC_SerialNum", serialNumber);
                 editor.putString("AC_YearOfManufacturing", yearOfManufacturing);
                 editor.putString("AC_Description", description);
-                editor.putString("AC_Photo1", image1);
-                editor.putString("AC_Photo2", image2);
+                editor.putString("AC_Photo1", stickerPhoto1);
+                editor.putString("AC_Photo2", aircondPhoto);
                 editor.putString("AC_SavedDateTime", currentDateTime);
                 editor.putString("AC_Type", type);
                 editor.putString("AC_Number", numOfACs);
@@ -311,12 +304,12 @@ public class AirConditionerFragment extends MainFragment {
         } else if (isEmptyStr(numOfACs)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter AC Quantity");
             return false;
-        } else if (isEmptyStr(image1)) {
+        } else if (isEmptyStr(stickerPhoto1)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sticker Photo");
-            return true;
-        } else if (isEmptyStr(image2)) {
+            return false;
+        } else if (isEmptyStr(aircondPhoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Photo");
-            return true;
+            return false;
 
         }
         return true;
@@ -327,10 +320,21 @@ public class AirConditionerFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? imageView1 : imageView2);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? stickerImage : aircondImag);
+                    if (isImage1) {
+                        stickerPhoto1 = deviceFile.getFilePath().toString();;
+                    } else {
+                        aircondPhoto = deviceFile.getFilePath().toString();
+                    }
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? imageView1 : imageView2);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? stickerImage : aircondImag);
+
+                if (isImage1) {
+                    stickerPhoto1 =deviceFile.getFilePath().toString();
+                } else {
+                    aircondPhoto = deviceFile.getFilePath().toString();
+                }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                 }
             }
