@@ -302,6 +302,7 @@ public class DGFragment extends MainFragment {
                     Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? plateImage : outSiteImage);
                     if (isImage1) {
                         platePhoto = deviceFile.getFilePath().toString();
+                      //  Log.e("size"+deviceFile.getSize());
                     } else {
                         outsitePhoto = deviceFile.getFilePath().toString();
                     }

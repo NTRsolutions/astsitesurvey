@@ -38,7 +38,7 @@ public class HomeFragment extends MainFragment {
     ASTUIUtil commonFunctions;
     AtmDatabase atmDatabase;
     ImageView imgRefresh;
-   ASTProgressBar _progrssBar;
+    ASTProgressBar _progrssBar;
 
     @Override
     protected int fragmentLayout() {
@@ -66,8 +66,9 @@ public class HomeFragment extends MainFragment {
         this.commonFunctions = new ASTUIUtil();
         this.atmDatabase = new AtmDatabase(getContext());
         this.homeFeGridAdapter = new HomeFeGridAdapter(getContext());
-        setAdaptor();
         getAllData();
+        setAdaptor();
+
     }
 
 
@@ -83,11 +84,11 @@ public class HomeFragment extends MainFragment {
             ArrayList<CircleMasterDataModel> arrCircleData = atmDatabase.getAllCircleData("Desc");
             ArrayList<SiteMasterDataModel> arrSiteData = atmDatabase.getAllSiteData("Desc");
             ArrayList<EquipMakeDataModel> arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "BB");
-            if (arrCircleData.size() <= 0)
+            if (arrCircleData != null && arrCircleData.size() <= 0)
                 getCircleMaster(serviceURLCircle);
-            if (arrSiteData.size() <= 0)
+            if (arrSiteData != null && arrSiteData.size() <= 0)
                 getSiteMaster(serviceURLSite);
-            if (arrEquipData.size() <= 0)
+            if (arrEquipData != null && arrEquipData.size() <= 0)
                 getEquipmentListMaster(serviceURLEquipment);
         }
     }
@@ -107,7 +108,6 @@ public class HomeFragment extends MainFragment {
             refreshAllData();
         }
     }
-
 
 
     public void getCircleMaster(String serviceURL) {

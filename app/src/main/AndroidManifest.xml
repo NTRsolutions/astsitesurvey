@@ -71,7 +71,7 @@
             android:label="Login"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".filepicker.FNFilePickerActivity" />
+        <activity android:name="com.telecom.ast.sitesurvey.filepicker.FNFilePickerActivity" />
 
 
         <provider

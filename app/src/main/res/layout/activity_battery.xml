@@ -12,13 +12,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:elevation="@dimen/_6dp"
         android:minWidth="@dimen/_30dp"
-        android:textColor="@color/blackMedium"
-        android:layout_marginBottom="10dp"
         android:padding="@dimen/_5dp"
         android:text="BATTERY Information"
         android:textAlignment="center"
+        android:textColor="@color/blackMedium"
         android:textSize="@dimen/_14dp"
         android:textStyle="bold" />
 
@@ -50,8 +50,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:textColor="@color/blackMedium"
                     android:text="Make"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -89,9 +89,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
-                    android:textColor="@color/blackMedium"
                     android:gravity="center_vertical"
-                    android:text="Model"
+                    android:text="Model No."
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -117,6 +117,45 @@
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4dp"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical"
+                    android:text="Serial Number"
+                    android:textColor="@color/blackMedium"
+                    android:textSize="@dimen/_16dp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <com.telecom.ast.sitesurvey.component.FNEditText
+                        android:id="@+id/etSerialNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="@dimen/_10dp"
+                        android:background="@android:color/white"
+                        android:gravity="left|center_vertical"
+                        android:hint="Enter Serial Num"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_16dp" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -172,48 +211,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Serial Number"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_16dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etSerialNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Serial Num"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Year of Manufacturing"
+                    android:text="Manufacturing Date"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -234,7 +232,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Year"
+                        android:hint="Enter Manufacturing Date"
                         android:inputType="date"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
@@ -255,8 +253,44 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
+                    android:text="Item Condition"
                     android:textColor="@color/blackMedium"
+                    android:textSize="@dimen/_16dp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_22dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+
+                    <Spinner
+                        android:id="@+id/itemConditionSpinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:popupBackground="@color/white" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4dp"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical"
                     android:text="Description"
+                    android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
@@ -315,11 +349,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/_5dp"
                             android:elevation="@dimen/_6dp"
+                            android:padding="@dimen/_5dp"
                             android:text="Photo Battery Bank"
-                            android:textColor="@color/blackMedium"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
@@ -354,16 +388,64 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Photo One Cell"
-                            android:elevation="@dimen/_6dp"
-                            android:textColor="@color/blackMedium"
                             android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="@dimen/_150dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_130dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image3"
+                            android:layout_width="@dimen/_130dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
+                            android:padding="@dimen/_5dp"
+                            android:text="Sr No Plate Photo"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
 
             </LinearLayout>
 

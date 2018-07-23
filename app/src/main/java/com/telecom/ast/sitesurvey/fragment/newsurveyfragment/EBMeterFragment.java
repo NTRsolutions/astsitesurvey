@@ -136,7 +136,7 @@ public class EBMeterFragment extends MainFragment {
 
             }
         } else if (view.getId() == R.id.imgPrevious || view.getId() == R.id.perviousLayout) {
-            saveScreenData(false, true);
+            saveScreenData(false, false);
         }
 
     }
