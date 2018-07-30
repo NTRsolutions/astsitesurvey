@@ -7,7 +7,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,223 +29,13 @@
                 android:orientation="horizontal">
 
                 <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:id="@+id/Time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Make"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <AutoCompleteTextView
-                        android:id="@+id/etMake"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Make"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Model"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <AutoCompleteTextView
-                        android:id="@+id/etModel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Model"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Capacity"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <AutoCompleteTextView
-                        android:id="@+id/etCapacity"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Capacity"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Serial Number"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etSerialNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Serial Num"
-                        android:inputType="date"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Date of Manufacturing"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etYear"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Date"
-                        android:inputType="number"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Item Condition"
+                    android:text="Batt Voltage"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -256,20 +45,24 @@
                     android:layout_margin="@dimen/_2dp"
                     android:layout_weight="0.6"
                     android:gravity="center"
-                    android:minHeight="@dimen/_22dp"
+                    android:minHeight="@dimen/_28dp"
                     app:cardBackgroundColor="@android:color/white">
 
-
-                    <Spinner
-                        android:id="@+id/itemConditionSpinner"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:popupBackground="@color/white" />
+                    <com.telecom.ast.sitesurvey.component.FNEditText
+                        android:id="@+id/etMake"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="@dimen/_10dp"
+                        android:background="@android:color/white"
+                        android:gravity="left|center_vertical"
+                        android:hint="Entre Batt Voltage"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4dp"
@@ -282,9 +75,9 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Description"
+                    android:text="Load Current"
                     android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:textSize="@dimen/_16dp" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="0dp"
@@ -295,21 +88,59 @@
                     android:minHeight="@dimen/_28dp"
                     app:cardBackgroundColor="@android:color/white">
 
-
                     <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etDescription"
+                        android:id="@+id/etModel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Description"
+                        android:hint="Enter Load Current"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
+                        android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4dp"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical"
+                    android:text="Battery Discharge Current"
+                    android:textColor="@color/blackMedium"
+                    android:textSize="@dimen/_16dp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <com.telecom.ast.sitesurvey.component.FNEditText
+                        android:id="@+id/etSerialNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="@dimen/_10dp"
+                        android:background="@android:color/white"
+                        android:gravity="left|center_vertical"
+                        android:hint="Enter Battery Discharge Current"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_16dp" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -338,14 +169,14 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
-                            android:elevation="@dimen/_6dp"
                             android:src="@drawable/noimage" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Front Photo"
+                            android:text="Batt Voltage Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -384,7 +215,7 @@
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Open Photo"
+                            android:text="Load Current"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -394,6 +225,7 @@
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="@dimen/_150dp"
@@ -429,7 +261,7 @@
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Sr No Plate Photo"
+                            android:text="Battery Discharge Current"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -441,6 +273,8 @@
 
 
             </LinearLayout>
+
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

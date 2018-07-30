@@ -7,22 +7,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvPartName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:elevation="@dimen/_6dp"
-        android:minWidth="@dimen/_30dp"
-        android:padding="@dimen/_5dp"
-        android:text="BASIC DATA INFORMATION"
-        android:textAlignment="center"
-        android:textColor="@color/blackMedium"
-        android:textSize="@dimen/_14dp"
-        android:textStyle="bold" />
-
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -469,89 +453,21 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/_3dp"
         app:cardElevation="@dimen/_6dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnSubmit"
+            style="@style/DefaultButtonText"
+            android:layout_width="@dimen/_220dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#fff"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <LinearLayout
-                    android:id="@+id/perviousLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#fff"
-                    android:gravity="left"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_5dp"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/Previousicon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="@dimen/_5dp"
-                        android:src="@drawable/ic_left"
-                        android:textColor="@color/colorPrimary" />
-
-                    <TextView
-                        android:id="@+id/imgPrevious"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="left|center"
-                        android:padding="@dimen/_6dp"
-                        android:text="Previous"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_16dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/nextLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#fff"
-                    android:gravity="right"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_5dp">
-
-                    <TextView
-                        android:id="@+id/imgNext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="right|center"
-                        android:padding="@dimen/_6dp"
-                        android:text="Next"
-                        android:textColor="@color/blackMedium"
-                        android:textSize="@dimen/_16dp" />
-
-                    <ImageView
-                        android:id="@+id/nextIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="@dimen/_5dp"
-                        android:src="@drawable/ic_next" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_login"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:text="Submit" />
     </android.support.v7.widget.CardView>
 
 

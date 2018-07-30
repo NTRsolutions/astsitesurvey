@@ -39,4 +39,12 @@
     <string name="error_image_select_size_limit">Total file size cannot be greater than %1$s.</string>
     <string name="error_create_image_file">Failed to create image file</string>
     <string name="entermake">Please Enter Make</string>
+
+    <string name="basidatatxt">BASIC DATA INFORMATION</string>
+    <string name="batryinfo">BATTERY Information</string>
+
+    <string-array name="BTSType">
+        <item>Indoor</item>
+        <item>Outdoor</item>
+    </string-array>
 </resources>

@@ -1,12 +1,15 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -18,6 +21,7 @@ import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTErrorIndicator;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
+import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
@@ -25,6 +29,7 @@ import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
+import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +38,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
-    TextView imgPrevious, imgNext;
     static ImageView batteryimg, cellImg, sNoPlateImg;
     static boolean isImage1, isIsImage3;
-    static String bateryphoto, cellPhoto, sNoPlatephoto;
+   static String bateryphoto, cellPhoto, sNoPlatephoto;
     FNEditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etMake, etModel, etCapacity;
     SharedPreferences pref;
@@ -50,8 +54,9 @@ public class BatteryFragment extends MainFragment {
     ArrayList<EquipCapacityDataModel> equipCapacityList;
     String[] arrCapacity;
     Spinner itemConditionSpinner;
-    LinearLayout perviousLayout, nextLayout;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
+    Button btnSubmit;
+    LinearLayout descriptionLayout;
 
     @Override
     protected int fragmentLayout() {
@@ -60,8 +65,7 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        imgNext = findViewById(R.id.imgNext);
-        imgPrevious = findViewById(R.id.imgPrevious);
+        btnSubmit = findViewById(R.id.btnSubmit);
         batteryimg = findViewById(R.id.image1);
         cellImg = findViewById(R.id.image2);
         sNoPlateImg = findViewById(R.id.image3);
@@ -71,20 +75,16 @@ public class BatteryFragment extends MainFragment {
         etSerialNum = findViewById(R.id.etSerialNum);
         etYear = findViewById(R.id.etYear);
         etDescription = findViewById(R.id.etDescription);
-        this.nextLayout = findViewById(R.id.nextLayout);
-        this.perviousLayout = findViewById(R.id.nextLayout);
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
+        descriptionLayout = findViewById(R.id.descriptionLayout);
     }
 
     @Override
     protected void setClickListeners() {
-        imgPrevious.setOnClickListener(this);
-        imgNext.setOnClickListener(this);
         batteryimg.setOnClickListener(this);
         cellImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
-        nextLayout.setOnClickListener(this);
-        perviousLayout.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
 
     }
 
@@ -102,6 +102,7 @@ public class BatteryFragment extends MainFragment {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
+
     }
 
     @Override
@@ -168,6 +169,16 @@ public class BatteryFragment extends MainFragment {
         makeDir();
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
+
+        itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     /*
@@ -207,9 +218,7 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.imgPrevious || view.getId() == R.id.perviousLayout) {
-            saveScreenData(false, false);
-        } else if (view.getId() == R.id.image1) {
+        if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isIsImage3 = true;
@@ -220,7 +229,7 @@ public class BatteryFragment extends MainFragment {
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isIsImage3 = false;
-        } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
+        } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 String newEquipment = "0";
                 if (equipCapacityList != null && equipCapacityList.size() > 0) {
@@ -272,7 +281,6 @@ public class BatteryFragment extends MainFragment {
                 strMakeId = pref.getString("", "");
                 strModelId = pref.getString("", "");
                 editor.commit();
-                saveScreenData(true, false);
 
             }
 
@@ -287,7 +295,7 @@ public class BatteryFragment extends MainFragment {
         capacity = getTextFromView(this.etCapacity);
         serialNumber = getTextFromView(this.etSerialNum);
         yearOfManufacturing = getTextFromView(this.etYear);
-        itemCondition =  itemConditionSpinner.getSelectedItem().toString();
+        itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (isEmptyStr(make)) {
@@ -325,13 +333,6 @@ public class BatteryFragment extends MainFragment {
         return true;
     }
 
-    private void saveScreenData(boolean NextPreviousFlag, boolean DoneFlag) {
-        Intent intent = new Intent("ViewPageChange");
-        intent.putExtra("NextPreviousFlag", NextPreviousFlag);
-        intent.putExtra("DoneFlag", DoneFlag);
-        getActivity().sendBroadcast(intent);
-    }
-
 
     public static void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
@@ -367,5 +368,21 @@ public class BatteryFragment extends MainFragment {
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
-}
 
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
+            getResult(files);
+
+        }
+    }
+
+}

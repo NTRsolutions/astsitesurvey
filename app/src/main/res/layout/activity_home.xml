@@ -24,6 +24,7 @@
         android:layout_height="@dimen/_40dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
+        android:visibility="gone"
         android:src="@drawable/refresh_button" /><!---->
 
 </RelativeLayout>

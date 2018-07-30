@@ -1,5 +1,6 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,10 +9,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -19,6 +23,7 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
+import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
@@ -26,6 +31,7 @@ import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
+import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,15 +43,15 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SmpsFragment extends MainFragment {
     TextView imgPrevious, imgNext;
-    static ImageView smpsshelifImage, smpsImag;
-    static String smpsshelifPhoto, smpsPhoto;
-    static boolean isImage1;
-    FNEditText etSerialNum, etYear, etDescription;
+    static ImageView frontImg, openImg, sNoPlateImg;
+    static boolean isImage1, isIsImage3;
+    static String frontphoto, openPhoto, sNoPlatephoto;
+    FNEditText etSerialNum, etYear, etDescription, etnoofModule, etModuleCapacity;
     AutoCompleteTextView etCapacity, etMake, etModel;
     SharedPreferences pref;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
+    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strnoofModule, strModuleCapacity;
     String strSavedDateTime, strUserId, strSiteId;
-    String strMakeId, strModelId, strDescriptionId;
+    String strMakeId, strModelId, strDescriptionId, nofModule, ModuleCapacity;
     String[] arrMake;
     String[] arrModel;
     String[] arrCapacity;
@@ -55,6 +61,8 @@ public class SmpsFragment extends MainFragment {
     AtmDatabase atmDatabase;
     LinearLayout perviousLayout, nextLayout;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
+    LinearLayout descriptionLayout;
+    Spinner itemConditionSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -65,8 +73,9 @@ public class SmpsFragment extends MainFragment {
     protected void loadView() {
         imgNext = findViewById(R.id.imgNext);
         imgPrevious = findViewById(R.id.imgPrevious);
-        smpsshelifImage = findViewById(R.id.image1);
-        smpsImag = findViewById(R.id.image2);
+        frontImg = findViewById(R.id.image1);
+        openImg = findViewById(R.id.image2);
+        sNoPlateImg = findViewById(R.id.image3);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
@@ -75,12 +84,17 @@ public class SmpsFragment extends MainFragment {
         etDescription = findViewById(R.id.etDescription);
         this.nextLayout = findViewById(R.id.nextLayout);
         this.perviousLayout = findViewById(R.id.nextLayout);
+        itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
+        descriptionLayout = findViewById(R.id.descriptionLayout);
+        etnoofModule = findViewById(R.id.etnoofModule);
+        etModuleCapacity = findViewById(R.id.etModuleCapacity);
     }
 
     @Override
     protected void setClickListeners() {
-        smpsshelifImage.setOnClickListener((this));
-        smpsImag.setOnClickListener((this));
+        openImg.setOnClickListener(this);
+        frontImg.setOnClickListener(this);
+        sNoPlateImg.setOnClickListener(this);
         imgNext.setOnClickListener((this));
         imgPrevious.setOnClickListener((this));
         nextLayout.setOnClickListener(this);
@@ -110,16 +124,27 @@ public class SmpsFragment extends MainFragment {
         strSerialNum = pref.getString("SMPS_SerialNum", "");
         strYearOfManufacturing = pref.getString("SMPS_YearOfManufacturing", "");
         strDescription = pref.getString("SMPS_Description", "");
-        smpsshelifPhoto = pref.getString("SMPS_Photo1", "");
-        smpsPhoto = pref.getString("SMPS_Photo2", "");
+        strModuleCapacity = pref.getString("ModuleCapacity", "");
+        strnoofModule = pref.getString("noofModule", "");
+        frontphoto = pref.getString("SMPSPhoto1", "");
+        openPhoto = pref.getString("SMPSPhoto2", "");
+        sNoPlatephoto = pref.getString("SMPSPhoto3", "");
         strSavedDateTime = pref.getString("SMPS_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+    }
+
+    public void setSpinnerValue() {
+        final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
+        ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
+        itemConditionSpinner.setAdapter(homeadapter);
+
     }
 
     @Override
     protected void dataToView() {
         atmDatabase = new AtmDatabase(getContext());
         getSharedPrefData();
+        setSpinnerValue();
         arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
         arrMake = new String[arrEquipData.size()];
         arrModel = new String[arrEquipData.size()];
@@ -184,11 +209,21 @@ public class SmpsFragment extends MainFragment {
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-            if (!smpsshelifPhoto.equals("") || !smpsPhoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(smpsshelifPhoto)).placeholder(R.drawable.noimage).into(smpsshelifImage);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(smpsPhoto)).placeholder(R.drawable.noimage).into(smpsImag);
+            if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
             }
         }
+        itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
 
@@ -197,10 +232,16 @@ public class SmpsFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
+            isIsImage3 = true;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
+            isIsImage3 = true;
+        } else if (view.getId() == R.id.image3) {
+            ASTUIUtil.startImagePicker(getHostActivity());
+            isIsImage3 = false;
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
+            saveScreenData(true, false);
             if (isValidate()) {
                 String newEquipment = "0";
                 if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
@@ -244,12 +285,17 @@ public class SmpsFragment extends MainFragment {
                 editor.putString("SMPS_SerialNum", serialNumber);
                 editor.putString("SMPS_YearOfManufacturing", yearOfManufacturing);
                 editor.putString("SMPS_Description", description);
-                editor.putString("SMPS_Photo1", smpsshelifPhoto);
-                editor.putString("SMPS_Photo2", smpsPhoto);
+                editor.putString("ModuleCapacity", ModuleCapacity);
+                editor.putString("noofModule", nofModule);
+                editor.putString("SMPSPhoto1", frontphoto);
+                editor.putString("SMPSPhoto2", openPhoto);
+                editor.putString("SMPSPhoto3", sNoPlatephoto);
                 editor.putString("SMPS_SavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
             }
+
+
         } else if (view.getId() == R.id.imgPrevious || view.getId() == R.id.perviousLayout) {
             saveScreenData(false, false);
         }
@@ -271,6 +317,9 @@ public class SmpsFragment extends MainFragment {
         serialNumber = etSerialNum.getText().toString();
         yearOfManufacturing = etYear.getText().toString();
         description = etDescription.getText().toString();
+        nofModule = etnoofModule.getText().toString();
+        ModuleCapacity = etModuleCapacity.getText().toString();
+
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (isEmptyStr(make)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -290,11 +339,20 @@ public class SmpsFragment extends MainFragment {
         } else if (isEmptyStr(description)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        } else if (isEmptyStr(smpsshelifPhoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select SMPS Shelf Photo");
+        } else if (isEmptyStr(frontphoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Set Plate Photo");
             return false;
-        } else if (isEmptyStr(smpsPhoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select SMPS Photo");
+        } else if (isEmptyStr(openPhoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Outside Photo");
+            return false;
+        } else if (isEmptyStr(sNoPlatephoto)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+            return false;
+        } else if (isEmptyStr(nofModule)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Nof Of Modules");
+            return false;
+        } else if (isEmptyStr(ModuleCapacity)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Module Capacity");
             return false;
         }
         return true;
@@ -305,29 +363,36 @@ public class SmpsFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isImage1 ? smpsshelifImage : smpsImag);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                     if (isImage1) {
-                        smpsshelifPhoto = deviceFile.getFilePath().toString();
+                        frontphoto = deviceFile.getFilePath().toString();
+                    } else if (isIsImage3) {
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     } else {
-                        smpsPhoto = deviceFile.getFilePath().toString();
+                        openPhoto = deviceFile.getFilePath().toString();
                     }
+                    //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isImage1 ? smpsshelifImage : smpsImag);
+                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
-                    smpsshelifPhoto = deviceFile.getFilePath().toString();
+                    frontphoto = deviceFile.getFilePath().toString();
+                } else if (isIsImage3) {
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 } else {
-                    smpsPhoto = deviceFile.getFilePath().toString();
+                    openPhoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
+                    // deviceFile.getFilePath().delete();
                 }
             }
         }
-
     }
 
 
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
+
+
 }

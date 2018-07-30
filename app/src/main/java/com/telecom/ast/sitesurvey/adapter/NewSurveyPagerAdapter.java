@@ -3,16 +3,6 @@ package com.telecom.ast.sitesurvey.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.AirConditionerFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BasicDataFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BatteryFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.DGFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.EBMeterFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PIUVoltageStablizerFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SetOnEBFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnBatteryBankFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnDgSetFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsFragment;
 
 public class NewSurveyPagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfPage = 10;
@@ -25,7 +15,7 @@ public class NewSurveyPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         switch (position) {
-            case 0:
+           /* case 0:
                 BasicDataFragment tab1 = new BasicDataFragment();
                 return tab1;
             case 1:
@@ -56,8 +46,10 @@ public class NewSurveyPagerAdapter extends FragmentStatePagerAdapter {
                 SetOnEBFragment tab10 = new SetOnEBFragment();
                 return tab10;
             default:
-                return null;
+                return null;*/
+
         }
+        return null;
     }
 
     @Override

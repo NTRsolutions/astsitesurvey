@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,8 +34,7 @@ public class BasicDataFragment extends MainFragment {
     FNEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity;
     Spinner spDistrict, spCircle, spSSA;
     AutoCompleteTextView etSiteId, etSiteName;
-    TextView imgNext;
-    LinearLayout perviousLayout, nextLayout;
+    Button btnSubmit;
     AtmDatabase atmDatabase;
     ASTUIUtil commonFunctions;
     ArrayList<SiteMasterDataModel> arrSiteData;
@@ -69,16 +69,12 @@ public class BasicDataFragment extends MainFragment {
         this.spSSA = findViewById(R.id.spSSA);
         this.spDistrict = findViewById(R.id.spDistrict);
         this.etCity = findViewById(R.id.etCity);
-        this.imgNext = findViewById(R.id.imgNext);
-        this.nextLayout = findViewById(R.id.nextLayout);
-        this.perviousLayout = findViewById(R.id.perviousLayout);
+        this.btnSubmit = findViewById(R.id.btnSubmit);
     }
 
     @Override
     protected void setClickListeners() {
-        imgNext.setOnClickListener(this);
-        nextLayout.setOnClickListener(this);
-        perviousLayout.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -288,10 +284,9 @@ public class BasicDataFragment extends MainFragment {
     }
 
 
-
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
+        if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("USER_ID", userId);

@@ -58,7 +58,7 @@ public class HomeFragment extends MainFragment {
 
     @Override
     protected void setAccessibility() {
-
+        this.imgRefresh.setVisibility(View.VISIBLE);
     }
 
     @Override

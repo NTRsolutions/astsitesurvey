@@ -238,4 +238,38 @@
     <color name="gray_new">#757b86</color>
     <color name="select_color">#3e4656</color>
 
+    <item name="purple" type="color">#FFAA66CC</item>
+
+    <!-- <integer-array name="androidcolors">
+         <item>@color/blue</item>
+         <item>@color/purple</item>
+         <item>@color/green</item>
+         <item>@color/orange</item>
+         <item>@color/red</item>
+     </integer-array>-->
+
+
+    <color name="bright_pink">#FF007F</color>
+    <color name="chartreuse">#7FFF00</color>
+    <color name="spring_green">#00FF7F</color>
+    <color name="azure">#007FFF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+    <array name="androidcolors">
+        <item>@color/bright_pink</item>
+        <item>@color/red</item>
+        <item>@color/orange</item>
+        <item>@color/chartreuse</item>
+        <item>@color/green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/saddleBrown</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+        <item>@color/Teal_A</item>
+        <item>@color/Purple_A</item>
+
+    </array>
+
 </resources>

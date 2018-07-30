@@ -3,11 +3,6 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
@@ -30,32 +24,29 @@ import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
-public class EBMeterFragment extends MainFragment {
+public class MpptFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isIsImage3;
     static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
-    String strUserId, strSavedDateTime, meterreading, strSiteId;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime, numOfACs, sNAC;
-
+    String strUserId, strSavedDateTime, strSiteId;
+    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     SharedPreferences pref;
     AutoCompleteTextView etCapacity, etMake, etModel;
-    FNEditText etSerialNum, etYear, etDescription, ebMeterreading;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
+    FNEditText etSerialNum, etYear, etDescription;
+    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType;
     String strMakeId, strModelId, strDescriptionId;
 
     @Override
     protected int fragmentLayout() {
-        return R.layout.activity_eb_meter;
+        return R.layout.activity_mppt;
     }
 
     @Override
@@ -72,7 +63,6 @@ public class EBMeterFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
-        ebMeterreading = findViewById(R.id.ebMeterreading);
     }
 
     @Override
@@ -105,7 +95,6 @@ public class EBMeterFragment extends MainFragment {
         sNoPlatephoto = pref.getString("Photo3", "");
         strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
-        meterreading = pref.getString("Meterreading", "");
     }
 
     public void setSpinnerValue() {
@@ -121,19 +110,18 @@ public class EBMeterFragment extends MainFragment {
         setSpinnerValue();
 
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !meterreading.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-            ebMeterreading.setText(meterreading);
-            if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }
+        }
+        if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
+            Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
+            Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
+            Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
         }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -177,7 +165,6 @@ public class EBMeterFragment extends MainFragment {
                 editor.putString("AC_SerialNum", serialNumber);
                 editor.putString("AC_YearOfManufacturing", yearOfManufacturing);
                 editor.putString("AC_Description", description);
-                editor.putString("Meterreading", meterreading);
                 editor.putString("Photo1", frontphoto);
                 editor.putString("Photo2", openPhoto);
                 editor.putString("Photo3", sNoPlatephoto);
@@ -208,7 +195,6 @@ public class EBMeterFragment extends MainFragment {
         yearOfManufacturing = etYear.getText().toString();
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
-        meterreading = ebMeterreading.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (isEmptyStr(make)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -237,9 +223,6 @@ public class EBMeterFragment extends MainFragment {
 
         } else if (isEmptyStr(sNoPlatephoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-            return false;
-        } else if (isEmptyStr(meterreading)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Ac");
             return false;
         }
         return true;

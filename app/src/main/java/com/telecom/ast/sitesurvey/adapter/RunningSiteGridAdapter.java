@@ -1,7 +1,6 @@
 package com.telecom.ast.sitesurvey.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,19 @@ import android.widget.BaseAdapter;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNTileView;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteSurvetTabFragment;
+import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnBBFragment;
+
+import java.util.Random;
 
 /**
  * Created by AST on 23-01-2017.
  */
 
-public class HomeFeGridAdapter extends BaseAdapter {
+public class RunningSiteGridAdapter extends BaseAdapter {
     private Context context;
 
-    public HomeFeGridAdapter(Context context) {
+    public RunningSiteGridAdapter(Context context) {
         this.context = context;
     }
 
@@ -30,64 +32,70 @@ public class HomeFeGridAdapter extends BaseAdapter {
         gridView = new View(context);
         gridView = inflater.inflate(R.layout.fe_home_grid_item, null);
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
+        int[] androidColors = ApplicationHelper.application().getResources().getIntArray(R.array.androidcolors);
+        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
+        llGridItem.setCardViewBg(randomAndroidColor);
         if (position == 0) {
-            llGridItem.setTitle("New Survey");
-            llGridItem.setImageResource(R.drawable.ic_profiles);
+            llGridItem.setTitle("SITE ON BB");
+            llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#078f4b"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            //llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
+                    SiteOnBBFragment siteOnbbFragment = new SiteOnBBFragment();
+                    openBasicDataFragment(siteOnbbFragment, "SITE ON BB");
 
                 }
             });
-        }
-        if (position == 1) {
-            llGridItem.setTitle("Sync Surveys");
-            llGridItem.setImageResource(R.drawable.ic_sync);
+        } else if (position == 1) {
+            llGridItem.setTitle("SITE ON DG");
+            llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#2e4fc7"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            //  llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
+                    //BatteryFragment batteryFragment = new BatteryFragment();
+                    // openBasicDataFragment(batteryFragment, "SITE ON DG");
 
                 }
             });
         } else if (position == 2) {
-            llGridItem.setTitle("View Unsyced Surveys");
+            llGridItem.setTitle("SITE ON EB");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#eb7f1a"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            //   llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
+                    // DGFragment dgFragment = new DGFragment();
+                    //openBasicDataFragment(dgFragment, "SITE ON EB");
                 }
             });
         } else if (position == 3) {
-            llGridItem.setTitle("View Synced Surveys");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setTitle("SITE ON SOLAR");
+            llGridItem.setImageResource(R.drawable.ic_air_conditioner);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#a6241b"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            // llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
+                    //  AirConditionerFragment airConditionerFragment = new AirConditionerFragment();
+                    //   openBasicDataFragment(airConditionerFragment, "SITE ON SOLAR");
 
                 }
             });
-        }
 
+        }
         return gridView;
     }
 
@@ -108,13 +116,11 @@ public class HomeFeGridAdapter extends BaseAdapter {
 
 
     //open BasicDataFragment
-    private void openBasicDataFragment() {
-        // BasicDataFragment basicDataFragment = new BasicDataFragment();
-        SiteSurvetTabFragment siteSurvetTabFragment = new SiteSurvetTabFragment();
+    private void openBasicDataFragment(MainFragment fragment, String headertext) {
         Bundle bundle = new Bundle();
-        bundle.putString("headerTxt", "Site Survey");
+        bundle.putString("headerTxt", headertext);
         bundle.putBoolean("showMenuButton", false);
-        ApplicationHelper.application().getActivity().updateFragment(siteSurvetTabFragment, bundle);
+        ApplicationHelper.application().getActivity().updateFragment(fragment, bundle);
 
     }
 }

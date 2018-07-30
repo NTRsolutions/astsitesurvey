@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.telecom.ast.sitesurvey.R;
-import com.telecom.ast.sitesurvey.adapter.NewSurveyPagerAdapter;
+import com.telecom.ast.sitesurvey.adapter.SMPSPIUPagerAdapter;
 import com.telecom.ast.sitesurvey.component.SwitchViewPager;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
@@ -17,7 +17,7 @@ import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.util.ArrayList;
 
-public class NewSurveyFragment extends MainFragment {
+public class SmpsPiuFragment extends MainFragment {
     SwitchViewPager mPager;
 
     @Override
@@ -42,9 +42,9 @@ public class NewSurveyFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        NewSurveyPagerAdapter mAdapter = new NewSurveyPagerAdapter(getActivity().getSupportFragmentManager());
+        SMPSPIUPagerAdapter mAdapter = new SMPSPIUPagerAdapter(getActivity().getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
-        mPager.setOffscreenPageLimit(10);
+        mPager.setOffscreenPageLimit(2);
     }
 
     //for geting next previous click action
@@ -97,9 +97,9 @@ public class NewSurveyFragment extends MainFragment {
     public void updateOnResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
             ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            int currentPage = mPager.getCurrentItem();
-
+            SmpsFragment.getResult(files);
 
         }
     }
+
 }
