@@ -6,7 +6,7 @@ import com.telecom.ast.sitesurvey.filepicker.view.FNCropImageView;
 /**
  * Created 16-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public interface IToolbarListener {
 	void onDone();

@@ -20,7 +20,7 @@ import java.util.Locale;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class DefaultCameraModule implements FNCameraModule, Serializable {
 

@@ -22,7 +22,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNTLSSocketFactory extends SSLSocketFactory {
 

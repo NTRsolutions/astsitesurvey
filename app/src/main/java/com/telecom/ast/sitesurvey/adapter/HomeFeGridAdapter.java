@@ -35,7 +35,7 @@ public class HomeFeGridAdapter extends BaseAdapter {
             llGridItem.setImageResource(R.drawable.ic_profiles);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#078f4b"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -50,12 +50,11 @@ public class HomeFeGridAdapter extends BaseAdapter {
             llGridItem.setImageResource(R.drawable.ic_sync);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#2e4fc7"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
 
                 }
             });
@@ -64,12 +63,11 @@ public class HomeFeGridAdapter extends BaseAdapter {
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#eb7f1a"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
                 }
             });
         } else if (position == 3) {
@@ -77,12 +75,11 @@ public class HomeFeGridAdapter extends BaseAdapter {
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#a6241b"));
-            llGridItem.setTitleColor(R.color.black_med_color);
+            llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openBasicDataFragment();
 
                 }
             });

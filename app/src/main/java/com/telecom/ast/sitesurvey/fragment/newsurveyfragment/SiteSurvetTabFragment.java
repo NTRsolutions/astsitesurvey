@@ -44,8 +44,8 @@ public class SiteSurvetTabFragment extends MainFragment {
     @Override
     protected void dataToView() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new StaticSiteFragment(), "Static Site");
-        adapter.addFragment(new RunningSiteFragment(), "Running SIte");
+        adapter.addFragment(new StaticSiteFragment(), "Site Info");
+        adapter.addFragment(new RunningSiteFragment(), "SIte On Source");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

@@ -9,10 +9,8 @@ import android.widget.GridView;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.SiteOnBBGridAdapter;
-import com.telecom.ast.sitesurvey.adapter.SiteSurevyGridAdapter;
-import com.telecom.ast.sitesurvey.fragment.ClampMeterFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.ClampMeterFragment;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
-import com.telecom.ast.sitesurvey.fragment.OperatorNameFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,13 +62,13 @@ public class SiteOnBBFragment extends MainFragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (position == 0) {
                     ReadingSmpsFragment readingSmpsFragment = new ReadingSmpsFragment();
-                    openBasicDataFragment(readingSmpsFragment, "Reading on SMPS Screen)");
+                    openBasicDataFragment(readingSmpsFragment, "Reading on SMPS Screen");
                 } else if (position == 1) {
                     ClampMeterFragment clampMeterFragment = new ClampMeterFragment();
-                    openBasicDataFragment(clampMeterFragment, "Clamp Meter)");
+                    openBasicDataFragment(clampMeterFragment, "Clamp Meter");
                 } else {
                     OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
-                    openBasicDataFragment(operatorNameFragment, "Operator )");
+                    openBasicDataFragment(operatorNameFragment, "Operator Details");
                 }
             }
         });

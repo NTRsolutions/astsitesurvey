@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNFilePickerConfig extends FNObject {
 

@@ -14,7 +14,7 @@ import static java.security.AccessController.getContext;
 /**
  * Created 03-07-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class DocumentFragment extends MediaFragment {
 

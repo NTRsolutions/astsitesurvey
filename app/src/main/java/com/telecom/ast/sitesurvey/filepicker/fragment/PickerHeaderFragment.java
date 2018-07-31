@@ -16,7 +16,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isNonEmptyStr;
 /**
  * Created 15-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class PickerHeaderFragment extends HeaderFragment {
 

@@ -34,7 +34,7 @@ import static com.telecom.ast.sitesurvey.utils.FNObjectUtil.isEmpty;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNFilePickerActivity extends MainActivity implements IPageListener, IToolbarListener {
 

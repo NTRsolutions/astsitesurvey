@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNEntityObject extends FNObject {
 

@@ -3,7 +3,7 @@ package com.telecom.ast.sitesurvey.utils;
 /**
  * <h4>Created</h4> 3/2/2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public interface FNReqResCode {
 	int REQ_PAGE_COMMUNICATOR = 101;

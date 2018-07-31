@@ -11,7 +11,7 @@ import com.telecom.ast.sitesurvey.R;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNCameraHelper {
 

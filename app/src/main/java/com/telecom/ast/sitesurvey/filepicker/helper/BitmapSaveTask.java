@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created 16-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class BitmapSaveTask extends AsyncTask<ArrayList<MediaFile>, Void, ArrayList<MediaFile>> {
 

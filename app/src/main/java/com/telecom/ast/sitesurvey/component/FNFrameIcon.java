@@ -16,7 +16,7 @@ import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 /**
  * <h4>Created</h4> 01/28/16
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNFrameIcon extends FrameLayout {
 

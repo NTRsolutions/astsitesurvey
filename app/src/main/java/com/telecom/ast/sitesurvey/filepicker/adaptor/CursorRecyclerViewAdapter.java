@@ -12,7 +12,7 @@ import com.telecom.ast.sitesurvey.filepicker.listener.OnItemClickListener;
 /**
  * Created 21-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 

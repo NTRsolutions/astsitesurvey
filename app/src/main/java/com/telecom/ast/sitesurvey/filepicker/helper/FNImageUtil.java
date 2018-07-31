@@ -55,7 +55,7 @@ import static com.telecom.ast.sitesurvey.filepicker.FNFilePicker.SIZE_LIMIT;
 /**
  * Created 15-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNImageUtil {
 

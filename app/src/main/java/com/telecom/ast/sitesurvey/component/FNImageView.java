@@ -27,7 +27,7 @@ import java.io.File;
 /**
  * Created 27-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNImageView extends AppCompatImageView {
 

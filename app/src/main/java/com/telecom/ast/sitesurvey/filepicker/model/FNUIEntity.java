@@ -4,7 +4,7 @@ package com.telecom.ast.sitesurvey.filepicker.model;
 import com.telecom.ast.sitesurvey.FNObject;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNUIEntity extends FNObject {
 

@@ -18,7 +18,7 @@ import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 /**
  * Created 22-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class AudioCursorAdaptor extends CursorRecyclerViewAdapter<AudioCursorAdaptor.AudioViewHolder> {
 

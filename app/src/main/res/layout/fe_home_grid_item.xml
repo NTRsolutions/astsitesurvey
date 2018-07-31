@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         foundation:imgHeight="@dimen/_60dp"
         foundation:imgWidth="@dimen/_60dp"
-        foundation:isCircularImg="true"
+        foundation:isCircularImg="false"
         foundation:outerPadding="@dimen/_10dp" />
 
 

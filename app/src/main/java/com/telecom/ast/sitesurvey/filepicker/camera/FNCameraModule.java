@@ -9,7 +9,7 @@ import com.telecom.ast.sitesurvey.filepicker.FNFilePickerConfig;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public interface FNCameraModule {
 

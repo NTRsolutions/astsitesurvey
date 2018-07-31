@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 	private int spanCount;

@@ -50,7 +50,7 @@ import static com.telecom.ast.sitesurvey.utils.FNObjectUtil.isNonEmptyStr;
 /**
  * Created 23-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class MediaFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 

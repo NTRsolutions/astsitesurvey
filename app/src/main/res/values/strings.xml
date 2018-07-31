@@ -40,7 +40,7 @@
     <string name="error_create_image_file">Failed to create image file</string>
     <string name="entermake">Please Enter Make</string>
 
-    <string name="basidatatxt">BASIC DATA INFORMATION</string>
+    <string name="basidatatxt">BASIC DATA</string>
     <string name="batryinfo">BATTERY Information</string>
 
     <string-array name="BTSType">

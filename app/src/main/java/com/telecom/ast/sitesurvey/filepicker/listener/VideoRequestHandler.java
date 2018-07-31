@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Created 09-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class VideoRequestHandler extends RequestHandler {
 

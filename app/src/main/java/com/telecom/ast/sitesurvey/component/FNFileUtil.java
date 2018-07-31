@@ -45,7 +45,7 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 /**
  * <h4>Created</h4> 02/02/16
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FNFileUtil {

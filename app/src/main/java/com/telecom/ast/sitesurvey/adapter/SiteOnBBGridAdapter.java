@@ -51,6 +51,21 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
         gridView = inflater.inflate(R.layout.fe_home_grid_item, null);
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
         llGridItem.setTitle(gridviewItem.get(position));
+        if (position == 0) {
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setImageResource(R.drawable.ic_gauge);
+        } else if (position == 1) {
+            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageCircleColor(false);
+
+
+        } else if (position == 2) {
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setImageResource(R.drawable.ic_gauge);
+        } else {
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setImageResource(R.drawable.ic_gauge);
+        }
 
         return gridView;
     }

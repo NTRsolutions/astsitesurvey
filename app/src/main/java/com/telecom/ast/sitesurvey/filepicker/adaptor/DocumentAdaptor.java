@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created 03-07-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class DocumentAdaptor extends RecyclerView.Adapter<DocumentAdaptor.DocumentViewHolder> {
 

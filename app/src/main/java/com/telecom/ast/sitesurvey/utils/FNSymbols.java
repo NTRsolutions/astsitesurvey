@@ -3,7 +3,7 @@ package com.telecom.ast.sitesurvey.utils;
 /**
  * <h4>Created</h4> 02/25/16
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNSymbols {
 

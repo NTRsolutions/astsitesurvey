@@ -12,7 +12,7 @@ import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNFontViewField extends AppCompatTextView {
 

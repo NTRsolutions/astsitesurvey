@@ -20,7 +20,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 /**
  * Created 21-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class MediaCursorAdaptor extends CursorRecyclerViewAdapter<MediaCursorAdaptor.MediaViewHolder> {
 

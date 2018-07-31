@@ -1,7 +1,7 @@
 package com.telecom.ast.sitesurvey;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNSortOrdering extends FNObject {
 

@@ -20,7 +20,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 /**
  * <h4>Created</h4> 7/18/2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNTileView extends LinearLayout {
 

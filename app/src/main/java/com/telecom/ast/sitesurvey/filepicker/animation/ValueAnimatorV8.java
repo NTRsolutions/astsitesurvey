@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created 15-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class ValueAnimatorV8 implements SimpleValueAnimator {
 	private static final int FRAME_RATE = 30;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created 16-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public interface FilePickerCallback {
 

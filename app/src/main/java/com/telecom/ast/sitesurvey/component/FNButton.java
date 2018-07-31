@@ -11,7 +11,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 /**
  * <h4>Created</h4> 16/02/17
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNButton extends AppCompatButton {
 

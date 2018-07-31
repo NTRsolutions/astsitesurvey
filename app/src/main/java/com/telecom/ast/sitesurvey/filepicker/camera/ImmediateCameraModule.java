@@ -9,7 +9,7 @@ import com.telecom.ast.sitesurvey.filepicker.model.PhotoFactory;
 /**
  * Created 05-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class ImmediateCameraModule extends DefaultCameraModule {
 

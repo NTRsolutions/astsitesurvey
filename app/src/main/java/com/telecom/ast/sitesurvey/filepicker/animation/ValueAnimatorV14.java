@@ -7,7 +7,7 @@ import android.view.animation.Interpolator;
 /**
  * Created 15-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class ValueAnimatorV14 implements SimpleValueAnimator, Animator.AnimatorListener,
 		ValueAnimator.AnimatorUpdateListener {

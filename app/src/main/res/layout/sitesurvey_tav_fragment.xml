@@ -10,14 +10,16 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_5dp">
+        android:layout_marginTop="@dimen/_2dp"
+        app:cardElevation="@dimen/_8dp">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/appTheamColor"
+            android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
+            android:textAlignment="center"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/white"
             app:tabMode="fixed"

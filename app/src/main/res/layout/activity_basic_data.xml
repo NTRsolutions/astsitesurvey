@@ -464,7 +464,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/button_login"
-            android:gravity="center"
+            android:gravity="center"    android:textSize="@dimen/_12dp"
             android:padding="10dp"
             android:layout_marginBottom="@dimen/_10dp"
             android:text="Submit" />

@@ -1,6 +1,7 @@
 package com.telecom.ast.sitesurvey.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,10 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNTileView;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SetOnEBFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnBBFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnDgSetFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnSolarFragment;
 
 import java.util.Random;
 
@@ -32,14 +36,11 @@ public class RunningSiteGridAdapter extends BaseAdapter {
         gridView = new View(context);
         gridView = inflater.inflate(R.layout.fe_home_grid_item, null);
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
-        int[] androidColors = ApplicationHelper.application().getResources().getIntArray(R.array.androidcolors);
-        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-        llGridItem.setCardViewBg(randomAndroidColor);
         if (position == 0) {
             llGridItem.setTitle("SITE ON BB");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -54,14 +55,14 @@ public class RunningSiteGridAdapter extends BaseAdapter {
             llGridItem.setTitle("SITE ON DG");
             llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
             llGridItem.hideCountField();
-            //  llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //BatteryFragment batteryFragment = new BatteryFragment();
-                    // openBasicDataFragment(batteryFragment, "SITE ON DG");
+                    SiteOnDgSetFragment runningSideDGFragment = new SiteOnDgSetFragment();
+                    openBasicDataFragment(runningSideDGFragment, "SITE ON DG");
 
                 }
             });
@@ -69,28 +70,28 @@ public class RunningSiteGridAdapter extends BaseAdapter {
             llGridItem.setTitle("SITE ON EB");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //   llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // DGFragment dgFragment = new DGFragment();
-                    //openBasicDataFragment(dgFragment, "SITE ON EB");
+                    SetOnEBFragment setOnEBFragment = new SetOnEBFragment();
+                    openBasicDataFragment(setOnEBFragment, "SITE ON EB");
                 }
             });
         } else if (position == 3) {
             llGridItem.setTitle("SITE ON SOLAR");
-            llGridItem.setImageResource(R.drawable.ic_air_conditioner);
+            llGridItem.setImageResource(R.drawable.ic_battery_charging_with_solar_panel);
             llGridItem.hideCountField();
-            // llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF007F"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //  AirConditionerFragment airConditionerFragment = new AirConditionerFragment();
-                    //   openBasicDataFragment(airConditionerFragment, "SITE ON SOLAR");
+                    SiteOnSolarFragment siteOnSolarFragment = new SiteOnSolarFragment();
+                    openBasicDataFragment(siteOnSolarFragment, "SITE ON SOLAR");
 
                 }
             });

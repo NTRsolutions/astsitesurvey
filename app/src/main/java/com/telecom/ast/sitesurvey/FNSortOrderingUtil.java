@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class FNSortOrderingUtil {
 

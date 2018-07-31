@@ -5,7 +5,7 @@ import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 /**
  * Created 16-06-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public interface CropCallback {
 	void onSuccess(MediaFile file);

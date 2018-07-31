@@ -27,7 +27,7 @@ import static android.provider.MediaStore.Files.FileColumns._ID;
 /**
  * Created 03-07-2017
  *
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class DocumentLoader extends AsyncTask<Void, Void, ArrayList<MediaFile>> {
 

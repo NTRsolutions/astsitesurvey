@@ -46,35 +46,35 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
         gridView = inflater.inflate(R.layout.fe_home_grid_item, null);
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
         int[] androidColors = ApplicationHelper.application().getResources().getIntArray(R.array.androidcolors);
-        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-        llGridItem.setCardViewBg(randomAndroidColor);
+        // int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
+        //      llGridItem.setCardViewBg(randomAndroidColor);
         if (position == 0) {
             llGridItem.setTitle(R.string.basidatatxt);
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     BasicDataFragment basicDataFragment = new BasicDataFragment();
-                    openBasicDataFragment(basicDataFragment, "BASIC DATA INFORMATION");
+                    openBasicDataFragment(basicDataFragment, "BASIC DATA ");
 
                 }
             });
         } else if (position == 1) {
-            llGridItem.setTitle("BATTERY Information");
+            llGridItem.setTitle("BATTERY ");
             llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
             llGridItem.hideCountField();
-            //  llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     BatteryFragment batteryFragment = new BatteryFragment();
-                    openBasicDataFragment(batteryFragment, "BATTERY Information");
+                    openBasicDataFragment(batteryFragment, "BATTERY ");
 
                 }
             });
@@ -82,7 +82,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setTitle("DG");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //   llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF007F"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setTitle("AC");
             llGridItem.setImageResource(R.drawable.ic_air_conditioner);
             llGridItem.hideCountField();
-            // llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +111,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setTitle("SMPS");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //    llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -124,9 +124,9 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 5) {
             llGridItem.setTitle("EB METER");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_electric_meter);
             llGridItem.hideCountField();
-            // llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setTitle("MPPT");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //   llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#198719"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -154,9 +154,9 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 7) {
             llGridItem.setTitle("Tower");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_antenna);
             llGridItem.hideCountField();
-            //  llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#0867CB"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -169,9 +169,9 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 8) {
             llGridItem.setTitle("Solar Panels");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_solar_panel);
             llGridItem.hideCountField();
-            //   llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +186,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setTitle("BTS");
             llGridItem.setImageResource(R.drawable.new_survey);
             llGridItem.hideCountField();
-            //  llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
@@ -199,9 +199,9 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 10) {
             llGridItem.setTitle("Miscellaneous Items");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_briefcase);
             llGridItem.hideCountField();
-            //    llGridItem.setCardViewBg(randomAndroidColor);
+            llGridItem.setCardViewBg(Color.parseColor("#FF007F"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {

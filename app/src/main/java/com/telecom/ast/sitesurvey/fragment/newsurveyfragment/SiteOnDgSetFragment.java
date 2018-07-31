@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,11 +21,10 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SiteOnDgSetFragment extends MainFragment {
     FNEditText etDGCurrent, etDGFrequency, etDGVoltage, etBatChangeCurrent, etBatteryVoltage;
-    TextView imgPrevious, imgNext;
     SharedPreferences pref;
     String strDgCurrent, strDgFrequency, strDgVoltage, strBatteryChargeCurrent, strBatteryVoltage;
     String strUserId, strSavedDateTime;
-    LinearLayout perviousLayout, nextLayout;
+    Button btnSubmit;
 
     @Override
     protected int fragmentLayout() {
@@ -38,16 +38,12 @@ public class SiteOnDgSetFragment extends MainFragment {
         etDGVoltage = findViewById(R.id.etDGVoltage);
         etBatChangeCurrent = findViewById(R.id.etBatChangeCurrent);
         etBatteryVoltage = findViewById(R.id.etBatteryVoltage);
-        imgNext = findViewById(R.id.imgNext);
-        imgPrevious = findViewById(R.id.imgPrevious);
-        this.nextLayout = findViewById(R.id.nextLayout);
-        this.perviousLayout = findViewById(R.id.perviousLayout);
+        btnSubmit = findViewById(R.id.btnSubmit);
     }
 
     @Override
     protected void setClickListeners() {
-        nextLayout.setOnClickListener(this);
-        perviousLayout.setOnClickListener(this);
+        btnSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -83,7 +79,7 @@ public class SiteOnDgSetFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
+        if (view.getId() == R.id.btnSubmit) {
             String dgCurrent = etDGCurrent.getText().toString().trim();
             String dgFrequency = etDGFrequency.getText().toString().trim();
             String dgVoltage = etDGVoltage.getText().toString().trim();

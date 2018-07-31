@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

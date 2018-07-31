@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * @author Altametrics Inc.
+ * @author AST Inc.
  */
 public class PicassoTrustAll {
 
