@@ -67,12 +67,11 @@ public class SetOnEBFragment extends MainFragment {
 
     public void getSharedPrefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strCurrent = pref.getString("GridCurrent", "");
-        strVoltage = pref.getString("GridVoltage", "");
-        strFrequency = pref.getString("GridFrequency", "");
+        strCurrent = pref.getString("ebCurrent", "");
+        strVoltage = pref.getString("ebVoltage", "");
+        strFrequency = pref.getString("ebFrequency", "");
         battcharging = pref.getString("battcharging", "");
         Battcurrent = pref.getString("Battcurrent", "");
-
         strUserId = pref.getString("USER_ID", "");
         strSavedDateTime = pref.getString("SetOnEbSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
@@ -93,7 +92,47 @@ public class SetOnEBFragment extends MainFragment {
         }
     }
 
-    public void saveBasicDataDetails() {
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnSubmit) {
+            String ebCurrent = etebCurrent.getText().toString().trim();
+            String ebFrequency = etebVolatge.getText().toString().trim();
+            String ebVoltage = etEbFrequency.getText().toString().trim();
+            String batrycharging = etbattcharging.getText().toString().trim();
+            String battcurrent = etBattcurrent.getText().toString().trim();
+            if (isEmptyStr(ebCurrent)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
+            } else if (isEmptyStr(ebFrequency)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
+            } else if (isEmptyStr(ebVoltage)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
+            } else if (isEmptyStr(batrycharging)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Voltage");
+            } else if (isEmptyStr(battcurrent)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Current");
+            } else {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("UserId", strUserId);
+                editor.putString("ebCurrent", ebCurrent);
+                editor.putString("ebFrequency", ebFrequency);
+                editor.putString("ebVoltage", ebVoltage);
+                editor.putString("battcharging", batrycharging);
+                editor.putString("Battcurrent", battcurrent);
+                editor.putString("SetOnEbSavedDateTime", strSavedDateTime);
+                editor.commit();
+                ASTProgressBar progressDialog = new ASTProgressBar(getContext());
+                progressDialog.show();
+                //  saveBasicDataDetails();
+                //  saveEbMeterDataDetails();
+                //   saveSiteOnDg();
+                //   saveSiteOnEb();
+                //  saveEquipmentData();
+                progressDialog.dismiss();
+            }
+        }
+    }
+/*   public void saveBasicDataDetails() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String userId = pref.getString("USER_ID", "");
         String strMilli = pref.getString("MilliSeconds", "");
@@ -127,9 +166,9 @@ public class SetOnEBFragment extends MainFragment {
         List<BasicDataModel> basicDataList = new ArrayList<>();
         basicDataList.add(basicDataModel);
         atmDatabase.addBasicFormData(basicDataList);
-    }
+    }*/
 
-    public void saveEbMeterDataDetails() {
+ /*   public void saveEbMeterDataDetails() {
         EbMeterDataModel ebMeterDataModel = new EbMeterDataModel();
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strEbMeterUserId = pref.getString("USER_ID", "");
@@ -158,9 +197,9 @@ public class SetOnEBFragment extends MainFragment {
         ebMeterDataList.add(ebMeterDataModel);
 
         atmDatabase.addEbMeterFormData(ebMeterDataList);
-    }
+    }*/
 
-    public void saveSiteOnBb() {
+/*    public void saveSiteOnBb() {
         SiteOnBatteryBankDataModel siteOnBatteryBankDataModel = new SiteOnBatteryBankDataModel();
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strSiteOnBbVoltage = pref.getString("Voltage", "");
@@ -175,9 +214,9 @@ public class SetOnEBFragment extends MainFragment {
         List<SiteOnBatteryBankDataModel> siteOnBatteryBankDataList = new ArrayList<>();
         siteOnBatteryBankDataList.add(siteOnBatteryBankDataModel);
         atmDatabase.addSiteOnBbFormData(siteOnBatteryBankDataList);
-    }
+    }*/
 
-    public void saveSiteOnDg() {
+ /*   public void saveSiteOnDg() {
         SiteOnDG siteOnDGDataModel = new SiteOnDG();
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         String strDgCurrent = pref.getString("DgCurrent", "");
@@ -198,25 +237,23 @@ public class SetOnEBFragment extends MainFragment {
         siteOnBatteryBankDataList.add(siteOnDGDataModel);
 
         atmDatabase.addSiteOnDgFormData(siteOnBatteryBankDataList);
-    }
+    }*/
 
-    public void saveSiteOnEb() {
+  /*  public void saveSiteOnEb() {
         SiteOnEbDataModel siteOnEbDataModel = new SiteOnEbDataModel();
         siteOnEbDataModel.setGridCurrent(strCurrent);
         siteOnEbDataModel.setGridFrequency(strVoltage);
         siteOnEbDataModel.setGridVoltage(strFrequency);
-
         //  siteOnEbDataModel.setGridVoltage(strFrequency);
         // siteOnEbDataModel.setGridVoltage(strFrequency);
-
         siteOnEbDataModel.setSiteId(strSiteId);
         siteOnEbDataModel.setUserId(strUserId);
         List<SiteOnEbDataModel> siteOnEbDataModelList = new ArrayList<>();
         siteOnEbDataModelList.add(siteOnEbDataModel);
         atmDatabase.addSiteOnEbFormData(siteOnEbDataModelList);
-    }
+    }*/
 
-    public void saveEquipmentData() {
+/*    public void saveEquipmentData() {
         SelectedEquipmentDataModel selectedEquipmentDataModel = new SelectedEquipmentDataModel();
         List<SelectedEquipmentDataModel> selectedEquipmentDataList = new ArrayList<>();
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
@@ -392,9 +429,9 @@ public class SetOnEBFragment extends MainFragment {
         selectedEquipmentDataList.add(selectedEquipmentDataModel);
         atmDatabase.addEquipmentFormData(selectedEquipmentDataList);
         clearPrefrences();
-    }
+    }*/
 
-    public void clearPrefrences() {
+    /*public void clearPrefrences() {
         SharedPreferences.Editor editor = pref.edit();
         //-------------------Basic Data Activity----------------------------------
         editor.putString("Date", "");
@@ -502,48 +539,6 @@ public class SetOnEBFragment extends MainFragment {
         editor.putString("SetOnDGSavedDateTime", "");
         //---------------------Site On EB --------------------------------------
         editor.commit();
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
-            String dgCurrent = etebCurrent.getText().toString().trim();
-            String dgFrequency = etebVolatge.getText().toString().trim();
-            String dgVoltage = etEbFrequency.getText().toString().trim();
-            String batrycharging = etbattcharging.getText().toString().trim();
-            String battcurrent = etBattcurrent.getText().toString().trim();
-            if (isEmptyStr(dgCurrent)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
-            } else if (isEmptyStr(dgFrequency)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
-            } else if (isEmptyStr(dgVoltage)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
-            } else if (isEmptyStr(batrycharging)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Voltage");
-            } else if (isEmptyStr(battcurrent)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Current");
-            } else {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("UserId", strUserId);
-                editor.putString("DgCurrent", dgCurrent);
-                editor.putString("DgFrequency", dgFrequency);
-                editor.putString("DgVoltage", dgVoltage);
-                editor.putString("battcharging", batrycharging);
-                editor.putString("Battcurrent", battcurrent);
-                editor.putString("SetOnEbSavedDateTime", strSavedDateTime);
-                editor.commit();
-                ASTProgressBar progressDialog = new ASTProgressBar(getContext());
-                progressDialog.show();
-                saveBasicDataDetails();
-                saveEbMeterDataDetails();
-                saveSiteOnBb();
-                saveSiteOnDg();
-                saveSiteOnEb();
-                saveEquipmentData();
-                progressDialog.dismiss();
-            }
-        }
-    }
+    }*/
 
 }

@@ -31,7 +31,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MpptFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
@@ -81,19 +81,19 @@ public class MpptFragment extends MainFragment {
     public void getSharedPrefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("AC_Make", "");
-        strModel = pref.getString("AC_Model", "");
-        strCapacity = pref.getString("AC_Capacity", "");
-        strMakeId = pref.getString("AC_MakeId", "");
-        strModelId = pref.getString("AC_ModelId", "");
-        strDescriptionId = pref.getString("AC_DescriptionId", "");
-        strSerialNum = pref.getString("AC_SerialNum", "");
-        strYearOfManufacturing = pref.getString("AC_YearOfManufacturing", "");
-        strDescription = pref.getString("AC_Description", "");
-        frontphoto = pref.getString("Photo1", "");
-        openPhoto = pref.getString("Photo2", "");
-        sNoPlatephoto = pref.getString("Photo3", "");
-        strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
+        strMake = pref.getString("MPPT_Make", "");
+        strModel = pref.getString("MPPT_Model", "");
+        strCapacity = pref.getString("MPPT_Capacity", "");
+        strMakeId = pref.getString("MPPT_MakeId", "");
+        strModelId = pref.getString("MPPT_ModelId", "");
+        strDescriptionId = pref.getString("MPPT_DescriptionId", "");
+        strSerialNum = pref.getString("MPPT_SerialNum", "");
+        strYearOfManufacturing = pref.getString("MPPT_YearOfManufacturing", "");
+        strDescription = pref.getString("MPPT_Description", "");
+        frontphoto = pref.getString("MPPT_Photo1", "");
+        openPhoto = pref.getString("MPPT_Photo2", "");
+        sNoPlatephoto = pref.getString("MPPT_Photo3", "");
+        strSavedDateTime = pref.getString("MPPT_EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
 
@@ -144,31 +144,32 @@ public class MpptFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
-            isIsImage3 = true;
+            isImage2 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("AC_UserId", strUserId);
-                editor.putString("AC_Make", make);
-                editor.putString("AC_Model", model);
-                editor.putString("AC_Capacity", capacity);
-                editor.putString("AC_DescriptionId", strDescriptionId);
-                editor.putString("AC_MakeId", strMakeId);
-                editor.putString("AC_ModelId", strModelId);
-                editor.putString("AC_SerialNum", serialNumber);
-                editor.putString("AC_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("AC_Description", description);
-                editor.putString("Photo1", frontphoto);
-                editor.putString("Photo2", openPhoto);
-                editor.putString("Photo3", sNoPlatephoto);
-                editor.putString("EbMeterSavedDateTime", currentDateTime);
+                editor.putString("MPPT_UserId", strUserId);
+                editor.putString("MPPT_Make", make);
+                editor.putString("MPPT_Model", model);
+                editor.putString("MPPT_Capacity", capacity);
+                editor.putString("MPPT_DescriptionId", strDescriptionId);
+                editor.putString("MPPT_MakeId", strMakeId);
+                editor.putString("MPPT_ModelId", strModelId);
+                editor.putString("MPPT_SerialNum", serialNumber);
+                editor.putString("MPPT_YearOfManufacturing", yearOfManufacturing);
+                editor.putString("MPPT_Description", description);
+                editor.putString("MPPT_Photo1", frontphoto);
+                editor.putString("MPPT_Photo2", openPhoto);
+                editor.putString("MPPT_Photo3", sNoPlatephoto);
+                editor.putString("MPPT_EbMeterSavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
 
@@ -233,24 +234,30 @@ public class MpptFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();

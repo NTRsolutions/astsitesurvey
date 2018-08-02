@@ -49,7 +49,7 @@
                     app:cardBackgroundColor="@android:color/white">
 
                     <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etMake"
+                        android:id="@+id/etBattVoltage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
@@ -89,7 +89,7 @@
                     app:cardBackgroundColor="@android:color/white">
 
                     <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etModel"
+                        android:id="@+id/etLoadCurrent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
@@ -129,7 +129,7 @@
                     app:cardBackgroundColor="@android:color/white">
 
                     <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etSerialNum"
+                        android:id="@+id/etBatteryDisCharge"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
@@ -294,8 +294,9 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/button_login"
             android:gravity="center"
-            android:padding="10dp"    android:textSize="@dimen/_12dp"
-            android:text="Submit" />
+            android:padding="10dp"
+            android:text="Submit"
+            android:textSize="@dimen/_12dp" />
     </android.support.v7.widget.CardView>
 
 

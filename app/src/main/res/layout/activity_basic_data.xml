@@ -35,7 +35,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Date"
+                    android:text="@string/date"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -76,7 +76,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Time"
+                    android:text="@string/time"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -97,7 +97,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Select Time"
+                        android:hint="@string/SelectTime"
                         android:inputType="time"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
@@ -118,7 +118,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Surveyor Name"
+                    android:text="@string/SurveyorName"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -139,7 +139,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Surveyor Name"
+                        android:hint="@string/EnterSurveyor_Name"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
@@ -158,7 +158,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Site Id"
+                    android:text="@string/SiteId"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -179,7 +179,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Site Id"
+                        android:hint="@string/EnterSite_Id"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
@@ -198,7 +198,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Site Name"
+                    android:text="@string/SiteName"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -219,7 +219,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Site Name"
+                        android:hint="EnterSite_Name"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
@@ -239,7 +239,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Address"
+                    android:text="@string/Address"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -260,7 +260,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Address"
+                        android:hint="@string/Enter_Address"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
@@ -280,7 +280,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Circle"
+                    android:text="@string/Circle"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -293,7 +293,6 @@
                     android:layout_weight="0.6"
                     android:background="@drawable/custom_spinner"
                     android:gravity="left|center_vertical"
-                    android:hint="Enter Address"
                     android:minHeight="@dimen/_28dp"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
@@ -313,7 +312,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="SSA"
+                    android:text="@string/SSA"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -327,7 +326,6 @@
                     android:background="@drawable/custom_spinner"
                     android:gravity="left|center_vertical"
                     android:minHeight="@dimen/_28dp"
-                    android:text="SSA"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_16dp" />
             </LinearLayout>
@@ -346,7 +344,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="District"
+                    android:text="@string/District"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -377,7 +375,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="City"
+                    android:text="@string/City"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -398,7 +396,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter City"
+                        android:hint="@string/Enter_City"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
                 </android.support.v7.widget.CardView>
@@ -418,7 +416,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Pincode"
+                    android:text="@string/Pincode"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_16dp" />
 
@@ -439,7 +437,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Pincode"
+                        android:hint="@string/Enter_Pincode"
                         android:inputType="number"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_16dp" />
@@ -462,12 +460,13 @@
             android:layout_width="@dimen/_220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/button_login"
-            android:gravity="center"    android:textSize="@dimen/_12dp"
+            android:gravity="center"
             android:padding="10dp"
-            android:layout_marginBottom="@dimen/_10dp"
-            android:text="Submit" />
+            android:text="@string/Submit"
+            android:textSize="@dimen/_12dp" />
     </android.support.v7.widget.CardView>
 
 

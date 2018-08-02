@@ -310,17 +310,10 @@ public class BasicDataFragment extends MainFragment {
                 strCirclePosition = pref.getString("CirclePosition", "");
                 strSSAPosition = pref.getString("SSAPosition", "");
                 strDistrictPosition = pref.getString("DistrictPosition", "");
-                saveScreenData(true, false);
+               reloadBackScreen();
 
             }
         }
-    }
-
-    private void saveScreenData(boolean NextPreviousFlag, boolean DoneFlag) {
-        Intent intent = new Intent("ViewPageChange");
-        intent.putExtra("NextPreviousFlag", NextPreviousFlag);
-        intent.putExtra("DoneFlag", DoneFlag);
-        getActivity().sendBroadcast(intent);
     }
 
 

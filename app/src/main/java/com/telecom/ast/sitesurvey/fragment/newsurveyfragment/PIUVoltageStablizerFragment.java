@@ -34,7 +34,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     TextView imgPrevious, imgNext;
     LinearLayout perviousLayout, nextLayout;
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     FNEditText etSerialNum, etYear, etDescription, etetNofLcu;
     AutoCompleteTextView etCapacity, etMake, etModel;
@@ -206,11 +206,17 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-        } else if (view.getId() == R.id.image2) {
+            isImage2 = false;
             ASTUIUtil.startImagePicker(getHostActivity());
+        } else if (view.getId() == R.id.image2) {
             isImage1 = false;
+            isImage2 = true;
+            ASTUIUtil.startImagePicker(getHostActivity());
+        } else if (view.getId() == R.id.image3) {
+            isImage1 = false;
+            isImage2 = false;
+            ASTUIUtil.startImagePicker(getHostActivity());
         } else if (view.getId() == R.id.imgNext || view.getId() == R.id.nextLayout) {
             if (isValiDate()) {
                 String newEquipment = "0";
@@ -322,24 +328,29 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();

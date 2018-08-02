@@ -123,16 +123,16 @@ public class TowerFragment extends MainFragment {
     public void getSharedPrefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
-        toerTypestr = pref.getString("Type", "");
-        typeheightstr = pref.getString("Height", "");
-        datesiteStr = pref.getString("Date_SITE", "");
-        itemConditionstr = pref.getString("item_Condi", "");
+        toerTypestr = pref.getString("Tower_Type", "");
+        typeheightstr = pref.getString("Tower_Height", "");
+        datesiteStr = pref.getString("Tower_Date_SITE", "");
+        itemConditionstr = pref.getString("Tower_item_Condi", "");
         descriptionstr = pref.getString("Description", "");
-        overviewImgstr = pref.getString("Photo1", "");
-        northmgStr = pref.getString("Photo2", "");
-        eastImgStr = pref.getString("Photo3", "");
-        southImgStr = pref.getString("Photo4", "");
-        westImgStr = pref.getString("Photo5", "");
+        overviewImgstr = pref.getString("Tower_Photo1", "");
+        northmgStr = pref.getString("Tower_Photo2", "");
+        eastImgStr = pref.getString("Tower_Photo3", "");
+        southImgStr = pref.getString("Tower_Photo4", "");
+        westImgStr = pref.getString("Tower_Photo5", "");
         strSiteId = pref.getString("SiteId", "");
     }
 
@@ -178,16 +178,16 @@ public class TowerFragment extends MainFragment {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("USER_ID", strUserId);
-                editor.putString("Type", type);
-                editor.putString("Height", height);
-                editor.putString("Date_SITE", date);
-                editor.putString("item_Condi", itemcondion);
-                editor.putString("Description", descreption);
-                editor.putString("Photo1", overviewImgstr);
-                editor.putString("Photo2", northmgStr);
-                editor.putString("Photo3", eastImgStr);
-                editor.putString("Photo4", southImgStr);
-                editor.putString("Photo5", westImgStr);
+                editor.putString("Tower_Type", type);
+                editor.putString("Tower_Height", height);
+                editor.putString("Tower_Date_SITE", date);
+                editor.putString("Tower_item_Condi", itemcondion);
+                editor.putString("Tower_Description", descreption);
+                editor.putString("Tower_Photo1", overviewImgstr);
+                editor.putString("Tower_Photo2", northmgStr);
+                editor.putString("Tower_Photo3", eastImgStr);
+                editor.putString("Tower_Photo4", southImgStr);
+                editor.putString("Tower_Photo5", westImgStr);
                 editor.commit();
             }
         }

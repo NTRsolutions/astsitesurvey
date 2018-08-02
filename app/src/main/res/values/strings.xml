@@ -39,9 +39,46 @@
     <string name="error_image_select_size_limit">Total file size cannot be greater than %1$s.</string>
     <string name="error_create_image_file">Failed to create image file</string>
     <string name="entermake">Please Enter Make</string>
-
     <string name="basidatatxt">BASIC DATA</string>
-    <string name="batryinfo">BATTERY Information</string>
+    <string name="batryinfo">BATTERY</string>
+    <string name="DG">DG</string>
+    <string name="EB_METER">EB METER</string>
+    <string name="MPPT">MPPT</string>
+    <string name="Tower">Tower</string>
+    <string name="SolarPanels">Solar Panels</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="SurveyorName">Surveyor Name</string>
+    <string name="SiteId">Site Id</string>
+    <string name="SiteName">Site Name</string>
+    <string name="Address">Address</string>
+    <string name="Circle">Circle</string>
+    <string name="SSA">SSA</string>
+    <string name="District">District</string>
+    <string name="City">City</string>
+    <string name="Pincode">Pincode</string>
+    <string name="Submit">Submit</string>
+    <string name="SelectTime">Select Time</string>
+    <string name="EnterSurveyor_Name">Enter Surveyor Name</string>
+    <string name="EnterSite_Id">Enter Site Id</string>
+    <string name="EnterSite_Name">Enter Site Name</string>
+    <string name="Enter_Address">Enter Address</string>
+    <string name="Enter_City">Enter City</string>
+    <string name="Enter_Pincode">Enter Pincode</string>
+    <string name="Make">Make</string>
+    <string name="Model_No">Model No.</string>
+    <string name="Serial_Number">Serial Number</string>
+    <string name="Capacity">Capacity</string>
+    <string name="Manufacturing_Date">Manufacturing Date</string>
+    <string name="Item_Condition">Item Condition</string>
+    <string name="Description">Description</string>
+    <string name="Enter_Make">Enter Make</string>
+    <string name="Enter_Model_No.">Enter Model No.</string>
+    <string name="EnterSerial_Num">Enter Serial Num</string>
+    <string name="Enter_Capacity">Enter Capacity</string>
+    <string name="Enter_Manufacturing_Date">Enter Manufacturing Date</string>
+    <string name="Enter_Description">Enter Description</string>
+
 
     <string-array name="BTSType">
         <item>Indoor</item>

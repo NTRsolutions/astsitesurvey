@@ -1,6 +1,9 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,10 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
@@ -33,14 +38,16 @@ import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
     static ImageView batteryimg, cellImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
-   static String bateryphoto, cellPhoto, sNoPlatephoto;
+    static String bateryphoto, cellPhoto, sNoPlatephoto;
+    static boolean isImage1, isImage2;
+
     FNEditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etMake, etModel, etCapacity;
     SharedPreferences pref;
@@ -57,6 +64,7 @@ public class BatteryFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     Button btnSubmit;
     LinearLayout descriptionLayout;
+    TimePickerDialog picker;
 
     @Override
     protected int fragmentLayout() {
@@ -85,8 +93,8 @@ public class BatteryFragment extends MainFragment {
         cellImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-
     }
+
 
     @Override
     protected void setAccessibility() {
@@ -197,9 +205,9 @@ public class BatteryFragment extends MainFragment {
         strSerialNum = pref.getString("SerialNum", "");
         strYearOfManufacturing = pref.getString("YearOfManufacturing", "");
         strDescription = pref.getString("Description", "");
-        bateryphoto = pref.getString("Photo1", "");
-        cellPhoto = pref.getString("Photo2", "");
-        sNoPlatephoto = pref.getString("Photo3", "");
+        bateryphoto = pref.getString("batryPhoto1", "");
+        cellPhoto = pref.getString("batryPhoto2", "");
+        sNoPlatephoto = pref.getString("batryPhoto3", "");
         strSavedDateTime = pref.getString("BbActivitySavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
         itemCondition = pref.getString("ItemCondition", "");
@@ -221,14 +229,15 @@ public class BatteryFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
-            isIsImage3 = true;
+            isImage2 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 String newEquipment = "0";
@@ -273,14 +282,15 @@ public class BatteryFragment extends MainFragment {
                 editor.putString("SerialNum", serialNumber);
                 editor.putString("YearOfManufacturing", yearOfManufacturing);
                 editor.putString("Description", description);
-                editor.putString("Photo1", bateryphoto);
-                editor.putString("Photo2", cellPhoto);
-                editor.putString("Photo3", sNoPlatephoto);
+                editor.putString("batryPhoto1", bateryphoto);
+                editor.putString("batryPhoto2", cellPhoto);
+                editor.putString("batryPhoto3", sNoPlatephoto);
                 editor.putString("BbActivitySavedDateTime", currentDateTime);
                 editor.putString("ItemCondition", itemCondition);
                 strMakeId = pref.getString("", "");
                 strModelId = pref.getString("", "");
                 editor.commit();
+                reloadBackScreen();
 
             }
 
@@ -333,30 +343,35 @@ public class BatteryFragment extends MainFragment {
         return true;
     }
 
-
     public static void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? batteryimg : cellImg) : sNoPlateImg);
+
                     if (isImage1) {
                         bateryphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(batteryimg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(cellImg);
                         cellPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? batteryimg : cellImg) : sNoPlateImg);
                 if (isImage1) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(batteryimg);
                     bateryphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(cellImg);
                     cellPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();
@@ -384,5 +399,6 @@ public class BatteryFragment extends MainFragment {
 
         }
     }
+
 
 }

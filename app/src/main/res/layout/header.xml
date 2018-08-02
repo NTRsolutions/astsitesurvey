@@ -41,8 +41,9 @@
             android:layout_marginLeft="@dimen/_15dp"
             android:layout_weight="1"
             android:maxLines="1"
+            android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/_18dp" />
+            android:textSize="@dimen/_14dp" />
 
 
 

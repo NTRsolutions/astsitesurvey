@@ -44,7 +44,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class DGFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     EditText etSerialNum, etYear, etDescription;
     AutoCompleteTextView etMake, etModel, etCapacity;
@@ -122,7 +122,7 @@ public class DGFragment extends MainFragment {
         strDescription = pref.getString("DG_Description", "");
         frontphoto = pref.getString("DG_Photo1", "");
         openPhoto = pref.getString("DG_Photo2", "");
-        sNoPlatephoto = pref.getString("Photo3", "");
+        sNoPlatephoto = pref.getString("DG_Photo3", "");
         strSavedDateTime = pref.getString("DG_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
@@ -213,14 +213,15 @@ public class DGFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
-            isIsImage3 = true;
+            isImage2 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 String newEquipment = "0";
@@ -267,7 +268,7 @@ public class DGFragment extends MainFragment {
                 editor.putString("DG_Description", description);
                 editor.putString("DG_Photo1", frontphoto);
                 editor.putString("DG_Photo2", openPhoto);
-                editor.putString("Photo3", sNoPlatephoto);
+                editor.putString("DG_Photo3", sNoPlatephoto);
                 editor.putString("DG_SavedDateTime", currentDateTime);
                 editor.commit();
             }
@@ -315,30 +316,35 @@ public class DGFragment extends MainFragment {
         return true;
     }
 
-
     public static void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();

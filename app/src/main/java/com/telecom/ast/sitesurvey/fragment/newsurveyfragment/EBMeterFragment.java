@@ -39,7 +39,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class EBMeterFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
@@ -91,18 +91,18 @@ public class EBMeterFragment extends MainFragment {
     public void getSharedPrefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("AC_Make", "");
-        strModel = pref.getString("AC_Model", "");
-        strCapacity = pref.getString("AC_Capacity", "");
-        strMakeId = pref.getString("AC_MakeId", "");
-        strModelId = pref.getString("AC_ModelId", "");
-        strDescriptionId = pref.getString("AC_DescriptionId", "");
-        strSerialNum = pref.getString("AC_SerialNum", "");
-        strYearOfManufacturing = pref.getString("AC_YearOfManufacturing", "");
-        strDescription = pref.getString("AC_Description", "");
-        frontphoto = pref.getString("Photo1", "");
-        openPhoto = pref.getString("Photo2", "");
-        sNoPlatephoto = pref.getString("Photo3", "");
+        strMake = pref.getString("EBM_Make", "");
+        strModel = pref.getString("EBM_Model", "");
+        strCapacity = pref.getString("EBM_Capacity", "");
+        strMakeId = pref.getString("EBM_MakeId", "");
+        strModelId = pref.getString("EBM_ModelId", "");
+        strDescriptionId = pref.getString("EBM_DescriptionId", "");
+        strSerialNum = pref.getString("EBM_SerialNum", "");
+        strYearOfManufacturing = pref.getString("EBM_YearOfManufacturing", "");
+        strDescription = pref.getString("EBM_Description", "");
+        frontphoto = pref.getString("EBM_Photo1", "");
+        openPhoto = pref.getString("EBM_Photo2", "");
+        sNoPlatephoto = pref.getString("EBM_Photo3", "");
         strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
         meterreading = pref.getString("Meterreading", "");
@@ -156,31 +156,32 @@ public class EBMeterFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
-            isIsImage3 = true;
+            isImage2 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("AC_UserId", strUserId);
-                editor.putString("AC_Make", make);
-                editor.putString("AC_Model", model);
-                editor.putString("AC_Capacity", capacity);
-                editor.putString("AC_DescriptionId", strDescriptionId);
-                editor.putString("AC_MakeId", strMakeId);
-                editor.putString("AC_ModelId", strModelId);
-                editor.putString("AC_SerialNum", serialNumber);
-                editor.putString("AC_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("AC_Description", description);
+                editor.putString("EBM_UserId", strUserId);
+                editor.putString("EBM_Make", make);
+                editor.putString("EBM_Model", model);
+                editor.putString("EBM_Capacity", capacity);
+                editor.putString("EBM_DescriptionId", strDescriptionId);
+                editor.putString("EBM_MakeId", strMakeId);
+                editor.putString("EBM_ModelId", strModelId);
+                editor.putString("EBM_SerialNum", serialNumber);
+                editor.putString("EBM_YearOfManufacturing", yearOfManufacturing);
+                editor.putString("EBM_Description", description);
                 editor.putString("Meterreading", meterreading);
-                editor.putString("Photo1", frontphoto);
-                editor.putString("Photo2", openPhoto);
-                editor.putString("Photo3", sNoPlatephoto);
+                editor.putString("EBM_Photo1", frontphoto);
+                editor.putString("EBM_Photo2", openPhoto);
+                editor.putString("EBM_Photo3", sNoPlatephoto);
                 editor.putString("EbMeterSavedDateTime", currentDateTime);
                 editor.commit();
                 saveScreenData(true, false);
@@ -250,24 +251,30 @@ public class EBMeterFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();

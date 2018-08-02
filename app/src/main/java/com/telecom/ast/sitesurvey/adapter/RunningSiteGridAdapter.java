@@ -38,7 +38,7 @@ public class RunningSiteGridAdapter extends BaseAdapter {
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
         if (position == 0) {
             llGridItem.setTitle("SITE ON BB");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
             llGridItem.setTitleColor(R.color.black);
@@ -53,7 +53,7 @@ public class RunningSiteGridAdapter extends BaseAdapter {
             });
         } else if (position == 1) {
             llGridItem.setTitle("SITE ON DG");
-            llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
+            llGridItem.setImageResource(R.drawable.ic_generator);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
             llGridItem.setTitleColor(R.color.black);
@@ -68,7 +68,7 @@ public class RunningSiteGridAdapter extends BaseAdapter {
             });
         } else if (position == 2) {
             llGridItem.setTitle("SITE ON EB");
-            llGridItem.setImageResource(R.drawable.new_survey);
+            llGridItem.setImageResource(R.drawable.ic_electric_meter);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);

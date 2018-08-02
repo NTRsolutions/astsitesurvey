@@ -43,7 +43,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class AirConditionerFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
@@ -118,7 +118,7 @@ public class AirConditionerFragment extends MainFragment {
         strDescription = pref.getString("AC_Description", "");
         frontphoto = pref.getString("AC_Photo1", "");
         openPhoto = pref.getString("AC_Photo2", "");
-        sNoPlatephoto = pref.getString("Photo3", "");
+        sNoPlatephoto = pref.getString("AC_Photo3", "");
         strSavedDateTime = pref.getString("AC_SavedDateTime", "");
         strType = pref.getString("AC_Type", "");
         strNumberOfAC = pref.getString("AC_Number", "");
@@ -223,14 +223,15 @@ public class AirConditionerFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
+            isImage2 = true;
             isImage1 = false;
-            isIsImage3 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage2 = false;
+            isImage1 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 String newEquipment = "0";
@@ -280,7 +281,7 @@ public class AirConditionerFragment extends MainFragment {
                 editor.putString("AC_Description", description);
                 editor.putString("AC_Photo1", frontphoto);
                 editor.putString("AC_Photo2", openPhoto);
-                editor.putString("Photo3", sNoPlatephoto);
+                editor.putString("AC_Photo3", sNoPlatephoto);
                 editor.putString("AC_SavedDateTime", currentDateTime);
                 editor.putString("AC_Number", numOfACs);
                 editor.putString("sNoAC", sNAC);
@@ -344,24 +345,30 @@ public class AirConditionerFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();

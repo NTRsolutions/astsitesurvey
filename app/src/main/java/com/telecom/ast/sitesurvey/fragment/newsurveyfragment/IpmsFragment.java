@@ -33,7 +33,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class IpmsFragment extends MainFragment {
 
     static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isIsImage3;
+    static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     FNEditText etSerialNum, etYear, etDescription, etnoofModule, etModuleCapacity, etLcuCapacity;
     AutoCompleteTextView etCapacity, etMake, etModel;
@@ -99,22 +99,22 @@ public class IpmsFragment extends MainFragment {
     public void getSharedPrefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("SMPS_Make", "");
-        strModel = pref.getString("SMPS_Model", "");
-        strCapacity = pref.getString("SMPS_Capacity", "");
-        strMakeId = pref.getString("SMPS_MakeId", "");
-        strModelId = pref.getString("SMPS_ModelId", "");
-        strDescriptionId = pref.getString("SMPS_DescriptionId", "");
-        strSerialNum = pref.getString("SMPS_SerialNum", "");
-        strYearOfManufacturing = pref.getString("SMPS_YearOfManufacturing", "");
-        strDescription = pref.getString("SMPS_Description", "");
-        strModuleCapacity = pref.getString("ModuleCapacity", "");
-        strlcucapacity = pref.getString("Llcucapacity", "");
-        strnoofModule = pref.getString("noofModule", "");
-        frontphoto = pref.getString("SMPSPhoto1", "");
-        openPhoto = pref.getString("SMPSPhoto2", "");
-        sNoPlatephoto = pref.getString("SMPSPhoto3", "");
-        strSavedDateTime = pref.getString("SMPS_SavedDateTime", "");
+        strMake = pref.getString("IPMS_Make", "");
+        strModel = pref.getString("SMP_Model", "");
+        strCapacity = pref.getString("IPMS_Capacity", "");
+        strMakeId = pref.getString("IPMS_MakeId", "");
+        strModelId = pref.getString("IPMS_ModelId", "");
+        strDescriptionId = pref.getString("IPMS_DescriptionId", "");
+        strSerialNum = pref.getString("IPMS_SerialNum", "");
+        strYearOfManufacturing = pref.getString("IPMS_YearOfManufacturing", "");
+        strDescription = pref.getString("IPMS_Description", "");
+        strModuleCapacity = pref.getString("IPMS_ModuleCapacity", "");
+        strlcucapacity = pref.getString("IPMS_Llcucapacity", "");
+        strnoofModule = pref.getString("IPMS_noofModule", "");
+        frontphoto = pref.getString("IPMS_Photo1", "");
+        openPhoto = pref.getString("IPMS__Photo2", "");
+        sNoPlatephoto = pref.getString("IPMS_Photo3", "");
+        strSavedDateTime = pref.getString("IPMS_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
     }
 
@@ -218,14 +218,15 @@ public class IpmsFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
-            isIsImage3 = true;
+            isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
-            isIsImage3 = true;
+            isImage2 = true;
         } else if (view.getId() == R.id.image3) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isIsImage3 = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 String newEquipment = "0";
@@ -260,23 +261,23 @@ public class IpmsFragment extends MainFragment {
                     strModelId = "0";
                 }
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("SMPS_UserId", strUserId);
-                editor.putString("SMPS_Make", make);
-                editor.putString("SMPS_Model", model);
-                editor.putString("SMPS_Capacity", capacity);
-                editor.putString("SMPS_DescriptionId", strDescriptionId);
-                editor.putString("SMPS_MakeId", strMakeId);
-                editor.putString("SMPS_ModelId", strModelId);
-                editor.putString("SMPS_SerialNum", serialNumber);
-                editor.putString("SMPS_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("SMPS_Description", description);
-                editor.putString("ModuleCapacity", ModuleCapacity);
-                editor.putString("Llcucapacity", lcucapacity);
-                editor.putString("noofModule", nofModule);
-                editor.putString("SMPSPhoto1", frontphoto);
-                editor.putString("SMPSPhoto2", openPhoto);
-                editor.putString("SMPSPhoto3", sNoPlatephoto);
-                editor.putString("SMPS_SavedDateTime", currentDateTime);
+                editor.putString("IPMS_UserId", strUserId);
+                editor.putString("IPMS_Make", make);
+                editor.putString("IPMS_Model", model);
+                editor.putString("IPMS_Capacity", capacity);
+                editor.putString("IPMS_DescriptionId", strDescriptionId);
+                editor.putString("IPMS_MakeId", strMakeId);
+                editor.putString("IPMS_ModelId", strModelId);
+                editor.putString("IPMS_SerialNum", serialNumber);
+                editor.putString("IPMS_YearOfManufacturing", yearOfManufacturing);
+                editor.putString("IPMS_Description", description);
+                editor.putString("IPMS_ModuleCapacity", ModuleCapacity);
+                editor.putString("IPMS_Llcucapacity", lcucapacity);
+                editor.putString("IPMS_noofModule", nofModule);
+                editor.putString("IPMS_Photo1", frontphoto);
+                editor.putString("IPMS_Photo2", openPhoto);
+                editor.putString("IPMS_Photo3", sNoPlatephoto);
+                editor.putString("IPMS_SavedDateTime", currentDateTime);
                 editor.commit();
             }
 
@@ -341,24 +342,30 @@ public class IpmsFragment extends MainFragment {
             if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
                 File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
+
                     if (isImage1) {
                         frontphoto = deviceFile.getFilePath().toString();
-                    } else if (isIsImage3) {
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
+                    } else if (isImage2) {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
                         openPhoto = deviceFile.getFilePath().toString();
+
+                    } else {
+                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
+                        sNoPlatephoto = deviceFile.getFilePath().toString();
                     }
                     //compressPath.delete();
                 }
             } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(isIsImage3 ? (isImage1 ? frontImg : openImg) : sNoPlateImg);
                 if (isImage1) {
                     frontphoto = deviceFile.getFilePath().toString();
-                } else if (isIsImage3) {
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                } else if (isImage2) {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
                     openPhoto = deviceFile.getFilePath().toString();
+                } else {
+                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
+                    sNoPlatephoto = deviceFile.getFilePath().toString();
                 }
                 if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
                     // deviceFile.getFilePath().delete();
