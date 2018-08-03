@@ -9,7 +9,6 @@ import android.widget.GridView;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.SiteOnBBGridAdapter;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.ClampMeterFragment;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 
 import java.util.ArrayList;

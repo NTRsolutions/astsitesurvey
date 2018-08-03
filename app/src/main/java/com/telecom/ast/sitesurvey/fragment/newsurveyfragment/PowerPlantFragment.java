@@ -11,7 +11,7 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmpsMainFragment extends MainFragment {
+public class PowerPlantFragment extends MainFragment {
     ViewPager viewPager;
     TabLayout tabLayout;
 

@@ -338,6 +338,7 @@
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Front Photo"
+                            android:background="@color/bg_color"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -374,6 +375,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
                             android:text="Open Photo"
@@ -424,6 +426,7 @@
                             android:padding="@dimen/_5dp"
                             android:text="Sr No Plate Photo"
                             android:textAlignment="center"
+                            android:background="@color/bg_color"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
 

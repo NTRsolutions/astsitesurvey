@@ -64,7 +64,7 @@ public class BatteryFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     Button btnSubmit;
     LinearLayout descriptionLayout;
-    TimePickerDialog picker;
+    Spinner itemStatusSpineer;
 
     @Override
     protected int fragmentLayout() {
@@ -84,6 +84,7 @@ public class BatteryFragment extends MainFragment {
         etYear = findViewById(R.id.etYear);
         etDescription = findViewById(R.id.etDescription);
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
+        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         descriptionLayout = findViewById(R.id.descriptionLayout);
     }
 
@@ -111,6 +112,9 @@ public class BatteryFragment extends MainFragment {
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
 
+        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
+        itemStatusSpineer.setAdapter(itemStatus);
     }
 
     @Override
@@ -174,14 +178,44 @@ public class BatteryFragment extends MainFragment {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
             }
         }
-        makeDir();
-        ASTUIUtil commonFunctions = new ASTUIUtil();
-        final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
-
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        itemStatusSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Not Available")) {
+                    batteryimg.setEnabled(false);
+                    cellImg.setEnabled(false);
+                    sNoPlateImg.setEnabled(false);
+                    etMake.setEnabled(false);
+                    etModel.setEnabled(false);
+                    etCapacity.setEnabled(false);
+                    etSerialNum.setEnabled(false);
+                    etYear.setEnabled(false);
+                    etDescription.setEnabled(false);
+                    itemConditionSpinner.setEnabled(false);
+                    descriptionLayout.setEnabled(false);
+                } else {
+                    batteryimg.setEnabled(true);
+                    cellImg.setEnabled(true);
+                    sNoPlateImg.setEnabled(true);
+                    etMake.setEnabled(true);
+                    etModel.setEnabled(true);
+                    etCapacity.setEnabled(true);
+                    etSerialNum.setEnabled(true);
+                    etYear.setEnabled(true);
+                    etDescription.setEnabled(true);
+                    itemConditionSpinner.setEnabled(true);
+                    descriptionLayout.setEnabled(true);
+                }
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -213,16 +247,6 @@ public class BatteryFragment extends MainFragment {
         itemCondition = pref.getString("ItemCondition", "");
 
     }
-
-
-    public void makeDir() {
-        File direct = new File(Environment.getExternalStorageDirectory() + "/" + strSiteId);
-        if (!direct.exists()) {
-            File wallpaperDirectory = new File("/sdcard/" + strSiteId + "/");
-            wallpaperDirectory.mkdirs();
-        }
-    }
-
 
     @Override
     public void onClick(View view) {
@@ -308,37 +332,41 @@ public class BatteryFragment extends MainFragment {
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
-        if (isEmptyStr(make)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
-            return false;
-        } else if (isEmptyStr(model)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
-            return false;
-        } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-            return false;
-        } else if (isEmptyStr(serialNumber)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
-            return false;
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            if (isEmptyStr(make)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
+                return false;
+            } else if (isEmptyStr(model)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
+                return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
+            } else if (isEmptyStr(serialNumber)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
 
-        } else if (isEmptyStr(itemCondition)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
-            return false;
-        } else if (isEmptyStr(yearOfManufacturing)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
-            return false;
-        } else if (isEmptyStr(description)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-            return false;
-        } else if (isEmptyStr(bateryphoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
-            return false;
-        } else if (isEmptyStr(cellPhoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
-            return false;
-        } else if (isEmptyStr(sNoPlatephoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-            return false;
+            } else if (isEmptyStr(itemCondition)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
+                return false;
+            } else if (isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                return false;
+            } else if (isEmptyStr(description)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (isEmptyStr(bateryphoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
+                return false;
+            } else if (isEmptyStr(cellPhoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
+                return false;
+            } else if (isEmptyStr(sNoPlatephoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                return false;
+            }
+        } else {
+            ASTUIUtil.showToast("Item Not Available");
         }
         return true;
     }

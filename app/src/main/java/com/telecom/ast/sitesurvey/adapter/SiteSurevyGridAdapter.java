@@ -18,15 +18,14 @@ import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BasicDataFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BatteryFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.DGFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.EBMeterFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.InputAlarmPanelFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MiscElectricalEquiFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MiscellaneousFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MpptFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PIUVoltageStablizerFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsMainFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PowerPlantFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SolarPanelsFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.TowerFragment;
-
-import java.util.Random;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.FireSystemFragment;
 
 /**
  * Created by AST on 23-01-2017.
@@ -47,7 +46,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
         if (position == 0) {
             llGridItem.setTitle(R.string.basidatatxt);
-            llGridItem.setImageResource(R.drawable.ic_learning);
+            llGridItem.setImageResource(R.drawable.ic_user);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
             llGridItem.setTitleColor(R.color.black);
@@ -105,7 +104,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
                 }
             });
         } else if (position == 4) {
-            llGridItem.setTitle("SMPS");
+            llGridItem.setTitle("Power Plant");
             llGridItem.setImageResource(R.drawable.ic_power);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
@@ -114,8 +113,8 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SmpsMainFragment smpsFragment = new SmpsMainFragment();
-                    openBasicDataFragment(smpsFragment, "SMPS");
+                    PowerPlantFragment smpsFragment = new PowerPlantFragment();
+                    openBasicDataFragment(smpsFragment, "Power Plant");
 
                 }
             });
@@ -195,6 +194,51 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
                 }
             });
         } else if (position == 10) {
+            llGridItem.setTitle("Fire System");
+            llGridItem.setImageResource(R.drawable.ic_fire_extinguishe);
+            llGridItem.hideCountField();
+            llGridItem.setCardViewBg(Color.parseColor("#CE2E22"));
+            llGridItem.setTitleColor(R.color.black);
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FireSystemFragment fireBaseFragment = new FireSystemFragment();
+                    openBasicDataFragment(fireBaseFragment, "Fire System");
+
+                }
+            });
+        } else if (position == 11) {
+            llGridItem.setTitle("Input Alarm Panel");
+            llGridItem.setImageResource(R.drawable.ic_alarm);
+            llGridItem.hideCountField();
+            llGridItem.setCardViewBg(Color.parseColor("#0099CC"));
+            llGridItem.setTitleColor(R.color.black);
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputAlarmPanelFragment inputAlarmPanelFragment = new InputAlarmPanelFragment();
+                    openBasicDataFragment(inputAlarmPanelFragment, "Input Alarm Panel");
+
+                }
+            });
+        } else if (position == 12) {
+            llGridItem.setTitle("Misc Electrical Equipment");
+            llGridItem.setImageResource(R.drawable.ic_settings);
+            llGridItem.hideCountField();
+            llGridItem.setCardViewBg(Color.parseColor("#fd5969"));
+            llGridItem.setTitleColor(R.color.black);
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MiscElectricalEquiFragment miscElectricalEquiFragment = new MiscElectricalEquiFragment();
+                    openBasicDataFragment(miscElectricalEquiFragment, "Misc Electrical Equipment");
+
+                }
+            });
+        } else if (position == 13) {
             llGridItem.setTitle("Miscellaneous Items");
             llGridItem.setImageResource(R.drawable.ic_briefcase);
             llGridItem.hideCountField();
@@ -215,7 +259,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 11;
+        return 14;
     }
 
     @Override

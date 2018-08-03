@@ -37,9 +37,9 @@ public class ReadingSmpsFragment extends MainFragment {
 
     static ImageView battVoltageImage, loadCurrentImage, batteryDisChaImage;
     static String battVoltagephoto, adCurrentPhoto, batteryDisChaphoto;
-    String strBattVoltage, strLoadCurrent, strBatteryDisCharge;
-    String BattVoltage, LoadCurrent, BatteryDisCharge;
-    FNEditText etBattVoltage, etLoadCurrent, etBatteryDisCharge;
+    String strBattVoltage, strLoadCurrent;
+    String BattVoltage, LoadCurrent;
+    FNEditText etBattVoltage, etLoadCurrent;
     SharedPreferences pref;
     Button btnSubmit;
     static boolean isImage1, isImage2;
@@ -56,7 +56,6 @@ public class ReadingSmpsFragment extends MainFragment {
         batteryDisChaImage = findViewById(R.id.image3);
         etBattVoltage = findViewById(R.id.etBattVoltage);
         etLoadCurrent = findViewById(R.id.etLoadCurrent);
-        etBatteryDisCharge = findViewById(R.id.etBatteryDisCharge);
         btnSubmit = findViewById(R.id.btnSubmit);
     }
 
@@ -83,7 +82,6 @@ public class ReadingSmpsFragment extends MainFragment {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strBattVoltage = pref.getString("READING_BattVoltage", "");
         strLoadCurrent = pref.getString("READING_LoadCurrent", "");
-        strBatteryDisCharge = pref.getString("READING_BatteryDisCharge", "");
         battVoltagephoto = pref.getString("BattVoltagephoto", "");
         adCurrentPhoto = pref.getString("AdCurrentPhoto", "");
         batteryDisChaphoto = pref.getString("BatteryDisChaphoto", "");
@@ -92,10 +90,9 @@ public class ReadingSmpsFragment extends MainFragment {
     @Override
     protected void dataToView() {
         getSharedPrefData();
-        if (!strBattVoltage.equals("") || !strLoadCurrent.equals("") || !strBatteryDisCharge.equals("")) {
+        if (!strBattVoltage.equals("") || !strLoadCurrent.equals("")) {
             etBattVoltage.setText(strBattVoltage);
             etLoadCurrent.setText(strLoadCurrent);
-            etBatteryDisCharge.setText(strBatteryDisCharge);
             if (!battVoltagephoto.equals("") || !adCurrentPhoto.equals("") || !batteryDisChaphoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(battVoltagephoto)).placeholder(R.drawable.noimage).into(battVoltageImage);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(adCurrentPhoto)).placeholder(R.drawable.noimage).into(loadCurrentImage);
@@ -123,7 +120,6 @@ public class ReadingSmpsFragment extends MainFragment {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("READING_BattVoltage", BattVoltage);
                 editor.putString("READING_LoadCurrent", LoadCurrent);
-                editor.putString("READING_BatteryDisCharge", BatteryDisCharge);
                 editor.putString("BattVoltagephoto", battVoltagephoto);
                 editor.putString("AdCurrentPhoto", adCurrentPhoto);
                 editor.putString("BatteryDisChaphoto", batteryDisChaphoto);
@@ -137,15 +133,11 @@ public class ReadingSmpsFragment extends MainFragment {
     public boolean isValidate() {
         BattVoltage = etBattVoltage.getText().toString();
         LoadCurrent = etLoadCurrent.getText().toString();
-        BatteryDisCharge = etBatteryDisCharge.getText().toString();
         if (isEmptyStr(BattVoltage)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Batt Voltage");
             return false;
         } else if (isEmptyStr(LoadCurrent)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Load Current");
-            return false;
-        } else if (isEmptyStr(BatteryDisCharge)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Discharge Current");
             return false;
         } else if (isEmptyStr(battVoltagephoto)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Batt Voltage Photo");
@@ -201,6 +193,7 @@ public class ReadingSmpsFragment extends MainFragment {
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
+
     /**
      * THIS USE an ActivityResult
      *

@@ -159,7 +159,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical"
-                    android:text="Battery Voltage"
+                    android:text="Batt Charging Voltage"
                     android:textColor="@color/blackMedium"
                     android:textSize="@dimen/_14dp" />
 
@@ -181,7 +181,7 @@
                         android:layout_marginLeft="@dimen/_10dp"
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
-                        android:hint="Enter Battery Voltage"
+                        android:hint="Enter Batt Charging Voltage"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>

@@ -43,6 +43,7 @@ public class MpptFragment extends MainFragment {
     FNEditText etSerialNum, etYear, etDescription;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType;
     String strMakeId, strModelId, strDescriptionId;
+    Spinner itemStatusSpineer;
 
     @Override
     protected int fragmentLayout() {
@@ -63,6 +64,7 @@ public class MpptFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
+        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -102,6 +104,10 @@ public class MpptFragment extends MainFragment {
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
 
+        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
+        itemStatusSpineer.setAdapter(itemStatus);
+
     }
 
     @Override
@@ -134,8 +140,39 @@ public class MpptFragment extends MainFragment {
         });
 
 
-        ASTUIUtil commonFunctions = new ASTUIUtil();
-        final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
+        itemStatusSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Not Available")) {
+                    frontImg.setEnabled(false);
+                    openImg.setEnabled(false);
+                    sNoPlateImg.setEnabled(false);
+                    etMake.setEnabled(false);
+                    etModel.setEnabled(false);
+                    etCapacity.setEnabled(false);
+                    etSerialNum.setEnabled(false);
+                    etYear.setEnabled(false);
+                    etDescription.setEnabled(false);
+                    itemConditionSpinner.setEnabled(false);
+                    descriptionLayout.setEnabled(false);
+                } else {
+                    frontImg.setEnabled(true);
+                    openImg.setEnabled(true);
+                    sNoPlateImg.setEnabled(true);
+                    etMake.setEnabled(true);
+                    etModel.setEnabled(true);
+                    etCapacity.setEnabled(true);
+                    etSerialNum.setEnabled(true);
+                    etYear.setEnabled(true);
+                    etDescription.setEnabled(true);
+                    itemConditionSpinner.setEnabled(true);
+                    descriptionLayout.setEnabled(true);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
 
@@ -197,34 +234,39 @@ public class MpptFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());
-        if (isEmptyStr(make)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
-            return false;
-        } else if (isEmptyStr(model)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
-            return false;
-        } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-            return false;
-        } else if (isEmptyStr(serialNumber)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
-            return false;
-        } else if (isEmptyStr(yearOfManufacturing)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
-            return false;
-        } else if (isEmptyStr(description)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-            return false;
-        } else if (isEmptyStr(frontphoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
-            return false;
-        } else if (isEmptyStr(openPhoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-            return false;
 
-        } else if (isEmptyStr(sNoPlatephoto)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-            return false;
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            if (isEmptyStr(make)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
+                return false;
+            } else if (isEmptyStr(model)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
+                return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
+            } else if (isEmptyStr(serialNumber)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
+            } else if (isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                return false;
+            } else if (isEmptyStr(description)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (isEmptyStr(frontphoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                return false;
+            } else if (isEmptyStr(openPhoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                return false;
+
+            } else if (isEmptyStr(sNoPlatephoto)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                return false;
+            }
+        } else {
+            ASTUIUtil.showToast("Item Not Available");
         }
         return true;
     }

@@ -8,15 +8,15 @@
         android:id="@+id/homeScreenGrid"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/_10dp"
+        android:layout_marginLeft="@dimen/_8dp"
+        android:layout_marginRight="@dimen/_5dp"
+        android:layout_marginTop="@dimen/_8dp"
         android:gravity="center_horizontal"
-        android:horizontalSpacing="2dp"
+        android:horizontalSpacing="@dimen/_2dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="2dp" />
+        android:verticalSpacing="@dimen/_2dp" />
 
     <ImageView
         android:id="@+id/imgRefresh"

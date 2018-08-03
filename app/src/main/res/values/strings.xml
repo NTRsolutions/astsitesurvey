@@ -71,6 +71,7 @@
     <string name="Capacity">Capacity</string>
     <string name="Manufacturing_Date">Manufacturing Date</string>
     <string name="Item_Condition">Item Condition</string>
+    <string name="item_status">Item Status</string>
     <string name="Description">Description</string>
     <string name="Enter_Make">Enter Make</string>
     <string name="Enter_Model_No.">Enter Model No.</string>

@@ -11,23 +11,8 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNTileView;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.AirConditionerFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BTSFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BasicDataFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BatteryFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.DGFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.EBMeterFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MiscellaneousFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MpptFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SiteOnBBFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsMainFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SolarPanelsFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.TowerFragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by AST on 23-01-2017.
