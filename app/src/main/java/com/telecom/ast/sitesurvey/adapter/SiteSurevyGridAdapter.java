@@ -46,6 +46,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
         if (position == 0) {
             llGridItem.setTitle(R.string.basidatatxt);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_user);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
@@ -61,6 +62,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 1) {
             llGridItem.setTitle(R.string.batryinfo);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_battery_with_positive_and_negative_poles_symbols);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
@@ -76,6 +78,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 2) {
             llGridItem.setTitle(R.string.DG);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_generator);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#FF007F"));
@@ -90,6 +93,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 3) {
             llGridItem.setTitle("AC");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_air_conditioner);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
@@ -105,6 +109,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 4) {
             llGridItem.setTitle("Power Plant");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_power);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
@@ -120,6 +125,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 5) {
             llGridItem.setTitle(R.string.EB_METER);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_electric_meter);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#FF00FF"));
@@ -135,6 +141,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 6) {
             llGridItem.setTitle(R.string.MPPT);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_electricity);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#198719"));
@@ -150,6 +157,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 7) {
             llGridItem.setTitle(R.string.Tower);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_antenna);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#0867CB"));
@@ -165,6 +173,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 8) {
             llGridItem.setTitle(R.string.SolarPanels);
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_solar_panel);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#007FFF"));
@@ -180,6 +189,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 9) {
             llGridItem.setTitle("BTS");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_transmitter);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
@@ -195,6 +205,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 10) {
             llGridItem.setTitle("Fire System");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_fire_extinguishe);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#CE2E22"));
@@ -210,6 +221,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 11) {
             llGridItem.setTitle("Input Alarm Panel");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_alarm);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#0099CC"));
@@ -225,6 +237,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 12) {
             llGridItem.setTitle("Misc Electrical Equipment");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_settings);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#fd5969"));
@@ -240,6 +253,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             });
         } else if (position == 13) {
             llGridItem.setTitle("Miscellaneous Items");
+            llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_briefcase);
             llGridItem.hideCountField();
             llGridItem.setCardViewBg(Color.parseColor("#FF007F"));
