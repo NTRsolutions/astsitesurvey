@@ -36,7 +36,6 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-legacy:2.0.1@aar'
     implementation 'com.journeyapps:zxing-android-integration:2.0.1@aar'
     implementation 'com.android.volley:volley:1.1.0'
-    implementation 'com.squareup.picasso:picasso:2.3.2'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.google.android.gms:play-services-gcm:11.8.0'
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
