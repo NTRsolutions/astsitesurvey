@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:cardElevation="@dimen/_8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/app_bar"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/activity_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/_5dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4dp">
+
+                    <com.telecom.ast.sitesurvey.component.FNTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_2dp"
+                        android:gravity="center_vertical"
+                        android:text="Item Status"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+
+
+                    <Spinner
+                        android:id="@+id/btstye"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/_32dp"
+                        android:popupBackground="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1dp"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:background="@color/backgroundColor" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_4dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/etNoEarthPits"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:hint="No of EarthPits"
+                            android:textSize="@dimen/_14dp" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_4dp">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/etEarthpitsconnected"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:hint="No of Earthpits connected  EGB/IGB"
+                            android:textSize="@dimen/_14dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_4dp">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/etinterConEarthPits"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:hint="Inter Connectivity of EarthPits"
+                            android:textSize="@dimen/_14dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_4dp">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/etVoltageEarth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:hint="Voltage between Earth and Neutral"
+                            android:textSize="@dimen/_14dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_4dp">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/etwireconnected"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:hint="DG/EB neutral wire connected with earthing"
+                            android:textSize="@dimen/_14dp" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_3dp"
+            app:cardElevation="@dimen/_6dp">
+
+            <Button
+                android:id="@+id/btnSubmit"
+                style="@style/DefaultButtonText"
+                android:layout_width="@dimen/_210dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_login"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Submit"
+                android:textSize="@dimen/_12dp" />
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

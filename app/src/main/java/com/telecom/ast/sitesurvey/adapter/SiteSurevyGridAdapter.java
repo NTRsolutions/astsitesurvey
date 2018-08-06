@@ -17,7 +17,9 @@ import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BTSFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BasicDataFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.BatteryFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.DGFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.DieselFillingFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.EBMeterFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.EarthingSystemFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.InputAlarmPanelFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MiscElectricalEquiFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MiscellaneousFragment;
@@ -240,32 +242,32 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
         } else if (position == 12) {
             llGridItem.setTitle("Earthing System");
             llGridItem.setTitleBgColor(R.color.bg_color);
-            llGridItem.setImageResource(R.drawable.ic_fire_extinguishe);
+            llGridItem.setImageResource(R.drawable.ic_mars_rover);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#CE2E22"));
+            llGridItem.setCardViewBg(Color.parseColor("#42C47D"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FireSystemFragment fireBaseFragment = new FireSystemFragment();
-                    openBasicDataFragment(fireBaseFragment, "Earthing System");
+                    EarthingSystemFragment earthingSystemFragment = new EarthingSystemFragment();
+                    openBasicDataFragment(earthingSystemFragment, "Earthing System");
 
                 }
             });
         } else if (position == 13) {
             llGridItem.setTitle("Diesel Filling");
             llGridItem.setTitleBgColor(R.color.bg_color);
-            llGridItem.setImageResource(R.drawable.ic_alarm);
+            llGridItem.setImageResource(R.drawable.ic_oil);
             llGridItem.hideCountField();
-            llGridItem.setCardViewBg(Color.parseColor("#0099CC"));
+            llGridItem.setCardViewBg(Color.parseColor("#F79646"));
             llGridItem.setTitleColor(R.color.black);
             llGridItem.setImageCircleColor(false);
             llGridItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    InputAlarmPanelFragment inputAlarmPanelFragment = new InputAlarmPanelFragment();
-                    openBasicDataFragment(inputAlarmPanelFragment, "Diesel Filling");
+                    DieselFillingFragment dieselFillingFragment = new DieselFillingFragment();
+                    openBasicDataFragment(dieselFillingFragment, "Diesel Filling");
 
                 }
             });
