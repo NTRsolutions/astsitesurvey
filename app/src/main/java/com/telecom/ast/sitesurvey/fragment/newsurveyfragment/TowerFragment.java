@@ -35,10 +35,11 @@ public class TowerFragment extends MainFragment {
     static boolean isImage1, isImage2, isImage3, isImage4, isImage5;
     Button btnSubmit;
     LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner, typeTowerSpinner;
+    Spinner itemConditionSpinner, typeTowerSpinner, laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
     String strUserId, strSavedDateTime, strSiteId;
     SharedPreferences pref;
-    AppCompatEditText etHeight, etDate, etDescription;
+    AppCompatEditText etHeight, etDate, etDescription, etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem,
+            etEarthingofTower;
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
     String type, height, date, itemcondion, descreption;
     static String overviewImgstr, northmgStr, eastImgStr, southImgStr, westImgStr;
@@ -62,6 +63,14 @@ public class TowerFragment extends MainFragment {
         etDate = findViewById(R.id.etDate);
         etDescription = findViewById(R.id.etDescription);
         descriptionLayout = findViewById(R.id.descriptionLayout);
+        etworkingCondi = findViewById(R.id.etworkingCondi);
+        etnoMicrowaveAntenna = findViewById(R.id.etnoMicrowaveAntenna);
+        etnoGSMAntenna = findViewById(R.id.etnoGSMAntenna);
+        etmissingMem = findViewById(R.id.etmissingMem);
+        etEarthingofTower = findViewById(R.id.etEarthingofTower);
+        laEarthingStatusSpinner = findViewById(R.id.laEarthingStatusSpinner);
+        towerFoundationSpinner = findViewById(R.id.towerFoundationSpinner);
+        towerTighteningSpinner = findViewById(R.id.towerTighteningSpinner);
 
     }
 
@@ -89,6 +98,21 @@ public class TowerFragment extends MainFragment {
         final String itemCondition_array[] = {"Ok", "Missing", "Poor Condition"};
         ArrayAdapter<String> towerType = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(towerType);
+
+
+        final String laEarthingStatus_array[] = {"Available", "Not Available", "Connected", "Nott Connected"};
+        ArrayAdapter<String> laEarthingStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, laEarthingStatus_array);
+        laEarthingStatusSpinner.setAdapter(laEarthingStatus);
+
+
+        final String towerFoundation_array[] = {"Available", "Not Available", "Covered", "Grouted"};
+        ArrayAdapter<String> towerFoundation = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, towerFoundation_array);
+        towerFoundationSpinner.setAdapter(towerFoundation);
+
+
+        final String towerTightening_array[] = {"Done", "Not Done"};
+        ArrayAdapter<String> towerTightening = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, towerTightening_array);
+        towerTighteningSpinner.setAdapter(towerTightening);
 
 
     }
