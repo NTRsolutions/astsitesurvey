@@ -28,38 +28,22 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:id="@+id/Time"
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Batt Voltage"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_16dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etBattVoltage"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Entre Batt Voltage"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16dp" />
-                </android.support.v7.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Batt Voltage"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -69,37 +53,23 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Load Current"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_16dp" />
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etLoadCurrent"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Load Current"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16dp" />
-                </android.support.v7.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Load Current"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
 

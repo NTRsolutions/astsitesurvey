@@ -1,17 +1,13 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNEditText;
@@ -23,16 +19,14 @@ import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BasicDataFragment extends MainFragment {
-    FNEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity;
+    AppCompatEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity,
+            etOwner, etOwnerContact, etCaretaker, etCaretakercontact, etownerAddress;
     Spinner spDistrict, spCircle, spSSA;
     AutoCompleteTextView etSiteId, etSiteName;
 
@@ -46,10 +40,12 @@ public class BasicDataFragment extends MainFragment {
     SharedPreferences pref;
     String userId, strDate, strTime, strSurveyyorName, strSiteId, strAddress, strMilli;
     String strCircleId, strSSAId, strDistrictId, strCity, strPincode, strSiteCustomerId, strSiteName;
-    String strCirclePosition, strSSAPosition, strDistrictPosition;
+    String strCirclePosition, strSSAPosition, strDistrictPosition,
+            strOwner, strOwnerContact, strCaretaker, strCaretakercontact, strownerAddress;
     long currentMilli;
     String dateTime, finalDate, finalTime, finalSurveyorName, finalSiteId, finalSiteName, finalAddress,
-            finalCity, finalPincode;
+            finalCity, finalPincode, Owner, OwnerContact, Caretaker, Caretakercontact, ownerAddress;
+    ;
 
     int finalCircle, finalSSA, finalDistrict;
 
@@ -72,6 +68,11 @@ public class BasicDataFragment extends MainFragment {
         this.spDistrict = findViewById(R.id.spDistrict);
         this.etCity = findViewById(R.id.etCity);
         this.btnSubmit = findViewById(R.id.btnSubmit);
+        etOwner = findViewById(R.id.etOwner);
+        etOwnerContact = findViewById(R.id.etOwnerContact);
+        etCaretaker = findViewById(R.id.etCaretaker);
+        etCaretakercontact = findViewById(R.id.etCaretakercontact);
+        etownerAddress = findViewById(R.id.etownerAddress);
     }
 
     @Override
@@ -206,6 +207,12 @@ public class BasicDataFragment extends MainFragment {
             etCity.setText(strCity);
             etPincode.setText(strPincode);
 
+            etOwner.setText(strOwner);
+            etOwnerContact.setText(strOwnerContact);
+            etCaretaker.setText(strCaretaker);
+            etCaretakercontact.setText(strCaretakercontact);
+            etownerAddress.setText(strownerAddress);
+
         }
     }
 
@@ -234,6 +241,12 @@ public class BasicDataFragment extends MainFragment {
         strDistrictPosition = pref.getString("DistrictPosition", "");
         strCity = pref.getString("City", "");
         strPincode = pref.getString("Pincode", "");
+        strOwner = pref.getString("strOwner", "");
+        strOwnerContact = pref.getString("strOwnerContact", "");
+        strCaretaker = pref.getString("strCaretaker", "");
+        strCaretakercontact = pref.getString("strCaretakercontact", "");
+        strownerAddress = pref.getString("strownerAddress", "");
+
     }
 
     public void setSSAadapter(String[] arrSSA, int position) {
@@ -307,12 +320,19 @@ public class BasicDataFragment extends MainFragment {
                 editor.putString("DistrictPosition", String.valueOf(spDistrict.getSelectedItemPosition()));
                 editor.putString("City", finalCity);
                 editor.putString("Pincode", finalPincode);
+                editor.putString("strOwner", Owner);
+                editor.putString("strOwnerContact", OwnerContact);
+                editor.putString("strCaretaker", Caretaker);
+                editor.putString("strCaretakercontact", Caretakercontact);
+                editor.putString("strownerAddress", ownerAddress);
+
+
                 editor.putString("MilliSeconds", String.valueOf(currentMilli));
                 editor.commit();
                 strCirclePosition = pref.getString("CirclePosition", "");
                 strSSAPosition = pref.getString("SSAPosition", "");
                 strDistrictPosition = pref.getString("DistrictPosition", "");
-               reloadBackScreen();
+                reloadBackScreen();
 
             }
         }
@@ -332,6 +352,14 @@ public class BasicDataFragment extends MainFragment {
         finalDistrict = spDistrict.getSelectedItemPosition();
         finalCity = getTextFromView(this.etCity);
         finalPincode = getTextFromView(this.etPincode);
+
+        Owner = getTextFromView(this.etOwner);
+        OwnerContact = getTextFromView(this.etOwnerContact);
+        Caretaker = getTextFromView(this.etCaretaker);
+        Caretakercontact = getTextFromView(this.etCaretakercontact);
+        ownerAddress = getTextFromView(this.etownerAddress);
+
+
         if (isEmptyStr(finalSurveyorName)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter SurveyorName");
             return false;

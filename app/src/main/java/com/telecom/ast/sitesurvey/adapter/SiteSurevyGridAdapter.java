@@ -235,7 +235,41 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
 
                 }
             });
+
+
         } else if (position == 12) {
+            llGridItem.setTitle("Earthing System");
+            llGridItem.setTitleBgColor(R.color.bg_color);
+            llGridItem.setImageResource(R.drawable.ic_fire_extinguishe);
+            llGridItem.hideCountField();
+            llGridItem.setCardViewBg(Color.parseColor("#CE2E22"));
+            llGridItem.setTitleColor(R.color.black);
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FireSystemFragment fireBaseFragment = new FireSystemFragment();
+                    openBasicDataFragment(fireBaseFragment, "Earthing System");
+
+                }
+            });
+        } else if (position == 13) {
+            llGridItem.setTitle("Diesel Filling");
+            llGridItem.setTitleBgColor(R.color.bg_color);
+            llGridItem.setImageResource(R.drawable.ic_alarm);
+            llGridItem.hideCountField();
+            llGridItem.setCardViewBg(Color.parseColor("#0099CC"));
+            llGridItem.setTitleColor(R.color.black);
+            llGridItem.setImageCircleColor(false);
+            llGridItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputAlarmPanelFragment inputAlarmPanelFragment = new InputAlarmPanelFragment();
+                    openBasicDataFragment(inputAlarmPanelFragment, "Diesel Filling");
+
+                }
+            });
+        } else if (position == 14) {
             llGridItem.setTitle("Misc Electrical Equipment");
             llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_settings);
@@ -251,7 +285,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
 
                 }
             });
-        } else if (position == 13) {
+        } else if (position == 15) {
             llGridItem.setTitle("Miscellaneous Items");
             llGridItem.setTitleBgColor(R.color.bg_color);
             llGridItem.setImageResource(R.drawable.ic_briefcase);
@@ -273,7 +307,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 14;
+        return 16;
     }
 
     @Override

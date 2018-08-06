@@ -29,38 +29,22 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="DG Current"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etDGCurrent"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter DG Current"
-                        android:textColor="@color/text_color"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Current"
                         android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -70,38 +54,23 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="DG Voltage"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etDGVoltage"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter DG Voltage"
-                        android:textColor="@color/text_color"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Voltage"
                         android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -111,38 +80,23 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="DG Frequency"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etDGFrequency"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter DG Frequency"
-                        android:textColor="@color/text_color"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Frequency"
                         android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
 
@@ -153,38 +107,24 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Batt Charging Voltage"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etBatteryVoltage"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Batt Charging Voltage"
-                        android:textColor="@color/text_color"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Batt Charging Voltage"
                         android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
+
             </LinearLayout>
 
 
@@ -195,38 +135,24 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="Batt Charge Current"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etBatChangeCurrent"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
                         android:hint="Batt Charge Current"
-                        android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
+                </android.support.design.widget.TextInputLayout>
+
+
             </LinearLayout>
 
 

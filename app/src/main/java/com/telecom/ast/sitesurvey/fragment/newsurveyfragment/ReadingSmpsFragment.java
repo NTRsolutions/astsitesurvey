@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,7 +40,7 @@ public class ReadingSmpsFragment extends MainFragment {
     static String battVoltagephoto, adCurrentPhoto, batteryDisChaphoto;
     String strBattVoltage, strLoadCurrent;
     String BattVoltage, LoadCurrent;
-    FNEditText etBattVoltage, etLoadCurrent;
+    AppCompatEditText etBattVoltage, etLoadCurrent;
     SharedPreferences pref;
     Button btnSubmit;
     static boolean isImage1, isImage2;

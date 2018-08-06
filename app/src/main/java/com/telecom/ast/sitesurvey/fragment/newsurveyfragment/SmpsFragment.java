@@ -2,6 +2,8 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,8 +39,8 @@ public class SmpsFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
-    FNEditText etSerialNum, etYear, etDescription, etnoofModule, etModuleCapacity;
-    AutoCompleteTextView etCapacity, etMake, etModel;
+    AppCompatEditText etYear, etDescription, etnoofModule, etModuleCapacity;
+    AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strnoofModule, strModuleCapacity;
     String strSavedDateTime, strUserId, strSiteId;

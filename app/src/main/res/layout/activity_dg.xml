@@ -177,7 +177,8 @@
                     app:counterOverflowTextAppearance="@style/CounterOverFlow"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etYear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -235,7 +236,7 @@
                     app:counterOverflowTextAppearance="@style/CounterOverFlow"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.telecom.ast.sitesurvey.component.FNEditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

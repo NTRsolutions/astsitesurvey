@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +33,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SetOnEBFragment extends MainFragment {
-    FNEditText etebCurrent, etebVolatge, etEbFrequency, etbattcharging, etBattcurrent;
+    AppCompatEditText etebCurrent, etebVolatge, etEbFrequency, etbattcharging, etBattcurrent;
     SharedPreferences pref;
     String strCurrent, strVoltage, strFrequency, battcharging, Battcurrent;
     String strUserId, strSavedDateTime, strSiteId;

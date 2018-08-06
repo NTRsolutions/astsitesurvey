@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,8 +49,8 @@ public class AirConditionerFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
-    FNEditText etSerialNum, etYear, etDescription, etNumberOfAC, etnoAc;
-    AutoCompleteTextView etCapacity, etMake, etModel;
+    AppCompatEditText etYear, etDescription, etNumberOfAC, etnoAc;
+    AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
     String strSavedDateTime, strUserId, strSiteId, sNoAC;

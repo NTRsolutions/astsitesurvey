@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,8 +49,8 @@ public class EBMeterFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime, numOfACs, sNAC;
 
     SharedPreferences pref;
-    AutoCompleteTextView etCapacity, etMake, etModel;
-    FNEditText etSerialNum, etYear, etDescription, ebMeterreading;
+    AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    AppCompatEditText etYear, etDescription, ebMeterreading;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;

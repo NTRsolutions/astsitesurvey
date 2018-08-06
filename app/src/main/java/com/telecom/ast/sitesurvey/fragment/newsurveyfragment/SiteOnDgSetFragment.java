@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SiteOnDgSetFragment extends MainFragment {
-    FNEditText etDGCurrent, etDGFrequency, etDGVoltage, etBatChangeCurrent, etBatteryVoltage;
+    AppCompatEditText etDGCurrent, etDGFrequency, etDGVoltage, etBatChangeCurrent, etBatteryVoltage;
     SharedPreferences pref;
     String strDgCurrent, strDgFrequency, strDgVoltage, strBatteryChargeCurrent, strBatteryVoltage;
     String strUserId, strSavedDateTime;

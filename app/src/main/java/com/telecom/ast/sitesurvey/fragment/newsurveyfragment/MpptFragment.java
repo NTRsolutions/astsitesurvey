@@ -40,7 +40,7 @@ public class MpptFragment extends MainFragment {
     String strUserId, strSavedDateTime, strSiteId;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     SharedPreferences pref;
-    AutoCompleteTextView etCapacity, etMake,etSerialNum, etModel;
+    AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
     AppCompatEditText etYear, etDescription;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType;
     String strMakeId, strModelId, strDescriptionId;
