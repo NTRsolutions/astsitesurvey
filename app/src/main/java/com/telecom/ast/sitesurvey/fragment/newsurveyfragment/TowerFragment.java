@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +38,7 @@ public class TowerFragment extends MainFragment {
     Spinner itemConditionSpinner, typeTowerSpinner;
     String strUserId, strSavedDateTime, strSiteId;
     SharedPreferences pref;
-    EditText etHeight, etDate, etDescription;
+    AppCompatEditText etHeight, etDate, etDescription;
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
     String type, height, date, itemcondion, descreption;
     static String overviewImgstr, northmgStr, eastImgStr, southImgStr, westImgStr;

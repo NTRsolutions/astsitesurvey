@@ -90,7 +90,7 @@
                         android:background="@color/bg_color"
                         android:ellipsize="end"
                         android:gravity="center"
-                        android:maxLines="2"
+                        android:maxLines="1"
                         android:padding="@dimen/_8dp"
                         android:textColor="@color/appTheamColor"
                         android:textSize="@dimen/_12dp"

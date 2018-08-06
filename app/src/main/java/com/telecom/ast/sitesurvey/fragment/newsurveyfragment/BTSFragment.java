@@ -2,6 +2,8 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,7 +27,8 @@ public class BTSFragment extends MainFragment {
     private LinearLayout mContainerView;
     private Button mAddButton, btnSubmit;
     private View mExclusiveEmptyView;
-    FNEditText etbtsOperator, etNofCab;
+    AppCompatEditText etNofCab;
+    AppCompatAutoCompleteTextView etbtsOperator;
     Spinner btstyelSpinner;
     String btsOperator, NofCab;
     String strbtsOperator, strNofCab;

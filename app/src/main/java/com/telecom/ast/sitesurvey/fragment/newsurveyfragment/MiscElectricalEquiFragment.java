@@ -1,6 +1,7 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,9 +18,9 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class MiscElectricalEquiFragment extends MainFragment {
 
     Spinner spinnerElectrical, spinnerAviationLamp, LightningSpinner;
-    FNEditText etbtsOperator;
+    AppCompatEditText etEarthingvalue;
     Button btnSubmit;
-    String btbtsOperator, strbtsOperator, strspinnerElectrical, strspinnerAviationLamp, strLightningSpinner;
+    String strEarthingvalue, Earthingvalue, strspinnerElectrical, strspinnerAviationLamp, strLightningSpinner;
     SharedPreferences pref;
 
     @Override
@@ -32,7 +33,7 @@ public class MiscElectricalEquiFragment extends MainFragment {
         spinnerElectrical = this.findViewById(R.id.spinnerElectrical);
         spinnerAviationLamp = this.findViewById(R.id.spinnerAviationLamp);
         LightningSpinner = this.findViewById(R.id.LightningSpinner);
-        etbtsOperator = this.findViewById(R.id.etbtsOperator);
+        etEarthingvalue = this.findViewById(R.id.etEarthingvalue);
         btnSubmit = this.findViewById(R.id.btnSubmit);
     }
 
@@ -50,8 +51,8 @@ public class MiscElectricalEquiFragment extends MainFragment {
     protected void dataToView() {
         setSpinnerValue();
         getSharedprefData();
-        if (!strbtsOperator.equals("")) {
-            etbtsOperator.setText(strbtsOperator);
+        if (!Earthingvalue.equals("")) {
+            etEarthingvalue.setText(Earthingvalue);
         }
     }
 
@@ -62,7 +63,7 @@ public class MiscElectricalEquiFragment extends MainFragment {
      */
     public void getSharedprefData() {
         pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strbtsOperator = pref.getString("MISC_strbtsOperator", "");
+        Earthingvalue = pref.getString("MISC_strbtsOperator", "");
         strspinnerElectrical = pref.getString("MISC_strspinnerElectrical", "");
         strspinnerAviationLamp = pref.getString("MISC_strspinnerAviationLamp", "");
         strLightningSpinner = pref.getString("MISC_strLightningSpinner", "");
@@ -90,10 +91,11 @@ public class MiscElectricalEquiFragment extends MainFragment {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("MISC_strbtsOperator", btbtsOperator);
+                editor.putString("MISC_strbtsOperator", strEarthingvalue);
                 editor.putString("MISC_strspinnerElectrical", strspinnerElectrical);
                 editor.putString("MISC_strspinnerAviationLamp", strspinnerAviationLamp);
                 editor.putString("MISC_strLightningSpinner", strLightningSpinner);
+                editor.commit();
             }
 
         }
@@ -101,11 +103,11 @@ public class MiscElectricalEquiFragment extends MainFragment {
 
     // ----validation -----
     private boolean isValidate() {
-        btbtsOperator = getTextFromView(this.etbtsOperator);
+        strEarthingvalue = getTextFromView(this.etEarthingvalue);
         strspinnerElectrical = spinnerElectrical.getSelectedItem().toString();
         strspinnerAviationLamp = spinnerAviationLamp.getSelectedItem().toString();
         strLightningSpinner = LightningSpinner.getSelectedItem().toString();
-        if (isEmptyStr(btbtsOperator)) {
+        if (isEmptyStr(strEarthingvalue)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Earthing-Resistance Value");
             return false;
         } else if (isEmptyStr(strspinnerElectrical)) {

@@ -2,6 +2,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SolarPanelsFragment extends MainFragment {
-    FNEditText etNoofPanel, etMake, etcapacitypanel, etNoofAGb;
+    AppCompatEditText etNoofPanel, etMake, etcapacitypanel, etNoofAGb;
     Button btnSubmit;
     ASTUIUtil commonFunctions;
     SharedPreferences pref;

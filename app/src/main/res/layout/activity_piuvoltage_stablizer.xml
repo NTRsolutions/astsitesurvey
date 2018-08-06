@@ -323,6 +323,47 @@
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4dp"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical"
+                    android:text="No Of LCU"
+                    android:textColor="@color/blackMedium"
+                    android:textSize="@dimen/_14dp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+
+                    <com.telecom.ast.sitesurvey.component.FNEditText
+                        android:id="@+id/etNofLcu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="@dimen/_10dp"
+                        android:background="@android:color/white"
+                        android:gravity="left|center_vertical"
+                        android:hint="Enter Serial Num"
+                        android:inputType="date"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -456,48 +497,6 @@
                 </android.support.v7.widget.CardView>
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <com.telecom.ast.sitesurvey.component.FNTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical"
-                    android:text="No Of LCU"
-                    android:textColor="@color/blackMedium"
-                    android:textSize="@dimen/_14dp" />
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_2dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:minHeight="@dimen/_28dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-
-                    <com.telecom.ast.sitesurvey.component.FNEditText
-                        android:id="@+id/etNofLcu"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/_10dp"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
-                        android:hint="Enter Serial Num"
-                        android:inputType="date"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.v7.widget.CardView>
             </LinearLayout>
 
 

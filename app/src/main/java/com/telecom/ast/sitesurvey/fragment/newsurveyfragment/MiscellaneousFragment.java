@@ -3,10 +3,12 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -28,7 +30,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MiscellaneousFragment extends MainFragment {
-    FNEditText etshater1size, etshater2size, etoutDoorsize, etGateSize, etPlot, etApproachRoad, etboundryheight;
+    EditText  etshater2size, etoutDoorsize, etGateSize, etPlot, etApproachRoad, etboundryheight;
+    TextInputEditText etshater1size;
     ImageView image1, image2, image3, image4, image5, image6;
     static boolean ismage1, ismage2, ismage3, ismage4, ismage5, ismage6;
     String shaterimage1, shaterimage2, outDoorimage3, GateSizeimage4, Plotimage5, Approachimage6;

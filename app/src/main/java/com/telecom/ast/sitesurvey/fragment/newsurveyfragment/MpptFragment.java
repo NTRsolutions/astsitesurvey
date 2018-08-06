@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,8 +40,8 @@ public class MpptFragment extends MainFragment {
     String strUserId, strSavedDateTime, strSiteId;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     SharedPreferences pref;
-    AutoCompleteTextView etCapacity, etMake, etModel;
-    FNEditText etSerialNum, etYear, etDescription;
+    AutoCompleteTextView etCapacity, etMake,etSerialNum, etModel;
+    AppCompatEditText etYear, etDescription;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType;
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;

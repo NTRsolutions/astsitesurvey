@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,8 +47,8 @@ public class DGFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
-    EditText etSerialNum, etYear, etDescription;
-    AutoCompleteTextView etMake, etModel, etCapacity;
+    AppCompatEditText etYear, etDescription;
+    AutoCompleteTextView etMake, etModel, etCapacity,etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId;

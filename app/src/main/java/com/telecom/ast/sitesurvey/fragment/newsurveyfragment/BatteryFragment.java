@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,9 +49,9 @@ public class BatteryFragment extends MainFragment {
     static ImageView batteryimg, cellImg, sNoPlateImg;
     static String bateryphoto, cellPhoto, sNoPlatephoto;
     static boolean isImage1, isImage2;
-
-    FNEditText etSerialNum, etYear, etDescription;
-    AutoCompleteTextView etMake, etModel, etCapacity;
+    AppCompatAutoCompleteTextView etMake;
+    AppCompatEditText  etYear, etDescription;
+    AppCompatAutoCompleteTextView etModel, etCapacity,etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;

@@ -3,6 +3,7 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ public class BasicDataFragment extends MainFragment {
     FNEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity;
     Spinner spDistrict, spCircle, spSSA;
     AutoCompleteTextView etSiteId, etSiteName;
+
     Button btnSubmit;
     AtmDatabase atmDatabase;
     ASTUIUtil commonFunctions;
