@@ -134,7 +134,7 @@ public class ApplicationClass extends Application {
     public boolean isPermissionGranted(int permissionCode){
         return getActivity() != null && getActivity().isPermissionGranted(permissionCode);
     }
-
+    //---------------for volley -------------
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -142,7 +142,7 @@ public class ApplicationClass extends Application {
 
         return mRequestQueue;
     }
-//---------------for volley -------------
+
     public ImageLoader getImageLoader() {
         getRequestQueue();
         if (mImageLoader == null) {
