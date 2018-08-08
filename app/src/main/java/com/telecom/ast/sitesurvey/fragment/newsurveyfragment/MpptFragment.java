@@ -41,8 +41,8 @@ public class MpptFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     SharedPreferences pref;
     AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
-    AppCompatEditText etYear, etDescription;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType;
+    AppCompatEditText etYear, etDescription, etMPPTReading;
+    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, MPPTReading;
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
 
@@ -66,6 +66,7 @@ public class MpptFragment extends MainFragment {
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
+        etMPPTReading = findViewById(R.id.etMPPTReading);
     }
 
     @Override
@@ -98,6 +99,8 @@ public class MpptFragment extends MainFragment {
         sNoPlatephoto = pref.getString("MPPT_Photo3", "");
         strSavedDateTime = pref.getString("MPPT_EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+        MPPTReading = pref.getString("MPPTReading", "");
+
     }
 
     public void setSpinnerValue() {
@@ -117,13 +120,14 @@ public class MpptFragment extends MainFragment {
         setSpinnerValue();
 
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !MPPTReading.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+            etMPPTReading.setText(MPPTReading);
         }
         if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
@@ -156,6 +160,7 @@ public class MpptFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
+                    etMPPTReading.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -168,6 +173,7 @@ public class MpptFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
+                    etMPPTReading.setEnabled(true);
                 }
             }
 
@@ -208,6 +214,7 @@ public class MpptFragment extends MainFragment {
                 editor.putString("MPPT_Photo2", openPhoto);
                 editor.putString("MPPT_Photo3", sNoPlatephoto);
                 editor.putString("MPPT_EbMeterSavedDateTime", currentDateTime);
+                editor.putString("MPPTReading", MPPTReading);
                 editor.commit();
                 saveScreenData(true, false);
 
@@ -232,6 +239,7 @@ public class MpptFragment extends MainFragment {
         capacity = etCapacity.getText().toString();
         serialNumber = etSerialNum.getText().toString();
         yearOfManufacturing = etYear.getText().toString();
+        MPPTReading = etMPPTReading.getText().toString();
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());

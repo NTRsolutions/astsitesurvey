@@ -50,11 +50,14 @@ public class BatteryFragment extends MainFragment {
     static String bateryphoto, cellPhoto, sNoPlatephoto;
     static boolean isImage1, isImage2;
     AppCompatAutoCompleteTextView etMake;
-    AppCompatEditText  etYear, etDescription;
-    AppCompatAutoCompleteTextView etModel, etCapacity,etSerialNum;
+    AppCompatEditText etYear, etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
+            etTightnessofBentCaps, etCellInterconnecting;
+    AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
+    String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
+            TightnessofBentCaps, CellInterconnecting;
     String strMakeId, strModelId;
     ArrayList<EquipMakeDataModel> equipMakeList;
     AtmDatabase atmDatabase;
@@ -88,6 +91,13 @@ public class BatteryFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         descriptionLayout = findViewById(R.id.descriptionLayout);
+        etNoofItems = findViewById(R.id.etNoofItems);
+        etNoofCell = findViewById(R.id.etNoofCell);
+        etCellVoltage = findViewById(R.id.etCellVoltage);
+        etNoofWeakCells = findViewById(R.id.etNoofWeakCells);
+        etBackUpinHrs = findViewById(R.id.etBackUpinHrs);
+        etTightnessofBentCaps = findViewById(R.id.etTightnessofBentCaps);
+        etCellInterconnecting = findViewById(R.id.etCellInterconnecting);
     }
 
     @Override
@@ -167,13 +177,31 @@ public class BatteryFragment extends MainFragment {
             }
         });
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")
+                || !NoofItems.equals("")
+                || !NoofCell.equals("")
+                || !CellVoltage.equals("")
+                || !NoofWeakCells.equals("")
+                || !BackUpinHrs.equals("")
+                || !TightnessofBentCaps.equals("")
+                || !CellInterconnecting.equals("")
+                ) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+
+            etNoofItems.setText(NoofItems);
+            etNoofCell.setText(NoofCell);
+            etCellVoltage.setText(CellVoltage);
+            etNoofWeakCells.setText(BackUpinHrs);
+            etBackUpinHrs.setText(BackUpinHrs);
+            etTightnessofBentCaps.setText(TightnessofBentCaps);
+            etCellInterconnecting.setText(CellInterconnecting);
+
+
             if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(bateryphoto)).placeholder(R.drawable.noimage).into(batteryimg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(cellPhoto)).placeholder(R.drawable.noimage).into(cellImg);
@@ -205,6 +233,15 @@ public class BatteryFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
+
+
+                    etNoofItems.setEnabled(false);
+                    etNoofCell.setEnabled(false);
+                    etCellVoltage.setEnabled(false);
+                    etNoofWeakCells.setEnabled(false);
+                    etBackUpinHrs.setEnabled(false);
+                    etTightnessofBentCaps.setEnabled(false);
+                    etCellInterconnecting.setEnabled(false);
                 } else {
                     batteryimg.setEnabled(true);
                     cellImg.setEnabled(true);
@@ -217,6 +254,14 @@ public class BatteryFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
+
+                    etNoofItems.setEnabled(true);
+                    etNoofCell.setEnabled(true);
+                    etCellVoltage.setEnabled(true);
+                    etNoofWeakCells.setEnabled(true);
+                    etBackUpinHrs.setEnabled(true);
+                    etTightnessofBentCaps.setEnabled(true);
+                    etCellInterconnecting.setEnabled(true);
                 }
             }
 
@@ -247,6 +292,15 @@ public class BatteryFragment extends MainFragment {
         strSavedDateTime = pref.getString("BbActivitySavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
         itemCondition = pref.getString("ItemCondition", "");
+
+        NoofItems = pref.getString("NoofItems", "");
+        NoofCell = pref.getString("NoofCell", "");
+        CellVoltage = pref.getString("CellVoltage", "");
+        NoofWeakCells = pref.getString("NoofWeakCells", "");
+        BackUpinHrs = pref.getString("BackUpinHrs", "");
+        TightnessofBentCaps = pref.getString("TightnessofBentCaps", "");
+        CellInterconnecting = pref.getString("CellInterconnecting", "");
+
 
     }
 
@@ -313,6 +367,13 @@ public class BatteryFragment extends MainFragment {
                 editor.putString("batryPhoto3", sNoPlatephoto);
                 editor.putString("BbActivitySavedDateTime", currentDateTime);
                 editor.putString("ItemCondition", itemCondition);
+                editor.putString("NoofItems", NoofItems);
+                editor.putString("NoofCell", NoofCell);
+                editor.putString("CellVoltage", CellVoltage);
+                editor.putString("NoofWeakCells", NoofWeakCells);
+                editor.putString("BackUpinHrs", BackUpinHrs);
+                editor.putString("TightnessofBentCaps", TightnessofBentCaps);
+                editor.putString("CellInterconnecting", CellInterconnecting);
                 strMakeId = pref.getString("", "");
                 strModelId = pref.getString("", "");
                 editor.commit();
@@ -334,6 +395,14 @@ public class BatteryFragment extends MainFragment {
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
+        NoofItems = getTextFromView(this.etNoofItems);
+        NoofCell = getTextFromView(this.etNoofCell);
+        CellVoltage = getTextFromView(this.etCellVoltage);
+        NoofWeakCells = getTextFromView(this.etNoofWeakCells);
+        BackUpinHrs = getTextFromView(this.etBackUpinHrs);
+        TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
+        CellInterconnecting = getTextFromView(this.etCellInterconnecting);
+
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");

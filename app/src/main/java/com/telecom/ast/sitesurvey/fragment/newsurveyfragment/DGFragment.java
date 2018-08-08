@@ -48,7 +48,7 @@ public class DGFragment extends MainFragment {
     static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
     AppCompatEditText etYear, etDescription;
-    AutoCompleteTextView etMake, etModel, etCapacity,etSerialNum;
+    AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId;
@@ -66,6 +66,21 @@ public class DGFragment extends MainFragment {
     Spinner itemConditionSpinner;
     Spinner itemStatusSpineer;
 
+    String pDistribution, mCBStatus, dbAlternatermake, eSN,
+            dBCapacity, dgContacter, backCompressor, AutomationCondition, PowerPanelMake, PowerPanelCapacity, DGType, AlternaterSno,
+            AlternterCapacity, DGBatteryStatus, DGBatteryMake, Conditionofwiring, DGearthing, ConditionCANOPY,
+            DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgpipe,
+            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGBatterysn, DGPollutionCertificate;
+
+    Spinner pDistributionSpinner, mCBStatusSpinner, dbAlternatermakeSpinner, eSNSpinner,
+            dBCapacitySpinner, dgContacterSpinner, backCompressorSpinner;
+
+    AppCompatEditText etAutomationCondition, etPowerPanelMake, etPowerPanelCapacity, etDGType, etAlternaterSno,
+            etAlternterCapacity, etDGBatteryStatus, etDGBatteryMake, etConditionofwiring, etDGearthing, etConditionCANOPY,
+            etDGRunHourMeter, eTDGlowLUBEWire, etDGFuelTank, etCableGrouting, etDGFoundation, etDGCoolingtype, etDgpipe,
+            etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver, etDGBatterysn, etDGPollutionCertificate;
+
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_dg;
@@ -77,15 +92,46 @@ public class DGFragment extends MainFragment {
         openImg = findViewById(R.id.image2);
         sNoPlateImg = findViewById(R.id.image3);
         etMake = findViewById(R.id.etMake);
-        etModel = findViewById(R.id.etModel);
         etCapacity = findViewById(R.id.etCapacity);
+        etModel = findViewById(R.id.etModel);
         etSerialNum = findViewById(R.id.etSerialNum);
         etYear = findViewById(R.id.etYear);
         etDescription = findViewById(R.id.etDescription);
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
+
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
+        pDistributionSpinner = findViewById(R.id.pDistributionSpinner);
+        mCBStatusSpinner = findViewById(R.id.mCBStatusSpinner);
+        dbAlternatermakeSpinner = findViewById(R.id.dbAlternatermakeSpinner);
+        eSNSpinner = findViewById(R.id.eSNSpinner);
+        dBCapacitySpinner = findViewById(R.id.dBCapacitySpinner);
+        dgContacterSpinner = findViewById(R.id.dgContacterSpinner);
+        backCompressorSpinner = findViewById(R.id.backCompressorSpinner);
+        etAutomationCondition = findViewById(R.id.etAutomationCondition);
+        etPowerPanelMake = findViewById(R.id.etPowerPanelMake);
+        etPowerPanelCapacity = findViewById(R.id.etPowerPanelCapacity);
+        etDGType = findViewById(R.id.etDGType);
+        etAlternaterSno = findViewById(R.id.etAlternaterSno);
+        etAlternterCapacity = findViewById(R.id.etAlternterCapacity);
+        etDGBatteryStatus = findViewById(R.id.etDGBatteryStatus);
+        etDGBatteryMake = findViewById(R.id.etDGBatteryMake);
+        etConditionofwiring = findViewById(R.id.etConditionofwiring);
+        etDGearthing = findViewById(R.id.etDGearthing);
+        etConditionCANOPY = findViewById(R.id.etConditionCANOPY);
+        etDGRunHourMeter = findViewById(R.id.etDGRunHourMeter);
+        eTDGlowLUBEWire = findViewById(R.id.eTDGlowLUBEWire);
+        etDGFuelTank = findViewById(R.id.etDGFuelTank);
+        etCableGrouting = findViewById(R.id.etCableGrouting);
+        etDGFoundation = findViewById(R.id.etDGFoundation);
+        etDGCoolingtype = findViewById(R.id.etDGCoolingtype);
+        etDgpipe = findViewById(R.id.etDgpipe);
+        etDGExhaustcondi = findViewById(R.id.etDGExhaustcondi);
+        etDGEmergencyStopSwitch = findViewById(R.id.etDGEmergencyStopSwitch);
+        etRentalDGChangeOver = findViewById(R.id.etRentalDGChangeOver);
+        etDGBatterysn = findViewById(R.id.etDGBatterysn);
+        etDGPollutionCertificate = findViewById(R.id.etDGPollutionCertificate);
     }
 
     @Override
@@ -110,6 +156,41 @@ public class DGFragment extends MainFragment {
         ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatus);
 
+
+        final String pDistributionSpinner_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> pDistributionSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, pDistributionSpinner_array);
+        pDistributionSpinner.setAdapter(pDistributionSpinnerada);
+
+
+        final String mCBStatusSpinner_array[] = {"Single Phase", "3 Phase"};
+        ArrayAdapter<String> mCBStatusSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, mCBStatusSpinner_array);
+        mCBStatusSpinner.setAdapter(mCBStatusSpinnerada);
+
+
+        final String dbAlternatermakeSpinner_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> dbAlternatermakeSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dbAlternatermakeSpinner_array);
+        dbAlternatermakeSpinner.setAdapter(dbAlternatermakeSpinnerad);
+
+
+        final String eSNSpinner_array[] = {"Working", "Not working"};
+        ArrayAdapter<String> eSNSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eSNSpinner_array);
+        eSNSpinner.setAdapter(eSNSpinnerada);
+
+
+        final String dBCapacitySpinnerSpineer_array[] = {"CANOPY door lock", "door pannel", "ok", "not ok"};
+        ArrayAdapter<String> dBCapacitySpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dBCapacitySpinnerSpineer_array);
+        dBCapacitySpinner.setAdapter(dBCapacitySpinnerad);
+
+        final String dgContacterSpinnerarray[] = {"DG Body earth ", "Neutral Earth"};
+        ArrayAdapter<String> dgContacterSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dgContacterSpinnerarray);
+        dgContacterSpinner.setAdapter(dgContacterSpinnerad);
+
+
+        final String backCompressorSpinner_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> backCompressorSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, backCompressorSpinner_array);
+        backCompressorSpinner.setAdapter(backCompressorSpinnerada);
+
+
     }
 
     /**
@@ -132,6 +213,38 @@ public class DGFragment extends MainFragment {
         sNoPlatephoto = pref.getString("DG_Photo3", "");
         strSavedDateTime = pref.getString("DG_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+
+        pDistribution = pref.getString("DG_pDistribution", "");
+        mCBStatus = pref.getString("DG_mCBStatus", "");
+        dbAlternatermake = pref.getString("DG_dbAlternatermake", "");
+        eSN = pref.getString("DG_eSN", "");
+        dBCapacity = pref.getString("DG_dBCapacity", "");
+        dgContacter = pref.getString("DG_dgContacter", "");
+        backCompressor = pref.getString("DG_backCompressor", "");
+        AutomationCondition = pref.getString("DG_AutomationCondition", "");
+        PowerPanelMake = pref.getString("DG_PowerPanelMake", "");
+        PowerPanelCapacity = pref.getString("DG_PowerPanelCapacity", "");
+        DGType = pref.getString("DG_DGType", "");
+        AlternaterSno = pref.getString("DG_AlternaterSno", "");
+        AlternterCapacity = pref.getString("DG_AlternterCapacity", "");
+        DGBatteryStatus = pref.getString("DG_DGBatteryStatus", "");
+        DGBatteryMake = pref.getString("DG_DGBatteryMake", "");
+        Conditionofwiring = pref.getString("DG_Conditionofwiring", "");
+        DGearthing = pref.getString("DG_DGearthing", "");
+        ConditionCANOPY = pref.getString("DG_ConditionCANOPY", "");
+        DGRunHourMer = pref.getString("DG_DGRunHourMer", "");
+        DGlowLUBEWire = pref.getString("DG_DGlowLUBEWire", "");
+        DGFuelTank = pref.getString("DG_DGFuelTank", "");
+        CableGrouting = pref.getString("DG_CableGrouting", "");
+        DGFoundation = pref.getString("DG_DGFoundation", "");
+        DGCoolingtype = pref.getString("DG_DGCoolingtype", "");
+        Dgpipe = pref.getString("DG_Dgpipe", "");
+        DGExhaustcondi = pref.getString("DG_DGExhaustcondi", "");
+        DGEmergencyStopSwitch = pref.getString("DG_DGEmergencyStopSwitch", "");
+        RentalDGChangeOver = pref.getString("DG_RentalDGChangeOver", "");
+        DGBatterysn = pref.getString("DG_DGBatterysn", "");
+        DGPollutionCertificate = pref.getString("DG_DGPollutionCertificate", "");
+
     }
 
     @Override
@@ -194,6 +307,40 @@ public class DGFragment extends MainFragment {
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+
+            pDistribution = pDistributionSpinner.getSelectedItem().toString();
+            mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
+            dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
+            eSN = eSNSpinner.getSelectedItem().toString();
+            dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
+            dgContacter = dgContacterSpinner.getSelectedItem().toString();
+            backCompressor = backCompressorSpinner.getSelectedItem().toString();
+
+            this.etAutomationCondition.setText(AutomationCondition);
+            this.etPowerPanelMake.setText(PowerPanelMake);
+            this.etPowerPanelCapacity.setText(PowerPanelCapacity);
+            this.etDGType.setText(DGType);
+            this.etAlternaterSno.setText(AlternaterSno);
+            this.etAlternterCapacity.setText(AlternterCapacity);
+            this.etDGBatteryStatus.setText(DGBatteryStatus);
+            this.etDGBatteryMake.setText(DGBatteryMake);
+            this.etConditionofwiring.setText(Conditionofwiring);
+            this.etDGearthing.setText(DGearthing);
+            this.etConditionCANOPY.setText(ConditionCANOPY);
+            this.etDGRunHourMeter.setText(DGRunHourMer);
+            this.eTDGlowLUBEWire.setText(DGlowLUBEWire);
+            this.etDGFuelTank.setText(DGFuelTank);
+            this.etCableGrouting.setText(CableGrouting);
+            this.etDGFoundation.setText(DGFoundation);
+            this.etDGCoolingtype.setText(DGCoolingtype);
+            this.etDgpipe.setText(Dgpipe);
+            this.etDGExhaustcondi.setText(DGExhaustcondi);
+            this.etDGEmergencyStopSwitch.setText(DGEmergencyStopSwitch);
+            this.etRentalDGChangeOver.setText(RentalDGChangeOver);
+            this.etDGBatterysn.setText(DGBatterysn);
+            etDGPollutionCertificate.setText(DGPollutionCertificate);
+
+
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -229,7 +376,39 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-                }else {
+
+                    itemStatusSpineer.setEnabled(false);
+                    pDistributionSpinner.setEnabled(false);
+                    mCBStatusSpinner.setEnabled(false);
+                    dbAlternatermakeSpinner.setEnabled(false);
+                    eSNSpinner.setEnabled(false);
+                    dBCapacitySpinner.setEnabled(false);
+                    dgContacterSpinner.setEnabled(false);
+                    backCompressorSpinner.setEnabled(false);
+                    etAutomationCondition.setEnabled(false);
+                    etPowerPanelMake.setEnabled(false);
+                    etPowerPanelCapacity.setEnabled(false);
+                    etDGType.setEnabled(false);
+                    etAlternaterSno.setEnabled(false);
+                    etAlternterCapacity.setEnabled(false);
+                    etDGBatteryStatus.setEnabled(false);
+                    etDGBatteryMake.setEnabled(false);
+                    etConditionofwiring.setEnabled(false);
+                    etDGearthing.setEnabled(false);
+                    etConditionCANOPY.setEnabled(false);
+                    etDGRunHourMeter.setEnabled(false);
+                    eTDGlowLUBEWire.setEnabled(false);
+                    etDGFuelTank.setEnabled(false);
+                    etCableGrouting.setEnabled(false);
+                    etDGFoundation.setEnabled(false);
+                    etDGCoolingtype.setEnabled(false);
+                    etDgpipe.setEnabled(false);
+                    etDGExhaustcondi.setEnabled(false);
+                    etDGEmergencyStopSwitch.setEnabled(false);
+                    etRentalDGChangeOver.setEnabled(false);
+                    etDGBatterysn.setEnabled(false);
+                    etDGPollutionCertificate.setEnabled(false);
+                } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
                     sNoPlateImg.setEnabled(true);
@@ -241,6 +420,38 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
+
+                    itemStatusSpineer.setEnabled(true);
+                    pDistributionSpinner.setEnabled(true);
+                    mCBStatusSpinner.setEnabled(true);
+                    dbAlternatermakeSpinner.setEnabled(true);
+                    eSNSpinner.setEnabled(true);
+                    dBCapacitySpinner.setEnabled(true);
+                    dgContacterSpinner.setEnabled(true);
+                    backCompressorSpinner.setEnabled(true);
+                    etAutomationCondition.setEnabled(true);
+                    etPowerPanelMake.setEnabled(true);
+                    etPowerPanelCapacity.setEnabled(true);
+                    etDGType.setEnabled(true);
+                    etAlternaterSno.setEnabled(true);
+                    etAlternterCapacity.setEnabled(true);
+                    etDGBatteryStatus.setEnabled(true);
+                    etDGBatteryMake.setEnabled(true);
+                    etConditionofwiring.setEnabled(true);
+                    etDGearthing.setEnabled(true);
+                    etConditionCANOPY.setEnabled(true);
+                    etDGRunHourMeter.setEnabled(true);
+                    eTDGlowLUBEWire.setEnabled(true);
+                    etDGFuelTank.setEnabled(true);
+                    etCableGrouting.setEnabled(true);
+                    etDGFoundation.setEnabled(true);
+                    etDGCoolingtype.setEnabled(true);
+                    etDgpipe.setEnabled(true);
+                    etDGExhaustcondi.setEnabled(true);
+                    etDGEmergencyStopSwitch.setEnabled(true);
+                    etRentalDGChangeOver.setEnabled(true);
+                    etDGBatterysn.setEnabled(true);
+                    etDGPollutionCertificate.setEnabled(true);
                 }
             }
 
@@ -312,6 +523,37 @@ public class DGFragment extends MainFragment {
                 editor.putString("DG_Photo2", openPhoto);
                 editor.putString("DG_Photo3", sNoPlatephoto);
                 editor.putString("DG_SavedDateTime", currentDateTime);
+
+                editor.putString("DG_pDistribution", pDistribution);
+                editor.putString("DG_mCBStatus", mCBStatus);
+                editor.putString("DG_dbAlternatermake", dbAlternatermake);
+                editor.putString("DG_eSN", eSN);
+                editor.putString("DG_dBCapacity", dBCapacity);
+                editor.putString("DG_dgContacter", dgContacter);
+                editor.putString("DG_backCompressor", backCompressor);
+                editor.putString("DG_AutomationCondition", AutomationCondition);
+                editor.putString("DG_PowerPanelMake", PowerPanelMake);
+                editor.putString("DG_PowerPanelCapacity", PowerPanelCapacity);
+                editor.putString("DG_DGType", DGType);
+                editor.putString("DG_AlternaterSno", AlternaterSno);
+                editor.putString("DG_AlternterCapacity", AlternterCapacity);
+                editor.putString("DG_DGBatteryStatus", DGBatteryStatus);
+                editor.putString("DG_DGBatteryMake", DGBatteryMake);
+                editor.putString("DG_Conditionofwiring", Conditionofwiring);
+                editor.putString("DG_DGearthing", DGearthing);
+                editor.putString("DG_ConditionCANOPY", ConditionCANOPY);
+                editor.putString("DG_DGRunHourMer", DGRunHourMer);
+                editor.putString("DG_DGlowLUBEWire", DGlowLUBEWire);
+                editor.putString("DG_DGFuelTank", DGFuelTank);
+                editor.putString("DG_CableGrouting", CableGrouting);
+                editor.putString("DG_DGFoundation", DGFoundation);
+                editor.putString("DG_DGCoolingtype", DGCoolingtype);
+                editor.putString("DG_Dgpipe", Dgpipe);
+                editor.putString("DG_DGExhaustcondi", DGExhaustcondi);
+                editor.putString("DG_DGEmergencyStopSwitch", DGEmergencyStopSwitch);
+                editor.putString("DG_RentalDGChangeOver", RentalDGChangeOver);
+                editor.putString("DG_DGBatterysn", DGBatterysn);
+                editor.putString("DG_DGPollutionCertificate", DGPollutionCertificate);
                 editor.commit();
             }
         }
@@ -320,12 +562,46 @@ public class DGFragment extends MainFragment {
 
     public boolean isValidate() {
         make = getTextFromView(this.etMake);
-        model = getTextFromView(this.etCapacity);
+        model = getTextFromView(this.etModel);
         capacity = getTextFromView(this.etCapacity);
         serialNumber = getTextFromView(this.etSerialNum);
         yearOfManufacturing = getTextFromView(this.etYear);
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
+
+        pDistribution = pDistributionSpinner.getSelectedItem().toString();
+        mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
+        dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
+        eSN = eSNSpinner.getSelectedItem().toString();
+        dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
+        dgContacter = dgContacterSpinner.getSelectedItem().toString();
+        backCompressor = backCompressorSpinner.getSelectedItem().toString();
+
+        AutomationCondition = getTextFromView(this.etAutomationCondition);
+        PowerPanelMake = getTextFromView(this.etPowerPanelMake);
+        PowerPanelCapacity = getTextFromView(this.etPowerPanelCapacity);
+        DGType = getTextFromView(this.etDGType);
+        AlternaterSno = getTextFromView(this.etAlternaterSno);
+        AlternterCapacity = getTextFromView(this.etAlternterCapacity);
+        DGBatteryStatus = getTextFromView(this.etDGBatteryStatus);
+        DGBatteryMake = getTextFromView(this.etDGBatteryMake);
+        Conditionofwiring = getTextFromView(this.etConditionofwiring);
+        DGearthing = getTextFromView(this.etDGearthing);
+        ConditionCANOPY = getTextFromView(this.etConditionCANOPY);
+        DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
+        DGlowLUBEWire = getTextFromView(this.eTDGlowLUBEWire);
+        DGFuelTank = getTextFromView(this.etDGFuelTank);
+        CableGrouting = getTextFromView(this.etCableGrouting);
+        DGFoundation = getTextFromView(this.etDGFoundation);
+        DGCoolingtype = getTextFromView(this.etDGCoolingtype);
+        Dgpipe = getTextFromView(this.etDgpipe);
+        DGExhaustcondi = getTextFromView(this.etDGExhaustcondi);
+        DGEmergencyStopSwitch = getTextFromView(this.etDGEmergencyStopSwitch);
+        RentalDGChangeOver = getTextFromView(this.etRentalDGChangeOver);
+        DGBatterysn = getTextFromView(this.etDGBatterysn);
+        DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
+
+
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -355,7 +631,7 @@ public class DGFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
-        }else {
+        } else {
             ASTUIUtil.showToast("Item Not Available");
         }
 

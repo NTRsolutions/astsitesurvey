@@ -32,6 +32,7 @@ import com.telecom.ast.sitesurvey.filepicker.camera.FNCameraHelper;
 import com.telecom.ast.sitesurvey.filepicker.camera.FNCameraModule;
 import com.telecom.ast.sitesurvey.filepicker.camera.OnImageReadyListener;
 import com.telecom.ast.sitesurvey.filepicker.listener.IPageListener;
+import com.telecom.ast.sitesurvey.filepicker.listener.IToolbarListener;
 import com.telecom.ast.sitesurvey.filepicker.listener.OnItemClickListener;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.filepicker.view.GridSpacingItemDecoration;
@@ -54,239 +55,253 @@ import static com.telecom.ast.sitesurvey.utils.FNObjectUtil.isNonEmptyStr;
  */
 public class MediaFragment extends MainFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
-	private final int LOADER_ID = 1;
-	protected RecyclerView.Adapter adapter;
-	protected GridLayoutManager layoutManager;
-	protected GridSpacingItemDecoration itemOffsetDecoration;
-	private RecyclerView recyclerView;
-	private View noRecordView;
-	private IPageListener pageListener;
-	private FNCameraModule cameraModule = new DefaultCameraModule();
+    private final int LOADER_ID = 1;
+    protected RecyclerView.Adapter adapter;
+    protected GridLayoutManager layoutManager;
+    protected GridSpacingItemDecoration itemOffsetDecoration;
+    private RecyclerView recyclerView;
+    private View noRecordView;
+    private IPageListener pageListener;
+    private FNCameraModule cameraModule = new DefaultCameraModule();
 
-	@Override
-	protected int fragmentLayout() {
-		return R.layout.fn_recycle_layout;
-	}
+    @Override
+    protected int fragmentLayout() {
+        return R.layout.fn_recycle_layout;
+    }
 
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		this.pageListener = (IPageListener) context;
-	}
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.pageListener = (IPageListener) context;
+    }
 
-	@Override
-	protected void loadView() {
-		this.recyclerView = this.findViewById(R.id.recyclerView);
-		this.noRecordView = findViewById(R.id.no_record);
-		this.layoutManager = new GridLayoutManager(getContext(), gridColumns());
-	}
+    private IToolbarListener toolbarListener() {
+        return getHostActivity() != null ? (IToolbarListener) getHostActivity() : null;
+    }
 
-	@Override
-	protected void dataToView() {
-		this.recyclerView.setLayoutManager(layoutManager);
-		this.recyclerView.setHasFixedSize(true);
-		getHostActivity().requestPermission(FNReqResCode.PERMISSION_REQ_WRITE_EXTERNAL_STORAGE);
-	}
+    @Override
+    protected void loadView() {
+        this.recyclerView = this.findViewById(R.id.recyclerView);
+        this.noRecordView = findViewById(R.id.no_record);
+        this.layoutManager = new GridLayoutManager(getContext(), gridColumns());
 
-	@Override
-	public void permissionGranted(int requestCode) {
-		switch (requestCode) {
-			case FNReqResCode.PERMISSION_REQ_WRITE_EXTERNAL_STORAGE:
-				getLoaderManager().initLoader(LOADER_ID, null, this);
-				break;
-			case FNReqResCode.PERMISSION_REQ_CAMERA:
-				captureImage(FNReqResCode.CAPTURE_IMAGE);
-				break;
-		}
-	}
+        // open for direct Camra event
+        IToolbarListener listener = toolbarListener();
+        if (listener == null) {
+            return;
+        }
+        listener.onCameraClick();
+    }
 
-	@Override
-	public void updateOnResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == FNReqResCode.CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-			finishCaptureImage(data);
-		}
-	}
+    @Override
+    protected void dataToView() {
 
-	private void initAdaptor(Cursor cursor) {
-		switch (pageListener.config().getMediaType()) {
-			case MEDIA_TYPE_IMAGE:
-				adapter = new MediaCursorAdaptor(getContext(), cursor, gridColumns(), MEDIA_TYPE_IMAGE, this);
-				break;
-			case MEDIA_TYPE_VIDEO:
-				adapter = new VideoCursorAdaptor(getContext(), cursor, gridColumns(), MEDIA_TYPE_VIDEO, this);
-				break;
-			default:
-				adapter = new AudioCursorAdaptor(getContext(), cursor, MEDIA_TYPE_AUDIO, this);
-		}
-	}
-
-	@Override
-	protected void setClickListeners() {
-
-	}
-
-	@Override
-	protected void setAccessibility() {
-
-	}
+        this.recyclerView.setLayoutManager(layoutManager);
+        this.recyclerView.setHasFixedSize(true);
+        getHostActivity().requestPermission(FNReqResCode.PERMISSION_REQ_WRITE_EXTERNAL_STORAGE);
 
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		ASTUIUtil.disableTouch();
-		if (id != LOADER_ID) {
-			return null;
-		}
-		int mediaType = pageListener.config().getMediaType();
-		return new CursorLoader(getContext(), FNFileUtil.contentUri(mediaType), projection(), searchQuery(), null, FNFileUtil.dateAddedKey(mediaType) + " DESC");
-	}
+    }
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data == null || data.getCount() == 0) {
-			showEmptyUI();
-		} else {
-			showDataUI();
-			initAdaptor(data);
-			setAdapter();
-		}
-		ASTUIUtil.enableTouch();
-	}
+    @Override
+    public void permissionGranted(int requestCode) {
+        switch (requestCode) {
+            case FNReqResCode.PERMISSION_REQ_WRITE_EXTERNAL_STORAGE:
+                getLoaderManager().initLoader(LOADER_ID, null, this);
+                break;
+            case FNReqResCode.PERMISSION_REQ_CAMERA:
+                captureImage(FNReqResCode.CAPTURE_IMAGE);
+                break;
+        }
+    }
 
-	protected void showEmptyUI() {
-		this.recyclerView.setVisibility(View.GONE);
-		this.noRecordView.setVisibility(View.VISIBLE);
-	}
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
+            finishCaptureImage(data);
+        }
+    }
 
-	protected void showDataUI() {
-		this.noRecordView.setVisibility(View.GONE);
-		this.recyclerView.setVisibility(View.VISIBLE);
-	}
+    private void initAdaptor(Cursor cursor) {
+        switch (pageListener.config().getMediaType()) {
+            case MEDIA_TYPE_IMAGE:
+                adapter = new MediaCursorAdaptor(getContext(), cursor, gridColumns(), MEDIA_TYPE_IMAGE, this);
+                break;
+            case MEDIA_TYPE_VIDEO:
+                adapter = new VideoCursorAdaptor(getContext(), cursor, gridColumns(), MEDIA_TYPE_VIDEO, this);
+                break;
+            default:
+                adapter = new AudioCursorAdaptor(getContext(), cursor, MEDIA_TYPE_AUDIO, this);
+        }
+    }
 
-	protected void setAdapter() {
-		this.setItemDecoration(gridColumns());
-		this.recyclerView.setAdapter(adapter);
-	}
+    @Override
+    protected void setClickListeners() {
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		if (adapter != null && adapter instanceof CursorRecyclerViewAdapter) {
-			((CursorRecyclerViewAdapter) adapter).changeCursor(null);
-		}
-	}
+    }
 
-	protected int gridColumns() {
-		switch (pageListener.config().getMediaType()) {
-			case MEDIA_TYPE_VIDEO:
-			case MEDIA_TYPE_IMAGE:
-				return 4;
-			default:
-				return 1;
-		}
-	}
+    @Override
+    protected void setAccessibility() {
 
-	private String[] projection() {
-		String[] projection = new String[6];
-		int mediaType = pageListener.config().getMediaType();
-		projection[0] = FNFileUtil.idKey(mediaType);
-		projection[1] = FNFileUtil.dataKey(mediaType);
-		projection[2] = FNFileUtil.titleKey(mediaType);
-		projection[3] = FNFileUtil.sizeKey(mediaType);
-		projection[4] = FNFileUtil.mimeTypeKey(mediaType);
-		String mediaTypeKey = FNFileUtil.mediaTypeKey(mediaType);
-		String orientationKey = FNFileUtil.orientationKey(mediaType);
-		if (isNonEmptyStr(mediaTypeKey)) {
-			projection[5] = mediaTypeKey;
-		} else if (isNonEmptyStr(orientationKey)) {
-			projection[5] = orientationKey;
-		}
-		return projection;
-	}
+    }
 
-	protected void setItemDecoration(int columns) {
-		layoutManager.setSpanCount(columns);
-		if (itemOffsetDecoration != null)
-			recyclerView.removeItemDecoration(itemOffsetDecoration);
-		itemOffsetDecoration = new GridSpacingItemDecoration(columns, getResources().getDimensionPixelSize(R.dimen._1dp), false);
-		recyclerView.addItemDecoration(itemOffsetDecoration);
-	}
 
-	@Override
-	public void onFileClick(View view, FNObject object) {
-		FNFilePickerConfig config = pageListener.config();
-		MediaFile deviceFile = (MediaFile) object;
-		int selectedItemPosition = config.getSelectedPosition(deviceFile);
-		if (selectedItemPosition != -1) {
-			config.removeSelectedPosition(selectedItemPosition);
-			pageListener.updateHeader();
-		} else if (pageListener.isValidToAddFile()) {
-			if (config.getMode() == MODE_SINGLE && config.isReturnAfterFirst()) {
-				pageListener.openCropFragment(deviceFile);
-			} else {
-				if (config.getMode() == MODE_SINGLE) {
-					config.getSelectedFiles().clear();
-				}
-				config.getSelectedFiles().add(deviceFile);
-				pageListener.updateHeader();
-			}
-		}
-		adapter.notifyDataSetChanged();
-	}
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        ASTUIUtil.disableTouch();
+        if (id != LOADER_ID) {
+            return null;
+        }
+        int mediaType = pageListener.config().getMediaType();
+        return new CursorLoader(getContext(), FNFileUtil.contentUri(mediaType), projection(), searchQuery(), null, FNFileUtil.dateAddedKey(mediaType) + " DESC");
+    }
 
-	private void captureImage(int requestCode) {
-		if (!FNCameraHelper.checkCameraAvailability(getActivity())) {
-			return;
-		}
-		Context context = getActivity().getApplicationContext();
-		Intent intent = cameraModule.getCameraIntent(getActivity(), pageListener.config());
-		if (intent == null) {
-			Toast.makeText(context, context.getString(R.string.error_create_image_file), Toast.LENGTH_LONG).show();
-			return;
-		}
-		getActivity().startActivityForResult(intent, requestCode);
-	}
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data == null || data.getCount() == 0) {
+            showEmptyUI();
+        } else {
+            showDataUI();
+            initAdaptor(data);
+            setAdapter();
+        }
+        ASTUIUtil.enableTouch();
+    }
 
-	public void finishCaptureImage(Intent data) {
-		cameraModule.getImage(getContext(), data, new OnImageReadyListener() {
-			@Override
-			public void onImageReady(ArrayList<MediaFile> images) {
-				onImageCaptured(images);
-			}
-		});
-	}
+    protected void showEmptyUI() {
+        this.recyclerView.setVisibility(View.GONE);
+        this.noRecordView.setVisibility(View.VISIBLE);
+    }
 
-	public void onImageCaptured(final ArrayList<MediaFile> mediaFiles) {
-		if (pageListener.config().getMode() == FNFilePicker.MODE_SINGLE) {
-			pageListener.config().getSelectedFiles().clear();
-		}
-		if (pageListener.config().isReturnAfterFirst()) {
-			pageListener.openCropFragment(mediaFiles.get(0));
-		} else {
-			pageListener.config().getSelectedFiles().add(mediaFiles.get(0));
-			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					pageListener.updateHeader();
-					getLoaderManager().restartLoader(LOADER_ID, null, MediaFragment.this);
-				}
-			});
+    protected void showDataUI() {
+        this.noRecordView.setVisibility(View.GONE);
+        this.recyclerView.setVisibility(View.VISIBLE);
+    }
 
-		}
-	}
+    protected void setAdapter() {
+        this.setItemDecoration(gridColumns());
+        this.recyclerView.setAdapter(adapter);
+    }
 
-	@Override
-	public boolean isSelected(AndroidDeviceFile file) {
-		for (MediaFile mediaFile : pageListener.config().getSelectedFiles()) {
-			if (mediaFile.getPath().equals(file.getPath())) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        if (adapter != null && adapter instanceof CursorRecyclerViewAdapter) {
+            ((CursorRecyclerViewAdapter) adapter).changeCursor(null);
+        }
+    }
 
-	public String searchQuery() {
-		int mediaType = pageListener.config().getMediaType();
-		return FNFileUtil.mimeTypeKey(mediaType) + " IS NOT NULL AND " + FNFileUtil.sizeKey(mediaType) + ">0";
-	}
+    protected int gridColumns() {
+        switch (pageListener.config().getMediaType()) {
+            case MEDIA_TYPE_VIDEO:
+            case MEDIA_TYPE_IMAGE:
+                return 4;
+            default:
+                return 1;
+        }
+    }
+
+    private String[] projection() {
+        String[] projection = new String[6];
+        int mediaType = pageListener.config().getMediaType();
+        projection[0] = FNFileUtil.idKey(mediaType);
+        projection[1] = FNFileUtil.dataKey(mediaType);
+        projection[2] = FNFileUtil.titleKey(mediaType);
+        projection[3] = FNFileUtil.sizeKey(mediaType);
+        projection[4] = FNFileUtil.mimeTypeKey(mediaType);
+        String mediaTypeKey = FNFileUtil.mediaTypeKey(mediaType);
+        String orientationKey = FNFileUtil.orientationKey(mediaType);
+        if (isNonEmptyStr(mediaTypeKey)) {
+            projection[5] = mediaTypeKey;
+        } else if (isNonEmptyStr(orientationKey)) {
+            projection[5] = orientationKey;
+        }
+        return projection;
+    }
+
+    protected void setItemDecoration(int columns) {
+        layoutManager.setSpanCount(columns);
+        if (itemOffsetDecoration != null)
+            recyclerView.removeItemDecoration(itemOffsetDecoration);
+        itemOffsetDecoration = new GridSpacingItemDecoration(columns, getResources().getDimensionPixelSize(R.dimen._1dp), false);
+        recyclerView.addItemDecoration(itemOffsetDecoration);
+    }
+
+    @Override
+    public void onFileClick(View view, FNObject object) {
+        FNFilePickerConfig config = pageListener.config();
+        MediaFile deviceFile = (MediaFile) object;
+        int selectedItemPosition = config.getSelectedPosition(deviceFile);
+        if (selectedItemPosition != -1) {
+            config.removeSelectedPosition(selectedItemPosition);
+            pageListener.updateHeader();
+        } else if (pageListener.isValidToAddFile()) {
+            if (config.getMode() == MODE_SINGLE && config.isReturnAfterFirst()) {
+                pageListener.openCropFragment(deviceFile);
+            } else {
+                if (config.getMode() == MODE_SINGLE) {
+                    config.getSelectedFiles().clear();
+                }
+                config.getSelectedFiles().add(deviceFile);
+                pageListener.updateHeader();
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void captureImage(int requestCode) {
+        if (!FNCameraHelper.checkCameraAvailability(getActivity())) {
+            return;
+        }
+        Context context = getActivity().getApplicationContext();
+        Intent intent = cameraModule.getCameraIntent(getActivity(), pageListener.config());
+        if (intent == null) {
+            Toast.makeText(context, context.getString(R.string.error_create_image_file), Toast.LENGTH_LONG).show();
+            return;
+        }
+        getActivity().startActivityForResult(intent, requestCode);
+    }
+
+    public void finishCaptureImage(Intent data) {
+        cameraModule.getImage(getContext(), data, new OnImageReadyListener() {
+            @Override
+            public void onImageReady(ArrayList<MediaFile> images) {
+                onImageCaptured(images);
+            }
+        });
+    }
+
+    public void onImageCaptured(final ArrayList<MediaFile> mediaFiles) {
+        if (pageListener.config().getMode() == FNFilePicker.MODE_SINGLE) {
+            pageListener.config().getSelectedFiles().clear();
+        }
+        if (pageListener.config().isReturnAfterFirst()) {
+            pageListener.openCropFragment(mediaFiles.get(0));
+        } else {
+            pageListener.config().getSelectedFiles().add(mediaFiles.get(0));
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    pageListener.updateHeader();
+                    getLoaderManager().restartLoader(LOADER_ID, null, MediaFragment.this);
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public boolean isSelected(AndroidDeviceFile file) {
+        for (MediaFile mediaFile : pageListener.config().getSelectedFiles()) {
+            if (mediaFile.getPath().equals(file.getPath())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String searchQuery() {
+        int mediaType = pageListener.config().getMediaType();
+        return FNFileUtil.mimeTypeKey(mediaType) + " IS NOT NULL AND " + FNFileUtil.sizeKey(mediaType) + ">0";
+    }
 }

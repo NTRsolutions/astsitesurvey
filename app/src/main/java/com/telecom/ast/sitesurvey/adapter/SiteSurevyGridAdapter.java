@@ -27,7 +27,7 @@ import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.MpptFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PowerPlantFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SolarPanelsFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.TowerFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.FireSystemFragment;
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.FireSystemFragment;
 
 /**
  * Created by AST on 23-01-2017.

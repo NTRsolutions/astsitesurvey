@@ -44,16 +44,19 @@ public class EBMeterFragment extends MainFragment {
     static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
+    Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, MeterstatusSpinner;
     String strUserId, strSavedDateTime, meterreading, strSiteId;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime, numOfACs, sNAC;
+    String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
 
     SharedPreferences pref;
-    AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    AppCompatEditText etCapacity, etMake, etModel, etSerialNum,
+            etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etTheftfromSite;
     AppCompatEditText etYear, etDescription, ebMeterreading;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
+    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
+    String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, TheftfromSite,
+            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -76,6 +79,17 @@ public class EBMeterFragment extends MainFragment {
         btnSubmit = findViewById(R.id.btnSubmit);
         ebMeterreading = findViewById(R.id.ebMeterreading);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
+
+        etConnectionNo = findViewById(R.id.etConnectionNo);
+        etCableRating = findViewById(R.id.etCableRating);
+        etALTHTConnection = findViewById(R.id.etALTHTConnection);
+        etTransformerEarthing = findViewById(R.id.etTransformerEarthing);
+        etmccbStatus = findViewById(R.id.etmccbStatus);
+        etTheftfromSite = findViewById(R.id.etTheftfromSite);
+        meeterTypeSpinner = findViewById(R.id.meeterTypeSpinner);
+        powerTypeSpinner = findViewById(R.id.powerTypeSpinner);
+        transformerTypeSpinner = findViewById(R.id.transformerTypeSpinner);
+        MeterstatusSpinner = findViewById(R.id.MeterstatusSpinner);
     }
 
     @Override
@@ -109,6 +123,18 @@ public class EBMeterFragment extends MainFragment {
         strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
         meterreading = pref.getString("Meterreading", "");
+        ConnectionNo = pref.getString("EbMeterConnectionNo", "");
+        CableRating = pref.getString("EbMeterCableRating", "");
+        ALTHTConnection = pref.getString("EbMeterALTHTConnection", "");
+        TransformerEarthing = pref.getString("EbMeterTransformerEarthing", "");
+        mccbStatus = pref.getString("EbMetermccbStatus", "");
+        TheftfromSite = pref.getString("EbMeterTheftfromSite", "");
+        strmeeterTypeSpinner = pref.getString("EbMeterstrmeeterTypeSpinner", "");
+        strpowerTypeSpinner = pref.getString("EbMeterstrpowerTypeSpinner", "");
+        strtransformerTypeSpinner = pref.getString("EbMeterstrtransformerTypeSpinner", "");
+        strMeterstatusSpinner = pref.getString("EbMeterstrMeterstatusSpinner", "");
+
+
     }
 
     public void setSpinnerValue() {
@@ -120,6 +146,26 @@ public class EBMeterFragment extends MainFragment {
         ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatus);
 
+
+        final String meeterTypeSpinnerArray[] = {"Single Phase", "3 Phase"};
+        ArrayAdapter<String> meeterTypeSpinnerArrayad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, meeterTypeSpinnerArray);
+        meeterTypeSpinner.setAdapter(meeterTypeSpinnerArrayad);
+
+
+        final String powerTypeSpinnerarray[] = {"Temporary", "3 Phase"};
+        ArrayAdapter<String> powerTypeSpinnerarrayad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, powerTypeSpinnerarray);
+        powerTypeSpinner.setAdapter(powerTypeSpinnerarrayad);
+
+
+        final String transformerTypeSpinnerArray[] = {"Public", "Site"};
+        ArrayAdapter<String> transformerTypeSpinnerArrayad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, transformerTypeSpinnerArray);
+        transformerTypeSpinner.setAdapter(transformerTypeSpinnerArrayad);
+
+
+        final String MeterstatusSpinnerArraay[] = {"Covereds", "Open"};
+        ArrayAdapter<String> MeterstatusSpinnerAd = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, MeterstatusSpinnerArraay);
+        MeterstatusSpinner.setAdapter(MeterstatusSpinnerAd);
+
     }
 
     @Override
@@ -128,7 +174,17 @@ public class EBMeterFragment extends MainFragment {
         setSpinnerValue();
 
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !meterreading.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !meterreading.equals("")
+
+                || !ConnectionNo.equals("")
+                || !CableRating.equals("")
+                || !ALTHTConnection.equals("")
+                || !TransformerEarthing.equals("")
+                || !mccbStatus.equals("")
+                || !TheftfromSite.equals("")
+
+
+                ) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -136,6 +192,18 @@ public class EBMeterFragment extends MainFragment {
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
             ebMeterreading.setText(meterreading);
+
+            etConnectionNo.setText(ConnectionNo);
+            etCableRating.setText(CableRating);
+            etALTHTConnection.setText(ALTHTConnection);
+            etTransformerEarthing.setText(TransformerEarthing);
+            etmccbStatus.setText(mccbStatus);
+            etTheftfromSite.setText(TheftfromSite);
+            strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
+            strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
+            strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
+            strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();
+
             if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
@@ -168,6 +236,39 @@ public class EBMeterFragment extends MainFragment {
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
                     ebMeterreading.setEnabled(false);
+                    etConnectionNo.setEnabled(false);
+                    etCableRating.setEnabled(false);
+                    etALTHTConnection.setEnabled(false);
+                    etTransformerEarthing.setEnabled(false);
+                    etmccbStatus.setEnabled(false);
+                    etTheftfromSite.setEnabled(false);
+                    meeterTypeSpinner.setEnabled(false);
+                    powerTypeSpinner.setEnabled(false);
+                    transformerTypeSpinner.setEnabled(false);
+                    MeterstatusSpinner.setEnabled(false);
+                } else {
+                    frontImg.setEnabled(true);
+                    openImg.setEnabled(true);
+                    sNoPlateImg.setEnabled(true);
+                    etMake.setEnabled(true);
+                    etModel.setEnabled(true);
+                    etCapacity.setEnabled(true);
+                    etSerialNum.setEnabled(true);
+                    etYear.setEnabled(true);
+                    etDescription.setEnabled(true);
+                    itemConditionSpinner.setEnabled(true);
+                    descriptionLayout.setEnabled(true);
+                    ebMeterreading.setEnabled(true);
+                    etConnectionNo.setEnabled(true);
+                    etCableRating.setEnabled(true);
+                    etALTHTConnection.setEnabled(true);
+                    etTransformerEarthing.setEnabled(true);
+                    etmccbStatus.setEnabled(true);
+                    etTheftfromSite.setEnabled(true);
+                    meeterTypeSpinner.setEnabled(true);
+                    powerTypeSpinner.setEnabled(true);
+                    transformerTypeSpinner.setEnabled(true);
+                    MeterstatusSpinner.setEnabled(true);
                 }
             }
 
@@ -209,6 +310,20 @@ public class EBMeterFragment extends MainFragment {
                 editor.putString("EBM_Photo2", openPhoto);
                 editor.putString("EBM_Photo3", sNoPlatephoto);
                 editor.putString("EbMeterSavedDateTime", currentDateTime);
+
+
+                editor.putString("EbMeterConnectionNo", ConnectionNo);
+                editor.putString("EbMeterCableRating", CableRating);
+                editor.putString("EbMeterALTHTConnection", ALTHTConnection);
+                editor.putString("EbMeterTransformerEarthing", TransformerEarthing);
+                editor.putString("EbMetermccbStatus", mccbStatus);
+                editor.putString("EbMeterTheftfromSite", TheftfromSite);
+                editor.putString("EbMeterstrmeeterTypeSpinner", strmeeterTypeSpinner);
+                editor.putString("EbMeterstrpowerTypeSpinner", strpowerTypeSpinner);
+                editor.putString("EbMeterstrtransformerTypeSpinner", strtransformerTypeSpinner);
+                editor.putString("EbMeterstrMeterstatusSpinner", strMeterstatusSpinner);
+
+
                 editor.commit();
                 saveScreenData(true, false);
 
@@ -236,6 +351,19 @@ public class EBMeterFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         meterreading = ebMeterreading.getText().toString();
+
+        ConnectionNo = etConnectionNo.getText().toString();
+        CableRating = etCableRating.getText().toString();
+        ALTHTConnection = etALTHTConnection.getText().toString();
+        TransformerEarthing = etTransformerEarthing.getText().toString();
+        mccbStatus = etmccbStatus.getText().toString();
+        TheftfromSite = etTheftfromSite.getText().toString();
+        strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
+        strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
+        strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
+        strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();
+
+
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {

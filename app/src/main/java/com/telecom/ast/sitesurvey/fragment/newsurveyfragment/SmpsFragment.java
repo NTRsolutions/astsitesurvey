@@ -57,6 +57,13 @@ public class SmpsFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
 
+    AppCompatEditText etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etRatingofCable, etAlarmConnection,
+            etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
+
+    Spinner itemStatusSpineer;
+    String Controller, ConditionbackPlane, BodyEarthing, PositiveEarthing, RatingofCable, AlarmConnection,
+            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_smps;
@@ -81,6 +88,17 @@ public class SmpsFragment extends MainFragment {
         descriptionLayout = findViewById(R.id.descriptionLayout);
         etnoofModule = findViewById(R.id.etnoofModule);
         etModuleCapacity = findViewById(R.id.etModuleCapacity);
+
+        etController = findViewById(R.id.etController);
+        etConditionbackPlane = findViewById(R.id.etConditionbackPlane);
+        etBodyEarthing = findViewById(R.id.etBodyEarthing);
+        etPositiveEarthing = findViewById(R.id.etPositiveEarthing);
+        etRatingofCable = findViewById(R.id.etRatingofCable);
+        etAlarmConnection = findViewById(R.id.etAlarmConnection);
+        etNoofRMWorking = findViewById(R.id.etNoofRMWorking);
+        etNoofRMFaulty = findViewById(R.id.etNoofRMFaulty);
+        etSpareFuseStatus = findViewById(R.id.etSpareFuseStatus);
+        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -124,12 +142,26 @@ public class SmpsFragment extends MainFragment {
         sNoPlatephoto = pref.getString("SMPSPhoto3", "");
         strSavedDateTime = pref.getString("SMPS_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+        Controller = pref.getString("SMPS_Controller", "");
+        ConditionbackPlane = pref.getString("SMPS_ConditionbackPlane", "");
+        BodyEarthing = pref.getString("SMPS_BodyEarthing", "");
+        PositiveEarthing = pref.getString("SMPS_PositiveEarthing", "");
+        RatingofCable = pref.getString("SMPS_RatingofCable", "");
+        AlarmConnection = pref.getString("SMPS_AlarmConnection", "");
+        NoofRMWorking = pref.getString("SMPS_NoofRMWorking", "");
+        NoofRMFaulty = pref.getString("SMPS_NoofRMFaulty", "");
+        SpareFuseStatus = pref.getString("SMPS_SpareFuseStatus", "");
+        itemStatus = pref.getString("SMPS_itemStatus", "");
     }
 
     public void setSpinnerValue() {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
+
+        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> itemStatusSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
+        itemStatusSpineer.setAdapter(itemStatusSpineeradapter);
 
     }
 
@@ -192,13 +224,33 @@ public class SmpsFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")
+                || !Controller.equals("")
+                || !ConditionbackPlane.equals("")
+                || !BodyEarthing.equals("")
+                || !PositiveEarthing.equals("")
+                || !AlarmConnection.equals("")
+                || !NoofRMWorking.equals("")
+                || !NoofRMFaulty.equals("")
+                || !SpareFuseStatus.equals("")) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+
+            etController.setText(Controller);
+            etConditionbackPlane.setText(strDescription);
+            etBodyEarthing.setText(BodyEarthing);
+            etPositiveEarthing.setText(PositiveEarthing);
+            etRatingofCable.setText(RatingofCable);
+            etAlarmConnection.setText(AlarmConnection);
+            etNoofRMWorking.setText(NoofRMWorking);
+            etNoofRMFaulty.setText(NoofRMFaulty);
+            etSpareFuseStatus.setText(SpareFuseStatus);
+            itemStatus = itemStatusSpineer.getSelectedItem().toString();
+
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -287,6 +339,18 @@ public class SmpsFragment extends MainFragment {
                 editor.putString("SMPSPhoto2", openPhoto);
                 editor.putString("SMPSPhoto3", sNoPlatephoto);
                 editor.putString("SMPS_SavedDateTime", currentDateTime);
+
+                editor.putString("SMPS_Controller", Controller);
+                editor.putString("SMPS_ConditionbackPlane", ConditionbackPlane);
+                editor.putString("SMPS_BodyEarthing", BodyEarthing);
+                editor.putString("SMPS_PositiveEarthing", PositiveEarthing);
+                editor.putString("SMPS_RatingofCable", RatingofCable);
+                editor.putString("SMPS_AlarmConnection", AlarmConnection);
+                editor.putString("SMPS_NoofRMWorking", NoofRMWorking);
+                editor.putString("SMPS_NoofRMFaulty", NoofRMFaulty);
+                editor.putString("SMPS_SpareFuseStatus", SpareFuseStatus);
+                editor.putString("SMPS_itemStatus", itemStatus);
+
                 editor.commit();
                 saveScreenData(true, false);
             }
@@ -315,6 +379,19 @@ public class SmpsFragment extends MainFragment {
         description = etDescription.getText().toString();
         nofModule = etnoofModule.getText().toString();
         ModuleCapacity = etModuleCapacity.getText().toString();
+
+
+        Controller = etController.getText().toString();
+        ConditionbackPlane = etConditionbackPlane.getText().toString();
+        BodyEarthing = etBodyEarthing.getText().toString();
+        PositiveEarthing = etPositiveEarthing.getText().toString();
+        RatingofCable = etRatingofCable.getText().toString();
+        AlarmConnection = etAlarmConnection.getText().toString();
+        NoofRMWorking = etNoofRMWorking.getText().toString();
+        NoofRMFaulty = etNoofRMFaulty.getText().toString();
+        SpareFuseStatus = etSpareFuseStatus.getText().toString();
+        itemStatus = itemStatusSpineer.getSelectedItem().toString();
+
 
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (isEmptyStr(make)) {

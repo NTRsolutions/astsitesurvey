@@ -40,14 +40,15 @@ public class InputAlarmPanelFragment extends MainFragment {
     static String bateryphoto, cellPhoto, sNoPlatephoto;
     static boolean isImage1, isImage2;
     AppCompatEditText etYear, etDescription;
-    AppCompatAutoCompleteTextView etMake, etModel, etCapacity,etSerialNum;
+    AppCompatEditText etAnchorOperator, etSharingOperator;
+    AppCompatAutoCompleteTextView etMake, etModel, etCapacity, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
     String strMakeId, strModelId;
     AtmDatabase atmDatabase;
     Spinner itemConditionSpinner;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
+    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, AnchorOperator, SharingOperator;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
@@ -72,6 +73,8 @@ public class InputAlarmPanelFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
+        etAnchorOperator = findViewById(R.id.etAnchorOperator);
+        etSharingOperator = findViewById(R.id.etSharingOperator);
     }
 
     @Override
@@ -110,13 +113,20 @@ public class InputAlarmPanelFragment extends MainFragment {
         getSharedprefData();
         setSpinnerValue();
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")|| !AnchorOperator.equals("")
+                || !SharingOperator.equals("")) {
+
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+            etAnchorOperator.setText(AnchorOperator);
+            etSharingOperator.setText(SharingOperator);
+
+
+
             if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(bateryphoto)).placeholder(R.drawable.noimage).into(batteryimg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(cellPhoto)).placeholder(R.drawable.noimage).into(cellImg);
@@ -148,6 +158,9 @@ public class InputAlarmPanelFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
+                    etAnchorOperator.setEnabled(false);
+                            etSharingOperator.setEnabled(false);
+
                 } else {
                     batteryimg.setEnabled(true);
                     cellImg.setEnabled(true);
@@ -160,6 +173,8 @@ public class InputAlarmPanelFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
+                    etAnchorOperator.setEnabled(true);
+                    etSharingOperator.setEnabled(true);
                 }
             }
 
@@ -191,6 +206,10 @@ public class InputAlarmPanelFragment extends MainFragment {
         strSavedDateTime = pref.getString("ALARMPA_BbActivitySavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
         itemCondition = pref.getString("ALARMPA_ItemCondition", "");
+
+        AnchorOperator = pref.getString("ALARMPA_AnchorOperator", "");
+        SharingOperator = pref.getString("ALARMPA_SharingOperator", "");
+
 
     }
 
@@ -231,7 +250,8 @@ public class InputAlarmPanelFragment extends MainFragment {
                 editor.putString("ALARMPA_batryPhoto3", sNoPlatephoto);
                 editor.putString("BbActivitySavedDateTime", currentDateTime);
                 editor.putString("ALARMPA_ItemCondition", itemCondition);
-
+                editor.putString("ALARMPA_AnchorOperator", AnchorOperator);
+                editor.putString("ALARMPA_SharingOperator", SharingOperator);
 
                 strModelId = pref.getString("", "");
                 editor.commit();
@@ -249,10 +269,16 @@ public class InputAlarmPanelFragment extends MainFragment {
         model = getTextFromView(this.etCapacity);
         capacity = getTextFromView(this.etCapacity);
         serialNumber = getTextFromView(this.etSerialNum);
+
+        AnchorOperator = getTextFromView(this.etAnchorOperator);
+        SharingOperator = getTextFromView(this.etSharingOperator);
+
         yearOfManufacturing = getTextFromView(this.etYear);
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
+
+
 
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
@@ -278,10 +304,10 @@ public class InputAlarmPanelFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (isEmptyStr(bateryphoto)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
             } else if (isEmptyStr(cellPhoto)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
             } else if (isEmptyStr(sNoPlatephoto)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");

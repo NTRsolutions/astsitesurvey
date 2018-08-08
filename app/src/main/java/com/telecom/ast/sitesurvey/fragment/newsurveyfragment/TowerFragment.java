@@ -35,13 +35,18 @@ public class TowerFragment extends MainFragment {
     static boolean isImage1, isImage2, isImage3, isImage4, isImage5;
     Button btnSubmit;
     LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner, typeTowerSpinner, laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
-    String strUserId, strSavedDateTime, strSiteId;
+    Spinner itemConditionSpinner, typeTowerSpinner,
+            laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
+    String strUserId, strSavedDateTime, strSiteId, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
+            strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
     SharedPreferences pref;
-    AppCompatEditText etHeight, etDate, etDescription, etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem,
-            etEarthingofTower;
+    AppCompatEditText etHeight, etDate, etDescription,
+            etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem, etEarthingofTower;
+
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
-    String type, height, date, itemcondion, descreption;
+    String type, height, date, itemcondion, descreption,
+            workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
+            laEarthingStatus, towerFoundation, towerTightening;
     static String overviewImgstr, northmgStr, eastImgStr, southImgStr, westImgStr;
 
     @Override
@@ -100,7 +105,7 @@ public class TowerFragment extends MainFragment {
         itemConditionSpinner.setAdapter(towerType);
 
 
-        final String laEarthingStatus_array[] = {"Available", "Not Available", "Connected", "Nott Connected"};
+        final String laEarthingStatus_array[] = {"Available", "Not Available", "Connected", "Not Connected"};
         ArrayAdapter<String> laEarthingStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, laEarthingStatus_array);
         laEarthingStatusSpinner.setAdapter(laEarthingStatus);
 
@@ -122,10 +127,21 @@ public class TowerFragment extends MainFragment {
         setSpinnerValue();
         getSharedPrefData();
         if (!toerTypestr.equals("") || !typeheightstr.equals("") || !datesiteStr.equals("") || !itemConditionstr.equals("")
-                || !descriptionstr.equals("")) {
+                || !descriptionstr.equals("")
+                || !strworkingCondi.equals("")
+                || !strnoMicrowaveAntenna.equals("")
+                || !strnoGSMAntenna.equals("")
+                || !strmissingMem.equals("")
+                || !strEarthingofTower.equals("")) {
             etHeight.setText(typeheightstr);
             etDate.setText(datesiteStr);
             etDescription.setText(descriptionstr);
+            etworkingCondi.setText(strworkingCondi);
+            etnoMicrowaveAntenna.setText(strnoMicrowaveAntenna);
+            etnoGSMAntenna.setText(strnoGSMAntenna);
+            etmissingMem.setText(strmissingMem);
+            etEarthingofTower.setText(strEarthingofTower);
+
         }
         if (!overviewImgstr.equals("") || !northmgStr.equals("") || !eastImgStr.equals("") || !westImgStr.equals("") || !southImgStr.equals("")) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(overviewImgstr)).placeholder(R.drawable.noimage).into(overviewImg);
@@ -159,6 +175,14 @@ public class TowerFragment extends MainFragment {
         southImgStr = pref.getString("Tower_Photo4", "");
         westImgStr = pref.getString("Tower_Photo5", "");
         strSiteId = pref.getString("SiteId", "");
+        laEarthingStatus = pref.getString("Tower_laEarthingStatusSpinner", "");
+        towerFoundation = pref.getString("Tower_towerFoundationSpinner", "");
+        towerFoundation = pref.getString("Tower_towerTighteningSpinner", "");
+        strworkingCondi = pref.getString("Tower_workingCondi", "");
+        strnoMicrowaveAntenna = pref.getString("Tower_noMicrowaveAntenna", "");
+        strnoGSMAntenna = pref.getString("Tower_noGSMAntenna", "");
+        strmissingMem = pref.getString("Tower_missingMem", "");
+        strEarthingofTower = pref.getString("Tower_EarthingofTower", "");
     }
 
 
@@ -213,6 +237,16 @@ public class TowerFragment extends MainFragment {
                 editor.putString("Tower_Photo3", eastImgStr);
                 editor.putString("Tower_Photo4", southImgStr);
                 editor.putString("Tower_Photo5", westImgStr);
+
+                editor.putString("Tower_laEarthingStatusSpinner", strlaEarthingStatusSpinner);
+                editor.putString("Tower_towerFoundationSpinner", strtowerFoundationSpinner);
+                editor.putString("Tower_towerTighteningSpinner", strtowerTighteningSpinner);
+
+                editor.putString("Tower_workingCondi", workingCondi);
+                editor.putString("Tower_noMicrowaveAntenna", noMicrowaveAntenna);
+                editor.putString("Tower_noGSMAntenna", noGSMAntenna);
+                editor.putString("Tower_missingMem", missingMem);
+                editor.putString("Tower_EarthingofTower", EarthingofTower);
                 editor.commit();
             }
         }
@@ -222,9 +256,20 @@ public class TowerFragment extends MainFragment {
     public boolean isValidate() {
         type = typeTowerSpinner.getSelectedItem().toString();
         itemcondion = itemConditionSpinner.getSelectedItem().toString();
+        strlaEarthingStatusSpinner = laEarthingStatusSpinner.getSelectedItem().toString();
+        strtowerFoundationSpinner = towerFoundationSpinner.getSelectedItem().toString();
+        strtowerTighteningSpinner = towerTighteningSpinner.getSelectedItem().toString();
+
         height = etHeight.getText().toString();
         date = etDate.getText().toString();
         descreption = etDescription.getText().toString();
+        workingCondi = etworkingCondi.getText().toString();
+        noMicrowaveAntenna = etnoMicrowaveAntenna.getText().toString();
+        noGSMAntenna = etnoGSMAntenna.getText().toString();
+        missingMem = etmissingMem.getText().toString();
+        EarthingofTower = etEarthingofTower.getText().toString();
+
+
         if (isEmptyStr(type)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Type");
             return false;

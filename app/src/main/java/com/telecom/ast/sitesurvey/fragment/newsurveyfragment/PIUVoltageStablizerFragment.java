@@ -54,6 +54,12 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
+    AppCompatEditText etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etRatingofCable, etAlarmConnection,
+            etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
+
+    Spinner itemStatusSpineer;
+    String Controller, ConditionbackPlane, BodyEarthing, PositiveEarthing, RatingofCable, AlarmConnection,
+            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus;
 
     @Override
     protected int fragmentLayout() {
@@ -78,6 +84,17 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         etetNofLcu = findViewById(R.id.etNofLcu);
+
+        etController = findViewById(R.id.etController);
+        etConditionbackPlane = findViewById(R.id.etConditionbackPlane);
+        etBodyEarthing = findViewById(R.id.etBodyEarthing);
+        etPositiveEarthing = findViewById(R.id.etPositiveEarthing);
+        etRatingofCable = findViewById(R.id.etRatingofCable);
+        etAlarmConnection = findViewById(R.id.etAlarmConnection);
+        etNoofRMWorking = findViewById(R.id.etNoofRMWorking);
+        etNoofRMFaulty = findViewById(R.id.etNoofRMFaulty);
+        etSpareFuseStatus = findViewById(R.id.etSpareFuseStatus);
+        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -113,6 +130,17 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         openPhoto = pref.getString("PIU_Photo2", "");
         sNoPlatephoto = pref.getString("PIU_Photo3", "");
 
+        Controller = pref.getString("PIU_Controller", "");
+        ConditionbackPlane = pref.getString("PIU_ConditionbackPlane", "");
+        BodyEarthing = pref.getString("PIU_BodyEarthing", "");
+        PositiveEarthing = pref.getString("PIU_PositiveEarthing", "");
+        RatingofCable = pref.getString("PIU_RatingofCable", "");
+        AlarmConnection = pref.getString("PIU_AlarmConnection", "");
+        NoofRMWorking = pref.getString("PIU_NoofRMWorking", "");
+        NoofRMFaulty = pref.getString("PIU_NoofRMFaulty", "");
+        SpareFuseStatus = pref.getString("PIU_SpareFuseStatus", "");
+        itemStatus = pref.getString("PIU_itemStatus", "");
+
 
         strSavedDateTime = pref.getString("PIU_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
@@ -122,6 +150,10 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
+
+        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> itemStatusSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
+        itemStatusSpineer.setAdapter(itemStatusSpineeradapter);
 
     }
 
@@ -177,13 +209,34 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+                || !strYearOfManufacturing.equals("")
+                || !strDescription.equals("") || !Controller.equals("")
+                || !ConditionbackPlane.equals("")
+                || !BodyEarthing.equals("")
+                || !PositiveEarthing.equals("")
+                || !AlarmConnection.equals("")
+                || !NoofRMWorking.equals("")
+                || !NoofRMFaulty.equals("")
+                || !SpareFuseStatus.equals("")) {
+
+
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
+
+            etController.setText(Controller);
+            etConditionbackPlane.setText(strDescription);
+            etBodyEarthing.setText(BodyEarthing);
+            etPositiveEarthing.setText(PositiveEarthing);
+            etRatingofCable.setText(RatingofCable);
+            etAlarmConnection.setText(AlarmConnection);
+            etNoofRMWorking.setText(NoofRMWorking);
+            etNoofRMFaulty.setText(NoofRMFaulty);
+            etSpareFuseStatus.setText(SpareFuseStatus);
+            itemStatus = itemStatusSpineer.getSelectedItem().toString();
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -269,6 +322,18 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 editor.putString("PIU_Photo2", openPhoto);
                 editor.putString("PIU_Photo3", sNoPlatephoto);
                 editor.putString("PIU_SavedDateTime", currentDateTime);
+
+                editor.putString("PIU__Controller", Controller);
+                editor.putString("PIU_ConditionbackPlane", ConditionbackPlane);
+                editor.putString("PIU_BodyEarthing", BodyEarthing);
+                editor.putString("PIU_PositiveEarthing", PositiveEarthing);
+                editor.putString("PIU_RatingofCable", RatingofCable);
+                editor.putString("PIU_AlarmConnection", AlarmConnection);
+                editor.putString("PIU_NoofRMWorking", NoofRMWorking);
+                editor.putString("PIU_NoofRMFaulty", NoofRMFaulty);
+                editor.putString("PIU_SpareFuseStatus", SpareFuseStatus);
+                editor.putString("PIU_itemStatus", itemStatus);
+
                 editor.commit();
                 saveScreenData(false, true);
             }
@@ -294,6 +359,17 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         yearOfManufacturing = etYear.getText().toString();
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
+
+        Controller = etController.getText().toString();
+        ConditionbackPlane = etConditionbackPlane.getText().toString();
+        BodyEarthing = etBodyEarthing.getText().toString();
+        PositiveEarthing = etPositiveEarthing.getText().toString();
+        RatingofCable = etRatingofCable.getText().toString();
+        AlarmConnection = etAlarmConnection.getText().toString();
+        NoofRMWorking = etNoofRMWorking.getText().toString();
+        NoofRMFaulty = etNoofRMFaulty.getText().toString();
+        SpareFuseStatus = etSpareFuseStatus.getText().toString();
+        itemStatus= itemStatusSpineer.getSelectedItem().toString();
         if (isEmptyStr(make)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
             return false;

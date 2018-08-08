@@ -37,8 +37,8 @@ public class IpmsFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
-    AppCompatEditText etYear, etDescription ;
-    AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake,etnoofModule, etLcuCapacity,etModel,etModuleCapacity;
+    AppCompatEditText etYear, etDescription;
+    AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake, etnoofModule, etLcuCapacity, etModel, etModuleCapacity;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strnoofModule, strModuleCapacity, strlcucapacity;
     String strSavedDateTime, strUserId, strSiteId;
@@ -54,6 +54,12 @@ public class IpmsFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
     Button btnSubmit;
+    AppCompatEditText etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etRatingofCable, etAlarmConnection,
+            etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
+
+    Spinner itemStatusSpineer;
+    String Controller, ConditionbackPlane, BodyEarthing, PositiveEarthing, RatingofCable, AlarmConnection,
+            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus;
 
     @Override
     protected int fragmentLayout() {
@@ -77,6 +83,17 @@ public class IpmsFragment extends MainFragment {
         etModuleCapacity = findViewById(R.id.etModuleCapacity);
         etLcuCapacity = findViewById(R.id.etLcuCapacity);
         btnSubmit = findViewById(R.id.btnSubmit);
+
+        etController = findViewById(R.id.etController);
+        etConditionbackPlane = findViewById(R.id.etConditionbackPlane);
+        etBodyEarthing = findViewById(R.id.etBodyEarthing);
+        etPositiveEarthing = findViewById(R.id.etPositiveEarthing);
+        etRatingofCable = findViewById(R.id.etRatingofCable);
+        etAlarmConnection = findViewById(R.id.etAlarmConnection);
+        etNoofRMWorking = findViewById(R.id.etNoofRMWorking);
+        etNoofRMFaulty = findViewById(R.id.etNoofRMFaulty);
+        etSpareFuseStatus = findViewById(R.id.etSpareFuseStatus);
+        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -118,12 +135,27 @@ public class IpmsFragment extends MainFragment {
         sNoPlatephoto = pref.getString("IPMS_Photo3", "");
         strSavedDateTime = pref.getString("IPMS_SavedDateTime", "");
         strSiteId = pref.getString("SiteId", "");
+        Controller = pref.getString("IPMS_Controller", "");
+        ConditionbackPlane = pref.getString("IPMS_ConditionbackPlane", "");
+        BodyEarthing = pref.getString("IPMS_BodyEarthing", "");
+        PositiveEarthing = pref.getString("IPMS_PositiveEarthing", "");
+        RatingofCable = pref.getString("IPMS_RatingofCable", "");
+        AlarmConnection = pref.getString("IPMS_AlarmConnection", "");
+        NoofRMWorking = pref.getString("IPMS_NoofRMWorking", "");
+        NoofRMFaulty = pref.getString("IPMS_NoofRMFaulty", "");
+        SpareFuseStatus = pref.getString("IPMS_SpareFuseStatus", "");
+        itemStatus = pref.getString("IPMS_itemStatus", "");
     }
 
     public void setSpinnerValue() {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
+
+
+        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> itemStatusSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
+        itemStatusSpineer.setAdapter(itemStatusSpineeradapter);
 
     }
 
@@ -186,7 +218,17 @@ public class IpmsFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !strlcucapacity.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("")
+                || !strlcucapacity.equals("")
+                || !Controller.equals("")
+                || !ConditionbackPlane.equals("")
+                || !BodyEarthing.equals("")
+                || !PositiveEarthing.equals("")
+                || !AlarmConnection.equals("")
+                || !NoofRMWorking.equals("")
+                || !NoofRMFaulty.equals("")
+                || !SpareFuseStatus.equals("")
+                ) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -194,6 +236,16 @@ public class IpmsFragment extends MainFragment {
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
             etLcuCapacity.setText(strlcucapacity);
+            etController.setText(Controller);
+            etConditionbackPlane.setText(strDescription);
+            etBodyEarthing.setText(BodyEarthing);
+            etPositiveEarthing.setText(PositiveEarthing);
+            etRatingofCable.setText(RatingofCable);
+            etAlarmConnection.setText(AlarmConnection);
+            etNoofRMWorking.setText(NoofRMWorking);
+            etNoofRMFaulty.setText(NoofRMFaulty);
+            etSpareFuseStatus.setText(SpareFuseStatus);
+            itemStatus = itemStatusSpineer.getSelectedItem().toString();
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -280,6 +332,17 @@ public class IpmsFragment extends MainFragment {
                 editor.putString("IPMS_Photo2", openPhoto);
                 editor.putString("IPMS_Photo3", sNoPlatephoto);
                 editor.putString("IPMS_SavedDateTime", currentDateTime);
+
+                editor.putString("IPMS_Controller", Controller);
+                editor.putString("IPMS_ConditionbackPlane", ConditionbackPlane);
+                editor.putString("IPMS_BodyEarthing", BodyEarthing);
+                editor.putString("IPMS_PositiveEarthing", PositiveEarthing);
+                editor.putString("IPMS_RatingofCable", RatingofCable);
+                editor.putString("IPMS_AlarmConnection", AlarmConnection);
+                editor.putString("IPMS_NoofRMWorking", NoofRMWorking);
+                editor.putString("IPMS_NoofRMFaulty", NoofRMFaulty);
+                editor.putString("IPMS_SpareFuseStatus", SpareFuseStatus);
+                editor.putString("IPMS_itemStatus", itemStatus);
                 editor.commit();
             }
 
@@ -299,6 +362,16 @@ public class IpmsFragment extends MainFragment {
         ModuleCapacity = etModuleCapacity.getText().toString();
         lcucapacity = etLcuCapacity.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
+        Controller = etController.getText().toString();
+        ConditionbackPlane = etConditionbackPlane.getText().toString();
+        BodyEarthing = etBodyEarthing.getText().toString();
+        PositiveEarthing = etPositiveEarthing.getText().toString();
+        RatingofCable = etRatingofCable.getText().toString();
+        AlarmConnection = etAlarmConnection.getText().toString();
+        NoofRMWorking = etNoofRMWorking.getText().toString();
+        NoofRMFaulty = etNoofRMFaulty.getText().toString();
+        SpareFuseStatus = etSpareFuseStatus.getText().toString();
+        itemStatus = itemStatusSpineer.getSelectedItem().toString();
         if (isEmptyStr(make)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
             return false;

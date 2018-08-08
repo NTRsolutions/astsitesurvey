@@ -28,7 +28,7 @@ public class BTSFragment extends MainFragment {
     private Button mAddButton, btnSubmit;
     private View mExclusiveEmptyView;
     AppCompatEditText etNofCab;
-    AppCompatAutoCompleteTextView etbtsOperator;
+    AppCompatAutoCompleteTextView etbtsOperator,etNoofDCDB,etNofKroneBox,etNoofRack,etMicrowave;
     Spinner btstyelSpinner;
     String btsOperator, NofCab;
     String strbtsOperator, strNofCab;

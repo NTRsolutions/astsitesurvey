@@ -49,7 +49,8 @@ public class AirConditionerFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
-    AppCompatEditText etYear, etDescription, etNumberOfAC, etnoAc;
+    AppCompatEditText etYear, etDescription, etNumberOfAC, etnoAc,
+            etaCType, etacACWorkingCondition, etCompresserStatus, etACAlarms, etSocketandPlug;
     AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
@@ -64,6 +65,8 @@ public class AirConditionerFragment extends MainFragment {
     AtmDatabase atmDatabase;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs, sNAC;
     Spinner itemStatusSpineer;
+
+    String aCType, acACWorkingCondition, CompresserStatus, ACAlarms, SocketandPlug;
 
     @Override
     protected int fragmentLayout() {
@@ -87,6 +90,11 @@ public class AirConditionerFragment extends MainFragment {
         btnSubmit = findViewById(R.id.btnSubmit);
         etnoAc = findViewById(R.id.noAc);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
+        etaCType = findViewById(R.id.etaCType);
+        etacACWorkingCondition = findViewById(R.id.etacACWorkingCondition);
+        etCompresserStatus = findViewById(R.id.etCompresserStatus);
+        etACAlarms = findViewById(R.id.etACAlarms);
+        etSocketandPlug = findViewById(R.id.etSocketandPlug);
     }
 
     @Override
@@ -125,6 +133,11 @@ public class AirConditionerFragment extends MainFragment {
         strType = pref.getString("AC_Type", "");
         strNumberOfAC = pref.getString("AC_Number", "");
         strSiteId = pref.getString("SiteId", "");
+        aCType = pref.getString("AC_aCType", "");
+        acACWorkingCondition = pref.getString("AC_acACWorkingCondition", "");
+        CompresserStatus = pref.getString("AC_CompresserStatus", "");
+        ACAlarms = pref.getString("AC_ACAlarms", "");
+        SocketandPlug = pref.getString("AC_SocketandPlug", "");
         sNoAC = pref.getString("sNoAC", "");
     }
 
@@ -194,7 +207,14 @@ public class AirConditionerFragment extends MainFragment {
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !sNoAC.equals("")) {
+                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !sNoAC.equals("")
+                || !sNoAC.equals("")
+                || !acACWorkingCondition.equals("")
+                || !CompresserStatus.equals("")
+                || !ACAlarms.equals("")
+                || !SocketandPlug.equals("")
+                ) {
+
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -203,6 +223,14 @@ public class AirConditionerFragment extends MainFragment {
             etDescription.setText(strDescription);
             etNumberOfAC.setText(strNumberOfAC);
             etnoAc.setText(sNoAC);
+
+            etaCType.setText(aCType);
+            etacACWorkingCondition.setText(acACWorkingCondition);
+            etCompresserStatus.setText(CompresserStatus);
+            etACAlarms.setText(ACAlarms);
+            etSocketandPlug.setText(SocketandPlug);
+
+
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -239,6 +267,12 @@ public class AirConditionerFragment extends MainFragment {
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
                     etnoAc.setEnabled(false);
+                    etaCType.setEnabled(false);
+                    etacACWorkingCondition.setEnabled(false);
+                    etCompresserStatus.setEnabled(false);
+                    etACAlarms.setEnabled(false);
+                    etSocketandPlug.setEnabled(false);
+
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -253,6 +287,11 @@ public class AirConditionerFragment extends MainFragment {
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
                     etnoAc.setEnabled(true);
+                    etaCType.setEnabled(true);
+                    etacACWorkingCondition.setEnabled(true);
+                    etCompresserStatus.setEnabled(true);
+                    etACAlarms.setEnabled(true);
+                    etSocketandPlug.setEnabled(true);
                 }
             }
 
@@ -329,6 +368,13 @@ public class AirConditionerFragment extends MainFragment {
                 editor.putString("AC_SavedDateTime", currentDateTime);
                 editor.putString("AC_Number", numOfACs);
                 editor.putString("sNoAC", sNAC);
+
+                editor.putString("AC_aCType", aCType);
+                editor.putString("AC_acACWorkingCondition", acACWorkingCondition);
+                editor.putString("AC_CompresserStatus", CompresserStatus);
+                editor.putString("AC_ACAlarms", ACAlarms);
+                editor.putString("AC_SocketandPlug", SocketandPlug);
+
                 editor.commit();
             }
         }
@@ -345,6 +391,13 @@ public class AirConditionerFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         numOfACs = etNumberOfAC.getText().toString();
+        aCType = etaCType.getText().toString();
+        acACWorkingCondition = etacACWorkingCondition.getText().toString();
+        CompresserStatus = etCompresserStatus.getText().toString();
+        ACAlarms = etACAlarms.getText().toString();
+        SocketandPlug = etSocketandPlug.getText().toString();
+
+
         sNAC = etnoAc.getText().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
