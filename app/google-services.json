@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "409109697664",
-    "firebase_url": "https://sitesurvey-c4446.firebaseio.com",
-    "project_id": "sitesurvey-c4446",
-    "storage_bucket": "sitesurvey-c4446.appspot.com"
+    "project_number": "796538939558",
+    "firebase_url": "https://sitesurvey-c73b9.firebaseio.com",
+    "project_id": "sitesurvey-c73b9",
+    "storage_bucket": "sitesurvey-c73b9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:409109697664:android:81acb8be8f50d3bc",
+        "mobilesdk_app_id": "1:796538939558:android:81acb8be8f50d3bc",
         "android_client_info": {
           "package_name": "com.telecom.ast.sitesurvey"
         }
       },
       "oauth_client": [
         {
-          "client_id": "409109697664-jld881l4trlaprdsd40cpv0kka5s7u69.apps.googleusercontent.com",
+          "client_id": "796538939558-rf8fb12opn2j5bjhhbf7at5ruqg10bn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.telecom.ast.sitesurvey",
+            "certificate_hash": "dece5f7003a6ef0cbb0803247b6a0ccb20eb760f"
+          }
+        },
+        {
+          "client_id": "796538939558-12vo63ijq02a2jlkj8uvrf2po5b7fh7j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFshsJpLkxoUcrtF5Sij3ehwKHu31oOBY"
+          "current_key": "AIzaSyDOk7DTFIloCmRf7inLC32rNuHOYQLVb4E"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796538939558-12vo63ijq02a2jlkj8uvrf2po5b7fh7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
