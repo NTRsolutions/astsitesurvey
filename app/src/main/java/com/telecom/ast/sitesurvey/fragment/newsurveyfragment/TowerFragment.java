@@ -457,6 +457,8 @@ public class TowerFragment extends MainFragment {
         getPickedFiles(files);
     }
 
+
+
     //rename file
     private File renameFile(String imageFileName, String newImageName) {
         Context appContext = ApplicationHelper.application().getApplicationContext();
