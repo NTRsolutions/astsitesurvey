@@ -1,5 +1,6 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
@@ -8,18 +9,33 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.telecom.ast.sitesurvey.R;
-import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.framework.IAsyncWorkCompletedCallback;
+import com.telecom.ast.sitesurvey.framework.ServiceCaller;
 import com.telecom.ast.sitesurvey.model.CircleMasterDataModel;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.DistrictMasterDataModel;
 import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
@@ -37,17 +53,20 @@ public class BasicDataFragment extends MainFragment {
     ArrayList<CircleMasterDataModel> arrCircleData = new ArrayList<>();
     ArrayList<DistrictMasterDataModel> arrDistrictData = new ArrayList<>();
     ArrayList<SSAmasterDataModel> arrSSAData = new ArrayList<>();
-    SharedPreferences pref;
+    SharedPreferences basicSharedPref;
+    SharedPreferences userPref;
     String userId, strDate, strTime, strSurveyyorName, strSiteId, strAddress, strMilli;
     String strCircleId, strSSAId, strDistrictId, strCity, strPincode, strSiteCustomerId, strSiteName;
     String strCirclePosition, strSSAPosition, strDistrictPosition,
             strOwner, strOwnerContact, strCaretaker, strCaretakercontact, strownerAddress;
+    String SSAId, DistrictId, CirclePosition, SSAPosition, DistrictPosition;
     long currentMilli;
-    String dateTime, finalDate, finalTime, finalSurveyorName, finalSiteId, finalSiteName, finalAddress,
+    String dateTime, finalDate, finalTime, finalSurveyorName, curtomerSiteIdStr, siteIdStr, finalSiteName, finalAddress,
             finalCity, finalPincode, Owner, OwnerContact, Caretaker, Caretakercontact, ownerAddress;
-    ;
 
     int finalCircle, finalSSA, finalDistrict;
+    private String[] arrCustomerSiteId;
+    private long dateTimeMili;
 
     @Override
     protected int fragmentLayout() {
@@ -88,9 +107,23 @@ public class BasicDataFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        getSharedPrefSaveData();
+        getUserPref();
+        getSaveBasicDataSharedPref();
+        getBasicData();
+    }
+
+
+    public void getBasicData() {
+        setBasiMasterData();
+        getCircleData();
+        getPreFilledFields();
+    }
+
+
+    public void setBasiMasterData() {
         currentMilli = System.currentTimeMillis();
         String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
+        dateTimeMili = System.currentTimeMillis();
         etDate.setText(currentDate);
         etDate.setEnabled(false);
         final String currentTime = commonFunctions.getFormattedDate("hh:mm:ss", System.currentTimeMillis());
@@ -99,12 +132,12 @@ public class BasicDataFragment extends MainFragment {
         atmDatabase = new AtmDatabase(getContext());
         arrSiteData = atmDatabase.getAllSiteData("Desc");
         String[] arrSiteName = new String[arrSiteData.size()];
-        String[] arrSiteId = new String[arrSiteData.size()];
+        arrCustomerSiteId = new String[arrSiteData.size()];
         for (int i = 0; i < arrSiteData.size(); i++) {
-            arrSiteId[i] = arrSiteData.get(i).getCustomerSiteId();
             arrSiteName[i] = arrSiteData.get(i).getSiteName();
+            arrCustomerSiteId[i] = arrSiteData.get(i).getCustomerSiteId();
         }
-        setSiteNameAdapter(arrSiteId, arrSiteName);
+        setSiteNameAdapter(arrCustomerSiteId, arrSiteName);
         arrCircleData = atmDatabase.getAllCircleData("Desc");
         String[] arrCircle = new String[arrCircleData.size() + 1];
         arrCircle[0] = "--Select Circle--";
@@ -169,31 +202,37 @@ public class BasicDataFragment extends MainFragment {
 
             }
         });
+    }
 
-
+    public void getCircleData() {
         if (!strCircleId.equals("")) {
-            String circleId = arrCircleData.get(Integer.parseInt(strCirclePosition) - 1).getCircleId();
-            arrSSAData = atmDatabase.getAllSSAData("Desc", circleId);
-            String[] arrTempSSA = new String[arrSSAData.size() + 1];
-            arrTempSSA[0] = "---Select SSA-";
+            if (!strCirclePosition.equals("")) {
+                String circleId = arrCircleData.get(Integer.parseInt(strCirclePosition) - 1).getCircleId();
+                arrSSAData = atmDatabase.getAllSSAData("Desc", circleId);
+                String[] arrTempSSA = new String[arrSSAData.size() + 1];
+                arrTempSSA[0] = "---Select SSA-";
 
-            for (int i = 0; i < arrSSAData.size(); i++) {
-                arrTempSSA[i + 1] = arrSSAData.get(i).getSSAname();
+                for (int i = 0; i < arrSSAData.size(); i++) {
+                    arrTempSSA[i + 1] = arrSSAData.get(i).getSSAname();
+                }
+                setSSAadapter(arrTempSSA, Integer.parseInt(strSSAPosition));
+                spSSA.setEnabled(true);
+                //spSSA.setSelection(Integer.parseInt(strSSAPosition));
+                arrDistrictData = atmDatabase.getAllDistrictData("Desc", circleId);
+                String[] arrTempDistrict = new String[arrDistrictData.size() + 1];
+                arrTempDistrict[0] = "--Select District--";
+                for (int i = 0; i < arrDistrictData.size(); i++) {
+                    arrTempDistrict[i + 1] = arrDistrictData.get(i).getDistrictName();
+                }
+                setDistrictadapter(arrTempDistrict, Integer.parseInt(strDistrictPosition));
+                spDistrict.setEnabled(true);
+                //spDistrict.setSelection(Integer.parseInt(strDistrictPosition));
             }
-            setSSAadapter(arrTempSSA, Integer.parseInt(strSSAPosition));
-            spSSA.setEnabled(true);
-            //spSSA.setSelection(Integer.parseInt(strSSAPosition));
-            arrDistrictData = atmDatabase.getAllDistrictData("Desc", circleId);
-            String[] arrTempDistrict = new String[arrDistrictData.size() + 1];
-            arrTempDistrict[0] = "--Select District--";
-            for (int i = 0; i < arrDistrictData.size(); i++) {
-                arrTempDistrict[i + 1] = arrDistrictData.get(i).getDistrictName();
-            }
-            setDistrictadapter(arrTempDistrict, Integer.parseInt(strDistrictPosition));
-            spDistrict.setEnabled(true);
-            //spDistrict.setSelection(Integer.parseInt(strDistrictPosition));
         }
-        //-----------------Populating Pre Filled Fields---------------------
+    }
+
+    //-----------------Populating Pre Filled Fields---------------------
+    public void getPreFilledFields() {
         if (!strDate.equals("")) {
             etDate.setText(strDate);
             etTime.setText(strTime);
@@ -206,7 +245,6 @@ public class BasicDataFragment extends MainFragment {
             spDistrict.setSelection(Integer.parseInt(strDistrictPosition));
             etCity.setText(strCity);
             etPincode.setText(strPincode);
-
             etOwner.setText(strOwner);
             etOwnerContact.setText(strOwnerContact);
             etCaretaker.setText(strCaretaker);
@@ -216,36 +254,39 @@ public class BasicDataFragment extends MainFragment {
         }
     }
 
-    /*
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        userId = userPref.getString("USER_ID", "");
+    }    /*
      *
      * get Data in Shared Pref.
      */
 
-    public void getSharedPrefSaveData() {
-        commonFunctions = new ASTUIUtil();
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        userId = pref.getString("USER_ID", "");
-        strMilli = pref.getString("MilliSeconds", "");
-        strDate = pref.getString("Date", "");
-        strTime = pref.getString("Time", "");
-        strSurveyyorName = pref.getString("SurveyorName", "");
-        strSiteId = pref.getString("SiteId", "");
-        strSiteCustomerId = pref.getString("SiteCustomerId", "");
-        strSiteName = pref.getString("SiteName", "");
-        strAddress = pref.getString("Address", "");
-        strCircleId = pref.getString("CircleId", "");
-        strSSAId = pref.getString("SSAId", "");
-        strDistrictId = pref.getString("DistrictId", "");
-        strCirclePosition = pref.getString("CirclePosition", "");
-        strSSAPosition = pref.getString("SSAPosition", "");
-        strDistrictPosition = pref.getString("DistrictPosition", "");
-        strCity = pref.getString("City", "");
-        strPincode = pref.getString("Pincode", "");
-        strOwner = pref.getString("strOwner", "");
-        strOwnerContact = pref.getString("strOwnerContact", "");
-        strCaretaker = pref.getString("strCaretaker", "");
-        strCaretakercontact = pref.getString("strCaretakercontact", "");
-        strownerAddress = pref.getString("strownerAddress", "");
+
+    public void getSaveBasicDataSharedPref() {
+      /*  commonFunctions = new ASTUIUtil();
+        basicSharedPref = getContext().getSharedPreferences("BasicSharedPref", MODE_PRIVATE);
+        strMilli = basicSharedPref.getString("MilliSeconds", "");
+        strDate = basicSharedPref.getString("Date", "");
+        strTime = basicSharedPref.getString("Time", "");
+        strSurveyyorName = basicSharedPref.getString("SurveyorName", "");
+        strSiteId = basicSharedPref.getString("SiteId", "");
+        strSiteCustomerId = basicSharedPref.getString("SiteCustomerId", "");
+        strSiteName = basicSharedPref.getString("SiteName", "");
+        strAddress = basicSharedPref.getString("Address", "");
+        strCircleId = basicSharedPref.getString("CircleId", "");
+        strSSAId = basicSharedPref.getString("SSAId", "");
+        strDistrictId = basicSharedPref.getString("DistrictId", "");
+        strCirclePosition = basicSharedPref.getString("CirclePosition", "");
+        strSSAPosition = basicSharedPref.getString("SSAPosition", "");
+        strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");
+        strCity = basicSharedPref.getString("City", "");
+        strPincode = basicSharedPref.getString("Pincode", "");
+        strOwner = basicSharedPref.getString("strOwner", "");
+        strOwnerContact = basicSharedPref.getString("strOwnerContact", "");
+        strCaretaker = basicSharedPref.getString("strCaretaker", "");
+        strCaretakercontact = basicSharedPref.getString("strCaretakercontact", "");
+        strownerAddress = basicSharedPref.getString("strownerAddress", "");*/
 
     }
 
@@ -298,53 +339,67 @@ public class BasicDataFragment extends MainFragment {
 
     }
 
+    //get site id
+    private void getSiteId() {
+        for (int i = 0; i < arrCustomerSiteId.length; i++) {
+            if (curtomerSiteIdStr.equalsIgnoreCase(arrCustomerSiteId[i])) {
+                siteIdStr = arrSiteData.get(i).getSiteId();
+                break;
+            }
+        }
+    }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("USER_ID", userId);
-                editor.putString("Date", finalDate);
-                editor.putString("Time", finalTime);
-                editor.putString("SurveyorName", finalSurveyorName);
-                editor.putString("SiteId", finalSiteId);
-                editor.putString("SiteCustomerId", etSiteId.getText().toString());
-                editor.putString("SiteName", etSiteName.getText().toString());
-                editor.putString("Address", finalAddress);
-                editor.putString("CircleId", arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId());
-                editor.putString("SSAId", arrSSAData.get(spSSA.getSelectedItemPosition() - 1).getSSAid());
-                editor.putString("DistrictId", arrDistrictData.get(spDistrict.getSelectedItemPosition() - 1).getDistrictId());
-                editor.putString("CirclePosition", String.valueOf(spCircle.getSelectedItemPosition()));
-                editor.putString("SSAPosition", String.valueOf(spSSA.getSelectedItemPosition()));
-                editor.putString("DistrictPosition", String.valueOf(spDistrict.getSelectedItemPosition()));
-                editor.putString("City", finalCity);
-                editor.putString("Pincode", finalPincode);
-                editor.putString("strOwner", Owner);
-                editor.putString("strOwnerContact", OwnerContact);
-                editor.putString("strCaretaker", Caretaker);
-                editor.putString("strCaretakercontact", Caretakercontact);
-                editor.putString("strownerAddress", ownerAddress);
-
-
-                editor.putString("MilliSeconds", String.valueOf(currentMilli));
-                editor.commit();
-                strCirclePosition = pref.getString("CirclePosition", "");
-                strSSAPosition = pref.getString("SSAPosition", "");
-                strDistrictPosition = pref.getString("DistrictPosition", "");
-                reloadBackScreen();
-
+                getSiteId();
+                saveBasicDataonServer();
             }
+
+
         }
+
     }
 
+    @Override
+    public boolean onBackPressed() {
+        saveBasicDataintSharedPref();
+        return super.onBackPressed();
+    }
+
+    private void saveBasicDataintSharedPref() {
+       /* SharedPreferences.Editor editor = basicSharedPref.edit();
+        editor.putString("Date", finalDate);
+        editor.putString("Time", finalTime);
+        editor.putString("SurveyorName", finalSurveyorName);
+        editor.putString("SiteId", siteIdStr);
+        editor.putString("SiteCustomerId", curtomerSiteIdStr);
+        editor.putString("SiteName", finalSiteName);
+        editor.putString("Address", finalAddress);
+        editor.putString("CircleId", strCircleId);
+        editor.putString("SSAId", SSAId);
+        editor.putString("DistrictId", DistrictId);
+        editor.putString("CirclePosition", CirclePosition);
+        editor.putString("SSAPosition", SSAPosition);
+        editor.putString("DistrictPosition", DistrictPosition);
+        editor.putString("City", finalCity);
+        editor.putString("Pincode", finalPincode);
+        editor.putString("strOwner", Owner);
+        editor.putString("strOwnerContact", OwnerContact);
+        editor.putString("strCaretaker", Caretaker);
+        editor.putString("strCaretakercontact", Caretakercontact);
+        editor.putString("strownerAddress", ownerAddress);
+        editor.putString("MilliSeconds", String.valueOf(currentMilli));
+        editor.commit();*/
+    }
 
     public boolean isValidate() {
         dateTime = String.valueOf(currentMilli);
         finalDate = getTextFromView(this.etDate);
         finalTime = getTextFromView(this.etTime);
         finalSurveyorName = getTextFromView(this.etSurveyorName);
-        finalSiteId = getTextFromView(this.etSiteId);
+        curtomerSiteIdStr = getTextFromView(this.etSiteId);
         finalSiteName = getTextFromView(this.etSiteName);
         finalAddress = getTextFromView(this.etAddress);
         finalCircle = spCircle.getSelectedItemPosition();
@@ -352,19 +407,27 @@ public class BasicDataFragment extends MainFragment {
         finalDistrict = spDistrict.getSelectedItemPosition();
         finalCity = getTextFromView(this.etCity);
         finalPincode = getTextFromView(this.etPincode);
-
         Owner = getTextFromView(this.etOwner);
         OwnerContact = getTextFromView(this.etOwnerContact);
         Caretaker = getTextFromView(this.etCaretaker);
         Caretakercontact = getTextFromView(this.etCaretakercontact);
         ownerAddress = getTextFromView(this.etownerAddress);
+        strCircleId = arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId();
+        SSAId = arrSSAData.get(spSSA.getSelectedItemPosition() - 1).getSSAid();
+        DistrictId = arrDistrictData.get(spDistrict.getSelectedItemPosition() - 1).getDistrictId();
+        CirclePosition = String.valueOf(spCircle.getSelectedItemPosition());
+        SSAPosition = String.valueOf(spSSA.getSelectedItemPosition());
+        DistrictPosition = String.valueOf(spDistrict.getSelectedItemPosition());
 
 
         if (isEmptyStr(finalSurveyorName)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter SurveyorName");
             return false;
-        } else if (isEmptyStr(finalSiteId)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Site");
+        } else if (isEmptyStr(finalSiteName)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Site Name");
+            return false;
+        } else if (isEmptyStr(curtomerSiteIdStr)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Site ID");
             return false;
         } else if (isEmptyStr(finalAddress)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Address");
@@ -387,4 +450,93 @@ public class BasicDataFragment extends MainFragment {
         }
         return true;
     }
+
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", siteIdStr);
+                jsonObject.put("User_ID", userId);
+                jsonObject.put("Activity", "Basic");
+                JSONObject BasicData = new JSONObject();
+                BasicData.put("SiteName", finalSiteName);
+                BasicData.put("Address", finalAddress);
+                BasicData.put("CircleID", strCircleId);
+                BasicData.put("State", finalCircle);
+                BasicData.put("SSAID", finalSSA);
+                BasicData.put("DistrictID", finalDistrict);
+                BasicData.put("City", finalCity);
+                BasicData.put("Pincode", finalPincode);
+                BasicData.put("DateTime", dateTimeMili);//finalDate
+                BasicData.put("Surveyor", finalSurveyorName);
+                BasicData.put("Owner", Owner);
+                BasicData.put("OwnerContactNo", OwnerContact);
+                BasicData.put("OwnerAddress", ownerAddress);
+                BasicData.put("CareTaker", Caretaker);
+                BasicData.put("CareTakerNo", Caretakercontact);
+                BasicData.put("Latitude", "23.45678");
+                BasicData.put("Longitude", "23.45678");
+
+                jsonObject.put("BasicData", BasicData);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your Data save Successfully");
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.putString("Site_ID", siteIdStr);
+                            editor.commit();
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                            saveBasicDataintSharedPref();
+                        }
+                    } else {
+                        ASTUIUtil.showToast("BasiC Data Information has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      /*  if (equpImagList != null && equpImagList.size() > 0) {
+            for (SaveOffLineData data : equpImagList) {
+                if (data != null) {
+                    if (data.getImagePath() != null) {
+                        File inputFile = new File(data.getImagePath());
+                        if (inputFile.exists()) {
+                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
+                        }
+                    }
+                }
+            }
+        }
+*/
+        return multipartBody;
+    }
+
 }

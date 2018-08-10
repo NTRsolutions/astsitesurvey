@@ -12,5 +12,7 @@ public class Constant {
     public static String SITE_MASTER_URL = "Master/SiteList";
     public static String EQUIPMENT_MASTER_URL = "Master/EquipmentList";
 
+    public static String SurveyDataSave ="master/SurveyData";
+
 }
 

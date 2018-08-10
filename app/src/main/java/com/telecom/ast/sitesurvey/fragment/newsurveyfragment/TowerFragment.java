@@ -1,30 +1,55 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
@@ -39,15 +64,15 @@ public class TowerFragment extends MainFragment {
             laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
     String strUserId, strSavedDateTime, strSiteId, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
             strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
-    SharedPreferences pref;
+    SharedPreferences towerSharedPrefpref, userPref;
     AppCompatEditText etHeight, etDate, etDescription,
             etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem, etEarthingofTower;
-
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
     String type, height, date, itemcondion, descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
             laEarthingStatus, towerFoundation, towerTightening;
     static String overviewImgstr, northmgStr, eastImgStr, southImgStr, westImgStr;
+    long datemilisec;
 
     @Override
     protected int fragmentLayout() {
@@ -87,11 +112,56 @@ public class TowerFragment extends MainFragment {
         southImg.setOnClickListener(this);
         westImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        etDate.setOnClickListener(this);
     }
 
     @Override
     protected void setAccessibility() {
 
+    }
+
+    public void setDateofSiteonAir() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                etDate.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        etDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myCalendar.set(Calendar.MINUTE, minute);
+                timeView.setText(sdfTime.format(myCalendar.getTime()));
+            }
+        };
+        timeView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new TimePickerDialog(getContext(), time, myCalendar
+                        .get(Calendar.HOUR_OF_DAY), myCalendar
+                        .get(Calendar.MINUTE), true).show();
+            }
+        });*/
     }
 
 
@@ -126,13 +196,14 @@ public class TowerFragment extends MainFragment {
     protected void dataToView() {
         setSpinnerValue();
         getSharedPrefData();
-        if (!toerTypestr.equals("") || !typeheightstr.equals("") || !datesiteStr.equals("") || !itemConditionstr.equals("")
-                || !descriptionstr.equals("")
-                || !strworkingCondi.equals("")
-                || !strnoMicrowaveAntenna.equals("")
-                || !strnoGSMAntenna.equals("")
-                || !strmissingMem.equals("")
-                || !strEarthingofTower.equals("")) {
+        getUserPref();
+        if (!isEmptyStr(toerTypestr) || !isEmptyStr(typeheightstr) || !isEmptyStr(datesiteStr) || !isEmptyStr(itemConditionstr)
+                || !isEmptyStr(descriptionstr)
+                || !isEmptyStr(strworkingCondi)
+                || !isEmptyStr(strnoMicrowaveAntenna)
+                || !isEmptyStr(strnoGSMAntenna)
+                || !isEmptyStr(strmissingMem)
+                || !isEmptyStr(strEarthingofTower)) {
             etHeight.setText(typeheightstr);
             etDate.setText(datesiteStr);
             etDescription.setText(descriptionstr);
@@ -143,7 +214,7 @@ public class TowerFragment extends MainFragment {
             etEarthingofTower.setText(strEarthingofTower);
 
         }
-        if (!overviewImgstr.equals("") || !northmgStr.equals("") || !eastImgStr.equals("") || !westImgStr.equals("") || !southImgStr.equals("")) {
+        if (!isEmptyStr(overviewImgstr) || !isEmptyStr(northmgStr) || !isEmptyStr(eastImgStr) || !isEmptyStr(westImgStr) || !isEmptyStr(southImgStr)) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(overviewImgstr)).placeholder(R.drawable.noimage).into(overviewImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(northmgStr)).placeholder(R.drawable.noimage).into(northmg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(eastImgStr)).placeholder(R.drawable.noimage).into(eastImg);
@@ -161,34 +232,42 @@ public class TowerFragment extends MainFragment {
         });
     }
 
+
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+    }
+
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        toerTypestr = pref.getString("Tower_Type", "");
-        typeheightstr = pref.getString("Tower_Height", "");
-        datesiteStr = pref.getString("Tower_Date_SITE", "");
-        itemConditionstr = pref.getString("Tower_item_Condi", "");
-        descriptionstr = pref.getString("Description", "");
-        overviewImgstr = pref.getString("Tower_Photo1", "");
-        northmgStr = pref.getString("Tower_Photo2", "");
-        eastImgStr = pref.getString("Tower_Photo3", "");
-        southImgStr = pref.getString("Tower_Photo4", "");
-        westImgStr = pref.getString("Tower_Photo5", "");
-        strSiteId = pref.getString("SiteId", "");
-        laEarthingStatus = pref.getString("Tower_laEarthingStatusSpinner", "");
-        towerFoundation = pref.getString("Tower_towerFoundationSpinner", "");
-        towerFoundation = pref.getString("Tower_towerTighteningSpinner", "");
-        strworkingCondi = pref.getString("Tower_workingCondi", "");
-        strnoMicrowaveAntenna = pref.getString("Tower_noMicrowaveAntenna", "");
-        strnoGSMAntenna = pref.getString("Tower_noGSMAntenna", "");
-        strmissingMem = pref.getString("Tower_missingMem", "");
-        strEarthingofTower = pref.getString("Tower_EarthingofTower", "");
+      /*  towerSharedPrefpref = getContext().getSharedPreferences("TowerSharedPref", MODE_PRIVATE);
+        toerTypestr = towerSharedPrefpref.getString("Tower_Type", "");
+        typeheightstr = towerSharedPrefpref.getString("Tower_Height", "");
+        datesiteStr = towerSharedPrefpref.getString("Tower_Date_SITE", "");
+        itemConditionstr = towerSharedPrefpref.getString("Tower_item_Condi", "");
+        descriptionstr = towerSharedPrefpref.getString("Description", "");
+        overviewImgstr = towerSharedPrefpref.getString("Tower_Photo1", "");
+        northmgStr = towerSharedPrefpref.getString("Tower_Photo2", "");
+        eastImgStr = towerSharedPrefpref.getString("Tower_Photo3", "");
+        southImgStr = towerSharedPrefpref.getString("Tower_Photo4", "");
+        westImgStr = towerSharedPrefpref.getString("Tower_Photo5", "");
+        strSiteId = towerSharedPrefpref.getString("SiteId", "");
+        laEarthingStatus = towerSharedPrefpref.getString("Tower_laEarthingStatusSpinner", "");
+        towerFoundation = towerSharedPrefpref.getString("Tower_towerFoundationSpinner", "");
+        towerFoundation = towerSharedPrefpref.getString("Tower_towerTighteningSpinner", "");
+        strworkingCondi = towerSharedPrefpref.getString("Tower_workingCondi", "");
+        strnoMicrowaveAntenna = towerSharedPrefpref.getString("Tower_noMicrowaveAntenna", "");
+        strnoGSMAntenna = towerSharedPrefpref.getString("Tower_noGSMAntenna", "");
+        strmissingMem = towerSharedPrefpref.getString("Tower_missingMem", "");
+        strEarthingofTower = towerSharedPrefpref.getString("Tower_EarthingofTower", "");*/
     }
 
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.image1) {
+        if (view.getId() == R.id.etDate) {
+            setDateofSiteonAir();
+        } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
@@ -225,33 +304,12 @@ public class TowerFragment extends MainFragment {
             isImage5 = true;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("USER_ID", strUserId);
-                editor.putString("Tower_Type", type);
-                editor.putString("Tower_Height", height);
-                editor.putString("Tower_Date_SITE", date);
-                editor.putString("Tower_item_Condi", itemcondion);
-                editor.putString("Tower_Description", descreption);
-                editor.putString("Tower_Photo1", overviewImgstr);
-                editor.putString("Tower_Photo2", northmgStr);
-                editor.putString("Tower_Photo3", eastImgStr);
-                editor.putString("Tower_Photo4", southImgStr);
-                editor.putString("Tower_Photo5", westImgStr);
-
-                editor.putString("Tower_laEarthingStatusSpinner", strlaEarthingStatusSpinner);
-                editor.putString("Tower_towerFoundationSpinner", strtowerFoundationSpinner);
-                editor.putString("Tower_towerTighteningSpinner", strtowerTighteningSpinner);
-
-                editor.putString("Tower_workingCondi", workingCondi);
-                editor.putString("Tower_noMicrowaveAntenna", noMicrowaveAntenna);
-                editor.putString("Tower_noGSMAntenna", noGSMAntenna);
-                editor.putString("Tower_missingMem", missingMem);
-                editor.putString("Tower_EarthingofTower", EarthingofTower);
-                editor.commit();
+                saveBasicDataonServer();
             }
         }
 
     }
+
 
     public boolean isValidate() {
         type = typeTowerSpinner.getSelectedItem().toString();
@@ -259,7 +317,6 @@ public class TowerFragment extends MainFragment {
         strlaEarthingStatusSpinner = laEarthingStatusSpinner.getSelectedItem().toString();
         strtowerFoundationSpinner = towerFoundationSpinner.getSelectedItem().toString();
         strtowerTighteningSpinner = towerTighteningSpinner.getSelectedItem().toString();
-
         height = etHeight.getText().toString();
         date = etDate.getText().toString();
         descreption = etDescription.getText().toString();
@@ -268,8 +325,6 @@ public class TowerFragment extends MainFragment {
         noGSMAntenna = etnoGSMAntenna.getText().toString();
         missingMem = etmissingMem.getText().toString();
         EarthingofTower = etEarthingofTower.getText().toString();
-
-
         if (isEmptyStr(type)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Type");
             return false;
@@ -305,10 +360,34 @@ public class TowerFragment extends MainFragment {
         return true;
     }
 
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
+
+    public void saveBasicDataintSharedPref() {
+        /*SharedPreferences.Editor editor = towerSharedPrefpref.edit();
+        editor.putString("Tower_Type", type);
+        editor.putString("Tower_Height", height);
+        editor.putString("Tower_Date_SITE", date);
+        editor.putString("Tower_item_Condi", itemcondion);
+        editor.putString("Tower_Description", descreption);
+        editor.putString("Tower_Photo1", overviewImgstr);
+        editor.putString("Tower_Photo2", northmgStr);
+        editor.putString("Tower_Photo3", eastImgStr);
+        editor.putString("Tower_Photo4", southImgStr);
+        editor.putString("Tower_Photo5", westImgStr);
+        editor.putString("Tower_laEarthingStatusSpinner", strlaEarthingStatusSpinner);
+        editor.putString("Tower_towerFoundationSpinner", strtowerFoundationSpinner);
+        editor.putString("Tower_towerTighteningSpinner", strtowerTighteningSpinner);
+        editor.putString("Tower_workingCondi", workingCondi);
+        editor.putString("Tower_noMicrowaveAntenna", noMicrowaveAntenna);
+        editor.putString("Tower_noGSMAntenna", noGSMAntenna);
+        editor.putString("Tower_missingMem", missingMem);
+        editor.putString("Tower_EarthingofTower", EarthingofTower);
+        editor.commit();*/
+    }
+
+    public void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
+            // if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
+             /* //  File compressPath = new File(deviceFile.getCompressFilePath());
                 if (compressPath.exists()) {
                     if (isImage1) {
                         Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(overviewImg);
@@ -328,9 +407,11 @@ public class TowerFragment extends MainFragment {
                     }
                     //compressPath.delete();
                 }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+            } else*/
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(overviewImg);
+                    renameFile(deviceFile.getFileName());
+                    //Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(overviewImg);
                     overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
                     Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(northmg);
@@ -345,17 +426,35 @@ public class TowerFragment extends MainFragment {
                     Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(westImg);
                     westImgStr = deviceFile.getFilePath().toString();
                 }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
-                }
             }
+            //  }
         }
     }
 
-    public static void getResult(ArrayList<MediaFile> files) {
+    public void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
 
+    private void renameFile(String imageFileName) {
+        Context appContext = ApplicationHelper.application().getApplicationContext();
+        // Uri uri = Uri.fromFile(new File(appContext.getCacheDir(), imageFileName));
+
+        File directory = new File(appContext.getCacheDir(), imageFileName);
+        //File from = new File(directory, imageFileName);
+        File to = new File(directory.getAbsolutePath(), "neerraj.png");
+        directory.renameTo(to);
+      /*  if(rename(directory, to)){
+            //Success
+            ASTUIUtil.showToast("Success");
+        } else {
+            //Fail
+            ASTUIUtil.showToast("Fail!");
+        }*/
+        Picasso.with(ApplicationHelper.application().getContext()).load(to).into(overviewImg);
+    }
+    private boolean rename(File from, File to) {
+        return from.getParentFile().exists() && from.exists() && from.renameTo(to);
+    }
     /**
      * THIS USE an ActivityResult
      *
@@ -370,5 +469,91 @@ public class TowerFragment extends MainFragment {
             getResult(files);
 
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        saveBasicDataintSharedPref();
+        return super.onBackPressed();
+    }
+
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Tower");
+                JSONObject TowerData = new JSONObject();
+                TowerData.put("Type", type);
+                TowerData.put("Height", height);
+                TowerData.put("SiteOnAirDate", datemilisec);
+                TowerData.put("Condition", itemcondion);
+                TowerData.put("AVWorkingCondition", workingCondi);
+                TowerData.put("LAEarthingStatus", laEarthingStatus);
+                TowerData.put("NoofMicrowaveAntenna", noMicrowaveAntenna);
+                TowerData.put("NoofGSMAntenna", noGSMAntenna);
+                TowerData.put("TowerFoundationVolt", towerFoundation);
+                TowerData.put("TowerTightening", towerTightening);
+                TowerData.put("EarthingofeachTowerPole", EarthingofTower);
+                jsonObject.put("TowerData", TowerData);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your Data save Successfully");
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.commit();
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                            saveBasicDataintSharedPref();
+                        }
+                    } else {
+                        ASTUIUtil.showToast("BasiC Data Information has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      /*  if (equpImagList != null && equpImagList.size() > 0) {
+            for (SaveOffLineData data : equpImagList) {
+                if (data != null) {
+                    if (data.getImagePath() != null) {
+                        File inputFile = new File(data.getImagePath());
+                        if (inputFile.exists()) {
+                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
+                        }
+                    }
+                }
+            }
+        }
+*/
+        return multipartBody;
     }
 }

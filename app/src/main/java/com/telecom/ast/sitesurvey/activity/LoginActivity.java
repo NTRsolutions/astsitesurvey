@@ -40,9 +40,9 @@ public class LoginActivity extends AppCompatActivity {
 
     //get view ids
     public void loadView() {
-        btnLogIn = (Button) findViewById(R.id.btnLogIn);
-        etUserName = (EditText) findViewById(R.id.etUserName);
-        etPassword = (EditText) findViewById(R.id.etPass);
+        btnLogIn =  findViewById(R.id.btnLogIn);
+        etUserName =  findViewById(R.id.etUserName);
+        etPassword =  findViewById(R.id.etPass);
     }
 
     //get data from UI

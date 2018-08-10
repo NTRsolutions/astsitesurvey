@@ -329,6 +329,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="@string/Pincode"
+                        android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -382,7 +383,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Owner ContactNo"
+                        android:hint="Owner Contact No"
+                        android:inputType="phone"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -450,6 +452,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
+                        android:inputType="phone"
                         android:hint="Caretaker Contact No"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

@@ -50,12 +50,12 @@ public class EBMeterFragment extends MainFragment {
 
     SharedPreferences pref;
     AppCompatEditText etCapacity, etMake, etModel, etSerialNum,
-            etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etTheftfromSite;
+            etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus,etkitkatChangeover, etTheftfromSite;
     AppCompatEditText etYear, etDescription, ebMeterreading;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
-    String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, TheftfromSite,
+    String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover,TheftfromSite,
             strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner;
 
     @Override
@@ -85,6 +85,8 @@ public class EBMeterFragment extends MainFragment {
         etALTHTConnection = findViewById(R.id.etALTHTConnection);
         etTransformerEarthing = findViewById(R.id.etTransformerEarthing);
         etmccbStatus = findViewById(R.id.etmccbStatus);
+        etkitkatChangeover = findViewById(R.id.etmcckitkatChangeover);
+
         etTheftfromSite = findViewById(R.id.etTheftfromSite);
         meeterTypeSpinner = findViewById(R.id.meeterTypeSpinner);
         powerTypeSpinner = findViewById(R.id.powerTypeSpinner);
@@ -128,6 +130,8 @@ public class EBMeterFragment extends MainFragment {
         ALTHTConnection = pref.getString("EbMeterALTHTConnection", "");
         TransformerEarthing = pref.getString("EbMeterTransformerEarthing", "");
         mccbStatus = pref.getString("EbMetermccbStatus", "");
+
+        kitkatChangeover= pref.getString("EbMeterkitkatChangeover", "");
         TheftfromSite = pref.getString("EbMeterTheftfromSite", "");
         strmeeterTypeSpinner = pref.getString("EbMeterstrmeeterTypeSpinner", "");
         strpowerTypeSpinner = pref.getString("EbMeterstrpowerTypeSpinner", "");
@@ -181,6 +185,8 @@ public class EBMeterFragment extends MainFragment {
                 || !ALTHTConnection.equals("")
                 || !TransformerEarthing.equals("")
                 || !mccbStatus.equals("")
+                || !kitkatChangeover.equals("")
+
                 || !TheftfromSite.equals("")
 
 
@@ -198,6 +204,7 @@ public class EBMeterFragment extends MainFragment {
             etALTHTConnection.setText(ALTHTConnection);
             etTransformerEarthing.setText(TransformerEarthing);
             etmccbStatus.setText(mccbStatus);
+            etkitkatChangeover.setText(kitkatChangeover);
             etTheftfromSite.setText(TheftfromSite);
             strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
             strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
@@ -241,6 +248,7 @@ public class EBMeterFragment extends MainFragment {
                     etALTHTConnection.setEnabled(false);
                     etTransformerEarthing.setEnabled(false);
                     etmccbStatus.setEnabled(false);
+                    etkitkatChangeover.setEnabled(false);
                     etTheftfromSite.setEnabled(false);
                     meeterTypeSpinner.setEnabled(false);
                     powerTypeSpinner.setEnabled(false);
@@ -264,6 +272,7 @@ public class EBMeterFragment extends MainFragment {
                     etALTHTConnection.setEnabled(true);
                     etTransformerEarthing.setEnabled(true);
                     etmccbStatus.setEnabled(true);
+                    etkitkatChangeover.setEnabled(true);
                     etTheftfromSite.setEnabled(true);
                     meeterTypeSpinner.setEnabled(true);
                     powerTypeSpinner.setEnabled(true);
@@ -317,6 +326,7 @@ public class EBMeterFragment extends MainFragment {
                 editor.putString("EbMeterALTHTConnection", ALTHTConnection);
                 editor.putString("EbMeterTransformerEarthing", TransformerEarthing);
                 editor.putString("EbMetermccbStatus", mccbStatus);
+                editor.putString("EbMetermccbStatus", kitkatChangeover);
                 editor.putString("EbMeterTheftfromSite", TheftfromSite);
                 editor.putString("EbMeterstrmeeterTypeSpinner", strmeeterTypeSpinner);
                 editor.putString("EbMeterstrpowerTypeSpinner", strpowerTypeSpinner);
@@ -357,6 +367,7 @@ public class EBMeterFragment extends MainFragment {
         ALTHTConnection = etALTHTConnection.getText().toString();
         TransformerEarthing = etTransformerEarthing.getText().toString();
         mccbStatus = etmccbStatus.getText().toString();
+        kitkatChangeover=etkitkatChangeover.getText().toString();
         TheftfromSite = etTheftfromSite.getText().toString();
         strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
         strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();

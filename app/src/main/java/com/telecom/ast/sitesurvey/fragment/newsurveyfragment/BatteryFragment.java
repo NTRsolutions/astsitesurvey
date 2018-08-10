@@ -53,7 +53,7 @@ public class BatteryFragment extends MainFragment {
     AppCompatEditText etYear, etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
     AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
-    SharedPreferences pref;
+    SharedPreferences batterySharedPref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
     String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
@@ -275,31 +275,30 @@ public class BatteryFragment extends MainFragment {
      *     Shared Prefrences
      */
     public void getSharedprefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("Make", "");
-        strModel = pref.getString("Model", "");
-        strCapacity = pref.getString("Capacity", "");
-        strMakeId = pref.getString("MakeId", "");
-        strModelId = pref.getString("ModelId", "");
-        strDescriptionId = pref.getString("DescriptionId", "");
-        strSerialNum = pref.getString("SerialNum", "");
-        strYearOfManufacturing = pref.getString("YearOfManufacturing", "");
-        strDescription = pref.getString("Description", "");
-        bateryphoto = pref.getString("batryPhoto1", "");
-        cellPhoto = pref.getString("batryPhoto2", "");
-        sNoPlatephoto = pref.getString("batryPhoto3", "");
-        strSavedDateTime = pref.getString("BbActivitySavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
-        itemCondition = pref.getString("ItemCondition", "");
-
-        NoofItems = pref.getString("NoofItems", "");
-        NoofCell = pref.getString("NoofCell", "");
-        CellVoltage = pref.getString("CellVoltage", "");
-        NoofWeakCells = pref.getString("NoofWeakCells", "");
-        BackUpinHrs = pref.getString("BackUpinHrs", "");
-        TightnessofBentCaps = pref.getString("TightnessofBentCaps", "");
-        CellInterconnecting = pref.getString("CellInterconnecting", "");
+        batterySharedPref = getContext().getSharedPreferences("BatterySharedPref", MODE_PRIVATE);
+        strUserId = batterySharedPref.getString("USER_ID", "");
+        strMake = batterySharedPref.getString("Make", "");
+        strModel = batterySharedPref.getString("Model", "");
+        strCapacity = batterySharedPref.getString("Capacity", "");
+        strMakeId = batterySharedPref.getString("MakeId", "");
+        strModelId = batterySharedPref.getString("ModelId", "");
+        strDescriptionId = batterySharedPref.getString("DescriptionId", "");
+        strSerialNum = batterySharedPref.getString("SerialNum", "");
+        strYearOfManufacturing = batterySharedPref.getString("YearOfManufacturing", "");
+        strDescription = batterySharedPref.getString("Description", "");
+        bateryphoto = batterySharedPref.getString("batryPhoto1", "");
+        cellPhoto = batterySharedPref.getString("batryPhoto2", "");
+        sNoPlatephoto = batterySharedPref.getString("batryPhoto3", "");
+        strSavedDateTime = batterySharedPref.getString("BbActivitySavedDateTime", "");
+        strSiteId = batterySharedPref.getString("SiteId", "");
+        itemCondition = batterySharedPref.getString("ItemCondition", "");
+        NoofItems = batterySharedPref.getString("NoofItems", "");
+        NoofCell = batterySharedPref.getString("NoofCell", "");
+        CellVoltage = batterySharedPref.getString("CellVoltage", "");
+        NoofWeakCells = batterySharedPref.getString("NoofWeakCells", "");
+        BackUpinHrs = batterySharedPref.getString("BackUpinHrs", "");
+        TightnessofBentCaps = batterySharedPref.getString("TightnessofBentCaps", "");
+        CellInterconnecting = batterySharedPref.getString("CellInterconnecting", "");
 
 
     }
@@ -351,7 +350,7 @@ public class BatteryFragment extends MainFragment {
                 if (strModelId.equals("") || strModelId.equals("0")) {
                     strModelId = "0";
                 }
-                SharedPreferences.Editor editor = pref.edit();
+                SharedPreferences.Editor editor = batterySharedPref.edit();
                 editor.putString("USER_ID", strUserId);
                 editor.putString("Make", make);
                 editor.putString("Model", model);
@@ -374,8 +373,8 @@ public class BatteryFragment extends MainFragment {
                 editor.putString("BackUpinHrs", BackUpinHrs);
                 editor.putString("TightnessofBentCaps", TightnessofBentCaps);
                 editor.putString("CellInterconnecting", CellInterconnecting);
-                strMakeId = pref.getString("", "");
-                strModelId = pref.getString("", "");
+                strMakeId = batterySharedPref.getString("", "");
+                strModelId = batterySharedPref.getString("", "");
                 editor.commit();
                 reloadBackScreen();
 
