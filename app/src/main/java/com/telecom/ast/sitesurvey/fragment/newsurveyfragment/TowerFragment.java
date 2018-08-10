@@ -62,7 +62,7 @@ public class TowerFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner, typeTowerSpinner,
             laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
-    String strUserId, strSavedDateTime, strSiteId, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
+    String strUserId,strSiteId, strSavedDateTime, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
             strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
     SharedPreferences towerSharedPrefpref, userPref;
     AppCompatEditText etHeight, etDate, etDescription,
@@ -515,8 +515,6 @@ public class TowerFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your Data save Successfully");
-                            SharedPreferences.Editor editor = userPref.edit();
-                            editor.commit();
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());

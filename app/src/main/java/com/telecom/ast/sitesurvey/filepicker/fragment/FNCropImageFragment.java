@@ -43,6 +43,8 @@ public class FNCropImageFragment extends MainFragment {
 	protected void loadView() {
 		cropImageView = this.findViewById(R.id.cropImageView);
 		cropImageView.setCropMode(isProfilePic ? FNCropImageView.CropMode.CIRCLE_SQUARE : FNCropImageView.CropMode.SQUARE);
+		//cropImageView.setCropMode(FNCropImageView.CropMode.CIRCLE);
+
 	}
 
 	@Override

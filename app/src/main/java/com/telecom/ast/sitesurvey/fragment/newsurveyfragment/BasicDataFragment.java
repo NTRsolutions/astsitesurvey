@@ -257,6 +257,7 @@ public class BasicDataFragment extends MainFragment {
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         userId = userPref.getString("USER_ID", "");
+      //  strSiteId = userPref.getString("strSiteId", "");
     }    /*
      *
      * get Data in Shared Pref.
