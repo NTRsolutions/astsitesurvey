@@ -6,10 +6,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.gson.Gson;
@@ -37,6 +40,7 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,15 +75,17 @@ public class TowerFragment extends MainFragment {
     String strUserId, strSiteId, CurtomerSite_Id, strSavedDateTime, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
             strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
     SharedPreferences towerSharedPrefpref, userPref;
-    AppCompatEditText etHeight, etDate, etDescription,
+    AppCompatEditText etHeight, etDescription,
             etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem, etEarthingofTower;
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
-    String type, height, date, itemcondion,descreption,
+    String type, height, date, itemcondion, descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
             laEarthingStatus, towerFoundation, towerTightening;
+    TextView etDate,dateIcon;
+    LinearLayout dateLayout;
     long datemilisec;
     private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
-
+    Typeface materialdesignicons_font;
     @Override
     protected int fragmentLayout() {
         return R.layout.tower_fragment;
@@ -107,7 +113,11 @@ public class TowerFragment extends MainFragment {
         laEarthingStatusSpinner = findViewById(R.id.laEarthingStatusSpinner);
         towerFoundationSpinner = findViewById(R.id.towerFoundationSpinner);
         towerTighteningSpinner = findViewById(R.id.towerTighteningSpinner);
-
+        dateIcon = findViewById(R.id.dateIcon);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        dateLayout=findViewById(R.id.dateLayout);
     }
 
     @Override
@@ -118,7 +128,7 @@ public class TowerFragment extends MainFragment {
         southImg.setOnClickListener(this);
         westImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-        etDate.setOnClickListener(this);
+        dateLayout.setOnClickListener(this);
     }
 
     @Override
@@ -143,7 +153,7 @@ public class TowerFragment extends MainFragment {
                 datemilisec = myCalendar.getTimeInMillis();
             }
         };
-        etDate.setOnClickListener(new View.OnClickListener() {
+        dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -272,7 +282,7 @@ public class TowerFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.etDate) {
+        if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
@@ -347,19 +357,19 @@ public class TowerFragment extends MainFragment {
         }/* else if (isEmptyStr(descreption)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        }*/ else if (!overviewImgFile.exists()) {
+        }*/ else if (overviewImgFile == null || !overviewImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Overview Photo");
             return false;
-        } else if (!eastImgFile.exists()) {
+        } else if (eastImgFile == null || !eastImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select East Photo");
             return false;
-        } else if (!northmgFile.exists()) {
+        } else if (northmgFile == null || !northmgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select North Photo");
             return false;
-        } else if (!southImgFile.exists()) {
+        } else if (southImgFile == null || !southImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select South Photo");
             return false;
-        } else if (!westImgFile.exists()) {
+        } else if (westImgFile == null || !westImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select West Photo");
             return false;
         }
@@ -417,7 +427,7 @@ public class TowerFragment extends MainFragment {
 
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_ TowerOverview.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.png";
                     overviewImgFile = renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(overviewImgFile).into(overviewImg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
@@ -538,6 +548,7 @@ public class TowerFragment extends MainFragment {
         }
 
     }
+
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
