@@ -21,7 +21,7 @@
             android:orientation="vertical"
             android:padding="@dimen/_5dp">
 
-            <LinearLayout
+         <!--   <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
@@ -52,7 +52,7 @@
                     android:layout_height="@dimen/_1dp"
                     android:layout_marginRight="@dimen/_10dp"
                     android:background="@color/backgroundColor" />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,6 +72,7 @@
                         android:id="@+id/etNoofPanel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:autoSizeTextType="uniform"
                         android:hint="Enter No of Panels"
                         android:textSize="@dimen/_14dp" />
@@ -122,6 +123,7 @@
                         android:id="@+id/etcapacitypanel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
                         android:hint="Enter capacity per panel"
                         android:textSize="@dimen/_14dp" />
@@ -148,6 +150,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
+                        android:inputType="numberDecimal"
                         android:hint="Enter No of AGB"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

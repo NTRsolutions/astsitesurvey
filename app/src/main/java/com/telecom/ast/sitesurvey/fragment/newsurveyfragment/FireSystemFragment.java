@@ -178,7 +178,7 @@ public class FireSystemFragment extends MainFragment {
     // ----validation -----
     private boolean isValidate() {
         firedetectSpineer = etfiredetectSpineer.getSelectedItem().toString();
-        extinguiserSpineer = etfiredetectSpineer.getSelectedItem().toString();
+        extinguiserSpineer = etextinguiserSpineer.getSelectedItem().toString();
         status = etstatusSpinner.getSelectedItem().toString();
         make = getTextFromView(this.etMake);
         capacity = getTextFromView(this.etCapacity);
