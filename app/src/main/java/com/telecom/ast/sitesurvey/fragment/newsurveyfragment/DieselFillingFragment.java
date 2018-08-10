@@ -36,7 +36,6 @@ public class DieselFillingFragment extends MainFragment {
     String strLPD, strQualityDiesel, strFillingother, strDieselfuillDone;
     Button btnSubmit;
     SharedPreferences dieselSharedPref, userPref;
-    Spinner itemStatusSpineer;
     String strUserId, strSiteId;
 
     @Override
@@ -51,7 +50,6 @@ public class DieselFillingFragment extends MainFragment {
         etFillingother = this.findViewById(R.id.etFillingother);
         etDieselfuillDone = this.findViewById(R.id.etDieselfuillDone);
         btnSubmit = this.findViewById(R.id.btnSubmit);
-        itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -68,7 +66,6 @@ public class DieselFillingFragment extends MainFragment {
     protected void dataToView() {
         getSharedPrefData();
         getUserPref();
-        setSpinnerValue();
         if (!isEmptyStr(strLPD) || !isEmptyStr(strQualityDiesel) || !isEmptyStr(strFillingother)
                 || isEmptyStr(strDieselfuillDone)
                 ) {
@@ -77,25 +74,6 @@ public class DieselFillingFragment extends MainFragment {
             etFillingother.setText(strFillingother);
             etDieselfuillDone.setText(strDieselfuillDone);
         }
-        itemStatusSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getSelectedItem().toString();
-                if (selectedItem.equalsIgnoreCase("Not Available")) {
-                    etLPD.setEnabled(false);
-                    etQualityDiesel.setEnabled(false);
-                    etFillingother.setEnabled(false);
-                    etDieselfuillDone.setEnabled(false);
-                } else {
-                    etLPD.setEnabled(true);
-                    etQualityDiesel.setEnabled(true);
-                    etFillingother.setEnabled(true);
-                    etDieselfuillDone.setEnabled(true);
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 
     /*
@@ -116,12 +94,6 @@ public class DieselFillingFragment extends MainFragment {
         strSiteId = userPref.getString("Site_ID", "");
     }
 
-    public void setSpinnerValue() {
-        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
-        ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
-        itemStatusSpineer.setAdapter(itemStatus);
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -145,7 +117,6 @@ public class DieselFillingFragment extends MainFragment {
         QualityDiesel = etQualityDiesel.getText().toString();
         Fillingother = etFillingother.getText().toString();
         DieselfuillDone = etDieselfuillDone.getText().toString();
-        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(LPD)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LPD");
                 return false;
@@ -159,9 +130,6 @@ public class DieselFillingFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Diesel Filling Done by CareTaker/Technician/Filler");
                 return false;
             }
-        } else {
-            ASTUIUtil.showToast("Item Not Available");
-        }
 
         return true;
     }
@@ -182,7 +150,7 @@ public class DieselFillingFragment extends MainFragment {
                 DieselFillingData.put("QualityofDiesel", QualityDiesel);
                 DieselFillingData.put("FillingInDGTank", Fillingother);
                 DieselFillingData.put("DieselFillingDoneby", DieselfuillDone);
-                jsonObject.putOpt("DieselFillingData",DieselFillingData);
+                jsonObject.put("DieselFillingData",DieselFillingData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

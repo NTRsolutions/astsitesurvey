@@ -121,10 +121,13 @@ public class BasicDataFragment extends MainFragment {
 
 
     public void setBasiMasterData() {
+        commonFunctions=new ASTUIUtil();
         currentMilli = System.currentTimeMillis();
         String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         dateTimeMili = System.currentTimeMillis();
-        etDate.setText(currentDate);
+        if (dateTimeMili != 0) {
+            etDate.setText(currentDate);
+        }
         etDate.setEnabled(false);
         final String currentTime = commonFunctions.getFormattedDate("hh:mm:ss", System.currentTimeMillis());
         etTime.setText(currentTime);
@@ -175,7 +178,7 @@ public class BasicDataFragment extends MainFragment {
                     }
                     setSSAadapter(arrTempSSA, 0);
                     spSSA.setEnabled(true);
-                    if (!strSSAPosition.equals("")) {
+                    if (!isEmptyStr(strSSAPosition)) {
                         spSSA.setSelection(Integer.parseInt(strSSAPosition));
                     }
                     arrDistrictData = atmDatabase.getAllDistrictData("Desc", circleId);
@@ -186,7 +189,7 @@ public class BasicDataFragment extends MainFragment {
                     }
                     setDistrictadapter(arrTempDistrict, 0);
                     spDistrict.setEnabled(true);
-                    if (!strDistrictPosition.equals("")) {
+                    if (!isEmptyStr(strDistrictPosition)) {
                         spDistrict.setSelection(Integer.parseInt(strDistrictPosition));
                     }
                 } else {
@@ -205,8 +208,8 @@ public class BasicDataFragment extends MainFragment {
     }
 
     public void getCircleData() {
-        if (!strCircleId.equals("")) {
-            if (!strCirclePosition.equals("")) {
+        if (!isEmptyStr(strCircleId)) {
+            if (!isEmptyStr(strCirclePosition)) {
                 String circleId = arrCircleData.get(Integer.parseInt(strCirclePosition) - 1).getCircleId();
                 arrSSAData = atmDatabase.getAllSSAData("Desc", circleId);
                 String[] arrTempSSA = new String[arrSSAData.size() + 1];
@@ -233,7 +236,7 @@ public class BasicDataFragment extends MainFragment {
 
     //-----------------Populating Pre Filled Fields---------------------
     public void getPreFilledFields() {
-        if (!strDate.equals("")) {
+        if (!isEmptyStr(strDate)) {
             etDate.setText(strDate);
             etTime.setText(strTime);
             etSurveyorName.setText(strSurveyyorName);
@@ -257,7 +260,7 @@ public class BasicDataFragment extends MainFragment {
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         userId = userPref.getString("USER_ID", "");
-      //  strSiteId = userPref.getString("strSiteId", "");
+        //  strSiteId = userPref.getString("strSiteId", "");
     }    /*
      *
      * get Data in Shared Pref.
@@ -265,6 +268,10 @@ public class BasicDataFragment extends MainFragment {
 
 
     public void getSaveBasicDataSharedPref() {
+        basicSharedPref = getContext().getSharedPreferences("BasicSharedPref", MODE_PRIVATE);
+        strCirclePosition = basicSharedPref.getString("CirclePosition", "");
+        strSSAPosition = basicSharedPref.getString("SSAPosition", "");
+        strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");
       /*  commonFunctions = new ASTUIUtil();
         basicSharedPref = getContext().getSharedPreferences("BasicSharedPref", MODE_PRIVATE);
         strMilli = basicSharedPref.getString("MilliSeconds", "");
@@ -393,6 +400,10 @@ public class BasicDataFragment extends MainFragment {
         editor.putString("strownerAddress", ownerAddress);
         editor.putString("MilliSeconds", String.valueOf(currentMilli));
         editor.commit();*/
+    /*    strCirclePosition = basicSharedPref.getString("CirclePosition", "");
+        strSSAPosition = basicSharedPref.getString("SSAPosition", "");
+        strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");*/
+
     }
 
     public boolean isValidate() {
@@ -499,6 +510,8 @@ public class BasicDataFragment extends MainFragment {
                             ASTUIUtil.showToast("Your Data save Successfully");
                             SharedPreferences.Editor editor = userPref.edit();
                             editor.putString("Site_ID", siteIdStr);
+                            editor.putString("CurtomerSite_Id", curtomerSiteIdStr);
+
                             editor.commit();
                             reloadBackScreen();
                         } else {

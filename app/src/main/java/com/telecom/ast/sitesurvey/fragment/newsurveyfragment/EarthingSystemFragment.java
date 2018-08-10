@@ -8,9 +8,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
@@ -20,8 +34,8 @@ public class EarthingSystemFragment extends MainFragment {
     String strNoEarthPits, strEarthpitsconnected, strinterConEarthPits, strVoltageEarth, strwireconnected;
     String NoEarthPits, Earthpitsconnected, interConEarthPits, VoltageEarth, wireconnected;
     Button btnSubmit;
-    SharedPreferences pref;
-   Spinner itemStatusSpineer;
+    String strUserId, strSiteId;
+    SharedPreferences earthingSharedPref, userPref;
 
     @Override
     protected int fragmentLayout() {
@@ -36,7 +50,6 @@ public class EarthingSystemFragment extends MainFragment {
         etVoltageEarth = this.findViewById(R.id.etVoltageEarth);
         etwireconnected = this.findViewById(R.id.etwireconnected);
         btnSubmit = this.findViewById(R.id.btnSubmit);
-        itemStatusSpineer = this.findViewById(R.id.itemStatusSpineer);
     }
 
     @Override
@@ -49,13 +62,19 @@ public class EarthingSystemFragment extends MainFragment {
 
     }
 
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+    }
+
     @Override
     protected void dataToView() {
         getSharedPrefData();
-        setSpinnerValue();
-        if (!strNoEarthPits.equals("") || !strEarthpitsconnected.equals("") || !strinterConEarthPits.equals("")
-                || !strwireconnected.equals("")
-                || !strVoltageEarth.equals("")
+        getUserPref();
+        if (!isEmptyStr(strNoEarthPits) || !isEmptyStr(strEarthpitsconnected) || !isEmptyStr(strinterConEarthPits)
+                || !isEmptyStr(strwireconnected)
+                || !isEmptyStr(strVoltageEarth)
                 ) {
             etNoEarthPits.setText(strNoEarthPits);
             etEarthpitsconnected.setText(strEarthpitsconnected);
@@ -63,48 +82,20 @@ public class EarthingSystemFragment extends MainFragment {
             etVoltageEarth.setText(strVoltageEarth);
             etwireconnected.setText(strwireconnected);
         }
-        itemStatusSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getSelectedItem().toString();
-                if (selectedItem.equalsIgnoreCase("Not Available")) {
-                    etNoEarthPits.setEnabled(false);
-                    etEarthpitsconnected.setEnabled(false);
-                    etinterConEarthPits.setEnabled(false);
-                    etVoltageEarth.setEnabled(false);
-                    etwireconnected.setEnabled(false);
-                } else {
-                    etNoEarthPits.setEnabled(true);
-                    etEarthpitsconnected.setEnabled(true);
-                    etinterConEarthPits.setEnabled(true);
-                    etVoltageEarth.setEnabled(true);
-                    etwireconnected.setEnabled(true);
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 
-
-    public void setSpinnerValue() {
-        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
-        ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
-        itemStatusSpineer.setAdapter(itemStatus);
-
-    }
 
     /*
      *
      * Shared Prefrences---------------------------------------
      */
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strNoEarthPits = pref.getString("EARTH_strNoEarthPits", "");
-        strEarthpitsconnected = pref.getString("EARTH_strEarthpitsconnected", "");
-        strinterConEarthPits = pref.getString("EARTH_strinterConEarthPits", "");
-        strVoltageEarth = pref.getString("EARTH_strVoltageEarth", "");
-        strwireconnected = pref.getString("EARTH_strwireconnected", "");
+/*        earthingSharedPref = getContext().getSharedPreferences("EarthingSharedPref", MODE_PRIVATE);
+        strNoEarthPits = earthingSharedPref.getString("EARTH_strNoEarthPits", "");
+        strEarthpitsconnected = earthingSharedPref.getString("EARTH_strEarthpitsconnected", "");
+        strinterConEarthPits = earthingSharedPref.getString("EARTH_strinterConEarthPits", "");
+        strVoltageEarth = earthingSharedPref.getString("EARTH_strVoltageEarth", "");
+        strwireconnected = earthingSharedPref.getString("EARTH_strwireconnected", "");*/
     }
 
 
@@ -112,13 +103,15 @@ public class EarthingSystemFragment extends MainFragment {
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
+
+                saveBasicDataonServer();
+               /* SharedPreferences.Editor editor = earthingSharedPref.edit();
                 editor.putString("EARTH_strNoEarthPits", NoEarthPits);
                 editor.putString("EARTH_strEarthpitsconnected", Earthpitsconnected);
                 editor.putString("EARTH_strinterConEarthPits", interConEarthPits);
                 editor.putString("EARTH_strVoltageEarth", VoltageEarth);
                 editor.putString("EARTH_strwireconnected", wireconnected);
-                editor.commit();
+                editor.commit();*/
             }
 
         }
@@ -130,26 +123,92 @@ public class EarthingSystemFragment extends MainFragment {
         interConEarthPits = etinterConEarthPits.getText().toString();
         VoltageEarth = etVoltageEarth.getText().toString();
         wireconnected = etwireconnected.getText().toString();
-        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
-            if (isEmptyStr(NoEarthPits)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of EarthPits");
-                return false;
-            } else if (isEmptyStr(Earthpitsconnected)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Earthpits connected  EGB/IGB");
-                return false;
-            } else if (isEmptyStr(interConEarthPits)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Inter Connectivity of EarthPits");
-                return false;
-            } else if (isEmptyStr(VoltageEarth)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Voltage between Earth and Neutral");
-                return false;
-            } else if (isEmptyStr(wireconnected)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "DG/EB neutral wire connected with earthing");
-                return false;
-            }
-        } else {
-            ASTUIUtil.showToast("Item Not Available");
+        if (isEmptyStr(NoEarthPits)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of EarthPits");
+            return false;
+        } else if (isEmptyStr(Earthpitsconnected)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Earthpits connected  EGB/IGB");
+            return false;
+        } else if (isEmptyStr(interConEarthPits)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Inter Connectivity of EarthPits");
+            return false;
+        } else if (isEmptyStr(VoltageEarth)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Voltage between Earth and Neutral");
+            return false;
+        } else if (isEmptyStr(wireconnected)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "DG/EB neutral wire connected with earthing");
+            return false;
         }
         return true;
+    }
+
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Earthing");
+                JSONObject EarthingData = new JSONObject();
+                EarthingData.put("NoofEarthPits", NoEarthPits);
+                EarthingData.put("NoofEarthpitsconnectedEGBIGB", Earthpitsconnected);
+                EarthingData.put("InterConnectivityofEarthPits", interConEarthPits);
+                EarthingData.put("DGEBneutralwireconnectedwithearthing", wireconnected);
+                EarthingData.put("VoltagebetweenEarthandNeutral", VoltageEarth);
+                jsonObject.put("EarthingData", EarthingData);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your Earthing System  Data save Successfully");
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast(" Your Earthing System  Data   has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+      /*  if (equpImagList != null && equpImagList.size() > 0) {
+            for (SaveOffLineData data : equpImagList) {
+                if (data != null) {
+                    if (data.getImagePath() != null) {
+                        File inputFile = new File(data.getImagePath());
+                        if (inputFile.exists()) {
+                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
+                        }
+                    }
+                }
+            }
+        }
+*/
+        return multipartBody;
     }
 }
