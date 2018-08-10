@@ -93,12 +93,12 @@
                     app:counterOverflowTextAppearance="@style/CounterOverFlow"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <TextView
                         android:id="@+id/etDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Enter Date of Site on Air"
+                        android:text="Select Date of Site on Air"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>

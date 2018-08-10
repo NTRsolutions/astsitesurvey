@@ -4,6 +4,8 @@ package com.telecom.ast.sitesurvey.constants;
  * /** * @author AST Inc.  10/12/2015.
  */
 public class Contants {
+    public static String DEFAULT_APPLICATION_NAME = "ASTSurvey";
+    public static final String APP_DIRECTORY = DEFAULT_APPLICATION_NAME + "Directory/";
 
     //public static String BASE_URL = "http://192.168.1.4:8080/ATMAndroidServices/ASTAndroidService.svc/?req=";
     public static String BASE_URL_TEST = "http://14.141.142.61:80/ATMAndroidServices/ASTAndroidService.svc/?req=";
@@ -54,7 +56,7 @@ public class Contants {
     public static String EXPENSE_SCREEN_URL = "Expense/FEExpenseReport";
 
     public static String SEND_BUG_REPORT = "addbugreport";
-    public static String LOG_TAG="ASTAtm";
+    public static String LOG_TAG="ASTSurvey";
     public static boolean IS_DEBUG_LOG=true;
     public static final String OFFLINE_MESSAGE = "Oops! You are Offline. Please check your Internet Connection.";
     public static final String Error = "Server Side error!";

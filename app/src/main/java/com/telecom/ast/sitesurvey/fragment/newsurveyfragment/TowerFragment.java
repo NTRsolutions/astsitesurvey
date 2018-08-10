@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,6 +42,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,23 +62,23 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class TowerFragment extends MainFragment {
 
-    static ImageView overviewImg, northmg, eastImg, southImg, westImg;
-    static boolean isImage1, isImage2, isImage3, isImage4, isImage5;
+    private ImageView overviewImg, northmg, eastImg, southImg, westImg;
+    private boolean isImage1, isImage2, isImage3, isImage4, isImage5;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner, typeTowerSpinner,
             laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
-    String strUserId,strSiteId, strSavedDateTime, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
+    String strUserId, strSiteId, CurtomerSite_Id, strSavedDateTime, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
             strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
     SharedPreferences towerSharedPrefpref, userPref;
     AppCompatEditText etHeight, etDate, etDescription,
             etworkingCondi, etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem, etEarthingofTower;
     String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
-    String type, height, date, itemcondion, descreption,
+    String type, height, date, itemcondion,descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
             laEarthingStatus, towerFoundation, towerTightening;
-    static String overviewImgstr, northmgStr, eastImgStr, southImgStr, westImgStr;
     long datemilisec;
+    private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
 
     @Override
     protected int fragmentLayout() {
@@ -214,13 +220,13 @@ public class TowerFragment extends MainFragment {
             etEarthingofTower.setText(strEarthingofTower);
 
         }
-        if (!isEmptyStr(overviewImgstr) || !isEmptyStr(northmgStr) || !isEmptyStr(eastImgStr) || !isEmptyStr(westImgStr) || !isEmptyStr(southImgStr)) {
+       /* if (!isEmptyStr(overviewImgstr) || !isEmptyStr(northmgStr) || !isEmptyStr(eastImgStr) || !isEmptyStr(westImgStr) || !isEmptyStr(southImgStr)) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(overviewImgstr)).placeholder(R.drawable.noimage).into(overviewImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(northmgStr)).placeholder(R.drawable.noimage).into(northmg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(eastImgStr)).placeholder(R.drawable.noimage).into(eastImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(southImgStr)).placeholder(R.drawable.noimage).into(southImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(westImgStr)).placeholder(R.drawable.noimage).into(westImg);
-        }
+        }*/
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -237,6 +243,7 @@ public class TowerFragment extends MainFragment {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = userPref.getString("USER_ID", "");
         strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
     public void getSharedPrefData() {
@@ -337,23 +344,22 @@ public class TowerFragment extends MainFragment {
         } else if (isEmptyStr(itemcondion)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Condition");
             return false;
-        } else if (isEmptyStr(descreption)) {
+        }/* else if (isEmptyStr(descreption)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        } else if (isEmptyStr(overviewImgstr)) {
+        }*/ else if (!overviewImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Overview Photo");
             return false;
-        } else if (isEmptyStr(eastImgStr)) {
+        } else if (!eastImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select East Photo");
             return false;
-
-        } else if (isEmptyStr(northmgStr)) {
+        } else if (!northmgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select North Photo");
             return false;
-        } else if (isEmptyStr(southImgStr)) {
+        } else if (!southImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select South Photo");
             return false;
-        } else if (isEmptyStr(westImgStr)) {
+        } else if (!westImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select West Photo");
             return false;
         }
@@ -408,23 +414,29 @@ public class TowerFragment extends MainFragment {
                     //compressPath.delete();
                 }
             } else*/
+
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    renameFile(deviceFile.getFileName());
-                    //Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(overviewImg);
-                    overviewImgstr = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_Tower_1_ TowerOverview.png";
+                    overviewImgFile = renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(overviewImgFile).into(overviewImg);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(northmg);
-                    northmgStr = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.png";
+                    northmgFile = renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(northmgFile).into(northmg);
                 } else if (isImage3) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(eastImg);
-                    eastImgStr = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.png";
+                    eastImgFile = renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(eastImgFile).into(eastImg);
                 } else if (isImage4) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(southImg);
-                    southImgStr = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.png";
+                    southImgFile = renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(southImgFile).into(southImg);
                 } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(westImg);
-                    westImgStr = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.png";
+                    westImgFile = renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(westImgFile).into(westImg);
                 }
             }
             //  }
@@ -435,26 +447,18 @@ public class TowerFragment extends MainFragment {
         getPickedFiles(files);
     }
 
-    private void renameFile(String imageFileName) {
+    //rename file
+    private File renameFile(String imageFileName, String newImageName) {
         Context appContext = ApplicationHelper.application().getApplicationContext();
-        // Uri uri = Uri.fromFile(new File(appContext.getCacheDir(), imageFileName));
 
         File directory = new File(appContext.getCacheDir(), imageFileName);
-        //File from = new File(directory, imageFileName);
-        File to = new File(directory.getAbsolutePath(), "neerraj.png");
-        directory.renameTo(to);
-      /*  if(rename(directory, to)){
-            //Success
-            ASTUIUtil.showToast("Success");
-        } else {
-            //Fail
-            ASTUIUtil.showToast("Fail!");
-        }*/
-        Picasso.with(ApplicationHelper.application().getContext()).load(to).into(overviewImg);
+        Log.d(Contants.LOG_TAG, "OLd file name and path __: " + directory.getPath());
+        File newFileName = new File(appContext.getCacheDir(), newImageName);
+        boolean success = directory.renameTo(newFileName);
+        Log.d(Contants.LOG_TAG, "New file name and path __: " + newFileName.getPath() + "getName__" + newFileName.getName());
+        return newFileName;
     }
-    private boolean rename(File from, File to) {
-        return from.getParentFile().exists() && from.exists() && from.renameTo(to);
-    }
+
     /**
      * THIS USE an ActivityResult
      *
@@ -534,24 +538,25 @@ public class TowerFragment extends MainFragment {
         }
 
     }
-
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-      /*  if (equpImagList != null && equpImagList.size() > 0) {
-            for (SaveOffLineData data : equpImagList) {
-                if (data != null) {
-                    if (data.getImagePath() != null) {
-                        File inputFile = new File(data.getImagePath());
-                        if (inputFile.exists()) {
-                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
-                        }
-                    }
-                }
-            }
+        if (overviewImgFile.exists()) {
+            multipartBody.addFormDataPart(overviewImgFile.getName(), overviewImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, overviewImgFile));
         }
-*/
+        if (northmgFile.exists()) {
+            multipartBody.addFormDataPart(northmgFile.getName(), northmgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, northmgFile));
+        }
+        if (eastImgFile.exists()) {
+            multipartBody.addFormDataPart(eastImgFile.getName(), eastImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, eastImgFile));
+        }
+        if (southImgFile.exists()) {
+            multipartBody.addFormDataPart(southImgFile.getName(), southImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, southImgFile));
+        }
+        if (westImgFile.exists()) {
+            multipartBody.addFormDataPart(westImgFile.getName(), westImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, westImgFile));
+        }
         return multipartBody;
     }
 }
