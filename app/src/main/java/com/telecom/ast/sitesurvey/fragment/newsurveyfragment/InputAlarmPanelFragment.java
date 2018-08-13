@@ -405,6 +405,23 @@ public class InputAlarmPanelFragment extends MainFragment {
         return true;
     }
 
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
+            getResult(files);
+
+        }
+    }
+
     public void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
@@ -431,23 +448,6 @@ public class InputAlarmPanelFragment extends MainFragment {
     public void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {

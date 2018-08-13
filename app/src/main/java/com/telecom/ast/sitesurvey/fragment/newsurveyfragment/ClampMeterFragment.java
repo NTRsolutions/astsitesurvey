@@ -8,19 +8,33 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
@@ -28,13 +42,15 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class ClampMeterFragment extends MainFragment {
 
     static ImageView battVoltageImage, loadCurrentImage, batteryDisChaImage;
+    File battVoltageFile, adCurrentFile, batteryDisChaFile;
     static String battVoltagephoto, adCurrentPhoto, batteryDisChaphoto;
     String strBattVoltage, strLoadCurrent;
     String BattVoltage, LoadCurrent;
     AppCompatEditText etBattVoltage, etLoadCurrent;
-    SharedPreferences pref;
     Button btnSubmit;
     static boolean isImage1, isImage2;
+    SharedPreferences userPref;
+    String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
 
     @Override
     protected int fragmentLayout() {
@@ -66,31 +82,39 @@ public class ClampMeterFragment extends MainFragment {
 
     }
 
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
+    }
+
     /*
      *
      * Shared Prefrences---------------------------------------
      */
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+  /*      pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strBattVoltage = pref.getString("CLAMP_BattVoltage", "");
         strLoadCurrent = pref.getString("CLAMP_LoadCurrent", "");
         battVoltagephoto = pref.getString("CLAMP_BattVoltagephoto", "");
         adCurrentPhoto = pref.getString("CLAMP_AdCurrentPhoto", "");
-        batteryDisChaphoto = pref.getString("CLAMP_BatteryDisChaphoto", "");
+        batteryDisChaphoto = pref.getString("CLAMP_BatteryDisChaphoto", "");*/
     }
 
     @Override
     protected void dataToView() {
+        getUserPref();
         getSharedPrefData();
-        if (!strBattVoltage.equals("") || !strLoadCurrent.equals("")) {
+        if (!isEmptyStr(strBattVoltage) || !isEmptyStr(strLoadCurrent)) {
             etBattVoltage.setText(strBattVoltage);
             etLoadCurrent.setText(strLoadCurrent);
-            if (!battVoltagephoto.equals("") || !adCurrentPhoto.equals("") || !batteryDisChaphoto.equals("")) {
+         /*   if (!battVoltagephoto.equals("") || !adCurrentPhoto.equals("") || !batteryDisChaphoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(battVoltagephoto)).placeholder(R.drawable.noimage).into(battVoltageImage);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(adCurrentPhoto)).placeholder(R.drawable.noimage).into(loadCurrentImage);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(batteryDisChaphoto)).placeholder(R.drawable.noimage).into(batteryDisChaImage);
-            }
+            }*/
         }
     }
 
@@ -110,13 +134,14 @@ public class ClampMeterFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
+           /*     SharedPreferences.Editor editor = pref.edit();
                 editor.putString("CLAMP_BattVoltage", BattVoltage);
                 editor.putString("CLAMP_LoadCurrent", LoadCurrent);
                 editor.putString("CLAMP_BattVoltagephoto", battVoltagephoto);
                 editor.putString("CLAMP_AdCurrentPhoto", adCurrentPhoto);
                 editor.putString("CLAMP_BatteryDisChaphoto", batteryDisChaphoto);
-                editor.commit();
+                editor.commit();*/
+                saveBasicDataonServer();
             }
 
         }
@@ -132,59 +157,17 @@ public class ClampMeterFragment extends MainFragment {
         } else if (isEmptyStr(LoadCurrent)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Load Current");
             return false;
-        } else if (isEmptyStr(battVoltagephoto)) {
+        } else if (battVoltageFile == null || !battVoltageFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Batt Voltage Photo");
             return false;
-        } else if (isEmptyStr(adCurrentPhoto)) {
+        } else if (adCurrentFile == null || !adCurrentFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Load Current Photo");
             return false;
-        } else if (isEmptyStr(batteryDisChaphoto)) {
+        } else if (batteryDisChaFile == null || !batteryDisChaFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please SelectBattery Discharge Current Photo");
             return false;
         }
         return true;
-    }
-
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-
-                    if (isImage1) {
-                        battVoltagephoto = deviceFile.getFilePath().toString();
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(battVoltageImage);
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(loadCurrentImage);
-                        adCurrentPhoto = deviceFile.getFilePath().toString();
-
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(batteryDisChaImage);
-                        batteryDisChaphoto = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    battVoltagephoto = deviceFile.getFilePath().toString();
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(battVoltageImage);
-                } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(loadCurrentImage);
-                    adCurrentPhoto = deviceFile.getFilePath().toString();
-                } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(batteryDisChaImage);
-                    batteryDisChaphoto = deviceFile.getFilePath().toString();
-                }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
-                }
-            }
-        }
-    }
-
-
-    public static void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
     }
 
 
@@ -202,6 +185,101 @@ public class ClampMeterFragment extends MainFragment {
             getResult(files);
 
         }
+    }
+
+    public void getPickedFiles(ArrayList<MediaFile> files) {
+        for (MediaFile deviceFile : files) {
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+                if (isImage1) {
+                    String imageName = CurtomerSite_Id + "_BB_1_BattVoltage.png";
+                    battVoltageFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(battVoltageFile).into(battVoltageImage);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
+                } else if (isImage2) {
+                    String imageName = CurtomerSite_Id + "_BB_1_LoadCurrent.png";
+                    adCurrentFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(adCurrentFile).into(loadCurrentImage);
+                } else {
+                    String imageName = CurtomerSite_Id + "_BB_1_BatteryDisCharge.png";
+                    batteryDisChaFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(batteryDisChaFile).into(batteryDisChaImage);
+                }
+            }
+            //  }
+        }
+    }
+
+
+    public void getResult(ArrayList<MediaFile> files) {
+        getPickedFiles(files);
+    }
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "BB");
+                JSONObject BBData = new JSONObject();
+                BBData.put("BBEquipment_ID", "CM");
+                BBData.put("BattVoltage", BattVoltage);
+                BBData.put("LoadCurrent", LoadCurrent);
+                BBData.put("BattVolt_Photo", "0");
+                BBData.put("LoadCurrent_Photo", "0");
+                jsonObject.put("BBData", BBData);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your Clamp Meter Data save Successfully");
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast("Your Clamp Meter Data  has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (battVoltageFile.exists()) {
+            multipartBody.addFormDataPart(battVoltageFile.getName(), battVoltageFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, battVoltageFile));
+        }
+        if (adCurrentFile.exists()) {
+            multipartBody.addFormDataPart(adCurrentFile.getName(), adCurrentFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, adCurrentFile));
+        }
+        if (batteryDisChaFile.exists()) {
+            multipartBody.addFormDataPart(batteryDisChaFile.getName(), batteryDisChaFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryDisChaFile));
+        }
+
+        return multipartBody;
     }
 
 
