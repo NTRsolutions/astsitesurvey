@@ -776,8 +776,6 @@ public class DGFragment extends MainFragment {
                 EquipmentData.put("Capacity", capacity);
                 EquipmentData.put("SerialNo", serialNumber);
                 EquipmentData.put("MfgDate", datemilisec);
-
-
                 EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
                 EquipmentData.put("DG_Type", DGType);
                 EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);

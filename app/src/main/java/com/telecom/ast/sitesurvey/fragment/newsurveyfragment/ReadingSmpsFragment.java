@@ -44,6 +44,8 @@ public class ReadingSmpsFragment extends MainFragment {
     SharedPreferences pref;
     Button btnSubmit;
     static boolean isImage1, isImage2;
+    SharedPreferences userPref;
+    String strSavedDateTime, strUserId, strSiteId,CurtomerSite_Id;
 
     @Override
     protected int fragmentLayout() {
@@ -80,12 +82,19 @@ public class ReadingSmpsFragment extends MainFragment {
      */
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+   /*     pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strBattVoltage = pref.getString("READING_BattVoltage", "");
         strLoadCurrent = pref.getString("READING_LoadCurrent", "");
         battVoltagephoto = pref.getString("BattVoltagephoto", "");
         adCurrentPhoto = pref.getString("AdCurrentPhoto", "");
-        batteryDisChaphoto = pref.getString("BatteryDisChaphoto", "");
+        batteryDisChaphoto = pref.getString("BatteryDisChaphoto", "");*/
+    }
+
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
     @Override
@@ -118,13 +127,13 @@ public class ReadingSmpsFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
+               /* SharedPreferences.Editor editor = pref.edit();
                 editor.putString("READING_BattVoltage", BattVoltage);
                 editor.putString("READING_LoadCurrent", LoadCurrent);
                 editor.putString("BattVoltagephoto", battVoltagephoto);
                 editor.putString("AdCurrentPhoto", adCurrentPhoto);
                 editor.putString("BatteryDisChaphoto", batteryDisChaphoto);
-                editor.commit();
+                editor.commit();*/
             }
 
         }
