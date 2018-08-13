@@ -1,19 +1,23 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,23 +25,41 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FontManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
@@ -47,11 +69,11 @@ public class DGFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
     static String frontphoto, openPhoto, sNoPlatephoto;
-    AppCompatEditText etYear, etDescription;
+    AppCompatEditText etDescription;
     AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strSavedDateTime, strUserId, strSiteId, strDescriptionId;
+    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, CurtomerSite_Id;
     String strMakeId, strModelId;
     String[] arrMake;
     String[] arrModel;
@@ -60,7 +82,7 @@ public class DGFragment extends MainFragment {
     ArrayList<EquipMakeDataModel> arrEquipData;
     ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
+    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, itemCondition;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
@@ -80,6 +102,12 @@ public class DGFragment extends MainFragment {
             etDGRunHourMeter, eTDGlowLUBEWire, etDGFuelTank, etCableGrouting, etDGFoundation, etDGCoolingtype, etDgpipe,
             etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver, etDGBatterysn, etDGPollutionCertificate;
 
+    TextView etYear, dateIcon;
+    LinearLayout dateLayout;
+    long datemilisec;
+    static File frontimgFile, openImgFile, sNoPlateImgFile;
+    Typeface materialdesignicons_font;
+    SharedPreferences mpptSharedPrefpref, userPref;
 
     @Override
     protected int fragmentLayout() {
@@ -132,6 +160,11 @@ public class DGFragment extends MainFragment {
         etRentalDGChangeOver = findViewById(R.id.etRentalDGChangeOver);
         etDGBatterysn = findViewById(R.id.etDGBatterysn);
         etDGPollutionCertificate = findViewById(R.id.etDGPollutionCertificate);
+        dateIcon = findViewById(R.id.dateIcon);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        dateLayout = findViewById(R.id.dateLayout);
     }
 
     @Override
@@ -140,6 +173,7 @@ public class DGFragment extends MainFragment {
         frontImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        dateLayout.setOnClickListener(this);
     }
 
     @Override
@@ -197,7 +231,7 @@ public class DGFragment extends MainFragment {
      * Shared Prefrences
      */
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+       /* pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("DG_Make", "");
         strModel = pref.getString("DG_Model", "");
@@ -244,11 +278,47 @@ public class DGFragment extends MainFragment {
         RentalDGChangeOver = pref.getString("DG_RentalDGChangeOver", "");
         DGBatterysn = pref.getString("DG_DGBatterysn", "");
         DGPollutionCertificate = pref.getString("DG_DGPollutionCertificate", "");
+*/
+    }
 
+    public void setDateofSiteonAir() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                etYear.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        dateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
     @Override
     protected void dataToView() {
+        getUserPref();
         atmDatabase = new AtmDatabase(getContext());
         arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "DG");
         arrMake = new String[arrEquipData.size()];
@@ -299,8 +369,9 @@ public class DGFragment extends MainFragment {
         });
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
-        if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")) {
+        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
+                || !isEmptyStr(strSerialNum)
+                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -339,7 +410,7 @@ public class DGFragment extends MainFragment {
             this.etRentalDGChangeOver.setText(RentalDGChangeOver);
             this.etDGBatterysn.setText(DGBatterysn);
             etDGPollutionCertificate.setText(DGPollutionCertificate);
-
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
 
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
@@ -463,6 +534,9 @@ public class DGFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
+        if (view.getId() == R.id.dateLayout) {
+            setDateofSiteonAir();
+        }
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
@@ -485,7 +559,7 @@ public class DGFragment extends MainFragment {
                         }
                     }
                 }
-                if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
+                if (!isEmptyStr(strDescriptionId)) {
                     strDescriptionId = "0";
                 }
                 if (arrEquipData != null && arrEquipData.size() > 0) {
@@ -495,7 +569,7 @@ public class DGFragment extends MainFragment {
                         }
                     }
                 }
-                if (strMakeId.equals("") || strMakeId.equals("0")) {
+                if (!isEmptyStr(strMakeId)) {
                     strMakeId = "0";
                 }
                 if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
@@ -505,10 +579,10 @@ public class DGFragment extends MainFragment {
                         }
                     }
                 }
-                if (strModelId.equals("") || strModelId.equals("0")) {
+                if (!isEmptyStr(strModelId)) {
                     strModelId = "0";
                 }
-                SharedPreferences.Editor editor = pref.edit();
+              /*  SharedPreferences.Editor editor = pref.edit();
                 editor.putString("DG_UserId", strUserId);
                 editor.putString("DG_Make", make);
                 editor.putString("DG_Model", model);
@@ -554,7 +628,8 @@ public class DGFragment extends MainFragment {
                 editor.putString("DG_RentalDGChangeOver", RentalDGChangeOver);
                 editor.putString("DG_DGBatterysn", DGBatterysn);
                 editor.putString("DG_DGPollutionCertificate", DGPollutionCertificate);
-                editor.commit();
+                editor.commit();*/
+                saveBasicDataonServer();
             }
         }
     }
@@ -568,7 +643,6 @@ public class DGFragment extends MainFragment {
         yearOfManufacturing = getTextFromView(this.etYear);
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
-
         pDistribution = pDistributionSpinner.getSelectedItem().toString();
         mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
         dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
@@ -576,7 +650,6 @@ public class DGFragment extends MainFragment {
         dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
         dgContacter = dgContacterSpinner.getSelectedItem().toString();
         backCompressor = backCompressorSpinner.getSelectedItem().toString();
-
         AutomationCondition = getTextFromView(this.etAutomationCondition);
         PowerPanelMake = getTextFromView(this.etPowerPanelMake);
         PowerPanelCapacity = getTextFromView(this.etPowerPanelCapacity);
@@ -621,13 +694,13 @@ public class DGFragment extends MainFragment {
             } else if (isEmptyStr(description)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (isEmptyStr(frontphoto)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Set Plate Photo");
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
-            } else if (isEmptyStr(openPhoto)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Outside Photo");
+            } else if (openImgFile == null || !openImgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
-            } else if (isEmptyStr(sNoPlatephoto)) {
+            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
@@ -638,47 +711,6 @@ public class DGFragment extends MainFragment {
         return true;
     }
 
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-
-                    if (isImage1) {
-                        frontphoto = deviceFile.getFilePath().toString();
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
-                        openPhoto = deviceFile.getFilePath().toString();
-
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    frontphoto = deviceFile.getFilePath().toString();
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
-                } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
-                    openPhoto = deviceFile.getFilePath().toString();
-                } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
-                }
-            }
-        }
-    }
-
-
-    public static void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     /**
      * THIS USE an ActivityResult
@@ -694,5 +726,139 @@ public class DGFragment extends MainFragment {
             getResult(files);
 
         }
+    }
+
+    public void getPickedFiles(ArrayList<MediaFile> files) {
+        for (MediaFile deviceFile : files) {
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+                if (isImage1) {
+                    String imageName = CurtomerSite_Id + "_DG_1_Front.png";
+                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
+                } else if (isImage2) {
+                    String imageName = CurtomerSite_Id + "_DG_1_Open.png";
+                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
+                } else {
+                    String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.png";
+                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
+                }
+            }
+            //  }
+        }
+    }
+
+
+    public void getResult(ArrayList<MediaFile> files) {
+        getPickedFiles(files);
+    }
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+
+
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Equipment");
+                JSONObject EquipmentData = new JSONObject();
+                EquipmentData.put("EquipmentSno", "0");
+                EquipmentData.put("EquipmentID", "0");
+                EquipmentData.put("Equipment", "DG");
+                EquipmentData.put("MakeID", strMakeId);
+                EquipmentData.put("Capacity_ID", "0");
+                EquipmentData.put("Capacity", capacity);
+                EquipmentData.put("SerialNo", serialNumber);
+                EquipmentData.put("MfgDate", datemilisec);
+
+
+                EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
+                EquipmentData.put("DG_Type", DGType);
+                EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);
+                EquipmentData.put("DG_PowerDistPanelCapacity", PowerPanelCapacity);
+                EquipmentData.put("DG_AutomationWorkingCondition", AutomationCondition);
+                EquipmentData.put("DG_MCBStatus", mCBStatus);
+                EquipmentData.put("DG_AlternaterMake", dbAlternatermake);
+                EquipmentData.put("DG_AlternaterSno", AlternaterSno);
+                EquipmentData.put("DG_AlternaterCapacity", AlternterCapacity);
+                EquipmentData.put("DG_BatteryStatus", DGBatteryStatus);
+                EquipmentData.put("DG_BatteryMake", DGBatteryMake);
+                EquipmentData.put("DG_BatterySerialNo", DGBatterysn);
+                EquipmentData.put("DG_BatteryCapacity", dBCapacity);
+                EquipmentData.put("DG_Contacter", dgContacter);
+                EquipmentData.put("DG_WiringCondition", Conditionofwiring);
+                EquipmentData.put("DG_Earthing", DGearthing);
+                EquipmentData.put("DG_CANOPYCondition", ConditionCANOPY);
+                EquipmentData.put("DG_RunHourMeter", DGRunHourMer);
+                EquipmentData.put("DG_LowLUBEWire", DGlowLUBEWire);
+                EquipmentData.put("DG_BackCompressor", backCompressor);
+                EquipmentData.put("DG_FuelTankStatus", DGFuelTank);
+                EquipmentData.put("DG_CableGrouting", CableGrouting);
+                EquipmentData.put("DG_FoundationStatus", DGFoundation);
+                EquipmentData.put("DG_CoolingType", DGCoolingtype);
+                EquipmentData.put("DG_Pipe", Dgpipe);
+                EquipmentData.put("DG_ExhaustPipeCondition", DGExhaustcondi);
+                EquipmentData.put("DG_EmergencyStopSwitch", DGEmergencyStopSwitch);
+                EquipmentData.put("DG_Rental", "");
+                EquipmentData.put("DG_ChangeOverBox", RentalDGChangeOver);
+                EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
+                EquipmentData.put("DG_ESNo", eSN);
+                EquipmentData.put("ItemCondition", itemCondition);
+                jsonObject.put("EquipmentData", EquipmentData);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your MPPT Data save Successfully");
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast("Your MPPT Data has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (frontimgFile.exists()) {
+            multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
+        }
+        if (openImgFile.exists()) {
+            multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
+        }
+        if (sNoPlateImgFile.exists()) {
+            multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
+        }
+
+        return multipartBody;
     }
 }

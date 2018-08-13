@@ -1,31 +1,54 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FontManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
@@ -33,18 +56,22 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class MpptFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
-    static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
-    String strUserId, strSavedDateTime, strSiteId;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
-    SharedPreferences pref;
+    String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
+    String make, model, capacity, serialNumber, description, currentDateTime, yearOfManufacturing;
     AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
-    AppCompatEditText etYear, etDescription, etMPPTReading;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, MPPTReading;
-    String strMakeId, strModelId, strDescriptionId;
+    AppCompatEditText etDescription, etMPPTReading;
+    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, MPPTReading, itemCondition;
+    String strMakeId = "0", strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
+    TextView etYear, dateIcon;
+    LinearLayout dateLayout;
+    long datemilisec;
+    static File frontimgFile, openImgFile, sNoPlateImgFile;
+    Typeface materialdesignicons_font;
+    SharedPreferences mpptSharedPrefpref, userPref;
 
     @Override
     protected int fragmentLayout() {
@@ -67,6 +94,11 @@ public class MpptFragment extends MainFragment {
         btnSubmit = findViewById(R.id.btnSubmit);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         etMPPTReading = findViewById(R.id.etMPPTReading);
+        dateIcon = findViewById(R.id.dateIcon);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        dateLayout = findViewById(R.id.dateLayout);
     }
 
     @Override
@@ -75,6 +107,7 @@ public class MpptFragment extends MainFragment {
         frontImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        dateLayout.setOnClickListener(this);
     }
 
     @Override
@@ -83,23 +116,23 @@ public class MpptFragment extends MainFragment {
     }
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("MPPT_Make", "");
-        strModel = pref.getString("MPPT_Model", "");
-        strCapacity = pref.getString("MPPT_Capacity", "");
-        strMakeId = pref.getString("MPPT_MakeId", "");
-        strModelId = pref.getString("MPPT_ModelId", "");
-        strDescriptionId = pref.getString("MPPT_DescriptionId", "");
-        strSerialNum = pref.getString("MPPT_SerialNum", "");
-        strYearOfManufacturing = pref.getString("MPPT_YearOfManufacturing", "");
-        strDescription = pref.getString("MPPT_Description", "");
-        frontphoto = pref.getString("MPPT_Photo1", "");
-        openPhoto = pref.getString("MPPT_Photo2", "");
-        sNoPlatephoto = pref.getString("MPPT_Photo3", "");
-        strSavedDateTime = pref.getString("MPPT_EbMeterSavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
-        MPPTReading = pref.getString("MPPTReading", "");
+/*        mpptSharedPrefpref = getContext().getSharedPreferences("mpptSharedPref", MODE_PRIVATE);
+        strUserId = mpptSharedPrefpref.getString("USER_ID", "");
+        strMake = mpptSharedPrefpref.getString("MPPT_Make", "");
+        strModel = mpptSharedPrefpref.getString("MPPT_Model", "");
+        strCapacity = mpptSharedPrefpref.getString("MPPT_Capacity", "");
+        strMakeId = mpptSharedPrefpref.getString("MPPT_MakeId", "");
+        strModelId = mpptSharedPrefpref.getString("MPPT_ModelId", "");
+        strDescriptionId = mpptSharedPrefpref.getString("MPPT_DescriptionId", "");
+        strSerialNum = mpptSharedPrefpref.getString("MPPT_SerialNum", "");
+        strYearOfManufacturing = mpptSharedPrefpref.getString("MPPT_YearOfManufacturing", "");
+        strDescription = mpptSharedPrefpref.getString("MPPT_Description", "");
+        frontphoto = mpptSharedPrefpref.getString("MPPT_Photo1", "");
+        openPhoto = mpptSharedPrefpref.getString("MPPT_Photo2", "");
+        sNoPlatephoto = mpptSharedPrefpref.getString("MPPT_Photo3", "");
+        strSavedDateTime = mpptSharedPrefpref.getString("MPPT_EbMeterSavedDateTime", "");
+        strSiteId = mpptSharedPrefpref.getString("SiteId", "");
+        MPPTReading = mpptSharedPrefpref.getString("MPPTReading", "");*/
 
     }
 
@@ -114,13 +147,24 @@ public class MpptFragment extends MainFragment {
 
     }
 
+
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
+    }
+
     @Override
     protected void dataToView() {
+        getUserPref();
         getSharedPrefData();
         setSpinnerValue();
 
-        if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !MPPTReading.equals("")) {
+        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
+                || !isEmptyStr(strSerialNum)
+                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription) ||
+                !isEmptyStr(MPPTReading)) {
             etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
@@ -129,11 +173,11 @@ public class MpptFragment extends MainFragment {
             etDescription.setText(strDescription);
             etMPPTReading.setText(MPPTReading);
         }
-        if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
+/*        if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-        }
+        }*/
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -182,10 +226,39 @@ public class MpptFragment extends MainFragment {
         });
     }
 
+    public void setDateofSiteonAir() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                etYear.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        dateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.image1) {
+        if (view.getId() == R.id.dateLayout) {
+            setDateofSiteonAir();
+        } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
@@ -199,7 +272,7 @@ public class MpptFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                SharedPreferences.Editor editor = pref.edit();
+               /* SharedPreferences.Editor editor = pref.edit();
                 editor.putString("MPPT_UserId", strUserId);
                 editor.putString("MPPT_Make", make);
                 editor.putString("MPPT_Model", model);
@@ -216,20 +289,10 @@ public class MpptFragment extends MainFragment {
                 editor.putString("MPPT_EbMeterSavedDateTime", currentDateTime);
                 editor.putString("MPPTReading", MPPTReading);
                 editor.commit();
-                saveScreenData(true, false);
-
+                saveScreenData(true, false);*/
+                saveBasicDataonServer();
             }
-        } else if (view.getId() == R.id.imgPrevious || view.getId() == R.id.perviousLayout) {
-            saveScreenData(false, false);
         }
-
-    }
-
-    private void saveScreenData(boolean NextPreviousFlag, boolean DoneFlag) {
-        Intent intent = new Intent("ViewPageChange");
-        intent.putExtra("NextPreviousFlag", NextPreviousFlag);
-        intent.putExtra("DoneFlag", DoneFlag);
-        getActivity().sendBroadcast(intent);
     }
 
 
@@ -243,7 +306,7 @@ public class MpptFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());
-
+        itemCondition = itemConditionSpinner.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -263,14 +326,13 @@ public class MpptFragment extends MainFragment {
             } else if (isEmptyStr(description)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (isEmptyStr(frontphoto)) {
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
-            } else if (isEmptyStr(openPhoto)) {
+            } else if (openImgFile == null || !openImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
-
-            } else if (isEmptyStr(sNoPlatephoto)) {
+            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
@@ -280,47 +342,6 @@ public class MpptFragment extends MainFragment {
         return true;
     }
 
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-
-                    if (isImage1) {
-                        frontphoto = deviceFile.getFilePath().toString();
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
-                        openPhoto = deviceFile.getFilePath().toString();
-
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    frontphoto = deviceFile.getFilePath().toString();
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
-                } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
-                    openPhoto = deviceFile.getFilePath().toString();
-                } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
-                }
-            }
-        }
-    }
-
-
-    public static void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     /**
      * THIS USE an ActivityResult
@@ -338,4 +359,105 @@ public class MpptFragment extends MainFragment {
         }
     }
 
+    public void getPickedFiles(ArrayList<MediaFile> files) {
+        for (MediaFile deviceFile : files) {
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+                if (isImage1) {
+                    String imageName = CurtomerSite_Id + "_MPPT_1_Front.png";
+                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
+                } else if (isImage2) {
+                    String imageName = CurtomerSite_Id + "_MPPT_1_Open.png";
+                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
+                } else {
+                    String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.png";
+                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
+                }
+            }
+            //  }
+        }
+    }
+
+
+    public void getResult(ArrayList<MediaFile> files) {
+        getPickedFiles(files);
+    }
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+
+
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Equipment");
+                JSONObject EquipmentData = new JSONObject();
+                EquipmentData.put("EquipmentSno", "0");
+                EquipmentData.put("EquipmentID", "0");
+                EquipmentData.put("Equipment", "MPPT");
+                EquipmentData.put("MakeID", strMakeId);
+                EquipmentData.put("Capacity_ID", "0");
+                EquipmentData.put("Capacity", capacity);
+                EquipmentData.put("SerialNo", serialNumber);
+                EquipmentData.put("MfgDate", datemilisec);
+                EquipmentData.put("MPPT_Reading", MPPTReading);
+                EquipmentData.put("ItemCondition", itemCondition);
+                jsonObject.put("EquipmentData", EquipmentData);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your MPPT Data save Successfully");
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast("Your MPPT Data has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (frontimgFile.exists()) {
+            multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
+        }
+        if (openImgFile.exists()) {
+            multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
+        }
+        if (sNoPlateImgFile.exists()) {
+            multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
+        }
+
+        return multipartBody;
+    }
 }

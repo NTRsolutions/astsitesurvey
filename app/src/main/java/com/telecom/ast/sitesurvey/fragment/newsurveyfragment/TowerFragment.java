@@ -81,11 +81,12 @@ public class TowerFragment extends MainFragment {
     String type, height, date, itemcondion, descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
             laEarthingStatus, towerFoundation, towerTightening;
-    TextView etDate,dateIcon;
+    TextView etDate, dateIcon;
     LinearLayout dateLayout;
     long datemilisec;
     private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
     Typeface materialdesignicons_font;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.tower_fragment;
@@ -117,7 +118,7 @@ public class TowerFragment extends MainFragment {
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
-        dateLayout=findViewById(R.id.dateLayout);
+        dateLayout = findViewById(R.id.dateLayout);
     }
 
     @Override
@@ -456,7 +457,6 @@ public class TowerFragment extends MainFragment {
     public void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
-
 
 
     /**
