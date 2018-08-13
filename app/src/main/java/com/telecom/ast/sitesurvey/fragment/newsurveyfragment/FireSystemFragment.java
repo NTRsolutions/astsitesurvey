@@ -167,7 +167,6 @@ public class FireSystemFragment extends MainFragment {
                 editor.putString("FIRE_capacity", capacity);
                 editor.commit();*/
 
-                reloadBackScreen();
 
             }
 

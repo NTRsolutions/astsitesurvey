@@ -128,6 +128,7 @@ public class BatteryFragment extends MainFragment {
         dateLayout = findViewById(R.id.dateLayout);
     }
 
+
     @Override
     protected void setClickListeners() {
         batteryimg.setOnClickListener(this);

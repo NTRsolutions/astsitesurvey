@@ -42,7 +42,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     AppCompatEditText etYear, etDescription;
     AppCompatEditText etAnchorOperator, etSharingOperator;
     AppCompatAutoCompleteTextView etMake, etModel, etCapacity, etSerialNum;
-    SharedPreferences pref;
+
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
     String strMakeId, strModelId;
@@ -52,7 +52,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
-
+    SharedPreferences InputAlarmPanelpref;
     @Override
     protected int fragmentLayout() {
         return R.layout.inputalarmpannel_fragment;
@@ -189,27 +189,26 @@ public class InputAlarmPanelFragment extends MainFragment {
      *     Shared Prefrences
      */
     public void getSharedprefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("ALARMPA_Make", "");
-        strModel = pref.getString("ALARMPA_Model", "");
-        strCapacity = pref.getString("ALARMPA_Capacity", "");
-        strMakeId = pref.getString("ALARMPA_MakeId", "");
-        strModelId = pref.getString("ALARMPA_ModelId", "");
-        strDescriptionId = pref.getString("ALARMPA_DescriptionId", "");
-        strSerialNum = pref.getString("ALARMPA_SerialNum", "");
-        strYearOfManufacturing = pref.getString("ALARMPA_YearOfManufacturing", "");
-        strDescription = pref.getString("ALARMPA_Description", "");
-        bateryphoto = pref.getString("ALARMPA_batryPhoto1", "");
-        cellPhoto = pref.getString("ALARMPA_batryPhoto2", "");
-        sNoPlatephoto = pref.getString("ALARMPA_batryPhoto3", "");
-        strSavedDateTime = pref.getString("ALARMPA_BbActivitySavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
-        itemCondition = pref.getString("ALARMPA_ItemCondition", "");
-
-        AnchorOperator = pref.getString("ALARMPA_AnchorOperator", "");
-        SharingOperator = pref.getString("ALARMPA_SharingOperator", "");
-
+       /* InputAlarmPanelpref = getContext().getSharedPreferences("InputAlarmPanelpref", MODE_PRIVATE);
+        strUserId = InputAlarmPanelpref.getString("USER_ID", "");
+        strMake = InputAlarmPanelpref.getString("ALARMPA_Make", "");
+        strModel = InputAlarmPanelpref.getString("ALARMPA_Model", "");
+        strCapacity = InputAlarmPanelpref.getString("ALARMPA_Capacity", "");
+        strMakeId = InputAlarmPanelpref.getString("ALARMPA_MakeId", "");
+        strModelId = InputAlarmPanelpref.getString("ALARMPA_ModelId", "");
+        strDescriptionId = InputAlarmPanelpref.getString("ALARMPA_DescriptionId", "");
+        strSerialNum = InputAlarmPanelpref.getString("ALARMPA_SerialNum", "");
+        strYearOfManufacturing = InputAlarmPanelpref.getString("ALARMPA_YearOfManufacturing", "");
+        strDescription = InputAlarmPanelpref.getString("ALARMPA_Description", "");
+        bateryphoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto1", "");
+        cellPhoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto2", "");
+        sNoPlatephoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto3", "");
+        strSavedDateTime = InputAlarmPanelpref.getString("ALARMPA_BbActivitySavedDateTime", "");
+        strSiteId = InputAlarmPanelpref.getString("SiteId", "");
+        itemCondition = InputAlarmPanelpref.getString("ALARMPA_ItemCondition", "");
+        AnchorOperator = InputAlarmPanelpref.getString("ALARMPA_AnchorOperator", "");
+        SharingOperator = InputAlarmPanelpref.getString("ALARMPA_SharingOperator", "");
+*/
 
     }
 
@@ -234,7 +233,7 @@ public class InputAlarmPanelFragment extends MainFragment {
                 if (strModelId.equals("") || strModelId.equals("0")) {
                     strModelId = "0";
                 }
-                SharedPreferences.Editor editor = pref.edit();
+            /*    SharedPreferences.Editor editor = InputAlarmPanelpref.edit();
                 editor.putString("USER_ID", strUserId);
                 editor.putString("ALARMPA_Make", make);
                 editor.putString("ALARMPA_Model", model);
@@ -252,10 +251,8 @@ public class InputAlarmPanelFragment extends MainFragment {
                 editor.putString("ALARMPA_ItemCondition", itemCondition);
                 editor.putString("ALARMPA_AnchorOperator", AnchorOperator);
                 editor.putString("ALARMPA_SharingOperator", SharingOperator);
-
-                strModelId = pref.getString("", "");
-                editor.commit();
-                reloadBackScreen();
+                strModelId = InputAlarmPanelpref.getString("", "");
+                editor.commit();*/
 
             }
 
@@ -269,10 +266,8 @@ public class InputAlarmPanelFragment extends MainFragment {
         model = getTextFromView(this.etCapacity);
         capacity = getTextFromView(this.etCapacity);
         serialNumber = getTextFromView(this.etSerialNum);
-
         AnchorOperator = getTextFromView(this.etAnchorOperator);
         SharingOperator = getTextFromView(this.etSharingOperator);
-
         yearOfManufacturing = getTextFromView(this.etYear);
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
