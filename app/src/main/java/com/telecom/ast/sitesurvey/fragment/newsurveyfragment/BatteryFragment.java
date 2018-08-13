@@ -93,7 +93,7 @@ public class BatteryFragment extends MainFragment {
     Typeface materialdesignicons_font;
     LinearLayout dateLayout;
     long datemilisec;
-
+    String capcityId="0";
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_battery;
@@ -225,6 +225,7 @@ public class BatteryFragment extends MainFragment {
                     if (equipCapacityDataList.size() > 0) {
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
                             arrModel[i] = equipCapacityDataList.get(i).getName();
+                             capcityId=equipCapacityDataList.get(i).getId();
                         }
                         ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrModel);
                         etModel.setAdapter(adapterModelName);
@@ -409,9 +410,7 @@ public class BatteryFragment extends MainFragment {
                         }
                     }
                 }
-                if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
-                    strDescriptionId = "0";
-                }
+
                 if (equipMakeList != null && equipMakeList.size() > 0) {
                     for (int i = 0; i < equipMakeList.size(); i++) {
                         if (make.equals(equipMakeList.get(i).getName())) {
@@ -419,7 +418,7 @@ public class BatteryFragment extends MainFragment {
                         }
                     }
                 }
-                if (strMakeId.equals("") || strMakeId.equals("0")) {
+                if ( isEmptyStr(strMakeId) || strMakeId.equals("0")) {
                     strMakeId = "0";
                 }
                 if (equipCapacityList != null && equipCapacityList.size() > 0) {
@@ -429,12 +428,12 @@ public class BatteryFragment extends MainFragment {
                         }
                     }
                 }
-                if (strModelId.equals("") || strModelId.equals("0")) ;
+                if (isEmptyStr(strModelId) || strModelId.equals("0")) ;
                 {
                     strModelId = "0";
                 }
                 saveBasicDataonServer();
-                reloadBackScreen();
+
 
             }
 
@@ -556,14 +555,23 @@ public class BatteryFragment extends MainFragment {
                 JSONObject EquipmentData = new JSONObject();
                 EquipmentData.put("EquipmentSno", "");
                 EquipmentData.put("EquipmentID", "");
-                EquipmentData.put("Equipment", "");
-                EquipmentData.put("MakeID", make);
+                EquipmentData.put("Equipment", "Battery");
+                EquipmentData.put("MakeID", strMakeId);
                 EquipmentData.put("Capacity_ID", "");
                 EquipmentData.put("Capacity", capacity);
                 EquipmentData.put("SerialNo", serialNumber);
                 EquipmentData.put("MfgDate", yearOfManufacturing);
                 EquipmentData.put("ItemCondition", itemCondition);
-                jsonObject.put("EquipmentData", EquipmentData);
+                EquipmentData.put("BB_NoofBB", NoofItems);
+                EquipmentData.put("BB_NoofCell", NoofCell);
+                EquipmentData.put("BB_CellVoltage", CellVoltage);
+                EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
+                EquipmentData.put("BB_BackUp", BackUpinHrs);
+                EquipmentData.put("BB_TightnessofBentCaps", TightnessofBentCaps);
+                EquipmentData.put("BB_CellInterconnectingstriptightness", CellInterconnecting);
+
+
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
