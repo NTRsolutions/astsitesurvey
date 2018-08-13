@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.Fragment;
 
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.SMPSPIUPagerAdapter;
@@ -86,20 +87,7 @@ public class SmpsPiuFragment extends MainFragment {
         super.onDestroy();
     }
 
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            SmpsFragment.getResult(files);
 
-        }
-    }
+
 
 }

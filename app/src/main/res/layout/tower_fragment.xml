@@ -87,8 +87,6 @@
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
-
-
                 <TextView
                     android:id="@+id/etDate"
                     android:layout_width="0dp"

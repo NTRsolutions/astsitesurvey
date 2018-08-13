@@ -1,5 +1,6 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
@@ -18,6 +19,7 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
+import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
@@ -25,6 +27,7 @@ import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
+import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -452,6 +455,22 @@ public class IpmsFragment extends MainFragment {
 
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
+    }
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
+            getResult(files);
+
+        }
     }
 
 

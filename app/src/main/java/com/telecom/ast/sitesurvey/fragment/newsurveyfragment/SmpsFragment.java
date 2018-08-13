@@ -1,6 +1,9 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -471,6 +474,7 @@ public class SmpsFragment extends MainFragment {
     public static void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
+
 
 
 }

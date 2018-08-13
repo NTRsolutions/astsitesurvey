@@ -1,11 +1,18 @@
 package com.telecom.ast.sitesurvey.adapter;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
+import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PIUVoltageStablizerFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsFragment;
+import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+
+import java.util.ArrayList;
 
 public class SMPSPIUPagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfPage = 2;
@@ -34,5 +41,8 @@ public class SMPSPIUPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfPage;
     }
+
+
+
 }
 

@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,40 +24,56 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTErrorIndicator;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FontManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
     static ImageView batteryimg, cellImg, sNoPlateImg;
-    static String bateryphoto, cellPhoto, sNoPlatephoto;
+    private File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
     static boolean isImage1, isImage2;
     AppCompatAutoCompleteTextView etMake;
-    AppCompatEditText etYear, etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
+    AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
     AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
-    SharedPreferences batterySharedPref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
+    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition, CurtomerSite_Id;
     String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
             TightnessofBentCaps, CellInterconnecting;
     String strMakeId, strModelId;
@@ -70,6 +88,11 @@ public class BatteryFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
+    SharedPreferences batterySharedPref, userPref;
+    TextView etYear, dateIcon;
+    Typeface materialdesignicons_font;
+    LinearLayout dateLayout;
+    long datemilisec;
 
     @Override
     protected int fragmentLayout() {
@@ -98,6 +121,11 @@ public class BatteryFragment extends MainFragment {
         etBackUpinHrs = findViewById(R.id.etBackUpinHrs);
         etTightnessofBentCaps = findViewById(R.id.etTightnessofBentCaps);
         etCellInterconnecting = findViewById(R.id.etCellInterconnecting);
+        dateIcon = findViewById(R.id.dateIcon);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        dateLayout = findViewById(R.id.dateLayout);
     }
 
     @Override
@@ -106,12 +134,57 @@ public class BatteryFragment extends MainFragment {
         cellImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        dateLayout.setOnClickListener(this);
     }
 
 
     @Override
     protected void setAccessibility() {
 
+    }
+
+    public void setDateofSiteonAir() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                etYear.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        dateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myCalendar.set(Calendar.MINUTE, minute);
+                timeView.setText(sdfTime.format(myCalendar.getTime()));
+            }
+        };
+        timeView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new TimePickerDialog(getContext(), time, myCalendar
+                        .get(Calendar.HOUR_OF_DAY), myCalendar
+                        .get(Calendar.MINUTE), true).show();
+            }
+        });*/
     }
 
     @Override
@@ -138,6 +211,7 @@ public class BatteryFragment extends MainFragment {
             arrMake[i] = equipMakeList.get(i).getName();
         }
         getSharedprefData();
+        getUserPref();
         setSpinnerValue();
         equipCapacityList = new ArrayList<>();
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
@@ -176,15 +250,16 @@ public class BatteryFragment extends MainFragment {
                 }
             }
         });
-        if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("")
-                || !NoofItems.equals("")
-                || !NoofCell.equals("")
-                || !CellVoltage.equals("")
-                || !NoofWeakCells.equals("")
-                || !BackUpinHrs.equals("")
-                || !TightnessofBentCaps.equals("")
-                || !CellInterconnecting.equals("")
+        if (
+                !isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity) || !isEmptyStr(strSerialNum)
+                        || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)
+                        || !isEmptyStr(NoofItems)
+                        || !isEmptyStr(NoofCell)
+                        || !isEmptyStr(CellVoltage)
+                        || !isEmptyStr(NoofWeakCells)
+                        || !isEmptyStr(BackUpinHrs)
+                        || !isEmptyStr(TightnessofBentCaps)
+                        || !isEmptyStr(CellInterconnecting)
                 ) {
             etMake.setText(strMake);
             etModel.setText(strModel);
@@ -192,7 +267,6 @@ public class BatteryFragment extends MainFragment {
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-
             etNoofItems.setText(NoofItems);
             etNoofCell.setText(NoofCell);
             etCellVoltage.setText(CellVoltage);
@@ -202,11 +276,11 @@ public class BatteryFragment extends MainFragment {
             etCellInterconnecting.setText(CellInterconnecting);
 
 
-            if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
+            /*if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(bateryphoto)).placeholder(R.drawable.noimage).into(batteryimg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(cellPhoto)).placeholder(R.drawable.noimage).into(cellImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }
+            }*/
         }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -275,7 +349,7 @@ public class BatteryFragment extends MainFragment {
      *     Shared Prefrences
      */
     public void getSharedprefData() {
-        batterySharedPref = getContext().getSharedPreferences("BatterySharedPref", MODE_PRIVATE);
+ /*       batterySharedPref = getContext().getSharedPreferences("BatterySharedPref", MODE_PRIVATE);
         strUserId = batterySharedPref.getString("USER_ID", "");
         strMake = batterySharedPref.getString("Make", "");
         strModel = batterySharedPref.getString("Model", "");
@@ -298,14 +372,23 @@ public class BatteryFragment extends MainFragment {
         NoofWeakCells = batterySharedPref.getString("NoofWeakCells", "");
         BackUpinHrs = batterySharedPref.getString("BackUpinHrs", "");
         TightnessofBentCaps = batterySharedPref.getString("TightnessofBentCaps", "");
-        CellInterconnecting = batterySharedPref.getString("CellInterconnecting", "");
+        CellInterconnecting = batterySharedPref.getString("CellInterconnecting", "");*/
 
 
     }
 
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
+    }
+
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.image1) {
+        if (view.getId() == R.id.dateLayout) {
+            setDateofSiteonAir();
+        } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
@@ -319,7 +402,6 @@ public class BatteryFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                String newEquipment = "0";
                 if (equipCapacityList != null && equipCapacityList.size() > 0) {
                     for (int i = 0; i < equipCapacityList.size(); i++) {
                         if (capacity.equals(equipCapacityList.get(i).getName())) {
@@ -347,35 +429,11 @@ public class BatteryFragment extends MainFragment {
                         }
                     }
                 }
-                if (strModelId.equals("") || strModelId.equals("0")) {
+                if (strModelId.equals("") || strModelId.equals("0")) ;
+                {
                     strModelId = "0";
                 }
-                SharedPreferences.Editor editor = batterySharedPref.edit();
-                editor.putString("USER_ID", strUserId);
-                editor.putString("Make", make);
-                editor.putString("Model", model);
-                editor.putString("Capacity", capacity);
-                editor.putString("DescriptionId", strDescriptionId);
-                editor.putString("MakeId", strMakeId);
-                editor.putString("ModelId", strModelId);
-                editor.putString("SerialNum", serialNumber);
-                editor.putString("YearOfManufacturing", yearOfManufacturing);
-                editor.putString("Description", description);
-                editor.putString("batryPhoto1", bateryphoto);
-                editor.putString("batryPhoto2", cellPhoto);
-                editor.putString("batryPhoto3", sNoPlatephoto);
-                editor.putString("BbActivitySavedDateTime", currentDateTime);
-                editor.putString("ItemCondition", itemCondition);
-                editor.putString("NoofItems", NoofItems);
-                editor.putString("NoofCell", NoofCell);
-                editor.putString("CellVoltage", CellVoltage);
-                editor.putString("NoofWeakCells", NoofWeakCells);
-                editor.putString("BackUpinHrs", BackUpinHrs);
-                editor.putString("TightnessofBentCaps", TightnessofBentCaps);
-                editor.putString("CellInterconnecting", CellInterconnecting);
-                strMakeId = batterySharedPref.getString("", "");
-                strModelId = batterySharedPref.getString("", "");
-                editor.commit();
+                saveBasicDataonServer();
                 reloadBackScreen();
 
             }
@@ -425,13 +483,13 @@ public class BatteryFragment extends MainFragment {
             } else if (isEmptyStr(description)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (isEmptyStr(bateryphoto)) {
+            } else if (batteryimgFile == null || !batteryimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
                 return false;
-            } else if (isEmptyStr(cellPhoto)) {
+            } else if (cellImgFile == null || !cellImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
                 return false;
-            } else if (isEmptyStr(sNoPlatephoto)) {
+            } else if (sNoPlateImgImgFile == null || !sNoPlateImgImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
@@ -441,44 +499,31 @@ public class BatteryFragment extends MainFragment {
         return true;
     }
 
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
+    public void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-
-                    if (isImage1) {
-                        bateryphoto = deviceFile.getFilePath().toString();
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(batteryimg);
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(cellImg);
-                        cellPhoto = deviceFile.getFilePath().toString();
-
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(batteryimg);
-                    bateryphoto = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_Front.png";
+
+                    batteryimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(batteryimg);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(cellImg);
-                    cellPhoto = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_Open.png";
+                    cellImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(cellImg);
                 } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_SerialNoPlate.png";
+                    sNoPlateImgImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).into(sNoPlateImg);
+
                 }
             }
         }
     }
 
-    public static void getResult(ArrayList<MediaFile> files) {
+
+    public void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
     }
 
@@ -498,5 +543,74 @@ public class BatteryFragment extends MainFragment {
         }
     }
 
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Equipment");
+                JSONObject EquipmentData = new JSONObject();
+                EquipmentData.put("EquipmentSno", "");
+                EquipmentData.put("EquipmentID", "");
+                EquipmentData.put("Equipment", "");
+                EquipmentData.put("MakeID", make);
+                EquipmentData.put("Capacity_ID", "");
+                EquipmentData.put("Capacity", capacity);
+                EquipmentData.put("SerialNo", serialNumber);
+                EquipmentData.put("MfgDate", yearOfManufacturing);
+                EquipmentData.put("ItemCondition", itemCondition);
+                jsonObject.put("EquipmentData", EquipmentData);
 
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your Battery Data save Successfully");
+                            reloadBackScreen();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast("Battery Data  has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (batteryimgFile.exists()) {
+            multipartBody.addFormDataPart(batteryimgFile.getName(), batteryimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryimgFile));
+        }
+        if (cellImgFile.exists()) {
+            multipartBody.addFormDataPart(cellImgFile.getName(), cellImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, cellImgFile));
+        }
+        if (sNoPlateImgImgFile.exists()) {
+            multipartBody.addFormDataPart(sNoPlateImgImgFile.getName(), sNoPlateImgImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgImgFile));
+        }
+
+        return multipartBody;
+    }
 }
