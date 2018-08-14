@@ -98,7 +98,7 @@ public class PowerPlantFragment extends MainFragment {
     public void updateOnResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
             ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            SmpsFragment.getResult(files);
+         //  SmpsFragment.getResult(files);
 
            MainFragment fnFragment = null;
             if (getParentFragment()  instanceof SmpsFragment) {

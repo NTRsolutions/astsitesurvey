@@ -25,6 +25,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,14 +42,13 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class ClampMeterFragment extends MainFragment {
 
-    static ImageView battVoltageImage, loadCurrentImage, batteryDisChaImage;
-    File battVoltageFile, adCurrentFile, batteryDisChaFile;
-    static String battVoltagephoto, adCurrentPhoto, batteryDisChaphoto;
-    String strBattVoltage, strLoadCurrent;
-    String BattVoltage, LoadCurrent;
-    AppCompatEditText etBattVoltage, etLoadCurrent;
+    static ImageView clampimage1, clampimage2;
+    File clampbattVoltageFile, clampadCurrentFile;
+    String strclampmeBattVoltage, strclampLoadCurrent;
+    String BattVoltageclamp, LoadCurrentclamp;
+    AppCompatEditText etclampBattVoltage, etclampLoadCurrent;
     Button btnSubmit;
-    static boolean isImage1, isImage2;
+    static boolean isImage1clmp, isImage2clmp;
     SharedPreferences userPref;
     String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
 
@@ -60,19 +60,17 @@ public class ClampMeterFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        battVoltageImage = findViewById(R.id.image1);
-        loadCurrentImage = findViewById(R.id.image2);
-        batteryDisChaImage = findViewById(R.id.image3);
-        etBattVoltage = findViewById(R.id.etBattVoltage);
-        etLoadCurrent = findViewById(R.id.etLoadCurrent);
+        clampimage1 = findViewById(R.id.clampimage1);
+        clampimage2 = findViewById(R.id.clampimage2);
+        etclampBattVoltage = findViewById(R.id.etBattVoltage);
+        etclampLoadCurrent = findViewById(R.id.etLoadCurrent);
         btnSubmit = findViewById(R.id.btnSubmit);
     }
 
     @Override
     protected void setClickListeners() {
-        battVoltageImage.setOnClickListener(this);
-        loadCurrentImage.setOnClickListener(this);
-        batteryDisChaImage.setOnClickListener(this);
+        clampimage1.setOnClickListener(this);
+        clampimage2.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
 
     }
@@ -107,14 +105,9 @@ public class ClampMeterFragment extends MainFragment {
     protected void dataToView() {
         getUserPref();
         getSharedPrefData();
-        if (!isEmptyStr(strBattVoltage) || !isEmptyStr(strLoadCurrent)) {
-            etBattVoltage.setText(strBattVoltage);
-            etLoadCurrent.setText(strLoadCurrent);
-         /*   if (!battVoltagephoto.equals("") || !adCurrentPhoto.equals("") || !batteryDisChaphoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(battVoltagephoto)).placeholder(R.drawable.noimage).into(battVoltageImage);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(adCurrentPhoto)).placeholder(R.drawable.noimage).into(loadCurrentImage);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(batteryDisChaphoto)).placeholder(R.drawable.noimage).into(batteryDisChaImage);
-            }*/
+        if (!isEmptyStr(strclampmeBattVoltage) || !isEmptyStr(strclampLoadCurrent)) {
+            etclampBattVoltage.setText(strclampmeBattVoltage);
+            etclampLoadCurrent.setText(strclampLoadCurrent);
         }
     }
 
@@ -122,17 +115,13 @@ public class ClampMeterFragment extends MainFragment {
     public void onClick(View view) {
         if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isImage1 = true;
-            isImage2 = false;
+            isImage1clmp = true;
+            isImage2clmp = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
-            isImage1 = false;
-            isImage2 = true;
-        } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
-            isImage1 = false;
-            isImage2 = false;
-        } else if (view.getId() == R.id.btnSubmit) {
+            isImage1clmp = false;
+            isImage2clmp = true;
+        } else {
             if (isValidate()) {
            /*     SharedPreferences.Editor editor = pref.edit();
                 editor.putString("CLAMP_BattVoltage", BattVoltage);
@@ -149,22 +138,19 @@ public class ClampMeterFragment extends MainFragment {
 
 
     public boolean isValidate() {
-        BattVoltage = etBattVoltage.getText().toString();
-        LoadCurrent = etLoadCurrent.getText().toString();
-        if (isEmptyStr(BattVoltage)) {
+        BattVoltageclamp = etclampBattVoltage.getText().toString();
+        LoadCurrentclamp = etclampLoadCurrent.getText().toString();
+        if (isEmptyStr(BattVoltageclamp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Batt Voltage");
             return false;
-        } else if (isEmptyStr(LoadCurrent)) {
+        } else if (isEmptyStr(LoadCurrentclamp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Load Current");
             return false;
-        } else if (battVoltageFile == null || !battVoltageFile.exists()) {
+        } else if (clampbattVoltageFile == null || !clampbattVoltageFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Batt Voltage Photo");
             return false;
-        } else if (adCurrentFile == null || !adCurrentFile.exists()) {
+        } else if (clampadCurrentFile == null || !clampadCurrentFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Load Current Photo");
-            return false;
-        } else if (batteryDisChaFile == null || !batteryDisChaFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please SelectBattery Discharge Current Photo");
             return false;
         }
         return true;
@@ -190,19 +176,15 @@ public class ClampMeterFragment extends MainFragment {
     public void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_BB_1_BattVoltage.png";
-                    battVoltageFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(battVoltageFile).into(battVoltageImage);
+                if (isImage1clmp) {
+                    String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
+                    clampbattVoltageFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(clampbattVoltageFile).into(clampimage1);
                     //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_BB_1_LoadCurrent.png";
-                    adCurrentFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(adCurrentFile).into(loadCurrentImage);
-                } else {
-                    String imageName = CurtomerSite_Id + "_BB_1_BatteryDisCharge.png";
-                    batteryDisChaFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(batteryDisChaFile).into(batteryDisChaImage);
+                } else if (isImage2clmp) {
+                    String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
+                    clampadCurrentFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(clampadCurrentFile).into(clampimage2);
                 }
             }
             //  }
@@ -225,12 +207,12 @@ public class ClampMeterFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "BB");
                 JSONObject BBData = new JSONObject();
-                BBData.put("BBEquipment_ID", "CM");
-                BBData.put("BattVoltage", BattVoltage);
-                BBData.put("LoadCurrent", LoadCurrent);
-                BBData.put("BattVolt_Photo", "0");
-                BBData.put("LoadCurrent_Photo", "0");
-                jsonObject.put("BBData", BBData);
+                BBData.put("BBEquipment_ID", "Clamp");
+                BBData.put("BattVoltage", BattVoltageclamp);
+                BBData.put("LoadCurrent", LoadCurrentclamp);
+                JSONArray jsonObjectarray = new JSONArray();
+                jsonObjectarray.put(BBData);
+                jsonObject.put("BBData", jsonObjectarray);
 
 
             } catch (JSONException e) {
@@ -267,16 +249,13 @@ public class ClampMeterFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (battVoltageFile.exists()) {
-            multipartBody.addFormDataPart(battVoltageFile.getName(), battVoltageFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, battVoltageFile));
+        if (clampbattVoltageFile.exists()) {
+            multipartBody.addFormDataPart(clampbattVoltageFile.getName(), clampbattVoltageFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, clampbattVoltageFile));
         }
-        if (adCurrentFile.exists()) {
-            multipartBody.addFormDataPart(adCurrentFile.getName(), adCurrentFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, adCurrentFile));
-        }
-        if (batteryDisChaFile.exists()) {
-            multipartBody.addFormDataPart(batteryDisChaFile.getName(), batteryDisChaFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryDisChaFile));
+        if (clampadCurrentFile.exists()) {
+            multipartBody.addFormDataPart(clampadCurrentFile.getName(), clampadCurrentFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, clampadCurrentFile));
         }
 
         return multipartBody;

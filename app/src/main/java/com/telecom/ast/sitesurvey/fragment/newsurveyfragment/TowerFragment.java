@@ -428,24 +428,24 @@ public class TowerFragment extends MainFragment {
 
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.jpg";
                     overviewImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(overviewImgFile).into(overviewImg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.jpg";
                     northmgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(northmgFile).into(northmg);
                 } else if (isImage3) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.jpg";
                     eastImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(eastImgFile).into(eastImg);
                 } else if (isImage4) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.jpg";
                     southImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(southImgFile).into(southImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.png";
+                    String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.jpg";
                     westImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(westImgFile).into(westImg);
                 }
@@ -541,7 +541,7 @@ public class TowerFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (overviewImgFile.exists()) {
             multipartBody.addFormDataPart(overviewImgFile.getName(), overviewImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, overviewImgFile));

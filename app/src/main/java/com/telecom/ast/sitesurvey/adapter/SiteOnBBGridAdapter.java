@@ -39,12 +39,12 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
         if (position == 0) {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_gauge);
-        } else if (position == 1) {
+        } /*else if (position == 1) {
             llGridItem.setImageResource(R.drawable.ic_gauge);
             llGridItem.setImageCircleColor(false);
 
 
-        } else if (position == 2) {
+        }*/ else if (position == 2) {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_gauge);
         } else {

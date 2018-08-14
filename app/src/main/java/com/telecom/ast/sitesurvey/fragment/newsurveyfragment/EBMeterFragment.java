@@ -41,6 +41,7 @@ import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,7 +79,7 @@ public class EBMeterFragment extends MainFragment {
     String strMakeId, strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
     String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover, TheftfromSite,
-            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner,itemCondition;
+            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner, itemCondition;
     TextView etYear, dateIcon;
     LinearLayout dateLayout;
     long datemilisec;
@@ -470,16 +471,16 @@ public class EBMeterFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_EB_1_Front.png";
+                    String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
                     frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_EB_1_Open.png";
+                    String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
                     openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.png";
+                    String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.jpg";
                     sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
                 }
@@ -523,7 +524,7 @@ public class EBMeterFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentData = new JSONObject();
-                EquipmentData.put("EquipmentSno", "0");
+                EquipmentData.put("EquipmentSno", "1");
                 EquipmentData.put("EquipmentID", "0");
                 EquipmentData.put("Equipment", "EB");
                 EquipmentData.put("MakeID", strMakeId);
@@ -543,13 +544,9 @@ public class EBMeterFragment extends MainFragment {
                 EquipmentData.put("EB_MCCBStatus", mccbStatus);
                 EquipmentData.put("EB_WaterShedMeterstatus", "");
                 EquipmentData.put("EB_TheftfromSite", TheftfromSite);
-
-
-
-
-                jsonObject.put("EquipmentData", EquipmentData);
-
-
+                JSONArray EquipmentDataa = new JSONArray();
+                EquipmentDataa.put(EquipmentData);
+                jsonObject.put("EquipmentData", EquipmentDataa);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -584,7 +581,7 @@ public class EBMeterFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));

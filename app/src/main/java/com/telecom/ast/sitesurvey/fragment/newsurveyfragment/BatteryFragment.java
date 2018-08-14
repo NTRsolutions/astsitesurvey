@@ -503,17 +503,17 @@ public class BatteryFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_Front.png";
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_Front.jpg";
 
                     batteryimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(batteryimg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_Open.png";
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_Open.jpg";
                     cellImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(cellImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_SerialNoPlate.png";
+                    String imageName = CurtomerSite_Id + "_BATTERY_2_SerialNoPlate.jpg";
                     sNoPlateImgImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).into(sNoPlateImg);
 
@@ -608,7 +608,7 @@ public class BatteryFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (batteryimgFile.exists()) {
             multipartBody.addFormDataPart(batteryimgFile.getName(), batteryimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryimgFile));

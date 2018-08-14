@@ -46,6 +46,7 @@ import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +69,6 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class DGFragment extends MainFragment {
     static ImageView frontImg, openImg, sNoPlateImg;
     static boolean isImage1, isImage2;
-    static String frontphoto, openPhoto, sNoPlatephoto;
     AppCompatEditText etDescription;
     AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
     SharedPreferences pref;
@@ -415,11 +415,11 @@ public class DGFragment extends MainFragment {
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-            if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
+          /*  if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }
+            }*/
         }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -732,16 +732,16 @@ public class DGFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_DG_1_Front.png";
+                    String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
                     frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_DG_1_Open.png";
+                    String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
                     openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.png";
+                    String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
                     sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
                 }
@@ -762,13 +762,11 @@ public class DGFragment extends MainFragment {
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
             try {
-
-
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentData = new JSONObject();
-                EquipmentData.put("EquipmentSno", "0");
+                EquipmentData.put("EquipmentSno", "1");
                 EquipmentData.put("EquipmentID", "0");
                 EquipmentData.put("Equipment", "DG");
                 EquipmentData.put("MakeID", strMakeId);
@@ -808,9 +806,9 @@ public class DGFragment extends MainFragment {
                 EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
                 EquipmentData.put("DG_ESNo", eSN);
                 EquipmentData.put("ItemCondition", itemCondition);
-                jsonObject.put("EquipmentData", EquipmentData);
-
-
+                JSONArray EquipmentDataa = new JSONArray();
+                EquipmentDataa.put(EquipmentData);
+                jsonObject.put("EquipmentData", EquipmentDataa);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -845,7 +843,7 @@ public class DGFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));

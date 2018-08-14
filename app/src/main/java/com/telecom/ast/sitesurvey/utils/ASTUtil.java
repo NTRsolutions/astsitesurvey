@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -31,6 +32,7 @@ import com.telecom.ast.sitesurvey.FNSortOrdering;
 import com.telecom.ast.sitesurvey.FNSortOrderingUtil;
 
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.exception.FNExceptionUtil;
 import com.telecom.ast.sitesurvey.listener.PermissionRationaleDialogListener;
 
@@ -295,5 +297,10 @@ public class ASTUtil {
     public static <T> void sortArray(List<T> array, String key, boolean isAsc) {
         FNSortOrdering[] sortOrderArray = FNSortOrderingUtil.create(key, isAsc ? "ASC" : "DESC");
         FNSortOrderingUtil.sort(array, sortOrderArray);
+    }
+
+    public static File getExternalStorageFilePath(Context context) {
+        File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Contants.APP_DIRECTORY);
+        return DLPDirectory;
     }
 }

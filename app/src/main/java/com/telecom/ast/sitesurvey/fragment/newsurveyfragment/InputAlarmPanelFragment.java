@@ -40,6 +40,7 @@ import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,7 +71,7 @@ public class InputAlarmPanelFragment extends MainFragment {
 
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
-    String strMakeId="0", strModelId;
+    String strMakeId = "0", strModelId;
     String CurtomerSite_Id;
     AtmDatabase atmDatabase;
     Spinner itemConditionSpinner;
@@ -363,8 +364,6 @@ public class InputAlarmPanelFragment extends MainFragment {
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         description = getTextFromView(this.etDescription);
         currentDateTime = String.valueOf(System.currentTimeMillis());
-
-
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -426,16 +425,16 @@ public class InputAlarmPanelFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_IAP_1_Front.png";
+                    String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
                     frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontimg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_IAP_1_Open.png";
+                    String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
                     openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.png";
+                    String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.jpg";
                     sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
                 }
@@ -459,18 +458,21 @@ public class InputAlarmPanelFragment extends MainFragment {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
-                JSONObject EquipmentData = new JSONObject();
-                EquipmentData.put("EquipmentSno", "0");
-                EquipmentData.put("EquipmentID", "0");
-                EquipmentData.put("Equipment", "IAP");
-                EquipmentData.put("MakeID", strMakeId);
-                EquipmentData.put("Capacity_ID", "0");
-                EquipmentData.put("Capacity", capacity);
-                EquipmentData.put("SerialNo", serialNumber);
-                EquipmentData.put("MfgDate", datemilisec);
-                EquipmentData.put("ItemCondition", itemCondition);
-                EquipmentData.put("IAP_AnchorOperator", AnchorOperator);
-                EquipmentData.put("IAP_SharingOperator", SharingOperator);
+                JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentSno", "1");
+                EquipmentDataa.put("EquipmentID", "0");
+                EquipmentDataa.put("Equipment", "IAP");
+                EquipmentDataa.put("MakeID", strMakeId);
+                EquipmentDataa.put("Make", make);
+                EquipmentDataa.put("Capacity_ID", "0");
+                EquipmentDataa.put("Capacity", capacity);
+                EquipmentDataa.put("SerialNo", serialNumber);
+                EquipmentDataa.put("MfgDate", datemilisec);
+                EquipmentDataa.put("ItemCondition", itemCondition);
+                EquipmentDataa.put("IAP_AnchorOperator", AnchorOperator);
+                EquipmentDataa.put("IAP_SharingOperator", SharingOperator);
+                JSONArray EquipmentData = new JSONArray();
+                EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);
 
 
@@ -508,7 +510,7 @@ public class InputAlarmPanelFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));

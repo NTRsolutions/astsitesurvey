@@ -665,28 +665,28 @@ public class MiscellaneousFragment extends MainFragment {
                 if (ismage1) {
 
 
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
                     shaterimage1File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(shaterimage1File).into(image1);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (ismage2) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
                     shaterimage2File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(shaterimage2File).into(image2);
                 } else if (ismage3) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
                     outDoorimage3File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(outDoorimage3File).into(image3);
                 } else if (ismage4) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
                     GateSizeimage4File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(GateSizeimage4File).into(image4);
                 } else if (ismage5) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
                     Plotimage5File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(Plotimage5File).into(image5);
                 } else {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.png";
+                    String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
                     Approachimage6File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(Approachimage6File).into(image6);
                 }
@@ -930,7 +930,7 @@ public class MiscellaneousFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (shaterimage1File.exists()) {
             multipartBody.addFormDataPart(shaterimage1File.getName(), shaterimage1File.getName(), RequestBody.create(MEDIA_TYPE_PNG, shaterimage1File));
