@@ -62,8 +62,6 @@ public class InputAlarmPanelFragment extends MainFragment {
 
     static ImageView frontimg, openImg, sNoPlateImg;
     static File frontimgFile, openImgFile, sNoPlateImgFile;
-
-    static String bateryphoto, cellPhoto, sNoPlatephoto;
     static boolean isImage1, isImage2;
     AppCompatEditText etDescription;
     AppCompatEditText etAnchorOperator, etSharingOperator;
@@ -79,7 +77,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
-    SharedPreferences InputAlarmPanelpref, userPref;
+    SharedPreferences userPref;
     TextView etYear, dateIcon;
     Typeface materialdesignicons_font;
     LinearLayout dateLayout;
@@ -384,9 +382,6 @@ public class InputAlarmPanelFragment extends MainFragment {
                 return false;
             } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
-                return false;
-            } else if (isEmptyStr(description)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");

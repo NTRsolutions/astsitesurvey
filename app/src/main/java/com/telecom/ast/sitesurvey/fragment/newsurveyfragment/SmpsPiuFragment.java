@@ -88,6 +88,21 @@ public class SmpsPiuFragment extends MainFragment {
     }
 
 
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
 
+            int currentPagepre = mPager.getCurrentItem();
+            if (currentPagepre == 0)
+                SmpsFragment.getResult(files);
+            else if (currentPagepre == 1) {
+                PIUVoltageStablizerFragment.getResult(files);
+
+            }
+
+
+        }
+    }
 
 }
