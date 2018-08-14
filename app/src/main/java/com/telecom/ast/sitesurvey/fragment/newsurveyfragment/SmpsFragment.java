@@ -375,7 +375,7 @@ public class SmpsFragment extends MainFragment {
                         }
                     }
                 }
-                if (!isEmptyStr(strDescriptionId)) {
+                if (isEmptyStr(strDescriptionId)) {
                     strDescriptionId = "0";
                 }
                 if (arrEquipData != null && arrEquipData.size() > 0) {
@@ -385,7 +385,7 @@ public class SmpsFragment extends MainFragment {
                         }
                     }
                 }
-                if (!isEmptyStr(strMakeId)) {
+                if (isEmptyStr(strMakeId)) {
                     strMakeId = "0";
                 }
                 if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
@@ -395,7 +395,7 @@ public class SmpsFragment extends MainFragment {
                         }
                     }
                 }
-                if (!isEmptyStr(strModelId)) {
+                if (isEmptyStr(strModelId)) {
                     strModelId = "0";
                 }
                /* SharedPreferences.Editor editor = pref.edit();
@@ -474,9 +474,6 @@ public class SmpsFragment extends MainFragment {
         } else if (isEmptyStr(yearOfManufacturing)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
             return false;
-        } else if (isEmptyStr(description)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-            return false;
         } else if (frontimgFile == null || !frontimgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
             return false;
@@ -537,7 +534,7 @@ public class SmpsFragment extends MainFragment {
                 JSONObject EquipmentDataa = new JSONObject();
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
                 EquipmentDataa.put("EquipmentID", "0");
-                EquipmentDataa.put("Equipment", "IPMS");
+                EquipmentDataa.put("Equipment", "SMPS");
                 EquipmentDataa.put("MakeID", strMakeId);
                 EquipmentDataa.put("Make", make);
                 EquipmentDataa.put("Capacity_ID", "0");

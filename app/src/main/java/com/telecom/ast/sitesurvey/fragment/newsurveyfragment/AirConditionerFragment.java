@@ -1,60 +1,86 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
+import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.constants.Constant;
+import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FontManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class AirConditionerFragment extends MainFragment {
-    static ImageView frontImg, openImg, sNoPlateImg;
+    static ImageView frontimg, openImg, sNoPlateImg;
+    static File frontimgFile, openImgFile, sNoPlateImgFile;
     static boolean isImage1, isImage2;
-    static String frontphoto, openPhoto, sNoPlatephoto;
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
-    AppCompatEditText etYear, etDescription, etNumberOfAC, etnoAc,
+    AppCompatEditText etDescription, etNumberOfAC,
             etaCType, etacACWorkingCondition, etCompresserStatus, etACAlarms, etSocketandPlug;
     AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     SharedPreferences pref;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strType, strNumberOfAC;
-    String strSavedDateTime, strUserId, strSiteId, sNoAC;
+    String strSavedDateTime, strUserId, strSiteId, sNoAC, CurtomerSite_Id;
     String strMakeId, strModelId, strDescriptionId;
     String[] arrMake;
     String[] arrModel;
@@ -63,10 +89,15 @@ public class AirConditionerFragment extends MainFragment {
     ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
     ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     AtmDatabase atmDatabase;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs, sNAC;
+    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs;
     Spinner itemStatusSpineer;
-
-    String aCType, acACWorkingCondition, CompresserStatus, ACAlarms, SocketandPlug;
+    String aCType, acACWorkingCondition, CompresserStatus, ACAlarms, SocketandPlug, itemCondition;
+    SharedPreferences userPref;
+    TextView etYear, dateIcon;
+    Typeface materialdesignicons_font;
+    LinearLayout dateLayout;
+    long datemilisec;
+    int EquipmentSno = 1;
 
     @Override
     protected int fragmentLayout() {
@@ -75,7 +106,7 @@ public class AirConditionerFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        frontImg = findViewById(R.id.image1);
+        frontimg = findViewById(R.id.image1);
         openImg = findViewById(R.id.image2);
         sNoPlateImg = findViewById(R.id.image3);
         etMake = findViewById(R.id.etMake);
@@ -88,21 +119,26 @@ public class AirConditionerFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
-        etnoAc = findViewById(R.id.noAc);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         etaCType = findViewById(R.id.etaCType);
         etacACWorkingCondition = findViewById(R.id.etacACWorkingCondition);
         etCompresserStatus = findViewById(R.id.etCompresserStatus);
         etACAlarms = findViewById(R.id.etACAlarms);
         etSocketandPlug = findViewById(R.id.etSocketandPlug);
+        dateIcon = findViewById(R.id.dateIcon);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        dateLayout = findViewById(R.id.dateLayout);
     }
 
     @Override
     protected void setClickListeners() {
         openImg.setOnClickListener(this);
-        frontImg.setOnClickListener(this);
+        frontimg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        dateLayout.setOnClickListener(this);
     }
 
     @Override
@@ -115,7 +151,7 @@ public class AirConditionerFragment extends MainFragment {
      */
 
     public void getSharedPrefData() {
-        pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+   /*     pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = pref.getString("USER_ID", "");
         strMake = pref.getString("AC_Make", "");
         strModel = pref.getString("AC_Model", "");
@@ -138,7 +174,58 @@ public class AirConditionerFragment extends MainFragment {
         CompresserStatus = pref.getString("AC_CompresserStatus", "");
         ACAlarms = pref.getString("AC_ACAlarms", "");
         SocketandPlug = pref.getString("AC_SocketandPlug", "");
-        sNoAC = pref.getString("sNoAC", "");
+        sNoAC = pref.getString("sNoAC", "");*/
+    }
+
+    public void setDateofSiteonAir() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                etYear.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        dateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myCalendar.set(Calendar.MINUTE, minute);
+                timeView.setText(sdfTime.format(myCalendar.getTime()));
+            }
+        };
+        timeView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new TimePickerDialog(getContext(), time, myCalendar
+                        .get(Calendar.HOUR_OF_DAY), myCalendar
+                        .get(Calendar.MINUTE), true).show();
+            }
+        });*/
+    }
+
+    private void getUserPref() {
+        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        strUserId = userPref.getString("USER_ID", "");
+        strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
     public void setSpinnerValue() {
@@ -157,6 +244,7 @@ public class AirConditionerFragment extends MainFragment {
         atmDatabase = new AtmDatabase(getContext());
         getSharedPrefData();
         setSpinnerValue();
+        getUserPref();
         arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "AC");
         arrMake = new String[arrEquipData.size()];
         arrModel = new String[arrEquipData.size()];
@@ -170,7 +258,7 @@ public class AirConditionerFragment extends MainFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
-                if (!strMake.equals("") && strMake.length() > 1) {
+                if (!isEmptyStr(strMake)) {
                     equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
                     if (equipCapacityDataList.size() > 0) {
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
@@ -206,13 +294,15 @@ public class AirConditionerFragment extends MainFragment {
         });
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
-        if (!strMake.equals("") || !strModel.equals("") || !strCapacity.equals("") || !strSerialNum.equals("")
-                || !strYearOfManufacturing.equals("") || !strDescription.equals("") || !sNoAC.equals("")
-                || !sNoAC.equals("")
-                || !acACWorkingCondition.equals("")
-                || !CompresserStatus.equals("")
-                || !ACAlarms.equals("")
-                || !SocketandPlug.equals("")
+        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
+                || !isEmptyStr(strSerialNum)
+                || !isEmptyStr(strYearOfManufacturing)
+                || !isEmptyStr(strDescription) || !isEmptyStr(sNoAC)
+                || !isEmptyStr(sNoAC)
+                || !isEmptyStr(acACWorkingCondition)
+                || !isEmptyStr(CompresserStatus)
+                || !isEmptyStr(ACAlarms)
+                || !isEmptyStr(SocketandPlug)
                 ) {
 
             etMake.setText(strMake);
@@ -222,8 +312,6 @@ public class AirConditionerFragment extends MainFragment {
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
             etNumberOfAC.setText(strNumberOfAC);
-            etnoAc.setText(sNoAC);
-
             etaCType.setText(aCType);
             etacACWorkingCondition.setText(acACWorkingCondition);
             etCompresserStatus.setText(CompresserStatus);
@@ -234,11 +322,11 @@ public class AirConditionerFragment extends MainFragment {
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-            if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
+           /* if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
+                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontimg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }
+            }*/
         }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -254,7 +342,7 @@ public class AirConditionerFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 if (selectedItem.equalsIgnoreCase("Not Available")) {
-                    frontImg.setEnabled(false);
+                    frontimg.setEnabled(false);
                     openImg.setEnabled(false);
                     sNoPlateImg.setEnabled(false);
                     etMake.setEnabled(false);
@@ -266,7 +354,6 @@ public class AirConditionerFragment extends MainFragment {
                     etNumberOfAC.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-                    etnoAc.setEnabled(false);
                     etaCType.setEnabled(false);
                     etacACWorkingCondition.setEnabled(false);
                     etCompresserStatus.setEnabled(false);
@@ -274,7 +361,7 @@ public class AirConditionerFragment extends MainFragment {
                     etSocketandPlug.setEnabled(false);
 
                 } else {
-                    frontImg.setEnabled(true);
+                    frontimg.setEnabled(true);
                     openImg.setEnabled(true);
                     sNoPlateImg.setEnabled(true);
                     etMake.setEnabled(true);
@@ -286,7 +373,6 @@ public class AirConditionerFragment extends MainFragment {
                     etNumberOfAC.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
-                    etnoAc.setEnabled(true);
                     etaCType.setEnabled(true);
                     etacACWorkingCondition.setEnabled(true);
                     etCompresserStatus.setEnabled(true);
@@ -303,7 +389,9 @@ public class AirConditionerFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.image1) {
+        if (view.getId() == R.id.dateLayout) {
+            setDateofSiteonAir();
+        } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
@@ -326,7 +414,7 @@ public class AirConditionerFragment extends MainFragment {
                     }
                 }
 
-                if (strDescriptionId.equals("") || strDescriptionId.equals("0")) {
+                if (isEmptyStr(strDescriptionId)) {
                     strDescriptionId = "0";
                 }
 
@@ -337,7 +425,7 @@ public class AirConditionerFragment extends MainFragment {
                         }
                     }
                 }
-                if (strMakeId.equals("") || strMakeId.equals("0")) {
+                if (isEmptyStr(strMakeId)) {
                     strMakeId = "0";
                 }
 
@@ -348,10 +436,10 @@ public class AirConditionerFragment extends MainFragment {
                         }
                     }
                 }
-                if (strModelId.equals("") || strModelId.equals("0")) {
+                if (isEmptyStr(strModelId)) {
                     strModelId = "0";
                 }
-                SharedPreferences.Editor editor = pref.edit();
+                /*SharedPreferences.Editor editor = pref.edit();
                 editor.putString("AC_UserId", strUserId);
                 editor.putString("AC_Make", make);
                 editor.putString("AC_Model", model);
@@ -375,7 +463,9 @@ public class AirConditionerFragment extends MainFragment {
                 editor.putString("AC_ACAlarms", ACAlarms);
                 editor.putString("AC_SocketandPlug", SocketandPlug);
 
-                editor.commit();
+                editor.commit();*/
+
+                saveBasicDataonServer();
             }
         }
 
@@ -396,9 +486,7 @@ public class AirConditionerFragment extends MainFragment {
         CompresserStatus = etCompresserStatus.getText().toString();
         ACAlarms = etACAlarms.getText().toString();
         SocketandPlug = etSocketandPlug.getText().toString();
-
-
-        sNAC = etnoAc.getText().toString();
+        itemCondition = itemConditionSpinner.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -421,18 +509,14 @@ public class AirConditionerFragment extends MainFragment {
             } else if (isEmptyStr(numOfACs)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter AC Quantity");
                 return false;
-            } else if (isEmptyStr(frontphoto)) {
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
-            } else if (isEmptyStr(openPhoto)) {
+            } else if (openImgFile == null || !openImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
-
-            } else if (isEmptyStr(sNoPlatephoto)) {
+            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-                return false;
-            } else if (isEmptyStr(sNAC)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Ac");
                 return false;
             }
         } else {
@@ -441,46 +525,146 @@ public class AirConditionerFragment extends MainFragment {
         return true;
     }
 
-    public static void getPickedFiles(ArrayList<MediaFile> files) {
+    public void getPickedFiles(ArrayList<MediaFile> files) {
         for (MediaFile deviceFile : files) {
-            if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-                File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-
-                    if (isImage1) {
-                        frontphoto = deviceFile.getFilePath().toString();
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(frontImg);
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(openImg);
-                        openPhoto = deviceFile.getFilePath().toString();
-
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(sNoPlateImg);
-                        sNoPlatephoto = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
+            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    frontphoto = deviceFile.getFilePath().toString();
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(frontImg);
+                    String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Front.jpg";
+                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontimg);
+                    //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(openImg);
-                    openPhoto = deviceFile.getFilePath().toString();
+                    String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Open.jpg";
+                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
                 } else {
-                    Picasso.with(ApplicationHelper.application().getContext()).load(deviceFile.getFilePath()).into(sNoPlateImg);
-                    sNoPlatephoto = deviceFile.getFilePath().toString();
-                }
-                if (deviceFile.isfromCamera() || deviceFile.isCropped()) {
-                    // deviceFile.getFilePath().delete();
+                    String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_SerialNoPlate.jpg";
+                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
                 }
             }
+            //  }
         }
     }
 
 
-    public static void getResult(ArrayList<MediaFile> files) {
+    public void getResult(ArrayList<MediaFile> files) {
         getPickedFiles(files);
+    }
+
+    public void saveBasicDataonServer() {
+        if (ASTUIUtil.isOnline(getContext())) {
+            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+            progressBar.show();
+            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Site_ID", strSiteId);
+                jsonObject.put("User_ID", strUserId);
+                jsonObject.put("Activity", "Equipment");
+                JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentSno", EquipmentSno);
+                EquipmentDataa.put("EquipmentID", "0");
+                EquipmentDataa.put("Equipment", "AC");
+                EquipmentDataa.put("MakeID", strMakeId);
+                EquipmentDataa.put("Make", make);
+                EquipmentDataa.put("Capacity_ID", "0");
+                EquipmentDataa.put("Capacity", capacity);
+                EquipmentDataa.put("SerialNo", serialNumber);
+                EquipmentDataa.put("MfgDate", datemilisec);
+                EquipmentDataa.put("ItemCondition", itemCondition);
+                EquipmentDataa.put("AC_Type", aCType);
+                EquipmentDataa.put("AIR_CON_Number", numOfACs);
+                EquipmentDataa.put("AC_WorkingCondition", acACWorkingCondition);
+                EquipmentDataa.put("AC_CompresserandBlowerWorking", CompresserStatus);
+                EquipmentDataa.put("AC_Alarms", ACAlarms);
+                EquipmentDataa.put("AC_SocketandPlug", SocketandPlug);
+
+                JSONArray EquipmentData = new JSONArray();
+                EquipmentData.put(EquipmentDataa);
+                jsonObject.put("EquipmentData", EquipmentData);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", jsonObject.toString());
+            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                @Override
+                public void receiveData(String result) {
+                    ContentData data = new Gson().fromJson(result, ContentData.class);
+                    if (data != null) {
+                        if (data.getStatus() == 1) {
+                            ASTUIUtil.showToast("Your SMPS Data save Successfully");
+                            showAddMoreItemDialog();
+                        } else {
+                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                        }
+                    } else {
+                        ASTUIUtil.showToast("Your SMPS Data has not been updated!");
+                    }
+                    if (progressBar.isShowing()) {
+                        progressBar.dismiss();
+                    }
+                }
+            };
+            fileUploaderHelper.execute();
+        } else {
+            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+        }
+
+    }
+
+    //add pm install images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (frontimgFile.exists()) {
+            multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
+        }
+        if (openImgFile.exists()) {
+            multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
+        }
+        if (sNoPlateImgFile.exists()) {
+            multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
+        }
+
+        return multipartBody;
+    }
+
+    public void showAddMoreItemDialog() {
+        android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        dialog.setMessage("Do you want do add more AC Item Details");
+        dialog.setTitle("Add Ac Item");
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More Item", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                clearFiledData();
+                EquipmentSno = EquipmentSno + 1;
+            }
+        });
+        dialog.setButton(Dialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                reloadBackScreen();
+            }
+        });
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+    }
+
+    public void clearFiledData() {
+
+        itemStatusSpineer.setSelection(0);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
     }
 
     /**
