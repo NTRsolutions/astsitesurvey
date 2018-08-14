@@ -14,16 +14,11 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 
 import java.util.List;
 
-/**
- * Created by AST on 23-01-2017.
- */
-
-public class SiteOnBBGridAdapter extends BaseAdapter {
+public class PowerPanelGridAdapter extends BaseAdapter {
     private Context context;
-    // Populate a List from Array elements
     final List<String> gridviewItem;
 
-    public SiteOnBBGridAdapter(Context context, List<String> gridviewItem) {
+    public PowerPanelGridAdapter(Context context, List<String> gridviewItem) {
         this.context = context;
         this.gridviewItem = gridviewItem;
     }
@@ -39,15 +34,10 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
         if (position == 0) {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_gauge);
-        } /*else if (position == 1) {
+        } else if (position == 1) {
             llGridItem.setImageResource(R.drawable.ic_gauge);
             llGridItem.setImageCircleColor(false);
-
-
-        }*/ else if (position == 2) {
-            llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
-        } else {
+        } else if (position == 2) {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_gauge);
         }
@@ -71,12 +61,4 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
     }
 
 
-    //open BasicDataFragment
-    private void openBasicDataFragment(MainFragment fragment, String headertext) {
-        Bundle bundle = new Bundle();
-        bundle.putString("headerTxt", headertext);
-        bundle.putBoolean("showMenuButton", false);
-        ApplicationHelper.application().getActivity().updateFragment(fragment, bundle);
-
-    }
 }

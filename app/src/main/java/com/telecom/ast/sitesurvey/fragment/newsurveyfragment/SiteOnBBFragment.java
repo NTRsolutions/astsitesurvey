@@ -23,7 +23,7 @@ public class SiteOnBBFragment extends MainFragment {
     int count = 1;
     // Initializing a new String Array
     static final String[] gridviewItem = new String[]{
-            "SMPS", "Clamp Meter", "Operator 1 Name"};
+            "SMPS & Clamp Meter",  "Operator 1 Name"};
 
     @Override
     protected int fragmentLayout() {
@@ -61,11 +61,11 @@ public class SiteOnBBFragment extends MainFragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (position == 0) {
                     ReadingSmpsFragment readingSmpsFragment = new ReadingSmpsFragment();
-                    openBasicDataFragment(readingSmpsFragment, "Reading on SMPS Screen");
-                } else if (position == 1) {
+                    openBasicDataFragment(readingSmpsFragment, "SMPS and Clamp Meter Screen");
+                } /*else if (position == 1) {
                     ClampMeterFragment clampMeterFragment = new ClampMeterFragment();
                     openBasicDataFragment(clampMeterFragment, "Clamp Meter");
-                } else {
+                }*/ else {
                     OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
                     openBasicDataFragment(operatorNameFragment, "Operator Details");
                 }

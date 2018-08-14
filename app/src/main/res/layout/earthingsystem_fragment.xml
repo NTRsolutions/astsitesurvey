@@ -75,6 +75,7 @@
                             android:id="@+id/etEarthpitsconnected"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="number"
                             android:autoSizeTextType="uniform"
                             android:hint="No of Earthpits connected  EGB/IGB"
                             android:textSize="@dimen/_14dp" />
@@ -103,6 +104,7 @@
                             android:id="@+id/etinterConEarthPits"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="number"
                             android:autoSizeTextType="uniform"
                             android:hint="Inter Connectivity of EarthPits"
                             android:textSize="@dimen/_14dp" />
@@ -130,6 +132,7 @@
                             android:id="@+id/etVoltageEarth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:autoSizeTextType="uniform"
                             android:hint="Voltage between Earth and Neutral"
                             android:textSize="@dimen/_14dp" />

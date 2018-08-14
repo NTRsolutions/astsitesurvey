@@ -150,6 +150,7 @@
                             android:id="@+id/etEarthingvalue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:autoSizeTextType="uniform"
                             android:hint="Enter Earthing-Resistance Value."
                             android:textSize="@dimen/_14dp" />

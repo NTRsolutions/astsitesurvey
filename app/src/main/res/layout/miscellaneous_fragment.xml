@@ -71,6 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
+                                android:inputType="numberDecimal"
                                 android:hint="Enter Shelter 1 size"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -175,6 +176,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Enter Shelter 2 size"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -252,6 +254,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:padding="@dimen/_5dp"
+                        android:inputType="numberDecimal"
                         android:text="Outdoor BTS Area"
                         android:textAlignment="center"
                         android:textColor="@color/black"
@@ -278,6 +281,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Outdoor BTS Area"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -383,6 +387,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Gate Size "
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -488,6 +493,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
+                                android:inputType="numberDecimal"
                                 android:hint="Enter Plot Size"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -593,6 +599,7 @@
                                 android:id="@+id/etApproachRoad"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Approach Road  width"
                                 android:textSize="@dimen/_14dp" />
@@ -699,6 +706,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
+                                android:inputType="numberDecimal"
                                 android:hint="Enter Boundary Wall Height"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>

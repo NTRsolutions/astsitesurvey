@@ -167,7 +167,6 @@ public class FireSystemFragment extends MainFragment {
                 editor.putString("FIRE_capacity", capacity);
                 editor.commit();*/
 
-                reloadBackScreen();
 
             }
 
@@ -245,7 +244,7 @@ public class FireSystemFragment extends MainFragment {
 
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
       /*  if (equpImagList != null && equpImagList.size() > 0) {
             for (SaveOffLineData data : equpImagList) {

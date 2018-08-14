@@ -154,6 +154,7 @@ public class BatteryFragment extends MainFragment {
 
     }
 
+
     @Override
     protected void setClickListeners() {
         batteryimg.setOnClickListener(this);

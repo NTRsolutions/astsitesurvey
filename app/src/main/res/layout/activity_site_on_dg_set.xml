@@ -41,6 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
+                        android:inputType="numberDecimal"
                         android:hint="DG Current"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -66,6 +67,7 @@
                         android:id="@+id/etDGVoltage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
                         android:hint="DG Voltage"
                         android:textSize="@dimen/_14dp" />
@@ -92,6 +94,7 @@
                         android:id="@+id/etDGFrequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
                         android:hint="DG Frequency"
                         android:textSize="@dimen/_14dp" />
@@ -119,6 +122,7 @@
                         android:id="@+id/etBatteryVoltage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
                         android:hint="Batt Charging Voltage"
                         android:textSize="@dimen/_14dp" />
@@ -148,6 +152,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
+                        android:inputType="numberDecimal"
                         android:hint="Batt Charge Current"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

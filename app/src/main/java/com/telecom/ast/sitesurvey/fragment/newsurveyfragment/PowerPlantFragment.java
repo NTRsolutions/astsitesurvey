@@ -1,27 +1,88 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
+import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
-import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
-import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
+import com.telecom.ast.sitesurvey.adapter.PowerPanelGridAdapter;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
-import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PowerPlantFragment extends MainFragment {
-    ViewPager viewPager;
-    TabLayout tabLayout;
+    PowerPanelGridAdapter powerPanelGridAdapter;
+    GridView homeScreenGrid;
+    List<String> gridviewItemList;
+    int count = 1;
+    // Initializing a new String Array
+    static final String[] gridviewItem = new String[]{
+            "SMPS", "IPMS", "IPMS"};
+
 
     @Override
+    protected int fragmentLayout() {
+        return R.layout.sitebbgrid_home;
+    }
+
+    @Override
+    protected void loadView() {
+        this.homeScreenGrid = findViewById(R.id.homeScreenGrid);
+    }
+
+    @Override
+    protected void setClickListeners() {
+
+    }
+
+    @Override
+    protected void setAccessibility() {
+
+    }
+
+    @Override
+    protected void dataToView() {
+        gridviewItemList = new ArrayList<String>(Arrays.asList(gridviewItem));
+        this.powerPanelGridAdapter = new PowerPanelGridAdapter(getContext(), gridviewItemList);
+        setAdaptor();
+
+    }
+
+
+    private void setAdaptor() {
+        this.homeScreenGrid.setAdapter(powerPanelGridAdapter);
+        homeScreenGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                if (position == 0) {
+                    SmpsPiuFragment smpsPiuFragment = new SmpsPiuFragment();
+                    openBasicDataFragment(smpsPiuFragment, "SMPS");
+                } else if (position == 1) {
+                    IpmsFragment ipmsFragment = new IpmsFragment();
+                    openBasicDataFragment(ipmsFragment, "IPMS");
+                } else {
+                    OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
+                    openBasicDataFragment(operatorNameFragment, "PIU");
+                }
+            }
+        });
+
+
+    }
+
+
+    //open BasicDataFragment
+    private void openBasicDataFragment(MainFragment fragment, String headertext) {
+        Bundle bundle = new Bundle();
+        bundle.putString("headerTxt", headertext);
+        bundle.putBoolean("showMenuButton", false);
+        ApplicationHelper.application().getActivity().updateFragment(fragment, bundle);
+
+    }
+   /* @Override
     protected int fragmentLayout() {
         return R.layout.sitesurvey_tav_fragment;
     }
@@ -55,9 +116,9 @@ public class PowerPlantFragment extends MainFragment {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    /**
+    *//**
      * Adapter for the viewpager using FragmentPagerAdapter
-     */
+     *//*
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<MainFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -87,18 +148,18 @@ public class PowerPlantFragment extends MainFragment {
         }
     }
 
-    /**
+    *//**
      * THIS USE an ActivityResult
      *
      * @param requestCode
      * @param resultCode
      * @param data
-     */
+     *//*
     @Override
     public void updateOnResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
             ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            SmpsFragment.getResult(files);
+         //  SmpsFragment.getResult(files);
 
            MainFragment fnFragment = null;
             if (getParentFragment()  instanceof SmpsFragment) {
@@ -112,5 +173,5 @@ public class PowerPlantFragment extends MainFragment {
             }
 
         }
-    }
+    }*/
 }

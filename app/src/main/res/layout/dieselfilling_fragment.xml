@@ -49,6 +49,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            android:inputType="numberDecimal"
                             android:hint="LPD"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
