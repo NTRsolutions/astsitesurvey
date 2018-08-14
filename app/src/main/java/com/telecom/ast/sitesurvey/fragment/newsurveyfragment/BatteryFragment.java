@@ -4,14 +4,20 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,11 +48,14 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.model.EqupmientData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
+import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,19 +74,21 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
+
     static ImageView batteryimg, cellImg, sNoPlateImg;
-    private File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
+    private static File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
     static boolean isImage1, isImage2;
     AppCompatAutoCompleteTextView etMake;
     AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
     AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition, CurtomerSite_Id;
+    static String strSavedDateTime, strUserId, strSiteId, itemCondition, CurtomerSite_Id;
     String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
             TightnessofBentCaps, CellInterconnecting;
-    String strMakeId, strModelId;
+    String strMakeId, strEqupId;
     ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
     AtmDatabase atmDatabase;
     String[] arrMake;
     String[] arrModel;
@@ -85,15 +96,19 @@ public class BatteryFragment extends MainFragment {
     String[] arrCapacity;
     Spinner itemConditionSpinner;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
-    Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
     SharedPreferences batterySharedPref, userPref;
-    TextView etYear, dateIcon;
+    TextView etYear, dateIcon, next, done, previous;
     Typeface materialdesignicons_font;
     LinearLayout dateLayout;
+    LinearLayout nextLayout;
     long datemilisec;
-    String capcityId="0";
+    String capcityId = "0";
+    private boolean isLast = false;
+    private int screenPosition = 1;
+    private Button btnSubmmit;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_battery;
@@ -101,7 +116,6 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        btnSubmit = findViewById(R.id.btnSubmit);
         batteryimg = findViewById(R.id.image1);
         cellImg = findViewById(R.id.image2);
         sNoPlateImg = findViewById(R.id.image3);
@@ -126,6 +140,18 @@ public class BatteryFragment extends MainFragment {
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
+        previous = findViewById(R.id.previous);
+        previous.setTypeface(materialdesignicons_font);
+        previous.setText(Html.fromHtml("&#xf141;"));
+        nextLayout = findViewById(R.id.nextLayout);
+
+        TextView nextIcon = findViewById(R.id.nextIcon);
+        nextIcon.setTypeface(materialdesignicons_font);
+        nextIcon.setText(Html.fromHtml("&#xf142;"));
+        next = findViewById(R.id.next);
+        done = findViewById(R.id.done);
+        btnSubmmit = findViewById(R.id.btnSubmmit);
+
     }
 
     @Override
@@ -133,8 +159,11 @@ public class BatteryFragment extends MainFragment {
         batteryimg.setOnClickListener(this);
         cellImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
-        btnSubmit.setOnClickListener(this);
         dateLayout.setOnClickListener(this);
+        done.setOnClickListener(this);
+        previous.setOnClickListener(this);
+        nextLayout.setOnClickListener(this);
+        btnSubmmit.setOnClickListener(this);
     }
 
 
@@ -190,6 +219,8 @@ public class BatteryFragment extends MainFragment {
     @Override
     public void onResume() {
         super.onResume();
+        // ASTUIUtil.showToast("Position"+screenPosition);
+        Log.d(Contants.LOG_TAG, "onResume" + screenPosition);
     }
 
     public void setSpinnerValue() {
@@ -202,9 +233,24 @@ public class BatteryFragment extends MainFragment {
         itemStatusSpineer.setAdapter(itemStatus);
     }
 
+    private void setLastPageDoneButton() {
+       /* if (isLast) {
+            done.setVisibility(View.VISIBLE);
+            nextLayout.setVisibility(View.GONE);
+        } else {
+            nextLayout.setVisibility(View.VISIBLE);
+            done.setVisibility(View.GONE);
+        }*/
+        nextLayout.setVisibility(View.VISIBLE);
+        done.setVisibility(View.GONE);
+    }
+
     @Override
     protected void dataToView() {
+        setLastPageDoneButton();
+
         atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("BB");
         equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "BB");
         arrMake = new String[equipMakeList.size()];
         for (int i = 0; i < equipMakeList.size(); i++) {
@@ -220,12 +266,14 @@ public class BatteryFragment extends MainFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
+
                 if (!strMake.equals("") && strMake.length() > 1) {
                     ArrayList<EquipCapacityDataModel> equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
                     if (equipCapacityDataList.size() > 0) {
+                        arrModel = new String[equipCapacityDataList.size()];
                         for (int i = 0; i < equipCapacityDataList.size(); i++) {
                             arrModel[i] = equipCapacityDataList.get(i).getName();
-                             capcityId=equipCapacityDataList.get(i).getId();
+                            capcityId = equipCapacityDataList.get(i).getId();
                         }
                         ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrModel);
                         etModel.setAdapter(adapterModelName);
@@ -240,8 +288,8 @@ public class BatteryFragment extends MainFragment {
                 String strModel = etModel.getText().toString();
                 if (!strModel.equals("") && strModel.length() > 1) {
                     ArrayList<EquipDescriptionDataModel> equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    arrCapacity = new String[equipDescriptionDataList.size()];
                     if (equipDescriptionDataList.size() > 0) {
+                        arrCapacity = new String[equipDescriptionDataList.size()];
                         for (int i = 0; i < equipDescriptionDataList.size(); i++) {
                             arrCapacity[i] = equipDescriptionDataList.get(i).getName();
                         }
@@ -251,16 +299,15 @@ public class BatteryFragment extends MainFragment {
                 }
             }
         });
-        if (
-                !isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity) || !isEmptyStr(strSerialNum)
-                        || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)
-                        || !isEmptyStr(NoofItems)
-                        || !isEmptyStr(NoofCell)
-                        || !isEmptyStr(CellVoltage)
-                        || !isEmptyStr(NoofWeakCells)
-                        || !isEmptyStr(BackUpinHrs)
-                        || !isEmptyStr(TightnessofBentCaps)
-                        || !isEmptyStr(CellInterconnecting)
+        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity) || !isEmptyStr(strSerialNum)
+                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)
+                || !isEmptyStr(NoofItems)
+                || !isEmptyStr(NoofCell)
+                || !isEmptyStr(CellVoltage)
+                || !isEmptyStr(NoofWeakCells)
+                || !isEmptyStr(BackUpinHrs)
+                || !isEmptyStr(TightnessofBentCaps)
+                || !isEmptyStr(CellInterconnecting)
                 ) {
             etMake.setText(strMake);
             etModel.setText(strModel);
@@ -387,7 +434,17 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.dateLayout) {
+        if (view.getId() == R.id.nextLayout) {
+          /*  if (isValidate()) {
+                saveScreenData(true, false);
+            }*/
+        } else if (view.getId() == R.id.previous) {
+            //saveScreenData(false, false);
+        } else if (view.getId() == R.id.done) {
+            if (isValidate()) {
+                // saveScreenData(true, true);
+            }
+        } else if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
@@ -401,7 +458,12 @@ public class BatteryFragment extends MainFragment {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = false;
-        } else if (view.getId() == R.id.btnSubmit) {
+        } else if (view.getId() == R.id.btnSubmmit) {
+            if (isValidate()) {
+                saveBatteryDataonServer();
+            }
+        }
+        /*else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 if (equipCapacityList != null && equipCapacityList.size() > 0) {
                     for (int i = 0; i < equipCapacityList.size(); i++) {
@@ -418,7 +480,7 @@ public class BatteryFragment extends MainFragment {
                         }
                     }
                 }
-                if ( isEmptyStr(strMakeId) || strMakeId.equals("0")) {
+                if (isEmptyStr(strMakeId) || strMakeId.equals("0")) {
                     strMakeId = "0";
                 }
                 if (equipCapacityList != null && equipCapacityList.size() > 0) {
@@ -432,12 +494,10 @@ public class BatteryFragment extends MainFragment {
                 {
                     strModelId = "0";
                 }
-                saveBasicDataonServer();
-
 
             }
 
-        }
+        }*/
     }
 
 
@@ -479,10 +539,10 @@ public class BatteryFragment extends MainFragment {
             } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
-            } else if (isEmptyStr(description)) {
+            } /*else if (isEmptyStr(description)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (batteryimgFile == null || !batteryimgFile.exists()) {
+            } */ else if (batteryimgFile == null || !batteryimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
                 return false;
             } else if (cellImgFile == null || !cellImgFile.exists()) {
@@ -502,20 +562,18 @@ public class BatteryFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_Front.png";
-
+                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_Front.jpg";
                     batteryimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(batteryimg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_Open.png";
+                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_Open.jpg";
                     cellImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(cellImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_BATTERY_2_SerialNoPlate.png";
+                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_SerialNoPlate.jpg";
                     sNoPlateImgImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).into(sNoPlateImg);
-
                 }
             }
         }
@@ -526,59 +584,82 @@ public class BatteryFragment extends MainFragment {
         getPickedFiles(files);
     }
 
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
 
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
         }
     }
 
-    public void saveBasicDataonServer() {
+    //save screen data into battery home screen through Broadcast
+    private JSONObject makeJsonData() {
+        JSONObject mainObj = new JSONObject();
+        try {
+            getMakeAndEqupmentId();
+            mainObj.put("Site_ID", strSiteId);
+            mainObj.put("User_ID", strUserId);
+            mainObj.put("Activity", "Equipment");
+
+            JSONObject EquipmentData = new JSONObject();
+            EquipmentData.put("EquipmentSno", screenPosition);
+            EquipmentData.put("EquipmentID", strEqupId);
+            EquipmentData.put("Equipment", "Battery");
+            EquipmentData.put("MakeID", strMakeId);
+            EquipmentData.put("Capacity_ID", capcityId);
+            EquipmentData.put("Capacity", capacity);
+            EquipmentData.put("SerialNo", serialNumber);
+            EquipmentData.put("MfgDate", datemilisec);
+            EquipmentData.put("ItemCondition", itemCondition);
+            EquipmentData.put("BB_NoofBB", NoofItems);
+            EquipmentData.put("BB_NoofCell", NoofCell);
+            EquipmentData.put("BB_CellVoltage", CellVoltage);
+            EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
+            EquipmentData.put("BB_BackUp", BackUpinHrs);
+            EquipmentData.put("BB_TightnessofBentCaps", TightnessofBentCaps);
+            EquipmentData.put("BB_CellInterconnectingstriptightness", CellInterconnecting);
+
+            JSONArray equipArray = new JSONArray();
+            equipArray.put(EquipmentData);
+            mainObj.put("EquipmentData", equipArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mainObj;
+    }
+
+    //add images into MultipartBody for send as multipart
+    private MultipartBody.Builder setMultipartBodyVaule() {
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if (batteryimgFile.exists()) {
+            multipartBody.addFormDataPart(batteryimgFile.getName(), batteryimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryimgFile));
+        }
+        if (cellImgFile.exists()) {
+            multipartBody.addFormDataPart(cellImgFile.getName(), cellImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, cellImgFile));
+        }
+        if (sNoPlateImgImgFile.exists()) {
+            multipartBody.addFormDataPart(sNoPlateImgImgFile.getName(), sNoPlateImgImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgImgFile));
+        }
+        return multipartBody;
+    }
+
+    //save battery data into server
+    public void saveBatteryDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
             final ASTProgressBar progressBar = new ASTProgressBar(getContext());
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("Site_ID", strSiteId);
-                jsonObject.put("User_ID", strUserId);
-                jsonObject.put("Activity", "Equipment");
-                JSONObject EquipmentData = new JSONObject();
-                EquipmentData.put("EquipmentSno", "");
-                EquipmentData.put("EquipmentID", "");
-                EquipmentData.put("Equipment", "Battery");
-                EquipmentData.put("MakeID", strMakeId);
-                EquipmentData.put("Capacity_ID", "");
-                EquipmentData.put("Capacity", capacity);
-                EquipmentData.put("SerialNo", serialNumber);
-                EquipmentData.put("MfgDate", yearOfManufacturing);
-                EquipmentData.put("ItemCondition", itemCondition);
-                EquipmentData.put("BB_NoofBB", NoofItems);
-                EquipmentData.put("BB_NoofCell", NoofCell);
-                EquipmentData.put("BB_CellVoltage", CellVoltage);
-                EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
-                EquipmentData.put("BB_BackUp", BackUpinHrs);
-                EquipmentData.put("BB_TightnessofBentCaps", TightnessofBentCaps);
-                EquipmentData.put("BB_CellInterconnectingstriptightness", CellInterconnecting);
-
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            HashMap<String, String> payloadList = new HashMap<String, String>();
-            payloadList.put("JsonData", jsonObject.toString());
+            JSONObject mainObj = makeJsonData();
             MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+            HashMap<String, String> payloadList = new HashMap<String, String>();
+            payloadList.put("JsonData", mainObj.toString());
             FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
                 @Override
                 public void receiveData(String result) {
@@ -586,7 +667,7 @@ public class BatteryFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your Battery Data save Successfully");
-                            reloadBackScreen();
+                            alertNative();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -602,23 +683,38 @@ public class BatteryFragment extends MainFragment {
         } else {
             ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
         }
-
     }
 
-    //add pm install images into MultipartBody for send as multipart
-    private MultipartBody.Builder setMultipartBodyVaule() {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-        MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (batteryimgFile.exists()) {
-            multipartBody.addFormDataPart(batteryimgFile.getName(), batteryimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryimgFile));
-        }
-        if (cellImgFile.exists()) {
-            multipartBody.addFormDataPart(cellImgFile.getName(), cellImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, cellImgFile));
-        }
-        if (sNoPlateImgImgFile.exists()) {
-            multipartBody.addFormDataPart(sNoPlateImgImgFile.getName(), sNoPlateImgImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgImgFile));
-        }
-
-        return multipartBody;
+    public void alertNative() {
+        android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        dialog.setMessage("do you want do add more Battery detail");
+        dialog.setTitle("Battery Alert");
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                screenPosition=screenPosition+1;
+            }
+        });
+        dialog.setButton(Dialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                reloadBackScreen();
+            }
+        });
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
     }
+
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
+            getResult(files);
+        }
+    }
+
 }

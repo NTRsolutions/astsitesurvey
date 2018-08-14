@@ -15,6 +15,7 @@ import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.model.EquipTypeDataModel;
 import com.telecom.ast.sitesurvey.model.EquipmentMasterDataModel;
+import com.telecom.ast.sitesurvey.model.EqupmientData;
 import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SelectedEquipmentDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
@@ -247,7 +248,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
                 + EQUIPMENT_PHOTO_2 + " TEXT," + EQUIPMENT_PHOTO_1_NAME + " TEXT," + EQUIPMENT_PHOTO_2_NAME + " TEXT,"
                 + EQUIPMENT_TYPE + " TEXT," + EQUIPMENT_NUMBER_OF_AIR_CONDITIONER + " TEXT, " + EQUIPMENT_SITE_ID + " TEXT, "
                 + EQUIPMENT_FORM_MAKE_ID + " TEXT," + EQUIPMENT_FORM_MODEL_ID + " TEXT, " + EQUIPMENT_FORM_CAPACITY_ID + " TEXT, "
-                + EQUIPMENT_FORM_TYPE + " TEXT, "+ USERID + " TEXT)";
+                + EQUIPMENT_FORM_TYPE + " TEXT, " + USERID + " TEXT)";
         db.execSQL(CREATE_EQUIPMENT_SELECTED_TABLE);
 
         String CREATE_EB_METER_TABLE = "CREATE TABLE " + TABLE_EB_METER + "("
@@ -293,7 +294,8 @@ public class AtmDatabase extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY autoincrement," + EQUIPMENT_DESCRIPTION_ID + " TEXT," + EQUIPMENT_DESCRIPTION_NAME + " TEXT,"
                 + EQUIPMENT_DESCRIPTION_CAPACITY_ID + " TEXT," + EQUIPMENT_DESCRIPTION_LAST_UPDATED + " TEXT)";
         db.execSQL(CREATE_DESCRIPTION_TABLE);
-
+        String CREATE_EqupmentInfo_TABLE = "CREATE TABLE EqupmentInfo(ScreenPosition INTEGER,batteryimgStr TEXT, cellImgStr TEXT,sNoPlateImgImgStr TEXT,EquipmentDataJsonStr TEXT)";
+        db.execSQL(CREATE_EqupmentInfo_TABLE);
     }
 
 
@@ -316,6 +318,8 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_MAKE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CAPACITY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_DESCRIPTION);
+
+        db.execSQL("DROP TABLE IF EXISTS EqupmentInfo");
 
         onCreate(db);
     }
@@ -706,8 +710,33 @@ public class AtmDatabase extends SQLiteOpenHelper {
         return false;
     }
 
-
     // ------------------------Getting Equipment Data-------------------------------------------
+    public ArrayList<EquipMakeDataModel> getEquipmentData(String equipmentType) {
+        ArrayList<EquipMakeDataModel> equipMakeList = new ArrayList<EquipMakeDataModel>();
+        String selectQuery = "";
+        selectQuery = "SELECT  * FROM " + TABLE_EQUIPMENT_TYPE + " WHERE " + EQUIPMENT_TYPE_NAME + " = '" + equipmentType + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                EquipMakeDataModel equipMakeDataModel = new EquipMakeDataModel();
+                equipMakeDataModel.setId(cursor.getString(cursor.getColumnIndex(EQUIPMENT_TYPE_ID)));
+                equipMakeDataModel.setName(cursor.getString(cursor.getColumnIndex(EQUIPMENT_TYPE_NAME)));
+                equipMakeDataModel.setLastUpdated(cursor.getString(cursor.getColumnIndex(EQUIPMENT_TYPE_LAST_UPDATED)));
+
+                // Adding contact to list
+                equipMakeList.add(equipMakeDataModel);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        // return contact list
+        return equipMakeList;
+    }
 
     public ArrayList<EquipMakeDataModel> getEquipmentMakeData(String sortType, String equipmentType) {
         ArrayList<EquipMakeDataModel> equipMakeList = new ArrayList<EquipMakeDataModel>();
@@ -1023,6 +1052,101 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.delete(tableName, null, null);
         db.close();
     }
+
+    // upsert Equpment info for local use
+    public boolean upsertEqupmentInfo(EqupmientData ob) {
+        boolean done = false;
+        EqupmientData data = null;
+        if (ob.getScreenPosition() != 0) {
+            data = getEqupmentInfoById(ob.getScreenPosition());
+            if (data == null) {
+                done = insertEqupmentInfoData(ob);
+            } else {
+                done = updateEqupmentInfoData(ob);
+            }
+        }
+        return done;
+    }
+
+    public EqupmientData getEqupmentInfoById(int id) {
+        String query = "Select * FROM EqupmentInfo WHERE ScreenPosition = '" + id + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        EqupmientData ob = new EqupmientData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateEqupmentInfoData(cursor, ob);
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //populate EqupmentInfo  list data
+    private void populateEqupmentInfoData(Cursor cursor, EqupmientData ob) {
+        ob.setScreenPosition(cursor.getInt(0));
+        ob.setBatteryimgStr(cursor.getString(1));
+        ob.setCellImgStr(cursor.getString(2));
+        ob.setsNoPlateImgImgStr(cursor.getString(3));
+        ob.setJsonDataStr(cursor.getString(4));
+    }
+
+    public boolean insertEqupmentInfoData(EqupmientData ob) {
+        ContentValues values = new ContentValues();
+        populateEqupmentInfoValueData(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("EqupmentInfo", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateEqupmentInfoData(EqupmientData ob) {
+        ContentValues values = new ContentValues();
+        populateEqupmentInfoValueData(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        i = db.update("EqupmentInfo", values, " ScreenPosition = '" + ob.getScreenPosition() + "'", null);
+
+        db.close();
+        return i > 0;
+    }
+
+    public void populateEqupmentInfoValueData(ContentValues values, EqupmientData ob) {
+        values.put("ScreenPosition", ob.getScreenPosition());
+        values.put("batteryimgStr", ob.getBatteryimgStr());
+        values.put("cellImgStr", ob.getCellImgStr());
+        values.put("sNoPlateImgImgStr", ob.getsNoPlateImgImgStr());
+        values.put("EquipmentDataJsonStr", ob.getJsonDataStr());
+    }
+
+    public ArrayList<EqupmientData> getAllEqupmentInfoList() {
+        String query = "Select *  FROM EqupmentInfo ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        ArrayList<EqupmientData> list = new ArrayList<EqupmientData>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                EqupmientData ob = new EqupmientData();
+                populateEqupmentInfoData(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
 
 }
 
