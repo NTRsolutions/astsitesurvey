@@ -668,7 +668,7 @@ public class BatteryFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your Battery Data save Successfully");
-                            alertNative();
+                            showAddMoreItemDialog();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -686,17 +686,18 @@ public class BatteryFragment extends MainFragment {
         }
     }
 
-    public void alertNative() {
+    public void showAddMoreItemDialog() {
         android.support.v7.app.AlertDialog.Builder builder =
                 new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         android.support.v7.app.AlertDialog dialog = builder.create();
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
-        dialog.setMessage("do you want do add more Battery detail");
+        dialog.setMessage("Do you want do add more Battery Item Details");
         dialog.setTitle("Battery Alert");
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                screenPosition=screenPosition+1;
+                clearFiledData();
+                screenPosition = screenPosition + 1;
             }
         });
         dialog.setButton(Dialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
@@ -718,4 +719,24 @@ public class BatteryFragment extends MainFragment {
         }
     }
 
+
+    public void clearFiledData() {
+        etMake.setText("");
+        etModel.setText("");
+        etCapacity.setText("");
+        etSerialNum.setText("");
+        etYear.setText("");
+        etDescription.setText("");
+        etNoofItems.setText("");
+        etNoofCell.setText("");
+        etCellVoltage.setText("");
+        etNoofWeakCells.setText("");
+        etBackUpinHrs.setText("");
+        etTightnessofBentCaps.setText("");
+        etCellInterconnecting.setText("");
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(batteryimg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(cellImg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
+        itemConditionSpinner.setSelection(0);
+    }
 }

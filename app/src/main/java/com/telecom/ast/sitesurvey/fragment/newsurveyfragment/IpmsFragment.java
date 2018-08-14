@@ -2,8 +2,11 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -23,9 +26,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
-import com.telecom.ast.sitesurvey.component.ASTAlertDialog;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
-import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
@@ -38,7 +39,6 @@ import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
-import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
@@ -65,9 +65,7 @@ public class IpmsFragment extends MainFragment {
 
     static ImageView frontimg, openImg, sNoPlateImg;
     static File frontimgFile, openImgFile, sNoPlateImgFile;
-
     static boolean isImage1, isImage2;
-    static String frontphoto, openPhoto, sNoPlatephoto;
     AppCompatEditText etDescription;
     AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake, etnoofModule, etLcuCapacity, etModel, etModuleCapacity;
     SharedPreferences pref;
@@ -248,8 +246,6 @@ public class IpmsFragment extends MainFragment {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
-
-
         final String itemStatusSpineer_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> itemStatusSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatusSpineeradapter);
@@ -606,11 +602,7 @@ public class IpmsFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your Input Alarm Pannel Data save Successfully");
-                            ASTAlertDialog astAlertDialog = new ASTAlertDialog(getContext(), true, false);
-                            astAlertDialog.show("Are you want add More Item");
-                            
-
-                            reloadBackScreen();
+                            showAddMoreItemDialog();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -646,4 +638,53 @@ public class IpmsFragment extends MainFragment {
         return multipartBody;
     }
 
+    public void showAddMoreItemDialog() {
+        android.support.v7.app.AlertDialog.Builder builder =
+                new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        android.support.v7.app.AlertDialog dialog = builder.create();
+        //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        dialog.setMessage("Do you want do add more Battery Item Details");
+        dialog.setTitle("Battery Alert");
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                clearFiledData();
+                EquipmentSno = EquipmentSno + 1;
+            }
+        });
+        dialog.setButton(Dialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                reloadBackScreen();
+            }
+        });
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+    }
+
+    public void clearFiledData() {
+        etMake.setText("");
+        etModel.setText("");
+        etCapacity.setText("");
+        etSerialNum.setText("");
+        etYear.setText("");
+        etDescription.setText("");
+        etLcuCapacity.setText("");
+        etController.setText("");
+        etConditionbackPlane.setText("");
+        etBodyEarthing.setText("");
+        etPositiveEarthing.setText("");
+        etRatingofCable.setText("");
+        etAlarmConnection.setText("");
+        etNoofRMWorking.setText("");
+        etNoofRMFaulty.setText("");
+        etSpareFuseStatus.setText("");
+        itemStatusSpineer.setSelection(0);
+        itemConditionSpinner.setSelection(0);
+        etMake.setFocusable(true);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);
+        Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
+    }
 }
