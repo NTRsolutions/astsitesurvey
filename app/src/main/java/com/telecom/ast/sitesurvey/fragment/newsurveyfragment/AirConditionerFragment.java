@@ -660,7 +660,18 @@ public class AirConditionerFragment extends MainFragment {
     }
 
     public void clearFiledData() {
-
+        etMake.setText("");
+        etModel.setText("");
+        etCapacity.setText("");
+        etSerialNum.setText("");
+        etYear.setText("");
+        etDescription.setText("");
+        etNumberOfAC.setText("");
+        etaCType.setText("");
+        etacACWorkingCondition.setText("");
+        etCompresserStatus.setText("");
+        etACAlarms.setText("");
+        etSocketandPlug.setText("");
         itemStatusSpineer.setSelection(0);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);

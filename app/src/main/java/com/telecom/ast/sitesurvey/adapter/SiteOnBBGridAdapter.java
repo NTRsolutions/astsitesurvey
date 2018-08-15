@@ -38,18 +38,10 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
         llGridItem.setTitle(gridviewItem.get(position));
         if (position == 0) {
             llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
-        } /*else if (position == 1) {
-            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageResource(R.drawable.ic_light);
+        } else if (position == 1) {
             llGridItem.setImageCircleColor(false);
-
-
-        }*/ else if (position == 2) {
-            llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
-        } else {
-            llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageResource(R.drawable.ic_support);
         }
 
         return gridView;
