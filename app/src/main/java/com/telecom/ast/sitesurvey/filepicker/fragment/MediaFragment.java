@@ -175,7 +175,7 @@ public class MediaFragment extends MainFragment implements LoaderManager.LoaderC
 
     protected void showDataUI() {
         this.noRecordView.setVisibility(View.GONE);
-        this.recyclerView.setVisibility(View.VISIBLE);
+        this.recyclerView.setVisibility(View.GONE);
     }
 
     protected void setAdapter() {
@@ -303,5 +303,12 @@ public class MediaFragment extends MainFragment implements LoaderManager.LoaderC
     public String searchQuery() {
         int mediaType = pageListener.config().getMediaType();
         return FNFileUtil.mimeTypeKey(mediaType) + " IS NOT NULL AND " + FNFileUtil.sizeKey(mediaType) + ">0";
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        reloadBackScreen();
+        ASTUIUtil.showToast("back");
+        return true;
     }
 }

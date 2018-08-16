@@ -3,17 +3,11 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
@@ -21,22 +15,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
-import com.telecom.ast.sitesurvey.component.ASTErrorIndicator;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
-import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
@@ -48,15 +38,11 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
-import com.telecom.ast.sitesurvey.model.EqupmientData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
-import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
-import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -75,16 +61,16 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
 
-    static ImageView batteryimg, cellImg, sNoPlateImg;
+    private static ImageView batteryimg, cellImg, sNoPlateImg;
     private static File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
-    static boolean isImage1, isImage2;
-    AppCompatAutoCompleteTextView etMake;
-    AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
+    private static boolean isImage1, isImage2;
+    private AppCompatAutoCompleteTextView etMake;
+    private AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
-    AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    static String strSavedDateTime, strUserId, strSiteId, itemCondition, CurtomerSite_Id;
-    String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
+    private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
+    private String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
+    private static String strSavedDateTime, strUserId, strSiteId, itemCondition, CurtomerSite_Id;
+    private String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
             TightnessofBentCaps, CellInterconnecting;
     String strMakeId, strEqupId;
     ArrayList<EquipMakeDataModel> equipMakeList;
@@ -103,11 +89,11 @@ public class BatteryFragment extends MainFragment {
     LinearLayout dateLayout;
     LinearLayout nextLayout;
     long datemilisec;
-    String capcityId = "0";
+    private String capcityId = "0";
     private boolean isLast = false;
     private int screenPosition = 1;
     private Button btnSubmmit;
-
+private String itemstatus;
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_battery;
@@ -465,6 +451,7 @@ public class BatteryFragment extends MainFragment {
         BackUpinHrs = getTextFromView(this.etBackUpinHrs);
         TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
         CellInterconnecting = getTextFromView(this.etCellInterconnecting);
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
 
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
@@ -563,6 +550,7 @@ public class BatteryFragment extends MainFragment {
             mainObj.put("Activity", "Equipment");
 
             JSONObject EquipmentData = new JSONObject();
+            EquipmentData.put("EquipmentStatus", itemstatus);
             EquipmentData.put("EquipmentSno", screenPosition);
             EquipmentData.put("EquipmentID", strEqupId);
             EquipmentData.put("Equipment", "BB");

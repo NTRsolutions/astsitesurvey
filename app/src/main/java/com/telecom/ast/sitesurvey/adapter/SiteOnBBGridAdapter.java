@@ -11,7 +11,9 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.FNTileView;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.model.BtsInfoData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +23,11 @@ import java.util.List;
 public class SiteOnBBGridAdapter extends BaseAdapter {
     private Context context;
     // Populate a List from Array elements
-    final List<String> gridviewItem;
+    ArrayList<BtsInfoData> btsInfoDataList;
 
-    public SiteOnBBGridAdapter(Context context, List<String> gridviewItem) {
+    public SiteOnBBGridAdapter(Context context, ArrayList<BtsInfoData> btsInfoDataList) {
         this.context = context;
-        this.gridviewItem = gridviewItem;
+        this.btsInfoDataList = btsInfoDataList;
     }
 
 
@@ -35,11 +37,11 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
         gridView = new View(context);
         gridView = inflater.inflate(R.layout.fe_home_grid_item, null);
         FNTileView llGridItem = gridView.findViewById(R.id.customerTile);
-        llGridItem.setTitle(gridviewItem.get(position));
+        llGridItem.setTitle(btsInfoDataList.get(position).getName());
         if (position == 0) {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_light);
-        } else if (position == 1) {
+        } else  {
             llGridItem.setImageCircleColor(false);
             llGridItem.setImageResource(R.drawable.ic_support);
         }
@@ -49,7 +51,7 @@ public class SiteOnBBGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return gridviewItem.size();
+        return btsInfoDataList.size();
     }
 
     @Override

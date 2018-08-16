@@ -41,30 +41,30 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BasicDataFragment extends MainFragment {
-    AppCompatEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity,
+    private AppCompatEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity,
             etOwner, etOwnerContact, etCaretaker, etCaretakercontact, etownerAddress;
-    Spinner spDistrict, spCircle, spSSA;
-    AutoCompleteTextView etSiteId, etSiteName;
+    private Spinner spDistrict, spCircle, spSSA;
+    private AutoCompleteTextView etSiteId, etSiteName;
 
-    Button btnSubmit;
-    AtmDatabase atmDatabase;
-    ASTUIUtil commonFunctions;
-    ArrayList<SiteMasterDataModel> arrSiteData;
-    ArrayList<CircleMasterDataModel> arrCircleData = new ArrayList<>();
-    ArrayList<DistrictMasterDataModel> arrDistrictData = new ArrayList<>();
-    ArrayList<SSAmasterDataModel> arrSSAData = new ArrayList<>();
-    SharedPreferences basicSharedPref;
-    SharedPreferences userPref;
-    String userId, strDate, strTime, strSurveyyorName, strSiteId, strAddress, strMilli;
-    String strCircleId, strSSAId, strDistrictId, strCity, strPincode, strSiteCustomerId, strSiteName;
-    String strCirclePosition, strSSAPosition, strDistrictPosition,
+    private Button btnSubmit;
+    private AtmDatabase atmDatabase;
+    private ASTUIUtil commonFunctions;
+    private ArrayList<SiteMasterDataModel> arrSiteData;
+    private ArrayList<CircleMasterDataModel> arrCircleData = new ArrayList<>();
+    private ArrayList<DistrictMasterDataModel> arrDistrictData = new ArrayList<>();
+    private ArrayList<SSAmasterDataModel> arrSSAData = new ArrayList<>();
+    private SharedPreferences basicSharedPref;
+    private SharedPreferences userPref;
+    private String userId, strDate, strTime, strSurveyyorName, strSiteId, strAddress, strMilli;
+    private String strCircleId, strSSAId, strDistrictId, strCity, strPincode, strSiteCustomerId, strSiteName;
+    private String strCirclePosition, strSSAPosition, strDistrictPosition,
             strOwner, strOwnerContact, strCaretaker, strCaretakercontact, strownerAddress;
-    String SSAId, DistrictId, CirclePosition, SSAPosition, DistrictPosition;
-    long currentMilli;
-    String dateTime, finalDate, finalTime, finalSurveyorName, curtomerSiteIdStr, siteIdStr, finalSiteName, finalAddress,
+    private String SSAId, DistrictId, CirclePosition, SSAPosition, DistrictPosition;
+    private long currentMilli;
+    private String dateTime, finalDate, finalTime, finalSurveyorName, curtomerSiteIdStr, siteIdStr, finalSiteName, finalAddress,
             finalCity, finalPincode, Owner, OwnerContact, Caretaker, Caretakercontact, ownerAddress;
 
-    int finalCircle, finalSSA, finalDistrict;
+    private int finalCircle, finalSSA, finalDistrict;
     private String[] arrCustomerSiteId;
     private long dateTimeMili;
 
@@ -121,7 +121,7 @@ public class BasicDataFragment extends MainFragment {
 
 
     public void setBasiMasterData() {
-        commonFunctions=new ASTUIUtil();
+        commonFunctions = new ASTUIUtil();
         currentMilli = System.currentTimeMillis();
         String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         dateTimeMili = System.currentTimeMillis();

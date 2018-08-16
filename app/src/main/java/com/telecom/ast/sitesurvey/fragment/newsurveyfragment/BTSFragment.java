@@ -26,8 +26,10 @@ import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
+import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
+import com.telecom.ast.sitesurvey.model.BtsInfoData;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
@@ -48,11 +50,12 @@ public class BTSFragment extends MainFragment {
     private LinearLayout mContainerView;
     private Button btnSubmit;
     AppCompatEditText etNofCab;
-    AppCompatEditText etbtsOperator, etNoofDCDB, etNofKroneBox, etNoofRack, etMicrowave;
-    Spinner btstyelSpinner;
+    AppCompatEditText etNoofDCDB, etNofKroneBox, etNoofRack, etMicrowave;
+    Spinner btstyelSpinner, etbtsOperator;
     String btsOperator, NoofDCDB, NofKroneBox, NoofRack, Microwave, NofCab, btsty;
     String strUserId, strSiteId;
     SharedPreferences userPref;
+    int SNo = 1;
 
     @Override
     protected int fragmentLayout() {
@@ -95,9 +98,8 @@ public class BTSFragment extends MainFragment {
         if (!isEmptyStr(btsOperator) || !isEmptyStr(NoofDCDB) || !isEmptyStr(NofKroneBox) || !isEmptyStr(NoofRack) ||
                 !isEmptyStr(Microwave) ||
                 !isEmptyStr(NofCab)) {
-            etbtsOperator.setText(btsOperator);
+            // etbtsOperator.setText(btsOperator);
             etNofCab.setText(NofCab);
-            etbtsOperator.setText(btsOperator);
             etNoofDCDB.setText(NoofDCDB);
             etNofKroneBox.setText(NofKroneBox);
             etNoofRack.setText(NoofRack);
@@ -129,7 +131,8 @@ public class BTSFragment extends MainFragment {
     }
 
     public boolean isValidate() {
-        btsOperator = getTextFromView(this.etbtsOperator);
+        // btsOperator = getTextFromView(this.etbtsOperator);
+        btsOperator = etbtsOperator.getSelectedItem().toString();
         NofCab = getTextFromView(this.etNofCab);
         NoofDCDB = getTextFromView(this.etNoofDCDB);
         NofKroneBox = getTextFromView(this.etNofKroneBox);
@@ -148,7 +151,6 @@ public class BTSFragment extends MainFragment {
         return true;
     }
 
-    ArrayList<Object> operatorArray;
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -161,8 +163,6 @@ public class BTSFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "BTS");
                 JSONObject BTSData = new JSONObject();
-
-
                 BTSData.put("Type", btsty);
                 BTSData.put("Name", btsOperator);
                 BTSData.put("CabinetQty", NofCab);
@@ -177,9 +177,6 @@ public class BTSFragment extends MainFragment {
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
                 jsonObject.put("BTSData", jsonArray);
-                operatorArray = new ArrayList<Object>();
-
-                operatorArray.add(BTSData);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -194,7 +191,18 @@ public class BTSFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your BTS  Data save Successfully");
+                            AtmDatabase atmDatabase = new AtmDatabase(getContext());
+                            BtsInfoData btsInfoData = new BtsInfoData();
+                            btsInfoData.setsNo(SNo);
+                            btsInfoData.setType(btsty);
+                            btsInfoData.setName(btsOperator);
+                            btsInfoData.setCabinetQty(NofCab);
+                            btsInfoData.setNoofDCDBBox(NoofDCDB);
+                            btsInfoData.setNoofKroneBox(NofKroneBox);
+                            btsInfoData.setNoofTransmissionRack(NoofRack);
+                            atmDatabase.upsertBTSInfo(btsInfoData);
                             showAddMoreItemDialog();
+
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -244,6 +252,7 @@ public class BTSFragment extends MainFragment {
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More BTS Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                SNo = SNo + 1;
                 clearFiledData();
             }
         });
@@ -259,9 +268,8 @@ public class BTSFragment extends MainFragment {
     }
 
     public void clearFiledData() {
-        etbtsOperator.setText("");
+        etbtsOperator.setSelection(0);
         etNofCab.setText("");
-        etbtsOperator.setText("");
         etNoofDCDB.setText("");
         etNofKroneBox.setText("");
         etNoofRack.setText("");

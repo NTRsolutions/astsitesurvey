@@ -378,7 +378,6 @@ public class DGFragment extends MainFragment {
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-
             pDistribution = pDistributionSpinner.getSelectedItem().toString();
             mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
             dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
@@ -386,7 +385,6 @@ public class DGFragment extends MainFragment {
             dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
             dgContacter = dgContacterSpinner.getSelectedItem().toString();
             backCompressor = backCompressorSpinner.getSelectedItem().toString();
-
             this.etAutomationCondition.setText(AutomationCondition);
             this.etPowerPanelMake.setText(PowerPanelMake);
             this.etPowerPanelCapacity.setText(PowerPanelCapacity);
@@ -411,7 +409,6 @@ public class DGFragment extends MainFragment {
             this.etDGBatterysn.setText(DGBatterysn);
             etDGPollutionCertificate.setText(DGPollutionCertificate);
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
-
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
             equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
@@ -491,7 +488,6 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
-
                     itemStatusSpineer.setEnabled(true);
                     pDistributionSpinner.setEnabled(true);
                     mCBStatusSpinner.setEnabled(true);
