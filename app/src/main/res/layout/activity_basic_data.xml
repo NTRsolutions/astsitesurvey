@@ -116,13 +116,11 @@
                     <AutoCompleteTextView
                         android:id="@+id/etSiteId"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left|center_vertical"
-                        android:background="@android:color/white"
-                        android:gravity="left|center_vertical"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
                         android:hint="@string/EnterSite_Id"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16dp" />
+                        android:textSize="@dimen/_14dp" />
+
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -452,8 +450,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:inputType="phone"
                         android:hint="Caretaker Contact No"
+                        android:inputType="phone"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

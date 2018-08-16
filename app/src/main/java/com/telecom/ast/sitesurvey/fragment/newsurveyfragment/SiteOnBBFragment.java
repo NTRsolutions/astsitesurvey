@@ -9,7 +9,9 @@ import android.widget.GridView;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.SiteOnBBGridAdapter;
+import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.model.BtsInfoData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +21,10 @@ public class SiteOnBBFragment extends MainFragment {
     SiteOnBBGridAdapter siteOnBBGridAdapter;
     GridView homeScreenGrid;
     Button button;
-    List<String> gridviewItemList;
     int count = 1;
     // Initializing a new String Array
-    static final String[] gridviewItem = new String[]{
-            "SMPS & Clamp Meter",  "Operator 1 Name"};
+    ArrayList<BtsInfoData> btsInfoDataList;
+
 
     @Override
     protected int fragmentLayout() {
@@ -48,26 +49,37 @@ public class SiteOnBBFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        gridviewItemList = new ArrayList<String>(Arrays.asList(gridviewItem));
-        this.siteOnBBGridAdapter = new SiteOnBBGridAdapter(getContext(), gridviewItemList);
-        setAdaptor();
 
+        AtmDatabase atmDatabase = new AtmDatabase(getContext());
+        btsInfoDataList = new ArrayList<BtsInfoData>();
+        BtsInfoData btsInfoData = new BtsInfoData();
+        btsInfoData.setName("SMPS & Clamp Meter");
+        btsInfoDataList.add(btsInfoData);
+        ArrayList<BtsInfoData> btsList = atmDatabase.getAllBTSInfoList();
+        if (btsList != null && btsList.size() > 0) {
+            btsInfoDataList.addAll(btsList);
+        }
+        setAdaptor();
     }
 
 
     private void setAdaptor() {
+        this.siteOnBBGridAdapter = new SiteOnBBGridAdapter(getContext(), btsInfoDataList);
         this.homeScreenGrid.setAdapter(siteOnBBGridAdapter);
         homeScreenGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (position == 0) {
                     ReadingSmpsFragment readingSmpsFragment = new ReadingSmpsFragment();
-                    openBasicDataFragment(readingSmpsFragment, "SMPS and Clamp Meter Screen");
+                    openBBDeatilFragment(readingSmpsFragment, "SMPS and Clamp Meter Screen", null);
                 } /*else if (position == 1) {
                     ClampMeterFragment clampMeterFragment = new ClampMeterFragment();
                     openBasicDataFragment(clampMeterFragment, "Clamp Meter");
                 }*/ else {
+                    int sno = btsInfoDataList.get(position).getsNo();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("sno", sno);
                     OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
-                    openBasicDataFragment(operatorNameFragment, "Operator Details");
+                    openBBDeatilFragment(operatorNameFragment, "Operator Details", bundle);
                 }
             }
         });
@@ -76,17 +88,11 @@ public class SiteOnBBFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.addMoreItem) {
-            count++;
-            gridviewItemList.add(gridviewItemList.size(), "Operator" + " " + count + " " + "Name");
-            siteOnBBGridAdapter.notifyDataSetChanged();
-            //     String addedItemText = gridviewItemList.get(gridviewItemList.size() - 1);
-        }
+
     }
 
     //open BasicDataFragment
-    private void openBasicDataFragment(MainFragment fragment, String headertext) {
-        Bundle bundle = new Bundle();
+    private void openBBDeatilFragment(MainFragment fragment, String headertext, Bundle bundle) {
         bundle.putString("headerTxt", headertext);
         bundle.putBoolean("showMenuButton", false);
         ApplicationHelper.application().getActivity().updateFragment(fragment, bundle);

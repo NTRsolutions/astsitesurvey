@@ -86,6 +86,16 @@
         <item>Outdoor</item>
     </string-array>
 
+
+    <string-array name="operatorName">
+        <item>Airtel</item>
+        <item>BSNL</item>
+        <item>Ieda</item>
+        <item>Vodafone</item>
+        <item>Jio</item>
+    </string-array>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

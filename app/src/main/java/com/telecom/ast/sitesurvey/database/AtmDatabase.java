@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.telecom.ast.sitesurvey.model.BasicDataModel;
+import com.telecom.ast.sitesurvey.model.BtsInfoData;
 import com.telecom.ast.sitesurvey.model.CircleMasterDataModel;
 import com.telecom.ast.sitesurvey.model.DistrictMasterDataModel;
 import com.telecom.ast.sitesurvey.model.EbMeterDataModel;
@@ -294,8 +295,10 @@ public class AtmDatabase extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY autoincrement," + EQUIPMENT_DESCRIPTION_ID + " TEXT," + EQUIPMENT_DESCRIPTION_NAME + " TEXT,"
                 + EQUIPMENT_DESCRIPTION_CAPACITY_ID + " TEXT," + EQUIPMENT_DESCRIPTION_LAST_UPDATED + " TEXT)";
         db.execSQL(CREATE_DESCRIPTION_TABLE);
-        String CREATE_EqupmentInfo_TABLE = "CREATE TABLE EqupmentInfo(ScreenPosition INTEGER,batteryimgStr TEXT, cellImgStr TEXT,sNoPlateImgImgStr TEXT,EquipmentDataJsonStr TEXT)";
-        db.execSQL(CREATE_EqupmentInfo_TABLE);
+
+
+        String CREATE_BTSInfo_TABLE = "CREATE TABLE BTSInfo(sno INTEGR,type TEXT,btsName TEXT, CabinetQty TEXT,NoofDCDBBox TEXT,NoofKroneBox TEXT,NoofTransmissionRack TEXT)";
+        db.execSQL(CREATE_BTSInfo_TABLE);
     }
 
 
@@ -319,7 +322,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CAPACITY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_DESCRIPTION);
 
-        db.execSQL("DROP TABLE IF EXISTS EqupmentInfo");
+        db.execSQL("DROP TABLE IF EXISTS BTSInfo");
 
         onCreate(db);
     }
@@ -1053,31 +1056,30 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    // upsert Equpment info for local use
-    public boolean upsertEqupmentInfo(EqupmientData ob) {
+    // upsert BTSInfo  for local use
+    public boolean upsertBTSInfo(BtsInfoData ob) {
         boolean done = false;
-        EqupmientData data = null;
-        if (ob.getScreenPosition() != 0) {
-            data = getEqupmentInfoById(ob.getScreenPosition());
+        BtsInfoData data = null;
+        if (ob.getsNo() != 0) {
+            data = getBTSInfoById(ob.getsNo());
             if (data == null) {
-                done = insertEqupmentInfoData(ob);
+                done = insertBTSInfoData(ob);
             } else {
-                done = updateEqupmentInfoData(ob);
+                done = updateBTSInfoData(ob);
             }
         }
         return done;
     }
 
-    public EqupmientData getEqupmentInfoById(int id) {
-        String query = "Select * FROM EqupmentInfo WHERE ScreenPosition = '" + id + "' ";
-
+    public BtsInfoData getBTSInfoById(int id) {
+        String query = "Select * FROM BTSInfo WHERE sno = '" + id + "' ";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        EqupmientData ob = new EqupmientData();
+        BtsInfoData ob = new BtsInfoData();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            populateEqupmentInfoData(cursor, ob);
+            populateBTSInfoData(cursor, ob);
             cursor.close();
         } else {
             ob = null;
@@ -1086,59 +1088,61 @@ public class AtmDatabase extends SQLiteOpenHelper {
         return ob;
     }
 
-    //populate EqupmentInfo  list data
-    private void populateEqupmentInfoData(Cursor cursor, EqupmientData ob) {
-        ob.setScreenPosition(cursor.getInt(0));
-        ob.setBatteryimgStr(cursor.getString(1));
-        ob.setCellImgStr(cursor.getString(2));
-        ob.setsNoPlateImgImgStr(cursor.getString(3));
-        ob.setJsonDataStr(cursor.getString(4));
+
+    //populate BTSInfo  list data
+    private void populateBTSInfoData(Cursor cursor, BtsInfoData ob) {
+        ob.setsNo(cursor.getInt(0));
+        ob.setType(cursor.getString(1));
+        ob.setName(cursor.getString(2));
+        ob.setCabinetQty(cursor.getString(3));
+        ob.setNoofDCDBBox(cursor.getString(4));
+        ob.setNoofKroneBox(cursor.getString(5));
+        ob.setNoofTransmissionRack(cursor.getString(6));
     }
 
-    public boolean insertEqupmentInfoData(EqupmientData ob) {
+    public boolean insertBTSInfoData(BtsInfoData ob) {
         ContentValues values = new ContentValues();
-        populateEqupmentInfoValueData(values, ob);
-
+        populateBTSInfoValueData(values, ob);
         SQLiteDatabase db = this.getWritableDatabase();
-
-        long i = db.insert("EqupmentInfo", null, values);
+        long i = db.insert("BTSInfo", null, values);
         db.close();
         return i > 0;
     }
 
-    public boolean updateEqupmentInfoData(EqupmientData ob) {
+    public boolean updateBTSInfoData(BtsInfoData ob) {
         ContentValues values = new ContentValues();
-        populateEqupmentInfoValueData(values, ob);
-
+        populateBTSInfoValueData(values, ob);
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
-        i = db.update("EqupmentInfo", values, " ScreenPosition = '" + ob.getScreenPosition() + "'", null);
-
+        i = db.update("BTSInfo", values, " sno = '" + ob.getsNo() + "'", null);
         db.close();
         return i > 0;
     }
 
-    public void populateEqupmentInfoValueData(ContentValues values, EqupmientData ob) {
-        values.put("ScreenPosition", ob.getScreenPosition());
-        values.put("batteryimgStr", ob.getBatteryimgStr());
-        values.put("cellImgStr", ob.getCellImgStr());
-        values.put("sNoPlateImgImgStr", ob.getsNoPlateImgImgStr());
-        values.put("EquipmentDataJsonStr", ob.getJsonDataStr());
+
+    public void populateBTSInfoValueData(ContentValues values, BtsInfoData ob) {
+        values.put("sno", ob.getsNo());
+        values.put("type", ob.getType());
+        values.put("btsName", ob.getName());
+        values.put("CabinetQty", ob.getCabinetQty());
+        values.put("NoofDCDBBox", ob.getNoofDCDBBox());
+        values.put("NoofKroneBox", ob.getNoofKroneBox());
+        values.put("NoofTransmissionRack", ob.getNoofTransmissionRack());
     }
 
-    public ArrayList<EqupmientData> getAllEqupmentInfoList() {
-        String query = "Select *  FROM EqupmentInfo ";
+    public ArrayList<BtsInfoData> getAllBTSInfoList() {
+        String query = "Select *  FROM BTSInfo ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        ArrayList<EqupmientData> list = new ArrayList<EqupmientData>();
+        ArrayList<BtsInfoData> list = new ArrayList<BtsInfoData>();
 
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
-                EqupmientData ob = new EqupmientData();
-                populateEqupmentInfoData(cursor, ob);
+                BtsInfoData ob = new BtsInfoData();
+                populateBTSInfoData(cursor, ob);
                 list.add(ob);
                 cursor.moveToNext();
             }
@@ -1146,7 +1150,11 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.close();
         return list;
     }
-
+    public void deleteBTCRows(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("BTSInfo", " sno = '" + id + "'", null);
+        db.close();
+    }
 
 }
 
