@@ -93,7 +93,8 @@ public class BatteryFragment extends MainFragment {
     private boolean isLast = false;
     private int screenPosition = 1;
     private Button btnSubmmit;
-private String itemstatus;
+    private String itemstatus;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_battery;
@@ -129,7 +130,6 @@ private String itemstatus;
         previous.setTypeface(materialdesignicons_font);
         previous.setText(Html.fromHtml("&#xf141;"));
         nextLayout = findViewById(R.id.nextLayout);
-
         TextView nextIcon = findViewById(R.id.nextIcon);
         nextIcon.setTypeface(materialdesignicons_font);
         nextIcon.setText(Html.fromHtml("&#xf142;"));
@@ -234,7 +234,6 @@ private String itemstatus;
     @Override
     protected void dataToView() {
         setLastPageDoneButton();
-
         atmDatabase = new AtmDatabase(getContext());
         equipList = atmDatabase.getEquipmentData("BB");
         equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "BB");
@@ -553,9 +552,9 @@ private String itemstatus;
             EquipmentData.put("EquipmentStatus", itemstatus);
             EquipmentData.put("EquipmentSno", screenPosition);
             EquipmentData.put("EquipmentID", strEqupId);
-            EquipmentData.put("Equipment", "BB");
-            EquipmentData.put("MakeID", strMakeId);
             EquipmentData.put("Capacity_ID", capcityId);
+            EquipmentData.put("MakeID", strMakeId);
+            EquipmentData.put("Equipment", "BB");
             EquipmentData.put("Capacity", capacity);
             EquipmentData.put("SerialNo", serialNumber);
             EquipmentData.put("MfgDate", datemilisec);
