@@ -191,6 +191,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_center_bg"
                 android:layout_margin="@dimen/_4dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
@@ -200,6 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
                     android:padding="@dimen/_5dp"
+                    android:layout_gravity="center"
                     android:hint="@string/Enter_Manufacturing_Date"
                     android:textSize="@dimen/_14dp" />
 
@@ -208,8 +211,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="@dimen/_5dp"
+                    android:padding="@dimen/_2dp"
                     android:text="ic"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20dp" />
