@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -147,6 +148,7 @@ public class BTSFragment extends MainFragment {
         return true;
     }
 
+    ArrayList<Object> operatorArray;
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -159,21 +161,26 @@ public class BTSFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "BTS");
                 JSONObject BTSData = new JSONObject();
+
+
                 BTSData.put("Type", btsty);
                 BTSData.put("Name", btsOperator);
                 BTSData.put("CabinetQty", NofCab);
-                BTSData.put("SMPSVoltage", "");
-                BTSData.put("BTSVoltage", "");
-                BTSData.put("BTSCurrent", "");
+                BTSData.put("SMPSVoltage", "0");
+                BTSData.put("SMPSCurrent", "0");
+                BTSData.put("BTSVoltage", "0");
+                BTSData.put("BTSCurrent", "0");
                 BTSData.put("NoofDCDBBox", NoofDCDB);
                 BTSData.put("NoofKroneBox", NofKroneBox);
                 BTSData.put("NoofTransmissionRack", Microwave);
                 BTSData.put("NoofTransmissionRack", NoofRack);
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
-
-
                 jsonObject.put("BTSData", jsonArray);
+                operatorArray = new ArrayList<Object>();
+
+                operatorArray.add(BTSData);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -232,9 +239,9 @@ public class BTSFragment extends MainFragment {
                 new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         android.support.v7.app.AlertDialog dialog = builder.create();
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
-        dialog.setMessage("Do you want do add more AC Item Details");
-        dialog.setTitle("Add Ac Item");
-        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More Item", new DialogInterface.OnClickListener() {
+        dialog.setMessage("Do you want do add more BTS Operator Details");
+        dialog.setTitle("Add BTS Item");
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More BTS Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 clearFiledData();

@@ -611,7 +611,7 @@ public class BatteryFragment extends MainFragment {
             JSONObject EquipmentData = new JSONObject();
             EquipmentData.put("EquipmentSno", screenPosition);
             EquipmentData.put("EquipmentID", strEqupId);
-            EquipmentData.put("Equipment", "Battery");
+            EquipmentData.put("Equipment", "BB");
             EquipmentData.put("MakeID", strMakeId);
             EquipmentData.put("Capacity_ID", capcityId);
             EquipmentData.put("Capacity", capacity);
