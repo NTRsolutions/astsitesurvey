@@ -1,229 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="@dimen/_8dp">
+    android:orientation="vertical"
+    app:cardElevation="@dimen/_8dp"
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_below="@+id/app_bar"
+        android:layout_weight="1"
+        android:background="@color/white">
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout
+            android:id="@+id/activity_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/app_bar"
-            android:layout_weight="1"
-            android:background="@color/white">
+            android:orientation="vertical"
+            android:padding="@dimen/_5dp">
+
 
             <LinearLayout
-                android:id="@+id/activity_home"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
                 android:orientation="vertical"
-                android:padding="@dimen/_5dp">
+                android:padding="@dimen/_4dp">
 
-
-                <LinearLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_4dp">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="BTS Type"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-                    <com.telecom.ast.sitesurvey.component.FNTextView
+
+                <Spinner
+                    android:id="@+id/btstye"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/BTSType"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etbtsOperator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_2dp"
-                        android:gravity="center_vertical"
-                        android:text="BTS Type"
-                        android:textColor="@color/text_color"
+                        android:autoSizeTextType="uniform"
+                        android:hint="BTS Operator Name"
                         android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
 
-                    <Spinner
-                        android:id="@+id/btstye"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:entries="@array/BTSType"
-                        android:minHeight="@dimen/_32dp"
-                        android:popupBackground="@color/white" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1dp"
-                        android:layout_marginRight="@dimen/_10dp"
-                        android:background="@color/backgroundColor" />
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
 
 
-                <LinearLayout
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.design.widget.TextInputLayout
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etNofCab"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatAutoCompleteTextView
-                            android:id="@+id/etbtsOperator"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="BTS Operator Name"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etNofCab"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="No.of Cabinets"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etNoofDCDB"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="No of DCDB Box"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etNofKroneBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="No of Krone Box"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etNoofRack"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="No of Transmission Rack"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_30dp"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_4dp">
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etMicrowave"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autoSizeTextType="uniform"
-                            android:hint="OFC /Microwave"
-                            android:textSize="@dimen/_14dp" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
+                        android:autoSizeTextType="uniform"
+                        android:hint="No.of Cabinets"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
 
 
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
 
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etNoofDCDB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="No of DCDB Box"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etNofKroneBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:inputType="numberDecimal"
+                        android:hint="No of Krone Box"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etNoofRack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:inputType="numberDecimal"
+                        android:hint="No of Transmission Rack"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etMicrowave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="OFC /Microwave"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_3dp"
+        app:cardElevation="@dimen/_6dp">
+
+        <Button
+            android:id="@+id/btnSubmit"
+            style="@style/DefaultButtonText"
+            android:layout_width="@dimen/_210dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_login"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Submit"
+            android:textSize="@dimen/_12dp" />
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+
+

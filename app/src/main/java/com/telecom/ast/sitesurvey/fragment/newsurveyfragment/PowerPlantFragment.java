@@ -21,7 +21,7 @@ public class PowerPlantFragment extends MainFragment {
     int count = 1;
     // Initializing a new String Array
     static final String[] gridviewItem = new String[]{
-            "SMPS", "IPMS", "IPMS"};
+            "SMPS", "IPMS", "PIU"};
 
 
     @Override
@@ -58,14 +58,14 @@ public class PowerPlantFragment extends MainFragment {
         homeScreenGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (position == 0) {
-                    SmpsPiuFragment smpsPiuFragment = new SmpsPiuFragment();
-                    openBasicDataFragment(smpsPiuFragment, "SMPS");
+                    SmpsFragment smpsFragment = new SmpsFragment();
+                    openBasicDataFragment(smpsFragment, "SMPS");
                 } else if (position == 1) {
                     IpmsFragment ipmsFragment = new IpmsFragment();
                     openBasicDataFragment(ipmsFragment, "IPMS");
                 } else {
-                    OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
-                    openBasicDataFragment(operatorNameFragment, "PIU");
+                    PIUVoltageStablizerFragment piuVoltageStablizerFragment = new PIUVoltageStablizerFragment();
+                    openBasicDataFragment(piuVoltageStablizerFragment, "PIU");
                 }
             }
         });

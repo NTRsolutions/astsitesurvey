@@ -33,13 +33,13 @@ public class PowerPanelGridAdapter extends BaseAdapter {
         llGridItem.setTitle(gridviewItem.get(position));
         if (position == 0) {
             llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageResource(R.drawable.ic_power);
         } else if (position == 1) {
-            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageResource(R.drawable.ic_innovation);
             llGridItem.setImageCircleColor(false);
         } else if (position == 2) {
             llGridItem.setImageCircleColor(false);
-            llGridItem.setImageResource(R.drawable.ic_gauge);
+            llGridItem.setImageResource(R.drawable.ic_switch);
         }
 
         return gridView;

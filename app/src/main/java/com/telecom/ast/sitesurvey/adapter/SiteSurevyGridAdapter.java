@@ -129,7 +129,7 @@ public class SiteSurevyGridAdapter extends BaseAdapter {
             } else if (position == 4) {
                 llGridItem.setTitle("Power Plant");
                 llGridItem.setTitleBgColor(R.color.bg_color);
-                llGridItem.setImageResource(R.drawable.ic_power);
+                llGridItem.setImageResource(R.drawable.ic_hydro_power);
                 llGridItem.hideCountField();
                 llGridItem.setCardViewBg(Color.parseColor("#7F00FF"));
                 llGridItem.setTitleColor(R.color.black);

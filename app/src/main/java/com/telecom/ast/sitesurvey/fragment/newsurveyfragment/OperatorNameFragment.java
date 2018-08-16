@@ -55,11 +55,11 @@ public class OperatorNameFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        inflateEditRow();
         getSharedPrefSaveData();
-        if (!strbtsOperator.equals("") || !strNofCab.equals("") || !strbtscurrentbtSide.equals("") || !strbtscurrent.equals("")
-                | !strbtsvVoltagebtsside.equals("")
-                | !strbtsvollatagesmpsside.equals("")) {
+        if (!isEmptyStr(strbtsOperator) ||!isEmptyStr(strNofCab) || !isEmptyStr(strbtscurrentbtSide)
+                || !isEmptyStr(strbtscurrent)
+                | !isEmptyStr(strbtsvVoltagebtsside)
+                |!isEmptyStr(strbtsvollatagesmpsside)) {
             etbtsOperator.setText(strbtsOperator);
             etNofCab.setText(strNofCab);
             etbtscurrent.setText(strbtscurrentbtSide);
@@ -78,20 +78,11 @@ public class OperatorNameFragment extends MainFragment {
     }
 
 
-    // Helper for inflating a row
-    private void inflateEditRow() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.bts_fragment, null);
-
-        mExclusiveEmptyView = rowView;
-        mContainerView.addView(rowView, mContainerView.getChildCount() - 1);
-    }
 
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.addBts) {
-            inflateEditRow();
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 SharedPreferences.Editor editor = pref.edit();
