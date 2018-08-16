@@ -91,7 +91,6 @@ public class BatteryFragment extends MainFragment {
     ArrayList<EquipMakeDataModel> equipList;
     AtmDatabase atmDatabase;
     String[] arrMake;
-    String[] arrModel;
     ArrayList<EquipCapacityDataModel> equipCapacityList;
     String[] arrCapacity;
     Spinner itemConditionSpinner;
@@ -260,7 +259,6 @@ public class BatteryFragment extends MainFragment {
         getSharedprefData();
         getUserPref();
         setSpinnerValue();
-        equipCapacityList = new ArrayList<>();
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
         etMake.setAdapter(adapterMakeName);
         etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -269,30 +267,11 @@ public class BatteryFragment extends MainFragment {
                 String strMake = etMake.getText().toString();
 
                 if (!strMake.equals("") && strMake.length() > 1) {
-                    ArrayList<EquipCapacityDataModel> equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-                    if (equipCapacityDataList.size() > 0) {
-                        arrModel = new String[equipCapacityDataList.size()];
-                        for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                            arrModel[i] = equipCapacityDataList.get(i).getName();
-                            capcityId = equipCapacityDataList.get(i).getId();
-                        }
-                        ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrModel);
-                        etModel.setAdapter(adapterModelName);
-                    }
-                }
-            }
-        });
-
-        etModel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String strModel = etModel.getText().toString();
-                if (!strModel.equals("") && strModel.length() > 1) {
-                    ArrayList<EquipDescriptionDataModel> equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    if (equipDescriptionDataList.size() > 0) {
-                        arrCapacity = new String[equipDescriptionDataList.size()];
-                        for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                            arrCapacity[i] = equipDescriptionDataList.get(i).getName();
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
                         }
                         ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
                         etCapacity.setAdapter(adapterCapacityName);
@@ -300,6 +279,7 @@ public class BatteryFragment extends MainFragment {
                 }
             }
         });
+
         if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity) || !isEmptyStr(strSerialNum)
                 || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)
                 || !isEmptyStr(NoofItems)
@@ -310,7 +290,7 @@ public class BatteryFragment extends MainFragment {
                 || !isEmptyStr(TightnessofBentCaps)
                 || !isEmptyStr(CellInterconnecting)
                 ) {
-            etMake.setText(strMake);
+          /*  etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
@@ -322,7 +302,7 @@ public class BatteryFragment extends MainFragment {
             etNoofWeakCells.setText(BackUpinHrs);
             etBackUpinHrs.setText(BackUpinHrs);
             etTightnessofBentCaps.setText(TightnessofBentCaps);
-            etCellInterconnecting.setText(CellInterconnecting);
+            etCellInterconnecting.setText(CellInterconnecting);*/
 
 
             /*if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
@@ -464,41 +444,7 @@ public class BatteryFragment extends MainFragment {
                 saveBatteryDataonServer();
             }
         }
-        /*else if (view.getId() == R.id.btnSubmit) {
-            if (isValidate()) {
-                if (equipCapacityList != null && equipCapacityList.size() > 0) {
-                    for (int i = 0; i < equipCapacityList.size(); i++) {
-                        if (capacity.equals(equipCapacityList.get(i).getName())) {
-                            strDescriptionId = equipCapacityList.get(i).getId();
-                        }
-                    }
-                }
 
-                if (equipMakeList != null && equipMakeList.size() > 0) {
-                    for (int i = 0; i < equipMakeList.size(); i++) {
-                        if (make.equals(equipMakeList.get(i).getName())) {
-                            strMakeId = equipMakeList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strMakeId) || strMakeId.equals("0")) {
-                    strMakeId = "0";
-                }
-                if (equipCapacityList != null && equipCapacityList.size() > 0) {
-                    for (int i = 0; i < equipCapacityList.size(); i++) {
-                        if (make.equals(equipCapacityList.get(i).getName())) {
-                            strModelId = equipCapacityList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strModelId) || strModelId.equals("0")) ;
-                {
-                    strModelId = "0";
-                }
-
-            }
-
-        }*/
     }
 
 
@@ -596,6 +542,14 @@ public class BatteryFragment extends MainFragment {
         //get equpment id from equpiment list
         for (EquipMakeDataModel dataModel : equipList) {
             strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
         }
     }
 
