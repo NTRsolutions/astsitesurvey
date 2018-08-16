@@ -38,7 +38,7 @@ public class HomeFragment extends MainFragment {
     ASTUIUtil commonFunctions;
     AtmDatabase atmDatabase;
     ImageView imgRefresh;
-    ASTProgressBar _progrssBar;
+    ASTProgressBar Circle_progrssBar, Site_progrssBar, equipmentList_progrssBar;
 
     @Override
     protected int fragmentLayout() {
@@ -111,8 +111,8 @@ public class HomeFragment extends MainFragment {
 
 
     public void getCircleMaster(String serviceURL) {
-        _progrssBar = new ASTProgressBar(getContext());
-        _progrssBar.show();
+        Circle_progrssBar = new ASTProgressBar(getContext());
+        Circle_progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {
             @Override
@@ -122,7 +122,7 @@ public class HomeFragment extends MainFragment {
                 } else {
                     ASTUIUtil.showToast("Data Not Avilable");
                 }
-                _progrssBar.dismiss();
+                Circle_progrssBar.dismiss();
             }
 
         });
@@ -199,8 +199,8 @@ public class HomeFragment extends MainFragment {
      */
 
     public void getSiteMaster(String serviceURL) {
-        _progrssBar = new ASTProgressBar(getContext());
-        _progrssBar.show();
+        Site_progrssBar = new ASTProgressBar(getContext());
+        Site_progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {
             @Override
@@ -210,7 +210,7 @@ public class HomeFragment extends MainFragment {
                 } else {
                     ASTUIUtil.showToast("Data Not Avilable");
                 }
-                _progrssBar.dismiss();
+                Site_progrssBar.dismiss();
             }
 
         });
@@ -270,8 +270,8 @@ public class HomeFragment extends MainFragment {
      * @param serviceURL
      */
     public void getEquipmentListMaster(String serviceURL) {
-        _progrssBar = new ASTProgressBar(getContext());
-        _progrssBar.show();
+        equipmentList_progrssBar = new ASTProgressBar(getContext());
+        equipmentList_progrssBar.show();
         ServiceCaller serviceCaller = new ServiceCaller(getContext());
         serviceCaller.CallCommanServiceMethod(serviceURL, "getClusterData", new IAsyncWorkCompletedCallback() {
             @Override
@@ -281,7 +281,7 @@ public class HomeFragment extends MainFragment {
                 } else {
                     ASTUIUtil.showToast("EquipmentListMaster Data Not Avilable");
                 }
-                _progrssBar.dismiss();
+                equipmentList_progrssBar.dismiss();
             }
 
         });
