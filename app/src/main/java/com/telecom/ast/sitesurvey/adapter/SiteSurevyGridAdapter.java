@@ -29,7 +29,6 @@ import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.PowerPlantFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SolarPanelsFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.TowerFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.FireSystemFragment;
-import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.battery.BatteryHomeFragment;
 import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.surveyIntcallback.EqupmentCallBack;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
