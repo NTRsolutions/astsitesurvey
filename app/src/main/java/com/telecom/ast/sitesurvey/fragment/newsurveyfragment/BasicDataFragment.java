@@ -424,14 +424,18 @@ public class BasicDataFragment extends MainFragment {
         Caretaker = getTextFromView(this.etCaretaker);
         Caretakercontact = getTextFromView(this.etCaretakercontact);
         ownerAddress = getTextFromView(this.etownerAddress);
-        strCircleId = arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId();
-        SSAId = arrSSAData.get(spSSA.getSelectedItemPosition() - 1).getSSAid();
-        DistrictId = arrDistrictData.get(spDistrict.getSelectedItemPosition() - 1).getDistrictId();
-        CirclePosition = String.valueOf(spCircle.getSelectedItemPosition());
-        SSAPosition = String.valueOf(spSSA.getSelectedItemPosition());
-        DistrictPosition = String.valueOf(spDistrict.getSelectedItemPosition());
-
-
+        if (spCircle.getSelectedItemPosition() > 1) {
+            strCircleId = arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId();
+            CirclePosition = String.valueOf(spCircle.getSelectedItemPosition());
+        }
+        if (spSSA.getSelectedItemPosition() > 1) {
+            SSAId = arrSSAData.get(spSSA.getSelectedItemPosition() - 1).getSSAid();
+            SSAPosition = String.valueOf(spSSA.getSelectedItemPosition());
+        }
+        if (spDistrict.getSelectedItemPosition() > 1) {
+            DistrictId = arrDistrictData.get(spDistrict.getSelectedItemPosition() - 1).getDistrictId();
+            DistrictPosition = String.valueOf(spDistrict.getSelectedItemPosition());
+        }
         if (isEmptyStr(finalSurveyorName)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter SurveyorName");
             return false;
