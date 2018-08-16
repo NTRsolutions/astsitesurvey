@@ -79,6 +79,9 @@ public class DGFragment extends MainFragment {
     String[] arrModel;
     String[] arrCapacity;
     AtmDatabase atmDatabase;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
     ArrayList<EquipMakeDataModel> arrEquipData;
     ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
@@ -108,6 +111,10 @@ public class DGFragment extends MainFragment {
     static File frontimgFile, openImgFile, sNoPlateImgFile;
     Typeface materialdesignicons_font;
     SharedPreferences mpptSharedPrefpref, userPref;
+
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
 
     @Override
     protected int fragmentLayout() {
@@ -320,48 +327,30 @@ public class DGFragment extends MainFragment {
     protected void dataToView() {
         getUserPref();
         atmDatabase = new AtmDatabase(getContext());
-        arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "DG");
-        arrMake = new String[arrEquipData.size()];
-        arrModel = new String[arrEquipData.size()];
-        for (int i = 0; i < arrEquipData.size(); i++) {
-            arrMake[i] = arrEquipData.get(i).getName();
+        equipList = atmDatabase.getEquipmentData("DG");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "DG");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
         }
         getSharedPrefData();
         setSpinnerValue();
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
 
         etMake.setAdapter(adapterMakeName);
-
         etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
-                if (!strMake.equals("") && strMake.length() > 1) {
-                    equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                        for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                            arrModel[i] = equipCapacityDataList.get(i).getName();
-                        }
-                        ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrModel);
-                        etModel.setAdapter(adapterModelName);
-                    }
-                }
-            }
-        });
 
-        etModel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String strModel = etModel.getText().toString();
-                if (!strModel.equals("") && strModel.length() > 1) {
-                    equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    arrCapacity = new String[equipDescriptionDataList.size()];
-                    if (equipDescriptionDataList.size() > 0) {
-                        for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                            arrCapacity[i] = equipDescriptionDataList.get(i).getName();
+                if (!strMake.equals("") && strMake.length() > 1) {
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
                         }
-                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
                         etCapacity.setAdapter(adapterCapacityName);
                     }
                 }
@@ -372,7 +361,7 @@ public class DGFragment extends MainFragment {
         if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
                 || !isEmptyStr(strSerialNum)
                 || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)) {
-            etMake.setText(strMake);
+        /*    etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
@@ -411,7 +400,7 @@ public class DGFragment extends MainFragment {
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
+            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);*/
           /*  if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
@@ -547,37 +536,6 @@ public class DGFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                String newEquipment = "0";
-                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                    for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                        if (capacity.equals(equipCapacityDataList.get(i).getName())) {
-                            strDescriptionId = equipCapacityDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (!isEmptyStr(strDescriptionId)) {
-                    strDescriptionId = "0";
-                }
-                if (arrEquipData != null && arrEquipData.size() > 0) {
-                    for (int i = 0; i < arrEquipData.size(); i++) {
-                        if (make.equals(arrEquipData.get(i).getName())) {
-                            strMakeId = arrEquipData.get(i).getId();
-                        }
-                    }
-                }
-                if (!isEmptyStr(strMakeId)) {
-                    strMakeId = "0";
-                }
-                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                    for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                        if (make.equals(equipDescriptionDataList.get(i).getName())) {
-                            strModelId = equipDescriptionDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (!isEmptyStr(strModelId)) {
-                    strModelId = "0";
-                }
               /*  SharedPreferences.Editor editor = pref.edit();
                 editor.putString("DG_UserId", strUserId);
                 editor.putString("DG_Make", make);
@@ -669,7 +627,7 @@ public class DGFragment extends MainFragment {
         RentalDGChangeOver = getTextFromView(this.etRentalDGChangeOver);
         DGBatterysn = getTextFromView(this.etDGBatterysn);
         DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
-
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
 
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
@@ -756,58 +714,8 @@ public class DGFragment extends MainFragment {
             final ASTProgressBar progressBar = new ASTProgressBar(getContext());
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("Site_ID", strSiteId);
-                jsonObject.put("User_ID", strUserId);
-                jsonObject.put("Activity", "Equipment");
-                JSONObject EquipmentData = new JSONObject();
-                EquipmentData.put("EquipmentSno", "1");
-                EquipmentData.put("EquipmentID", "0");
-                EquipmentData.put("Equipment", "DG");
-                EquipmentData.put("MakeID", strMakeId);
-                EquipmentData.put("Capacity_ID", "0");
-                EquipmentData.put("Capacity", capacity);
-                EquipmentData.put("SerialNo", serialNumber);
-                EquipmentData.put("MfgDate", datemilisec);
-                EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
-                EquipmentData.put("DG_Type", DGType);
-                EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);
-                EquipmentData.put("DG_PowerDistPanelCapacity", PowerPanelCapacity);
-                EquipmentData.put("DG_AutomationWorkingCondition", AutomationCondition);
-                EquipmentData.put("DG_MCBStatus", mCBStatus);
-                EquipmentData.put("DG_AlternaterMake", dbAlternatermake);
-                EquipmentData.put("DG_AlternaterSno", AlternaterSno);
-                EquipmentData.put("DG_AlternaterCapacity", AlternterCapacity);
-                EquipmentData.put("DG_BatteryStatus", DGBatteryStatus);
-                EquipmentData.put("DG_BatteryMake", DGBatteryMake);
-                EquipmentData.put("DG_BatterySerialNo", DGBatterysn);
-                EquipmentData.put("DG_BatteryCapacity", dBCapacity);
-                EquipmentData.put("DG_Contacter", dgContacter);
-                EquipmentData.put("DG_WiringCondition", Conditionofwiring);
-                EquipmentData.put("DG_Earthing", DGearthing);
-                EquipmentData.put("DG_CANOPYCondition", ConditionCANOPY);
-                EquipmentData.put("DG_RunHourMeter", DGRunHourMer);
-                EquipmentData.put("DG_LowLUBEWire", DGlowLUBEWire);
-                EquipmentData.put("DG_BackCompressor", backCompressor);
-                EquipmentData.put("DG_FuelTankStatus", DGFuelTank);
-                EquipmentData.put("DG_CableGrouting", CableGrouting);
-                EquipmentData.put("DG_FoundationStatus", DGFoundation);
-                EquipmentData.put("DG_CoolingType", DGCoolingtype);
-                EquipmentData.put("DG_Pipe", Dgpipe);
-                EquipmentData.put("DG_ExhaustPipeCondition", DGExhaustcondi);
-                EquipmentData.put("DG_EmergencyStopSwitch", DGEmergencyStopSwitch);
-                EquipmentData.put("DG_Rental", "");
-                EquipmentData.put("DG_ChangeOverBox", RentalDGChangeOver);
-                EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
-                EquipmentData.put("DG_ESNo", eSN);
-                EquipmentData.put("ItemCondition", itemCondition);
-                JSONArray EquipmentDataa = new JSONArray();
-                EquipmentDataa.put(EquipmentData);
-                jsonObject.put("EquipmentData", EquipmentDataa);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            // JSONObject jsonObject = new JSONObject();
+            JSONObject jsonObject = makeJsonData();
             HashMap<String, String> payloadList = new HashMap<String, String>();
             payloadList.put("JsonData", jsonObject.toString());
             MultipartBody.Builder multipartBody = setMultipartBodyVaule();
@@ -837,6 +745,65 @@ public class DGFragment extends MainFragment {
 
     }
 
+    private JSONObject makeJsonData() {
+        JSONObject jsonObject = new JSONObject();
+        getMakeAndEqupmentId();
+        try {
+            jsonObject.put("Site_ID", strSiteId);
+            jsonObject.put("User_ID", strUserId);
+            jsonObject.put("Activity", "Equipment");
+            JSONObject EquipmentData = new JSONObject();
+            EquipmentData.put("EquipmentStatus", itemstatus);
+            EquipmentData.put("EquipmentSno", "1");
+            EquipmentData.put("EquipmentID", strEqupId);
+            EquipmentData.put("Capacity_ID", capcityId);
+            EquipmentData.put("MakeID", strMakeId);
+            EquipmentData.put("Equipment", "DG");
+            EquipmentData.put("Capacity", capacity);
+            EquipmentData.put("SerialNo", serialNumber);
+            EquipmentData.put("MfgDate", datemilisec);
+            EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
+            EquipmentData.put("DG_Type", DGType);
+            EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);
+            EquipmentData.put("DG_PowerDistPanelCapacity", PowerPanelCapacity);
+            EquipmentData.put("DG_AutomationWorkingCondition", AutomationCondition);
+            EquipmentData.put("DG_MCBStatus", mCBStatus);
+            EquipmentData.put("DG_AlternaterMake", dbAlternatermake);
+            EquipmentData.put("DG_AlternaterSno", AlternaterSno);
+            EquipmentData.put("DG_AlternaterCapacity", AlternterCapacity);
+            EquipmentData.put("DG_BatteryStatus", DGBatteryStatus);
+            EquipmentData.put("DG_BatteryMake", DGBatteryMake);
+            EquipmentData.put("DG_BatterySerialNo", DGBatterysn);
+            EquipmentData.put("DG_BatteryCapacity", dBCapacity);
+            EquipmentData.put("DG_Contacter", dgContacter);
+            EquipmentData.put("DG_WiringCondition", Conditionofwiring);
+            EquipmentData.put("DG_Earthing", DGearthing);
+            EquipmentData.put("DG_CANOPYCondition", ConditionCANOPY);
+            EquipmentData.put("DG_RunHourMeter", DGRunHourMer);
+            EquipmentData.put("DG_LowLUBEWire", DGlowLUBEWire);
+            EquipmentData.put("DG_BackCompressor", backCompressor);
+            EquipmentData.put("DG_FuelTankStatus", DGFuelTank);
+            EquipmentData.put("DG_CableGrouting", CableGrouting);
+            EquipmentData.put("DG_FoundationStatus", DGFoundation);
+            EquipmentData.put("DG_CoolingType", DGCoolingtype);
+            EquipmentData.put("DG_Pipe", Dgpipe);
+            EquipmentData.put("DG_ExhaustPipeCondition", DGExhaustcondi);
+            EquipmentData.put("DG_EmergencyStopSwitch", DGEmergencyStopSwitch);
+            EquipmentData.put("DG_Rental", "");
+            EquipmentData.put("DG_ChangeOverBox", RentalDGChangeOver);
+            EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
+            EquipmentData.put("DG_ESNo", eSN);
+            EquipmentData.put("ItemCondition", itemCondition);
+            JSONArray EquipmentDataa = new JSONArray();
+            EquipmentDataa.put(EquipmentData);
+            jsonObject.put("EquipmentData", EquipmentDataa);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+
+    }
+
     //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
@@ -852,5 +819,27 @@ public class DGFragment extends MainFragment {
         }
 
         return multipartBody;
+    }
+
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
     }
 }
