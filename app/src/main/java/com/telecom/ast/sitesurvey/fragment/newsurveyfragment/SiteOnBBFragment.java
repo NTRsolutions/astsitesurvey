@@ -68,15 +68,16 @@ public class SiteOnBBFragment extends MainFragment {
         this.homeScreenGrid.setAdapter(siteOnBBGridAdapter);
         homeScreenGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Bundle bundle = new Bundle();
                 if (position == 0) {
                     ReadingSmpsFragment readingSmpsFragment = new ReadingSmpsFragment();
-                    openBBDeatilFragment(readingSmpsFragment, "SMPS and Clamp Meter Screen", null);
+                    openBBDeatilFragment(readingSmpsFragment, "SMPS and Clamp Meter Screen", bundle);
                 } /*else if (position == 1) {
                     ClampMeterFragment clampMeterFragment = new ClampMeterFragment();
                     openBasicDataFragment(clampMeterFragment, "Clamp Meter");
                 }*/ else {
                     int sno = btsInfoDataList.get(position).getsNo();
-                    Bundle bundle = new Bundle();
+
                     bundle.putInt("sno", sno);
                     OperatorNameFragment operatorNameFragment = new OperatorNameFragment();
                     openBBDeatilFragment(operatorNameFragment, "Operator Details", bundle);
