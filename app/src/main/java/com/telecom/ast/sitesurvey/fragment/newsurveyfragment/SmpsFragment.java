@@ -65,7 +65,7 @@ public class SmpsFragment extends MainFragment {
     static boolean isImage1, isImage2;
     AppCompatEditText etDescription, etnoofModule, etModuleCapacity;
     AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    SharedPreferences pref;
+    SharedPreferences pref, smpsShrepreforrpiu;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strnoofModule, strModuleCapacity;
     String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
     String strMakeId, strModelId, strDescriptionId, nofModule, ModuleCapacity;
@@ -94,6 +94,12 @@ public class SmpsFragment extends MainFragment {
     long datemilisec;
     int EquipmentSno = 1;
     Button btnSubmit;
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
 
     @Override
     protected int fragmentLayout() {
@@ -251,51 +257,28 @@ public class SmpsFragment extends MainFragment {
         getSharedPrefData();
         getUserPref();
         setSpinnerValue();
-        arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
-        arrMake = new String[arrEquipData.size()];
-        arrModel = new String[arrEquipData.size()];
-        for (int i = 0; i < arrEquipData.size(); i++) {
-            arrMake[i] = arrEquipData.get(i).getName();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("SMPS");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
         }
-
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
         etMake.setAdapter(adapterMakeName);
         etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
+
                 if (!strMake.equals("") && strMake.length() > 1) {
-                    equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-
-                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                        for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                            arrModel[i] = equipCapacityDataList.get(i).getName();
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
                         }
-
-                        ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrModel);
-                        etModel.setAdapter(adapterModelName);
-                    }
-                }
-            }
-        });
-
-        etModel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String strModel = etModel.getText().toString();
-
-                if (!strModel.equals("") && strModel.length() > 1) {
-                    equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    arrCapacity = new String[equipDescriptionDataList.size()];
-
-                    if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                        for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                            arrCapacity[i] = equipDescriptionDataList.get(i).getName();
-                        }
-
-                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
                         etCapacity.setAdapter(adapterCapacityName);
                     }
                 }
@@ -367,37 +350,7 @@ public class SmpsFragment extends MainFragment {
 
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                String newEquipment = "0";
-                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                    for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                        if (capacity.equals(equipCapacityDataList.get(i).getName())) {
-                            strDescriptionId = equipCapacityDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strDescriptionId)) {
-                    strDescriptionId = "0";
-                }
-                if (arrEquipData != null && arrEquipData.size() > 0) {
-                    for (int i = 0; i < arrEquipData.size(); i++) {
-                        if (make.equals(arrEquipData.get(i).getName())) {
-                            strMakeId = arrEquipData.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strMakeId)) {
-                    strMakeId = "0";
-                }
-                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                    for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                        if (make.equals(equipDescriptionDataList.get(i).getName())) {
-                            strModelId = equipDescriptionDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strModelId)) {
-                    strModelId = "0";
-                }
+
                /* SharedPreferences.Editor editor = pref.edit();
                 editor.putString("SMPS_UserId", strUserId);
                 editor.putString("SMPS_Make", make);
@@ -474,6 +427,9 @@ public class SmpsFragment extends MainFragment {
         } else if (isEmptyStr(yearOfManufacturing)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
             return false;
+        } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+            return false;
         } else if (frontimgFile == null || !frontimgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
             return false;
@@ -527,17 +483,19 @@ public class SmpsFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentStatus", itemstatus);
+                EquipmentDataa.put("EquipmentID", strEqupId);
+                EquipmentDataa.put("Capacity_ID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
-                EquipmentDataa.put("EquipmentID", "0");
                 EquipmentDataa.put("Equipment", "SMPS");
                 EquipmentDataa.put("MakeID", strMakeId);
                 EquipmentDataa.put("Make", make);
-                EquipmentDataa.put("Capacity_ID", "0");
                 EquipmentDataa.put("Capacity", capacity);
                 EquipmentDataa.put("SerialNo", serialNumber);
                 EquipmentDataa.put("MfgDate", datemilisec);
@@ -572,6 +530,9 @@ public class SmpsFragment extends MainFragment {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your SMPS Data save Successfully");
                             showAddMoreItemDialog();
+                            SharedPreferences.Editor editor = smpsShrepreforrpiu.edit();
+                            editor.putBoolean("PIU_ENABLE", true);
+                            editor.commit();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -667,6 +628,27 @@ public class SmpsFragment extends MainFragment {
             ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
             getResult(files);
 
+        }
+    }
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
         }
     }
 }

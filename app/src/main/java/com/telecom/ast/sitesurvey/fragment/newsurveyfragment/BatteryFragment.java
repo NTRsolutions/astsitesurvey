@@ -472,10 +472,10 @@ public class BatteryFragment extends MainFragment {
             } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
-            } /*else if (isEmptyStr(description)) {
+            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } */ else if (batteryimgFile == null || !batteryimgFile.exists()) {
+            } else if (batteryimgFile == null || !batteryimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
                 return false;
             } else if (cellImgFile == null || !cellImgFile.exists()) {
@@ -554,6 +554,7 @@ public class BatteryFragment extends MainFragment {
             EquipmentData.put("EquipmentID", strEqupId);
             EquipmentData.put("Capacity_ID", capcityId);
             EquipmentData.put("MakeID", strMakeId);
+            EquipmentData.put("Make", make);
             EquipmentData.put("Equipment", "BB");
             EquipmentData.put("Capacity", capacity);
             EquipmentData.put("SerialNo", serialNumber);

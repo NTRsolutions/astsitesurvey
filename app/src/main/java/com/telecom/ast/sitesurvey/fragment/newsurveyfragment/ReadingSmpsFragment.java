@@ -67,7 +67,7 @@ public class ReadingSmpsFragment extends MainFragment {
     String strclampmeBattVoltage, strclampLoadCurrent;
     String BattVoltageclamp, LoadCurrentclamp;
     AppCompatEditText etclampBattVoltage, etclampLoadCurrent;
-    static boolean isImage1clmp = false, isImage2clmp = false;
+    static boolean isImage1clmp, isImage2clmp;
 
     @Override
     protected int fragmentLayout() {
@@ -148,16 +148,24 @@ public class ReadingSmpsFragment extends MainFragment {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1clmp = true;
             isImage2clmp = false;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.clampimage2) {
             ASTUIUtil.startImagePicker(getHostActivity());
             isImage1clmp = false;
             isImage2clmp = true;
+            isImage1 = false;
+            isImage2 = false;
         } else if (view.getId() == R.id.image1) {
             ASTUIUtil.startImagePicker(getHostActivity());
+            isImage1clmp = false;
+            isImage2clmp = false;
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
             ASTUIUtil.startImagePicker(getHostActivity());
+            isImage1clmp = false;
+            isImage2clmp = false;
             isImage1 = false;
             isImage2 = true;
         } else if (view.getId() == R.id.btnSubmit) {
