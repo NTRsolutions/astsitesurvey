@@ -718,4 +718,7 @@ public class BasicDataFragment extends MainFragment {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
     }
+
+
+
 }

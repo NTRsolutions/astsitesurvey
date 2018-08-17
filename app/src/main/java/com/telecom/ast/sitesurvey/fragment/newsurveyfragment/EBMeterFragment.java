@@ -566,7 +566,7 @@ public class EBMeterFragment extends MainFragment {
                 JSONObject EquipmentData = new JSONObject();
                 EquipmentData.put("EquipmentStatus", itemstatus);
                 EquipmentData.put("EquipmentID", strEqupId);
-                EquipmentData.put("Capacity_ID", capcityId);
+                EquipmentData.put("CapacityID", capcityId);
                 EquipmentData.put("EquipmentSno", "1");
                 EquipmentData.put("Equipment", "EB");
                 EquipmentData.put("MakeID", strMakeId);
@@ -641,7 +641,7 @@ public class EBMeterFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }

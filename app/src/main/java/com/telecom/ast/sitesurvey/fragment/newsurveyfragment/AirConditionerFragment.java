@@ -522,7 +522,7 @@ public class AirConditionerFragment extends MainFragment {
                 JSONObject EquipmentDataa = new JSONObject();
                 EquipmentDataa.put("EquipmentStatus", itemstatus);
                 EquipmentDataa.put("EquipmentID", strEqupId);
-                EquipmentDataa.put("Capacity_ID", capcityId);
+                EquipmentDataa.put("CapacityID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
                 EquipmentDataa.put("Equipment", "AC");
                 EquipmentDataa.put("MakeID", strMakeId);
@@ -651,11 +651,10 @@ public class AirConditionerFragment extends MainFragment {
 
         }
     }
-
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }

@@ -756,7 +756,7 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("EquipmentStatus", itemstatus);
             EquipmentData.put("EquipmentSno", "1");
             EquipmentData.put("EquipmentID", strEqupId);
-            EquipmentData.put("Capacity_ID", capcityId);
+            EquipmentData.put("CapacityID", capcityId);
             EquipmentData.put("MakeID", strMakeId);
             EquipmentData.put("Make", make);
             EquipmentData.put("Equipment", "DG");
@@ -826,7 +826,7 @@ public class DGFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }
