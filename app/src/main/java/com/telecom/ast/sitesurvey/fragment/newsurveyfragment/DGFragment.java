@@ -628,6 +628,7 @@ public class DGFragment extends MainFragment {
         DGBatterysn = getTextFromView(this.etDGBatterysn);
         DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
+        itemCondition = itemConditionSpinner.getSelectedItem().toString();
 
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {

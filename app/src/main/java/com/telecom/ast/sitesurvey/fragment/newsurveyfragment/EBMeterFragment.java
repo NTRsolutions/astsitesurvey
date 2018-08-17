@@ -72,7 +72,7 @@ public class EBMeterFragment extends MainFragment {
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, MeterstatusSpinner;
-    String strUserId, strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
+    String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
     String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
 
     SharedPreferences pref;
@@ -80,7 +80,7 @@ public class EBMeterFragment extends MainFragment {
     AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etkitkatChangeover, etTheftfromSite;
     AppCompatEditText etDescription, ebMeterreading;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strMakeId, strModelId, strDescriptionId;
+    String strMakeId = "0", strModelId, strDescriptionId;
     Spinner itemStatusSpineer;
     String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover, TheftfromSite,
             strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner, itemCondition;

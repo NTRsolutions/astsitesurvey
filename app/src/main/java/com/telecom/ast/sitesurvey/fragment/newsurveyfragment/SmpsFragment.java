@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
@@ -338,6 +339,8 @@ public class SmpsFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
+
+
             ASTUIUtil.startImagePicker(getHostActivity());
 
         } else if (view.getId() == R.id.image2) {
@@ -410,7 +413,7 @@ public class SmpsFragment extends MainFragment {
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
         SpareFuseStatus = etSpareFuseStatus.getText().toString();
-        itemStatus = itemStatusSpineer.getSelectedItem().toString();
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {

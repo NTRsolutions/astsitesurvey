@@ -175,7 +175,7 @@ public class MediaFragment extends MainFragment implements LoaderManager.LoaderC
 
     protected void showDataUI() {
         this.noRecordView.setVisibility(View.GONE);
-        this.recyclerView.setVisibility(View.GONE);
+        this.recyclerView.setVisibility(View.VISIBLE);
     }
 
     protected void setAdapter() {
@@ -308,7 +308,6 @@ public class MediaFragment extends MainFragment implements LoaderManager.LoaderC
     @Override
     public boolean onBackPressed() {
         reloadBackScreen();
-        ASTUIUtil.showToast("back");
         return true;
     }
 }
