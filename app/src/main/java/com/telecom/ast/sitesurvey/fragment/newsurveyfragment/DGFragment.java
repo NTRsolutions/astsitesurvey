@@ -725,13 +725,13 @@ public class DGFragment extends MainFragment {
                     ContentData data = new Gson().fromJson(result, ContentData.class);
                     if (data != null) {
                         if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your MPPT Data save Successfully");
+                            ASTUIUtil.showToast("Site Equipment DG Details updated Successfully");
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
                     } else {
-                        ASTUIUtil.showToast("Your MPPT Data has not been updated!");
+                        ASTUIUtil.showToast("Your Site Equipment DG Details not updated !");
                     }
                     if (progressBar.isShowing()) {
                         progressBar.dismiss();
@@ -809,13 +809,13 @@ public class DGFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
@@ -835,7 +835,7 @@ public class DGFragment extends MainFragment {
             strEqupId = dataModel.getId();
         }
 //get Capcity id
-        if (equipCapacityList.size() > 0) {
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
             for (int i = 0; i < equipCapacityList.size(); i++) {
                 if (capacity.equals(equipCapacityList.get(i).getName())) {
                     capcityId = equipCapacityList.get(i).getId();

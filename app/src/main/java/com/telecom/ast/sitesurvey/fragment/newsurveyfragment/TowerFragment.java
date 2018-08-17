@@ -81,7 +81,7 @@ public class TowerFragment extends MainFragment {
     String type, height, date, itemcondion, descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower,
             laEarthingStatus, towerFoundation, towerTightening;
-    TextView etDate, dateIcon;
+    TextView etYear, dateIcon;
     LinearLayout dateLayout;
     long datemilisec;
     private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
@@ -103,7 +103,7 @@ public class TowerFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         typeTowerSpinner = findViewById(R.id.typeTowerSpinner);
         etHeight = findViewById(R.id.etHeight);
-        etDate = findViewById(R.id.etDate);
+        etYear = findViewById(R.id.etYear);
         etDescription = findViewById(R.id.etDescription);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         etworkingCondi = findViewById(R.id.etworkingCondi);
@@ -150,7 +150,7 @@ public class TowerFragment extends MainFragment {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                etDate.setText(sdf.format(myCalendar.getTime()));
+                etYear.setText(sdf.format(myCalendar.getTime()));
                 datemilisec = myCalendar.getTimeInMillis();
             }
         };
@@ -222,7 +222,7 @@ public class TowerFragment extends MainFragment {
                 || !isEmptyStr(strmissingMem)
                 || !isEmptyStr(strEarthingofTower)) {
             etHeight.setText(typeheightstr);
-            etDate.setText(datesiteStr);
+            etYear.setText(datesiteStr);
             etDescription.setText(descriptionstr);
             etworkingCondi.setText(strworkingCondi);
             etnoMicrowaveAntenna.setText(strnoMicrowaveAntenna);
@@ -336,13 +336,14 @@ public class TowerFragment extends MainFragment {
         strtowerFoundationSpinner = towerFoundationSpinner.getSelectedItem().toString();
         strtowerTighteningSpinner = towerTighteningSpinner.getSelectedItem().toString();
         height = etHeight.getText().toString();
-        date = etDate.getText().toString();
+        date = etYear.getText().toString();
         descreption = etDescription.getText().toString();
         workingCondi = etworkingCondi.getText().toString();
         noMicrowaveAntenna = etnoMicrowaveAntenna.getText().toString();
         noGSMAntenna = etnoGSMAntenna.getText().toString();
         missingMem = etmissingMem.getText().toString();
         EarthingofTower = etEarthingofTower.getText().toString();
+
         if (isEmptyStr(type)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Type");
             return false;
@@ -354,6 +355,9 @@ public class TowerFragment extends MainFragment {
             return false;
         } else if (isEmptyStr(itemcondion)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Condition");
+            return false;
+        } else if (isEmptyStr(descreption) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
         }/* else if (isEmptyStr(descreption)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");

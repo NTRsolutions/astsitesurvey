@@ -70,25 +70,25 @@ public class BatteryFragment extends MainFragment {
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     private String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     private static String strSavedDateTime, strUserId, strSiteId, itemCondition, CurtomerSite_Id;
-    private String NoofItems, NoofCell, CellVoltage, NoofWeakCells, BackUpinHrs,
-            TightnessofBentCaps, CellInterconnecting;
-    String strMakeId, strEqupId;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    AtmDatabase atmDatabase;
-    String[] arrMake;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    String[] arrCapacity;
-    Spinner itemConditionSpinner;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
-    LinearLayout descriptionLayout;
-    Spinner itemStatusSpineer;
-    SharedPreferences batterySharedPref, userPref;
-    TextView etYear, dateIcon, next, done, previous;
-    Typeface materialdesignicons_font;
-    LinearLayout dateLayout;
-    LinearLayout nextLayout;
-    long datemilisec;
+    private String NoofItems = "", NoofCell = "", CellVoltage = "", NoofWeakCells = "", BackUpinHrs = "",
+            TightnessofBentCaps = "", CellInterconnecting = "";
+    private String strMakeId = "", strEqupId = "";
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private AtmDatabase atmDatabase;
+    private String[] arrMake;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private String[] arrCapacity;
+    private Spinner itemConditionSpinner;
+    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
+    private LinearLayout descriptionLayout;
+    private Spinner itemStatusSpineer;
+    private SharedPreferences batterySharedPref, userPref;
+    private TextView etYear, dateIcon, next, done, previous;
+    private Typeface materialdesignicons_font;
+    private LinearLayout dateLayout;
+    private LinearLayout nextLayout;
+    private long datemilisec;
     private String capcityId = "0";
     private boolean isLast = false;
     private int screenPosition = 1;
@@ -451,7 +451,6 @@ public class BatteryFragment extends MainFragment {
         TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
         CellInterconnecting = getTextFromView(this.etCellInterconnecting);
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
-
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -530,7 +529,7 @@ public class BatteryFragment extends MainFragment {
             strEqupId = dataModel.getId();
         }
 //get Capcity id
-        if (equipCapacityList.size() > 0) {
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
             for (int i = 0; i < equipCapacityList.size(); i++) {
                 if (capacity.equals(equipCapacityList.get(i).getName())) {
                     capcityId = equipCapacityList.get(i).getId();
@@ -581,13 +580,13 @@ public class BatteryFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (batteryimgFile.exists()) {
+        if (batteryimgFile != null && batteryimgFile.exists()) {
             multipartBody.addFormDataPart(batteryimgFile.getName(), batteryimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, batteryimgFile));
         }
-        if (cellImgFile.exists()) {
+        if (cellImgFile != null && cellImgFile.exists()) {
             multipartBody.addFormDataPart(cellImgFile.getName(), cellImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, cellImgFile));
         }
-        if (sNoPlateImgImgFile.exists()) {
+        if (sNoPlateImgImgFile != null && sNoPlateImgImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgImgFile.getName(), sNoPlateImgImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgImgFile));
         }
         return multipartBody;

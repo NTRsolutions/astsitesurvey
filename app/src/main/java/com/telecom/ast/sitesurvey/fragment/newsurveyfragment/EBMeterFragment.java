@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
 import android.util.Log;
@@ -31,11 +32,14 @@ import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
+import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
+import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
@@ -72,8 +76,8 @@ public class EBMeterFragment extends MainFragment {
     String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
 
     SharedPreferences pref;
-    AppCompatEditText etCapacity, etMake, etModel, etSerialNum,
-            etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etkitkatChangeover, etTheftfromSite;
+    AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etkitkatChangeover, etTheftfromSite;
     AppCompatEditText etDescription, ebMeterreading;
     String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
     String strMakeId, strModelId, strDescriptionId;
@@ -86,6 +90,16 @@ public class EBMeterFragment extends MainFragment {
     static File frontimgFile, openImgFile, sNoPlateImgFile;
     Typeface materialdesignicons_font;
     SharedPreferences EBMETERSharedPref, userPref;
+
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
+    AtmDatabase atmDatabase;
+    String[] arrMake;
+    String[] arrCapacity;
 
     @Override
     protected int fragmentLayout() {
@@ -219,6 +233,33 @@ public class EBMeterFragment extends MainFragment {
         getSharedPrefData();
         getUserPref();
         setSpinnerValue();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("EB");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "EB");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
+        }
+        ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
+        etMake.setAdapter(adapterMakeName);
+        etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String strMake = etMake.getText().toString();
+
+                if (!strMake.equals("") && strMake.length() > 1) {
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
+                        }
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        etCapacity.setAdapter(adapterCapacityName);
+                    }
+                }
+            }
+        });
 
         if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
                 || !isEmptyStr(strSerialNum)
@@ -230,7 +271,7 @@ public class EBMeterFragment extends MainFragment {
                 || !isEmptyStr(mccbStatus)
                 || !isEmptyStr(kitkatChangeover)
                 || !isEmptyStr(TheftfromSite)) {
-            etMake.setText(strMake);
+  /*          etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
@@ -247,7 +288,7 @@ public class EBMeterFragment extends MainFragment {
             strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
             strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
             strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
-            strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();
+            strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();*/
 
             /*if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
@@ -427,7 +468,7 @@ public class EBMeterFragment extends MainFragment {
         strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
         strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
-
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
@@ -445,7 +486,7 @@ public class EBMeterFragment extends MainFragment {
             } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
-            } else if (isEmptyStr(description)) {
+            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
@@ -517,18 +558,19 @@ public class EBMeterFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
-
-
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentData = new JSONObject();
+                EquipmentData.put("EquipmentStatus", itemstatus);
+                EquipmentData.put("EquipmentID", strEqupId);
+                EquipmentData.put("Capacity_ID", capcityId);
                 EquipmentData.put("EquipmentSno", "1");
-                EquipmentData.put("EquipmentID", "0");
                 EquipmentData.put("Equipment", "EB");
                 EquipmentData.put("MakeID", strMakeId);
-                EquipmentData.put("Capacity_ID", "0");
+                EquipmentData.put("Make", make);
                 EquipmentData.put("Capacity", capacity);
                 EquipmentData.put("SerialNo", serialNumber);
                 EquipmentData.put("MfgDate", datemilisec);
@@ -559,13 +601,13 @@ public class EBMeterFragment extends MainFragment {
                     ContentData data = new Gson().fromJson(result, ContentData.class);
                     if (data != null) {
                         if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your MPPT Data save Successfully");
+                            ASTUIUtil.showToast("Your EB Meter Data save Successfully");
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
                     } else {
-                        ASTUIUtil.showToast("Your MPPT Data has not been updated!");
+                        ASTUIUtil.showToast("Your EB Meter  Data has not been updated!");
                     }
                     if (progressBar.isShowing()) {
                         progressBar.dismiss();
@@ -583,17 +625,37 @@ public class EBMeterFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
         return multipartBody;
     }
 
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
+    }
 }

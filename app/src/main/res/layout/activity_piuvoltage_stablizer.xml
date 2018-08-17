@@ -163,7 +163,10 @@
                 android:id="@+id/dateLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="@dimen/_4dp"
+                android:background="@drawable/edittext_center_bg"
+                android:gravity="center"
                 android:minHeight="@dimen/_30dp"
                 android:orientation="horizontal">
 
@@ -172,6 +175,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
+                    android:padding="@dimen/_5dp"
                     android:text="@string/Enter_Manufacturing_Date"
                     android:textSize="@dimen/_14dp" />
 
@@ -181,6 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:gravity="center"
+                    android:padding="@dimen/_5dp"
                     android:text="ic"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20dp" />
@@ -261,6 +266,7 @@
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etNofLcu"
                         android:layout_width="match_parent"
+                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No Of LCU"
@@ -435,6 +441,7 @@
                         android:id="@+id/etNoofRMWorking"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:autoSizeTextType="uniform"
                         android:hint="No of RM Working"
                         android:textSize="@dimen/_14dp" />
@@ -458,6 +465,7 @@
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etNoofRMFaulty"
                         android:layout_width="match_parent"
+                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of RM Faulty"

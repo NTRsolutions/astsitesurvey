@@ -26,11 +26,14 @@ import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
+import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
+import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
@@ -73,6 +76,17 @@ public class MpptFragment extends MainFragment {
     static File frontimgFile, openImgFile, sNoPlateImgFile;
     Typeface materialdesignicons_font;
     SharedPreferences mpptSharedPrefpref, userPref;
+
+
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
+    AtmDatabase atmDatabase;
+    String[] arrMake;
+    String[] arrCapacity;
 
     @Override
     protected int fragmentLayout() {
@@ -161,18 +175,44 @@ public class MpptFragment extends MainFragment {
         getUserPref();
         getSharedPrefData();
         setSpinnerValue();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("MPPT");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "MPPT");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
+        }
+        ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
+        etMake.setAdapter(adapterMakeName);
+        etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String strMake = etMake.getText().toString();
+                if (!strMake.equals("") && strMake.length() > 1) {
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
+                        }
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        etCapacity.setAdapter(adapterCapacityName);
+                    }
+                }
+            }
+        });
 
         if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
                 || !isEmptyStr(strSerialNum)
                 || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription) ||
                 !isEmptyStr(MPPTReading)) {
-            etMake.setText(strMake);
+         /*   etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
             etYear.setText(strYearOfManufacturing);
             etDescription.setText(strDescription);
-            etMPPTReading.setText(MPPTReading);
+            etMPPTReading.setText(MPPTReading);*/
         }
 /*        if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
             Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
@@ -308,6 +348,7 @@ public class MpptFragment extends MainFragment {
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -324,7 +365,7 @@ public class MpptFragment extends MainFragment {
             } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
-            } else if (isEmptyStr(description)) {
+            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
@@ -393,16 +434,19 @@ public class MpptFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentStatus", itemstatus);
+                EquipmentDataa.put("EquipmentID", strEqupId);
+                EquipmentDataa.put("Capacity_ID", capcityId);
                 EquipmentDataa.put("EquipmentSno", "1");
-                EquipmentDataa.put("EquipmentID", "0");
                 EquipmentDataa.put("Equipment", "MPPT");
                 EquipmentDataa.put("MakeID", strMakeId);
-                EquipmentDataa.put("Capacity_ID", "0");
+                EquipmentDataa.put("Make", make);
                 EquipmentDataa.put("Capacity", capacity);
                 EquipmentDataa.put("SerialNo", serialNumber);
                 EquipmentDataa.put("MfgDate", datemilisec);
@@ -449,16 +493,39 @@ public class MpptFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
         return multipartBody;
     }
+
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
+    }
+
 }

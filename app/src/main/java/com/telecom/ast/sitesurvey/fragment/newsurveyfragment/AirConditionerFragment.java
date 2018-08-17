@@ -83,12 +83,14 @@ public class AirConditionerFragment extends MainFragment {
     String strSavedDateTime, strUserId, strSiteId, sNoAC, CurtomerSite_Id;
     String strMakeId, strModelId, strDescriptionId;
     String[] arrMake;
-    String[] arrModel;
+    AtmDatabase atmDatabase;
     String[] arrCapacity;
+    String[] arrModel;
+
     ArrayList<EquipMakeDataModel> arrEquipData;
     ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
     ArrayList<EquipCapacityDataModel> equipCapacityDataList;
-    AtmDatabase atmDatabase;
+
     String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs;
     Spinner itemStatusSpineer;
     String aCType, acACWorkingCondition, CompresserStatus, ACAlarms, SocketandPlug, itemCondition;
@@ -292,7 +294,7 @@ public class AirConditionerFragment extends MainFragment {
                 || !isEmptyStr(SocketandPlug)
                 ) {
 
-            etMake.setText(strMake);
+       /*     etMake.setText(strMake);
             etModel.setText(strModel);
             etCapacity.setText(strCapacity);
             etSerialNum.setText(strSerialNum);
@@ -308,7 +310,7 @@ public class AirConditionerFragment extends MainFragment {
 
             arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
             equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
+            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);*/
            /* if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontimg);
                 Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
@@ -553,13 +555,13 @@ public class AirConditionerFragment extends MainFragment {
                     ContentData data = new Gson().fromJson(result, ContentData.class);
                     if (data != null) {
                         if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your SMPS Data save Successfully");
+                            ASTUIUtil.showToast("Site Equipment AC Details Saved Successfully.");
                             showAddMoreItemDialog();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
                     } else {
-                        ASTUIUtil.showToast("Your SMPS Data has not been updated!");
+                        ASTUIUtil.showToast("Site Equipment AC Details not Saved ");
                     }
                     if (progressBar.isShowing()) {
                         progressBar.dismiss();
@@ -577,13 +579,13 @@ public class AirConditionerFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
@@ -597,7 +599,7 @@ public class AirConditionerFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more AC Item Details");
         dialog.setTitle("Add Ac Item");
-        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More Item", new DialogInterface.OnClickListener() {
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More AC ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 clearFiledData();
@@ -662,7 +664,7 @@ public class AirConditionerFragment extends MainFragment {
             strEqupId = dataModel.getId();
         }
 //get Capcity id
-        if (equipCapacityList.size() > 0) {
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
             for (int i = 0; i < equipCapacityList.size(); i++) {
                 if (capacity.equals(equipCapacityList.get(i).getName())) {
                     capcityId = equipCapacityList.get(i).getId();

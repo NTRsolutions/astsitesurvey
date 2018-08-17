@@ -14,14 +14,18 @@ import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
+import com.telecom.ast.sitesurvey.database.AtmDatabase;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
+import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -33,13 +37,23 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class FireSystemFragment extends MainFragment {
 
     Spinner etfiredetectSpineer, etextinguiserSpineer;
-    Spinner  etstatusSpinner;
+    Spinner etstatusSpinner;
     AutoCompleteTextView etMake, etCapacity;
     String strfiredetectSpineer, status, strextinguiserSpineer, stritemStatusSpineer, firedetectSpineer, extinguiserSpineer, itemStatus, make, capacity;
     LinearLayout fillEmptyLayout;
     Button btnSubmit;
     String strUserId, strSiteId;
     SharedPreferences FireSystemSharedPref, userPref;
+    String strEqupId, strMakeId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
+
+    String[] arrMake;
+    AtmDatabase atmDatabase;
+    String[] arrCapacity;
 
     @Override
     protected int fragmentLayout() {
@@ -72,6 +86,33 @@ public class FireSystemFragment extends MainFragment {
         getSharedprefData();
         getUserPref();
         setSpinnerValue();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("AC");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "AC");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
+        }
+        ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
+        etMake.setAdapter(adapterMakeName);
+        etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String strMake = etMake.getText().toString();
+
+                if (!strMake.equals("") && strMake.length() > 1) {
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
+                        }
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        etCapacity.setAdapter(adapterCapacityName);
+                    }
+                }
+            }
+        });
         etextinguiserSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -181,16 +222,21 @@ public class FireSystemFragment extends MainFragment {
         status = etstatusSpinner.getSelectedItem().toString();
         make = getTextFromView(this.etMake);
         capacity = getTextFromView(this.etCapacity);
-            if (isEmptyStr(firedetectSpineer)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Detect System");
-                return false;
-            } else if (isEmptyStr(extinguiserSpineer)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Extinguiser ");
-                return false;
-            }
+        if (isEmptyStr(firedetectSpineer)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Detect System");
+            return false;
+        } else if (isEmptyStr(extinguiserSpineer)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Extinguiser ");
+            return false;
+        } else if (isEmptyStr(make)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Make ");
+            return false;
+        } else if (isEmptyStr(capacity)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter capacity ");
+            return false;
+        }
         return true;
     }
-
 
 
     public void saveBasicDataonServer() {
@@ -199,6 +245,7 @@ public class FireSystemFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
@@ -209,6 +256,11 @@ public class FireSystemFragment extends MainFragment {
                 FireSysData.put("FireextinguiserMake", make);
                 FireSysData.put("FireextinguiserCapacity", capacity);
                 FireSysData.put("Fireextinguiserfilledstatus", status);
+                FireSysData.put("Capacity_ID", capcityId);
+                FireSysData.put("Equipment", "Fire");
+                FireSysData.put("MakeID", strMakeId);
+
+
                 jsonObject.put("FireSysData", FireSysData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -261,4 +313,26 @@ public class FireSystemFragment extends MainFragment {
 */
         return multipartBody;
     }
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
+    }
+
 }

@@ -265,8 +265,8 @@ public class IpmsFragment extends MainFragment {
         getUserPref();
         setSpinnerValue();
         atmDatabase = new AtmDatabase(getContext());
-        equipList = atmDatabase.getEquipmentData("SMPS");
-        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
+        equipList = atmDatabase.getEquipmentData("IPMS");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "IPMS");
         arrMake = new String[equipMakeList.size()];
         for (int i = 0; i < equipMakeList.size(); i++) {
             arrMake[i] = equipMakeList.get(i).getName();
@@ -422,43 +422,49 @@ public class IpmsFragment extends MainFragment {
         SpareFuseStatus = etSpareFuseStatus.getText().toString();
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
-        if (isEmptyStr(make)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
-            return false;
-        } else if (isEmptyStr(model)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
-            return false;
-        } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-            return false;
-        } else if (isEmptyStr(serialNumber)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
-            return false;
-        } else if (isEmptyStr(yearOfManufacturing)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
-            return false;
-        } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-            return false;
-        } else if (isEmptyStr(lcucapacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LCU Capacity");
-            return false;
-        } else if (frontimgFile == null || !frontimgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
-            return false;
-        } else if (openImgFile == null || !openImgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-            return false;
-        } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-            return false;
-        } else if (isEmptyStr(nofModule)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Nof Of Modules");
-            return false;
-        } else if (isEmptyStr(ModuleCapacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Module Capacity");
-            return false;
+
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            if (isEmptyStr(make)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
+                return false;
+            } else if (isEmptyStr(model)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
+                return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
+            } else if (isEmptyStr(serialNumber)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
+            } else if (isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                return false;
+            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (isEmptyStr(lcucapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LCU Capacity");
+                return false;
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                return false;
+            } else if (openImgFile == null || !openImgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                return false;
+            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                return false;
+            } else if (isEmptyStr(nofModule)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Nof Of Modules");
+                return false;
+            } else if (isEmptyStr(ModuleCapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Module Capacity");
+                return false;
+            }
+        } else {
+            ASTUIUtil.showToast("Item Not Available");
         }
+
         return true;
     }
 
@@ -559,13 +565,13 @@ public class IpmsFragment extends MainFragment {
                     ContentData data = new Gson().fromJson(result, ContentData.class);
                     if (data != null) {
                         if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your Input Alarm Pannel Data save Successfully");
+                            ASTUIUtil.showToast("Your IPMS Data save Successfully");
                             showAddMoreItemDialog();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
                     } else {
-                        ASTUIUtil.showToast("Your Input Alarm Pannel Data has not been updated!");
+                        ASTUIUtil.showToast("Your IPMS  Data has not been updated!");
                     }
                     if (progressBar.isShowing()) {
                         progressBar.dismiss();
@@ -583,13 +589,13 @@ public class IpmsFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
@@ -601,9 +607,9 @@ public class IpmsFragment extends MainFragment {
                 new android.support.v7.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         android.support.v7.app.AlertDialog dialog = builder.create();
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
-        dialog.setMessage("Do you want do add more Battery Item Details");
-        dialog.setTitle("Battery Alert");
-        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
+        dialog.setMessage("Do you want do add more IPMS Item Details");
+        dialog.setTitle("IPMS Alert");
+        dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More IPMS Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 clearFiledData();
@@ -658,7 +664,7 @@ public class IpmsFragment extends MainFragment {
             strEqupId = dataModel.getId();
         }
 //get Capcity id
-        if (equipCapacityList.size() > 0) {
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
             for (int i = 0; i < equipCapacityList.size(); i++) {
                 if (capacity.equals(equipCapacityList.get(i).getName())) {
                     capcityId = equipCapacityList.get(i).getId();

@@ -88,7 +88,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
 
     Spinner itemStatusSpineer;
     String Controller, ConditionbackPlane, BodyEarthing, PositiveEarthing, RatingofCable, AlarmConnection,
-            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus,itemCondition;
+            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus, itemCondition;
 
     SharedPreferences userPref;
     TextView etYear, dateIcon;
@@ -97,6 +97,13 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     long datemilisec;
     int EquipmentSno = 1;
     Button btnSubmit;
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
+    SharedPreferences smpsShrepreforrpiu;
 
     @Override
     protected int fragmentLayout() {
@@ -250,11 +257,12 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         getSharedPrefData();
         setSpinnerValue();
         getUserPref();
-        arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "PIU");
-        arrMake = new String[arrEquipData.size()];
-        arrModel = new String[arrEquipData.size()];
-        for (int i = 0; i < arrEquipData.size(); i++) {
-            arrMake[i] = arrEquipData.get(i).getName();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("PIU");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "PIU");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
         }
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
         etMake.setAdapter(adapterMakeName);
@@ -262,33 +270,15 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
-                if (!isEmptyStr(strMake)) {
-                    equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                        for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                            arrModel[i] = equipCapacityDataList.get(i).getName();
-                        }
-                        ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrModel);
-                        etModel.setAdapter(adapterModelName);
-                    }
-                }
-            }
-        });
 
-        etModel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String strModel = etModel.getText().toString();
-                if (!strModel.equals("") && strModel.length() > 1) {
-                    equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    arrCapacity = new String[equipDescriptionDataList.size()];
-
-                    if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                        for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                            arrCapacity[i] = equipDescriptionDataList.get(i).getName();
+                if (!strMake.equals("") && strMake.length() > 1) {
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
                         }
-                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
                         etCapacity.setAdapter(adapterCapacityName);
                     }
                 }
@@ -360,38 +350,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             ASTUIUtil.startImagePicker(getHostActivity());
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValiDate()) {
-                String newEquipment = "0";
-                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                    for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                        if (capacity.equals(equipCapacityDataList.get(i).getName())) {
-                            strDescriptionId = equipCapacityDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strDescriptionId)) {
-                    strDescriptionId = "0";
-                }
 
-                if (arrEquipData != null && arrEquipData.size() > 0) {
-                    for (int i = 0; i < arrEquipData.size(); i++) {
-                        if (make.equals(arrEquipData.get(i).getName())) {
-                            strMakeId = arrEquipData.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strMakeId)) {
-                    strMakeId = "0";
-                }
-                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                    for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                        if (make.equals(equipDescriptionDataList.get(i).getName())) {
-                            strModelId = equipDescriptionDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strModelId)) {
-                    strModelId = "0";
-                }
              /*   SharedPreferences.Editor editor = pref.edit();
                 editor.putString("PIU_UserId", strUserId);
                 editor.putString("PIU_Make", make);
@@ -425,7 +384,6 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     }
 
 
-
     public boolean isValiDate() {
         make = etMake.getText().toString();
         model = etCapacity.getText().toString();
@@ -435,7 +393,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
-        NofLcu=etetNofLcu.getText().toString();
+        NofLcu = etetNofLcu.getText().toString();
         Controller = etController.getText().toString();
         ConditionbackPlane = etConditionbackPlane.getText().toString();
         BodyEarthing = etBodyEarthing.getText().toString();
@@ -445,31 +403,39 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
         SpareFuseStatus = etSpareFuseStatus.getText().toString();
-        itemStatus = itemStatusSpineer.getSelectedItem().toString();
-        if (isEmptyStr(make)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
-            return false;
-        } else if (isEmptyStr(model)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
-            return false;
-        } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-            return false;
-        } else if (isEmptyStr(serialNumber)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
-            return false;
-        } else if (isEmptyStr(yearOfManufacturing)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
-            return false;
-        } else if (frontimgFile == null || !frontimgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
-            return false;
-        } else if (openImgFile == null || !openImgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-            return false;
-        } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-            return false;
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
+
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            if (isEmptyStr(make)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
+                return false;
+            } else if (isEmptyStr(model)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
+                return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
+            } else if (isEmptyStr(serialNumber)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
+            } else if (isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                return false;
+            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                return false;
+            } else if (openImgFile == null || !openImgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                return false;
+            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                return false;
+            }
+        } else {
+            ASTUIUtil.showToast("Item Not Available");
         }
         return true;
     }
@@ -507,19 +473,22 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
                 JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentStatus", itemstatus);
+                EquipmentDataa.put("EquipmentID", strEqupId);
+                EquipmentDataa.put("Capacity_ID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
-                EquipmentDataa.put("EquipmentID", "0");
                 EquipmentDataa.put("Equipment", "PIU");
                 EquipmentDataa.put("MakeID", strMakeId);
                 EquipmentDataa.put("Make", make);
-                EquipmentDataa.put("Capacity_ID", "0");
                 EquipmentDataa.put("Capacity", capacity);
                 EquipmentDataa.put("SerialNo", serialNumber);
+
                 EquipmentDataa.put("MfgDate", datemilisec);
                 EquipmentDataa.put("ItemCondition", itemCondition);
                 EquipmentDataa.put("PP_Controller", Controller);
@@ -531,8 +500,8 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 EquipmentDataa.put("PP_WorkingRM", NoofRMWorking);
                 EquipmentDataa.put("PP_FaultyRM", NoofRMFaulty);
                 EquipmentDataa.put("PP_SpareFuseStatusHRC", SpareFuseStatus);
-                EquipmentDataa.put("PIU_LCU_Qt",NofLcu);
-               EquipmentDataa.put("PIU_LCU_Capacity", "0");
+                EquipmentDataa.put("PIU_LCU_Qt", NofLcu);
+                EquipmentDataa.put("PIU_LCU_Capacity", "0");
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);
@@ -552,6 +521,9 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your PIU Data save Successfully");
                             showAddMoreItemDialog();
+                            smpsShrepreforrpiu = getContext().getSharedPreferences("PiuenablePref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = smpsShrepreforrpiu.edit();
+                            editor.clear().commit();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -574,13 +546,13 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        if (frontimgFile.exists()) {
+        if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile.exists()) {
+        if (openImgFile != null && openImgFile.exists()) {
             multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
         }
-        if (sNoPlateImgFile.exists()) {
+        if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
 
@@ -651,4 +623,25 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         }
     }
 
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList != null && equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
+    }
 }

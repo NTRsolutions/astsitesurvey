@@ -1,5 +1,6 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,15 +10,19 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.PowerPanelGridAdapter;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
+import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class PowerPlantFragment extends MainFragment {
     PowerPanelGridAdapter powerPanelGridAdapter;
     GridView homeScreenGrid;
     List<String> gridviewItemList;
+    SharedPreferences piuenable;
     int count = 1;
     // Initializing a new String Array
     static final String[] gridviewItem = new String[]{
@@ -64,8 +69,14 @@ public class PowerPlantFragment extends MainFragment {
                     IpmsFragment ipmsFragment = new IpmsFragment();
                     openBasicDataFragment(ipmsFragment, "IPMS");
                 } else {
-                    PIUVoltageStablizerFragment piuVoltageStablizerFragment = new PIUVoltageStablizerFragment();
-                    openBasicDataFragment(piuVoltageStablizerFragment, "PIU");
+                    piuenable = getContext().getSharedPreferences("PiuenablePref", MODE_PRIVATE);
+                    boolean isenablePiu = piuenable.getBoolean("PIU_ENABLE", false);
+                    if (isenablePiu) {
+                        PIUVoltageStablizerFragment piuVoltageStablizerFragment = new PIUVoltageStablizerFragment();
+                        openBasicDataFragment(piuVoltageStablizerFragment, "PIU");
+                    } else {
+                        ASTUIUtil.showToast("Please Fill and Submitted  SMPS data information First");
+                    }
                 }
             }
         });
