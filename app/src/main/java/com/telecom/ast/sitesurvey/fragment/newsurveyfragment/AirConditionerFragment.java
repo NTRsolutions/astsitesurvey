@@ -253,8 +253,8 @@ public class AirConditionerFragment extends MainFragment {
         setSpinnerValue();
         getUserPref();
         atmDatabase = new AtmDatabase(getContext());
-        equipList = atmDatabase.getEquipmentData("DG");
-        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "DG");
+        equipList = atmDatabase.getEquipmentData("AC");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "AC");
         arrMake = new String[equipMakeList.size()];
         for (int i = 0; i < equipMakeList.size(); i++) {
             arrMake[i] = equipMakeList.get(i).getName();

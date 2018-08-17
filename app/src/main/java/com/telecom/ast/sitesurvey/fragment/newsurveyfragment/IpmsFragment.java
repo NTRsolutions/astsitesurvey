@@ -97,6 +97,12 @@ public class IpmsFragment extends MainFragment {
     LinearLayout dateLayout;
     long datemilisec;
     int EquipmentSno = 1;
+    String strEqupId;
+    private String capcityId = "0";
+    private String itemstatus;
+    ArrayList<EquipMakeDataModel> equipMakeList;
+    ArrayList<EquipMakeDataModel> equipList;
+    ArrayList<EquipCapacityDataModel> equipCapacityList;
 
     @Override
     protected int fragmentLayout() {
@@ -258,54 +264,33 @@ public class IpmsFragment extends MainFragment {
         getSharedPrefData();
         getUserPref();
         setSpinnerValue();
-        arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
-        arrMake = new String[arrEquipData.size()];
-        arrModel = new String[arrEquipData.size()];
-        for (int i = 0; i < arrEquipData.size(); i++) {
-            arrMake[i] = arrEquipData.get(i).getName();
+        atmDatabase = new AtmDatabase(getContext());
+        equipList = atmDatabase.getEquipmentData("SMPS");
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "SMPS");
+        arrMake = new String[equipMakeList.size()];
+        for (int i = 0; i < equipMakeList.size(); i++) {
+            arrMake[i] = equipMakeList.get(i).getName();
         }
-
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
         etMake.setAdapter(adapterMakeName);
         etMake.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
+
                 if (!strMake.equals("") && strMake.length() > 1) {
-                    equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-
-                    if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                        for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                            arrModel[i] = equipCapacityDataList.get(i).getName();
+                    equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
+                    if (equipCapacityList.size() > 0) {
+                        arrCapacity = new String[equipCapacityList.size()];
+                        for (int i = 0; i < equipCapacityList.size(); i++) {
+                            arrCapacity[i] = equipCapacityList.get(i).getName();
                         }
-
-                        ArrayAdapter<String> adapterModelName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrModel);
-                        etModel.setAdapter(adapterModelName);
-                    }
-                }
-            }
-        });
-
-        etModel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String strModel = etModel.getText().toString();
-                if (!strModel.equals("") && strModel.length() > 1) {
-                    equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-                    arrCapacity = new String[equipDescriptionDataList.size()];
-                    if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                        for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                            arrCapacity[i] = equipDescriptionDataList.get(i).getName();
-                        }
-                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(
-                                getContext(), android.R.layout.select_dialog_item, arrCapacity);
+                        ArrayAdapter<String> adapterCapacityName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrCapacity);
                         etCapacity.setAdapter(adapterCapacityName);
                     }
                 }
             }
         });
-
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
         if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
@@ -378,37 +363,6 @@ public class IpmsFragment extends MainFragment {
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-                String newEquipment = "0";
-                if (equipCapacityDataList != null && equipCapacityDataList.size() > 0) {
-                    for (int i = 0; i < equipCapacityDataList.size(); i++) {
-                        if (capacity.equals(equipCapacityDataList.get(i).getName())) {
-                            strDescriptionId = equipCapacityDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strDescriptionId)) {
-                    strDescriptionId = "0";
-                }
-                if (arrEquipData != null && arrEquipData.size() > 0) {
-                    for (int i = 0; i < arrEquipData.size(); i++) {
-                        if (make.equals(arrEquipData.get(i).getName())) {
-                            strMakeId = arrEquipData.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strMakeId)) {
-                    strMakeId = "0";
-                }
-                if (equipDescriptionDataList != null && equipDescriptionDataList.size() > 0) {
-                    for (int i = 0; i < equipDescriptionDataList.size(); i++) {
-                        if (make.equals(equipDescriptionDataList.get(i).getName())) {
-                            strModelId = equipDescriptionDataList.get(i).getId();
-                        }
-                    }
-                }
-                if (isEmptyStr(strModelId)) {
-                    strModelId = "0";
-                }
                /* SharedPreferences.Editor editor = pref.edit();
                 editor.putString("IPMS_UserId", strUserId);
                 editor.putString("IPMS_Make", make);
@@ -438,7 +392,6 @@ public class IpmsFragment extends MainFragment {
                 editor.putString("IPMS_SpareFuseStatus", SpareFuseStatus);
                 editor.putString("IPMS_itemStatus", itemStatus);
                 editor.commit();*/
-
                 saveBasicDataonServer();
             }
 
@@ -467,7 +420,7 @@ public class IpmsFragment extends MainFragment {
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
         SpareFuseStatus = etSpareFuseStatus.getText().toString();
-        itemStatus = itemStatusSpineer.getSelectedItem().toString();
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         if (isEmptyStr(make)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -483,6 +436,9 @@ public class IpmsFragment extends MainFragment {
             return false;
         } else if (isEmptyStr(yearOfManufacturing)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+            return false;
+        } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
         } else if (isEmptyStr(lcucapacity)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LCU Capacity");
@@ -557,18 +513,20 @@ public class IpmsFragment extends MainFragment {
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
+            getMakeAndEqupmentId();
             try {
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Equipment");
 
                 JSONObject EquipmentDataa = new JSONObject();
+                EquipmentDataa.put("EquipmentStatus", itemstatus);
+                EquipmentDataa.put("EquipmentID", strEqupId);
+                EquipmentDataa.put("Capacity_ID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
-                EquipmentDataa.put("EquipmentID", "0");
                 EquipmentDataa.put("Equipment", "IPMS");
                 EquipmentDataa.put("MakeID", strMakeId);
                 EquipmentDataa.put("Make", make);
-                EquipmentDataa.put("Capacity_ID", "0");
                 EquipmentDataa.put("Capacity", capacity);
                 EquipmentDataa.put("SerialNo", serialNumber);
                 EquipmentDataa.put("MfgDate", datemilisec);
@@ -686,5 +644,26 @@ public class IpmsFragment extends MainFragment {
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
+    }
+
+    //get make and equpment id from  list
+    private void getMakeAndEqupmentId() {
+        for (EquipMakeDataModel dataModel : equipMakeList) {
+            if (dataModel.getName().equals(make)) {
+                strMakeId = dataModel.getId();
+            }
+        }
+        //get equpment id from equpiment list
+        for (EquipMakeDataModel dataModel : equipList) {
+            strEqupId = dataModel.getId();
+        }
+//get Capcity id
+        if (equipCapacityList.size() > 0) {
+            for (int i = 0; i < equipCapacityList.size(); i++) {
+                if (capacity.equals(equipCapacityList.get(i).getName())) {
+                    capcityId = equipCapacityList.get(i).getId();
+                }
+            }
+        }
     }
 }
