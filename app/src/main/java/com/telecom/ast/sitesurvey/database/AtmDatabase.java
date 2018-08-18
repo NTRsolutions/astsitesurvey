@@ -27,17 +27,15 @@ import com.telecom.ast.sitesurvey.model.SiteOnEbDataModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mohit on 10/14/2015.
- */
+
 public class AtmDatabase extends SQLiteOpenHelper {
     //http://www.androidhive.info/2011/11/android-sqlite-database-tutorial/
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 81;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "AST_ATM";
+    private static final String DATABASE_NAME = "AST_Survey";
 
     // table name
     private static final String TABLE_CIRCLE = "circle";
@@ -1150,6 +1148,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
     public void deleteBTCRows(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("BTSInfo", " sno = '" + id + "'", null);
