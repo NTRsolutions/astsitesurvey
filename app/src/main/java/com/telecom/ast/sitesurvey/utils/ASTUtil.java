@@ -1,5 +1,6 @@
 package com.telecom.ast.sitesurvey.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -34,7 +35,13 @@ import com.telecom.ast.sitesurvey.FNSortOrderingUtil;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.exception.FNExceptionUtil;
+import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
 import com.telecom.ast.sitesurvey.listener.PermissionRationaleDialogListener;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO;
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+import static com.telecom.ast.sitesurvey.filepicker.FNFilePicker.MEDIA_TYPE_DOCUMENT;
 
 /**
  * @author AST Inc.
@@ -302,5 +309,20 @@ public class ASTUtil {
     public static File getExternalStorageFilePath(Context context) {
         File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Contants.APP_DIRECTORY);
         return DLPDirectory;
+    }
+
+    public static void startFilePicker(Activity activity, int limit, long sizeLimit) {
+        FNFilePicker.options(activity)
+                .addMedia(MEDIA_TYPE_IMAGE)
+             //   .addMedia(MEDIA_TYPE_VIDEO)
+              //  .addMedia(MEDIA_TYPE_AUDIO)
+                //.addMedia(MEDIA_TYPE_DOCUMENT)
+                .returnAfterFirst(false)
+                .limit(limit)
+                .single()
+                .sizeLimit(sizeLimit)
+                .imageDirectory(appNameWithoutSpace(activity)) // captured image directory name ("Camera" folder by default)
+                .start(FNReqResCode.ATTACHMENT_REQUEST); // start image picker activity with request code
+
     }
 }

@@ -653,6 +653,7 @@ public class AirConditionerFragment extends MainFragment {
 
         }
     }
+
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {

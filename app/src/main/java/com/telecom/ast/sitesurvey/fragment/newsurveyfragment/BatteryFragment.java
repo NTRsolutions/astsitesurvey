@@ -39,6 +39,7 @@ import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
@@ -413,7 +414,8 @@ public class BatteryFragment extends MainFragment {
         } else if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+             ASTUIUtil.startImagePicker(getHostActivity());
+           // ASTUtil.startFilePicker(getHostActivity(), 1, FNFilePicker.SIZE_LIMIT - attachmentSize());
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
@@ -681,5 +683,11 @@ public class BatteryFragment extends MainFragment {
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(cellImg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
         itemConditionSpinner.setSelection(0);
+    }
+
+    private long attachmentSize() {
+        long ttlSize = 5000;
+
+        return ttlSize;
     }
 }

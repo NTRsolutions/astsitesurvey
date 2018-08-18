@@ -16,7 +16,7 @@ import com.telecom.ast.sitesurvey.utils.ASTLogUtil;
  */
 public class FNExceptionUtil {
 
-	public static String packageStr = "com.altametrics";
+	public static String packageStr = "com.ast";
 
 	public static void logException(Throwable ex) {
 		logException(ex, ApplicationHelper.application().getActivity());
