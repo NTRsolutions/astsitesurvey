@@ -256,7 +256,7 @@ public class FireSystemFragment extends MainFragment {
                 FireSysData.put("FireextinguiserMake", make);
                 FireSysData.put("FireextinguiserCapacity", capacity);
                 FireSysData.put("Fireextinguiserfilledstatus", status);
-                FireSysData.put("Capacity_ID", capcityId);
+                FireSysData.put("CapacityID", capcityId);
                 FireSysData.put("Equipment", "Fire");
                 FireSysData.put("MakeID", strMakeId);
 
@@ -317,7 +317,7 @@ public class FireSystemFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
@@ -338,6 +339,8 @@ public class SmpsFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
+
+
             ASTUIUtil.startImagePicker(getHostActivity());
 
         } else if (view.getId() == R.id.image2) {
@@ -410,7 +413,7 @@ public class SmpsFragment extends MainFragment {
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
         SpareFuseStatus = etSpareFuseStatus.getText().toString();
-        itemStatus = itemStatusSpineer.getSelectedItem().toString();
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
@@ -496,7 +499,7 @@ public class SmpsFragment extends MainFragment {
                 JSONObject EquipmentDataa = new JSONObject();
                 EquipmentDataa.put("EquipmentStatus", itemstatus);
                 EquipmentDataa.put("EquipmentID", strEqupId);
-                EquipmentDataa.put("Capacity_ID", capcityId);
+                EquipmentDataa.put("CapacityID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
                 EquipmentDataa.put("Equipment", "SMPS");
                 EquipmentDataa.put("MakeID", strMakeId);
@@ -580,6 +583,8 @@ public class SmpsFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more SMPS Item Details");
         dialog.setTitle("SMPS Alert");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More SMPS", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -639,7 +644,7 @@ public class SmpsFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }

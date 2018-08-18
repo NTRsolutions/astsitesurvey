@@ -9,6 +9,7 @@ public class BtsInfoData {
     String NoofDCDBBox;
     String NoofKroneBox;
     String NoofTransmissionRack;
+    String Microwave;
 
     public int getsNo() {
         return sNo;
@@ -64,5 +65,13 @@ public class BtsInfoData {
 
     public void setNoofTransmissionRack(String noofTransmissionRack) {
         NoofTransmissionRack = noofTransmissionRack;
+    }
+
+    public String getMicrowave() {
+        return Microwave;
+    }
+
+    public void setMicrowave(String microwave) {
+        Microwave = microwave;
     }
 }

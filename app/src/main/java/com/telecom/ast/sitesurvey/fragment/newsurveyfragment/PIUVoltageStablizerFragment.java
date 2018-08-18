@@ -481,7 +481,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 JSONObject EquipmentDataa = new JSONObject();
                 EquipmentDataa.put("EquipmentStatus", itemstatus);
                 EquipmentDataa.put("EquipmentID", strEqupId);
-                EquipmentDataa.put("Capacity_ID", capcityId);
+                EquipmentDataa.put("CapacityID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
                 EquipmentDataa.put("Equipment", "PIU");
                 EquipmentDataa.put("MakeID", strMakeId);
@@ -566,6 +566,8 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more PIU Item Details");
         dialog.setTitle("PIU Alert");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -623,11 +625,10 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         }
     }
 
-
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }

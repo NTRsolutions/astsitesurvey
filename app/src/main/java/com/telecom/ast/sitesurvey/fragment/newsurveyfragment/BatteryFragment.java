@@ -494,16 +494,16 @@ public class BatteryFragment extends MainFragment {
         for (MediaFile deviceFile : files) {
             if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
                 if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_Front.jpg";
+                    String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
                     batteryimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(batteryimg);
                     //overviewImgstr = deviceFile.getFilePath().toString();
                 } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_Open.jpg";
+                    String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
                     cellImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(cellImg);
                 } else {
-                    String imageName = CurtomerSite_Id + "_BATTERY_" + screenPosition + "_SerialNoPlate.jpg";
+                    String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_SerialNoPlate.jpg";
                     sNoPlateImgImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
                     Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).into(sNoPlateImg);
                 }
@@ -520,7 +520,7 @@ public class BatteryFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }
@@ -551,7 +551,7 @@ public class BatteryFragment extends MainFragment {
             EquipmentData.put("EquipmentStatus", itemstatus);
             EquipmentData.put("EquipmentSno", screenPosition);
             EquipmentData.put("EquipmentID", strEqupId);
-            EquipmentData.put("Capacity_ID", capcityId);
+            EquipmentData.put("CapacityID", capcityId);
             EquipmentData.put("MakeID", strMakeId);
             EquipmentData.put("Make", make);
             EquipmentData.put("Equipment", "BB");
@@ -634,6 +634,8 @@ public class BatteryFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more Battery Item Details");
         dialog.setTitle("Battery Alert");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

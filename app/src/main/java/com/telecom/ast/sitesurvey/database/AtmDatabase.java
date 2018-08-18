@@ -295,7 +295,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.execSQL(CREATE_DESCRIPTION_TABLE);
 
 
-        String CREATE_BTSInfo_TABLE = "CREATE TABLE BTSInfo(sno INTEGR,type TEXT,btsName TEXT, CabinetQty TEXT,NoofDCDBBox TEXT,NoofKroneBox TEXT,NoofTransmissionRack TEXT)";
+        String CREATE_BTSInfo_TABLE = "CREATE TABLE BTSInfo(sno INTEGR,type TEXT,btsName TEXT, CabinetQty TEXT,NoofDCDBBox TEXT,NoofKroneBox TEXT,NoofTransmissionRack TEXT,Microwave TEXT)";
         db.execSQL(CREATE_BTSInfo_TABLE);
     }
 
@@ -1096,6 +1096,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         ob.setNoofDCDBBox(cursor.getString(4));
         ob.setNoofKroneBox(cursor.getString(5));
         ob.setNoofTransmissionRack(cursor.getString(6));
+        ob.setMicrowave(cursor.getString(7));
     }
 
     public boolean insertBTSInfoData(BtsInfoData ob) {
@@ -1126,10 +1127,11 @@ public class AtmDatabase extends SQLiteOpenHelper {
         values.put("NoofDCDBBox", ob.getNoofDCDBBox());
         values.put("NoofKroneBox", ob.getNoofKroneBox());
         values.put("NoofTransmissionRack", ob.getNoofTransmissionRack());
+        values.put("Microwave", ob.getMicrowave());
     }
 
     public ArrayList<BtsInfoData> getAllBTSInfoList() {
-        String query = "Select *  FROM BTSInfo ";
+        String query = "Select *  FROM BTSInfo";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

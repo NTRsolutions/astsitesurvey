@@ -20,7 +20,6 @@ import java.util.List;
 public class SiteOnBBFragment extends MainFragment {
     SiteOnBBGridAdapter siteOnBBGridAdapter;
     GridView homeScreenGrid;
-    Button button;
     int count = 1;
     // Initializing a new String Array
     ArrayList<BtsInfoData> btsInfoDataList;
@@ -34,12 +33,10 @@ public class SiteOnBBFragment extends MainFragment {
     @Override
     protected void loadView() {
         this.homeScreenGrid = findViewById(R.id.homeScreenGrid);
-        button = findViewById(R.id.addMoreItem);
     }
 
     @Override
     protected void setClickListeners() {
-        button.setOnClickListener(this);
     }
 
     @Override

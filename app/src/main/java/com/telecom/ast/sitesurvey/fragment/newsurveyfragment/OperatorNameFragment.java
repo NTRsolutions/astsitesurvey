@@ -41,6 +41,7 @@ public class OperatorNameFragment extends MainFragment {
     //Spinner btstyelSpinner ;
     String btsOperator, NofCab, btscurrentbtSide, btscurrent, btsvVoltagebtsside, btsvollatagesmpsside;
     String strbtsOperator, strNofCab, strbtscurrentbtSide, strbtscurrent, strbtsvVoltagebtsside, strbtsvollatagesmpsside, btstype;
+    String NoofDCDB, NofKroneBox, NoofRack, Microwave;
     SharedPreferences pref;
     String strUserId, strSiteId;
     SharedPreferences userPref;
@@ -65,7 +66,7 @@ public class OperatorNameFragment extends MainFragment {
         etbtscurrentbtSide = this.findViewById(R.id.btscurrentbtSide);
         etbtsvVoltagebtsside = this.findViewById(R.id.btsvVoltagebtsside);
         etbtsvollatagesmpsside = this.findViewById(R.id.btsvollatagesmpsside);
-        btstyelSpinner=this.findViewById(R.id.btstype);
+        btstyelSpinner = this.findViewById(R.id.btstype);
         btnSubmit = this.findViewById(R.id.btnSubmit);
     }
 
@@ -101,6 +102,10 @@ public class OperatorNameFragment extends MainFragment {
             btstype = btsInfoData.getType();
             strbtsOperator = btsInfoData.getName();
             strNofCab = btsInfoData.getCabinetQty();
+            NoofDCDB = btsInfoData.getNoofDCDBBox();
+            NofKroneBox = btsInfoData.getNoofKroneBox();
+            NoofRack = btsInfoData.getNoofTransmissionRack();
+            Microwave = btsInfoData.getMicrowave();
         }
 
 
@@ -192,19 +197,20 @@ public class OperatorNameFragment extends MainFragment {
                 jsonObject.put("Activity", "BTS");
                 JSONObject BTSData = new JSONObject();
                 BTSData.put("Type", btstype);
-                BTSData.put("Name", btsOperator);
-                BTSData.put("CabinetQty", NofCab);
+                BTSData.put("Name", strbtsOperator);
+                BTSData.put("CabinetQty", strNofCab);
                 BTSData.put("SMPSVoltage", strbtsvVoltagebtsside);
                 BTSData.put("SMPSCurrent", strbtsvollatagesmpsside);
                 BTSData.put("BTSVoltage", strbtscurrent);
                 BTSData.put("BTSCurrent", strbtscurrentbtSide);
-                BTSData.put("NoofDCDBBox", "0");
-                BTSData.put("NoofKroneBox", "0");
-                BTSData.put("NoofTransmissionRack", "0");
-                BTSData.put("NoofTransmissionRack", "0");
+                BTSData.put("NoofDCDBBox", NoofDCDB);
+                BTSData.put("NoofKroneBox", NofKroneBox);
+                BTSData.put("NoofTransmissionRack", NoofRack);
+                BTSData.put("Microwave", Microwave);
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
                 jsonObject.put("BTSData", jsonArray);
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -528,7 +528,7 @@ public class IpmsFragment extends MainFragment {
                 JSONObject EquipmentDataa = new JSONObject();
                 EquipmentDataa.put("EquipmentStatus", itemstatus);
                 EquipmentDataa.put("EquipmentID", strEqupId);
-                EquipmentDataa.put("Capacity_ID", capcityId);
+                EquipmentDataa.put("CapacityID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
                 EquipmentDataa.put("Equipment", "IPMS");
                 EquipmentDataa.put("MakeID", strMakeId);
@@ -609,6 +609,8 @@ public class IpmsFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more IPMS Item Details");
         dialog.setTitle("IPMS Alert");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More IPMS Item", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -655,7 +657,7 @@ public class IpmsFragment extends MainFragment {
     //get make and equpment id from  list
     private void getMakeAndEqupmentId() {
         for (EquipMakeDataModel dataModel : equipMakeList) {
-            if (dataModel.getName().equals(make)) {
+            if (make.equals(dataModel.getName().trim())) {
                 strMakeId = dataModel.getId();
             }
         }
