@@ -123,7 +123,21 @@ public class BTSFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (isValidate()) {
-            saveBasicDataonServer();
+            ASTUIUtil.showToast("Your BTS  Data save Successfully");
+            AtmDatabase atmDatabase = new AtmDatabase(getContext());
+            BtsInfoData btsInfoData = new BtsInfoData();
+            btsInfoData.setsNo(SNo);
+            btsInfoData.setType(btsty);
+            btsInfoData.setName(btsOperator);
+            btsInfoData.setCabinetQty(NofCab);
+            btsInfoData.setNoofDCDBBox(NoofDCDB);
+            btsInfoData.setNoofKroneBox(NofKroneBox);
+            btsInfoData.setNoofTransmissionRack(NoofRack);
+            btsInfoData.setMicrowave(Microwave);
+            atmDatabase.upsertBTSInfo(btsInfoData);
+            showAddMoreItemDialog();
+
+            //     saveBasicDataonServer();
 
         }
 
@@ -151,7 +165,7 @@ public class BTSFragment extends MainFragment {
         return true;
     }
 
-
+/*
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
             final ASTProgressBar progressBar = new ASTProgressBar(getContext());
@@ -172,7 +186,7 @@ public class BTSFragment extends MainFragment {
                 BTSData.put("BTSCurrent", "0");
                 BTSData.put("NoofDCDBBox", NoofDCDB);
                 BTSData.put("NoofKroneBox", NofKroneBox);
-                BTSData.put("NoofTransmissionRack", Microwave);
+                BTSData.put("Microwave", Microwave);
                 BTSData.put("NoofTransmissionRack", NoofRack);
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
@@ -219,13 +233,13 @@ public class BTSFragment extends MainFragment {
             ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
         }
 
-    }
+    }*/
 
-    //add pm install images into MultipartBody for send as multipart
+  /*  //add pm install images into MultipartBody for send as multipart
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-      /*  if (equpImagList != null && equpImagList.size() > 0) {
+      *//*  if (equpImagList != null && equpImagList.size() > 0) {
             for (SaveOffLineData data : equpImagList) {
                 if (data != null) {
                     if (data.getImagePath() != null) {
@@ -237,10 +251,10 @@ public class BTSFragment extends MainFragment {
                 }
             }
         }
-*/
+*//*
         return multipartBody;
     }
-
+*/
 
     public void showAddMoreItemDialog() {
         android.support.v7.app.AlertDialog.Builder builder =
