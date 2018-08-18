@@ -599,6 +599,8 @@ public class AirConditionerFragment extends MainFragment {
         //dialog.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         dialog.setMessage("Do you want do add more AC Item Details");
         dialog.setTitle("Add Ac Item");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.setButton(Dialog.BUTTON_POSITIVE, "Add More AC ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

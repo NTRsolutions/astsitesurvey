@@ -1133,7 +1133,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
     }
 
     public ArrayList<BtsInfoData> getAllBTSInfoList() {
-        String query = "Select *  FROM BTSInfo ";
+        String query = "Select *  FROM BTSInfo";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
