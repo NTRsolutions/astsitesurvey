@@ -197,8 +197,8 @@ public class OperatorNameFragment extends MainFragment {
                 jsonObject.put("Activity", "BTS");
                 JSONObject BTSData = new JSONObject();
                 BTSData.put("Type", btstype);
-                BTSData.put("Name", btsOperator);
-                BTSData.put("CabinetQty", NofCab);
+                BTSData.put("Name", strbtsOperator);
+                BTSData.put("CabinetQty", strNofCab);
                 BTSData.put("SMPSVoltage", strbtsvVoltagebtsside);
                 BTSData.put("SMPSCurrent", strbtsvollatagesmpsside);
                 BTSData.put("BTSVoltage", strbtscurrent);
