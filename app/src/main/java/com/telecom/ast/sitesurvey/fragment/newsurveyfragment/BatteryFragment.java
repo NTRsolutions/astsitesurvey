@@ -3,11 +3,25 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
@@ -41,16 +55,22 @@ import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -95,6 +115,7 @@ public class BatteryFragment extends MainFragment {
     private int screenPosition = 1;
     private Button btnSubmmit;
     private String itemstatus;
+
 
     @Override
     protected int fragmentLayout() {
@@ -414,16 +435,22 @@ public class BatteryFragment extends MainFragment {
         } else if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-             ASTUIUtil.startImagePicker(getHostActivity());
-           // ASTUtil.startFilePicker(getHostActivity(), 1, FNFilePicker.SIZE_LIMIT - attachmentSize());
+            //ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+            // ASTUtil.startFilePicker(getHostActivity(), 1, FNFilePicker.SIZE_LIMIT - attachmentSize());
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            //ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+            //ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmmit) {
@@ -658,12 +685,102 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
+      /*  if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
             ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
+            //getResult(files);
+        }*/
+
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
         }
     }
 
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, batteryimg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, cellImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    batteryimgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(imageView);
+                } else if (isImage2) {
+                    cellImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(imageView);
+                } else {
+                    sNoPlateImgImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
 
     public void clearFiledData() {
         etMake.setText("");
@@ -689,5 +806,42 @@ public class BatteryFragment extends MainFragment {
         long ttlSize = 5000;
 
         return ttlSize;
+    }
+
+    //convert uri into file
+    private Boolean addUriAsFile(final Uri uri, final String fileName) {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+
+                Boolean flag = false;
+                File imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                try {
+                    InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                    byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                    FileOutputStream fOut = new FileOutputStream(imgFile);
+                    fOut.write(inputData);
+                    //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    iStream.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+
+            }
+        }.execute();
+
+        return true;
     }
 }

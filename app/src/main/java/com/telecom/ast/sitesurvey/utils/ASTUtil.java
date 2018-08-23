@@ -272,23 +272,17 @@ public class ASTUtil {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    public static boolean isAboveLollipop()
-    {
+    public static boolean isAboveLollipop() {
         boolean isAboveHOneyComb = false;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1)
-        {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
             isAboveHOneyComb = true;
         }
         return isAboveHOneyComb;
     }
 
 
-
-
-    public static boolean isCollectionEmpty(Collection arrayList)
-    {
-        if(arrayList != null && arrayList.size() > 0)
-        {
+    public static boolean isCollectionEmpty(Collection arrayList) {
+        if (arrayList != null && arrayList.size() > 0) {
             return false;
         }
         return true;
@@ -306,16 +300,29 @@ public class ASTUtil {
         FNSortOrderingUtil.sort(array, sortOrderArray);
     }
 
+    public static File getFilePath(Context context) {
+        File directory = new File(context.getFilesDir(), Contants.APP_DIRECTORY);
+        return directory;
+    }
+
     public static File getExternalStorageFilePath(Context context) {
-        File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Contants.APP_DIRECTORY);
-        return DLPDirectory;
+        File directory = new File(Environment.getExternalStorageDirectory(), Contants.APP_DIRECTORY);
+        return directory;
+    }
+
+    public static File getExternalStorageFilePathCreateAppDirectory(Context context) {
+        File directory = new File(Environment.getExternalStorageDirectory(), Contants.APP_DIRECTORY);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
     }
 
     public static void startFilePicker(Activity activity, int limit, long sizeLimit) {
         FNFilePicker.options(activity)
                 .addMedia(MEDIA_TYPE_IMAGE)
-             //   .addMedia(MEDIA_TYPE_VIDEO)
-              //  .addMedia(MEDIA_TYPE_AUDIO)
+                //   .addMedia(MEDIA_TYPE_VIDEO)
+                //  .addMedia(MEDIA_TYPE_AUDIO)
                 //.addMedia(MEDIA_TYPE_DOCUMENT)
                 .returnAfterFirst(false)
                 .limit(limit)
@@ -325,4 +332,5 @@ public class ASTUtil {
                 .start(FNReqResCode.ATTACHMENT_REQUEST); // start image picker activity with request code
 
     }
+
 }
