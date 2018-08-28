@@ -11,6 +11,8 @@ public class BtsInfoData {
     String NoofTransmissionRack;
     String Microwave;
 
+    String OperatorType;
+
     public int getsNo() {
         return sNo;
     }
@@ -73,5 +75,14 @@ public class BtsInfoData {
 
     public void setMicrowave(String microwave) {
         Microwave = microwave;
+    }
+
+
+    public String getOperatorType() {
+        return OperatorType;
+    }
+
+    public void setOperatorType(String operatorType) {
+        OperatorType = operatorType;
     }
 }

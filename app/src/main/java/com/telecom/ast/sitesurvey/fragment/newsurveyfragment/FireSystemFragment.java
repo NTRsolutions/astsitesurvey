@@ -1,13 +1,18 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.telecom.ast.sitesurvey.R;
@@ -21,12 +26,16 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -54,9 +63,12 @@ public class FireSystemFragment extends MainFragment {
     String[] arrMake;
     AtmDatabase atmDatabase;
     String[] arrCapacity;
-    Spinner firedetecttypeSpineer, extinguisertypeSpineer;
-    LinearLayout ExtinguiserLayout, FireDetectSystemLayout;
-    String strfiredetecttypeSpineer, strextinguisertypeSpineer;
+    Spinner firedetecttypeSpineer, extinguisertypeSpineer, etRefillingStatusSpinner;
+    LinearLayout ExtinguiserLayout, FireDetectSystemLayout, FilledDateLayout;
+    String strfiredetecttypeSpineer, strextinguisertypeSpineer, stretRefillingStatusSpinner, strFilledDate;
+    TextView FilledDate, dateIcon;
+    private long datemilisec;
+    private Typeface materialdesignicons_font;
 
     @Override
     protected int fragmentLayout() {
@@ -77,11 +89,18 @@ public class FireSystemFragment extends MainFragment {
         FireDetectSystemLayout = findViewById(R.id.FireDetectSystemLayout);
         firedetecttypeSpineer = findViewById(R.id.firedetecttypeSpineer);
         extinguisertypeSpineer = findViewById(R.id.extinguisertypeSpineer);
+        etRefillingStatusSpinner = findViewById(R.id.etRefillingStatusSpinner);
+        FilledDateLayout = findViewById(R.id.FilledDateLayout);
+        dateIcon = findViewById(R.id.dateIconfilled);
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
+        dateIcon.setTypeface(materialdesignicons_font);
+        dateIcon.setText(Html.fromHtml("&#xf0ed;"));
     }
 
     @Override
     protected void setClickListeners() {
         btnSubmit.setOnClickListener(this);
+        FilledDateLayout.setOnClickListener(this);
     }
 
     @Override
@@ -151,6 +170,21 @@ public class FireSystemFragment extends MainFragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        etRefillingStatusSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Filled")) {
+                    FilledDateLayout.setVisibility(View.VISIBLE);
+                } else {
+                    FilledDateLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
     }
 
@@ -237,6 +271,9 @@ public class FireSystemFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
+        if (view.getId() == R.id.dateLayout) {
+            setFilledDate();
+        }
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
@@ -258,6 +295,7 @@ public class FireSystemFragment extends MainFragment {
         status = etstatusSpinner.getSelectedItem().toString();
         make = getTextFromView(this.etMake);
         capacity = getTextFromView(this.etCapacity);
+        stretRefillingStatusSpinner = etRefillingStatusSpinner.getSelectedItem().toString();
         if (isEmptyStr(firedetectSpineer)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Detect System");
             return false;
@@ -270,7 +308,12 @@ public class FireSystemFragment extends MainFragment {
         } else if (isEmptyStr(capacity)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter capacity ");
             return false;
+        } else if (isEmptyStr(stretRefillingStatusSpinner)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Refilling Status ");
+            return false;
         }
+
+
         return true;
     }
 
@@ -297,7 +340,8 @@ public class FireSystemFragment extends MainFragment {
                 FireSysData.put("CapacityID", capcityId);
                 FireSysData.put("Equipment", "Fire");
                 FireSysData.put("MakeID", strMakeId);
-
+                FireSysData.put("stretRefillingStatusSpinner", stretRefillingStatusSpinner);
+                FireSysData.put("RefillingFilledDate", datemilisec);
 
                 jsonObject.put("FireSysData", FireSysData);
             } catch (JSONException e) {
@@ -358,6 +402,35 @@ public class FireSystemFragment extends MainFragment {
                 }
             }
         }
+    }
+
+
+    public void setFilledDate() {
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                FilledDate.setText(sdf.format(myCalendar.getTime()));
+                datemilisec = myCalendar.getTimeInMillis();
+            }
+        };
+        FilledDateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
     }
 
 }

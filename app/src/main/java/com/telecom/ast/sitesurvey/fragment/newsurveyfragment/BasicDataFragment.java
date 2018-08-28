@@ -67,7 +67,7 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BasicDataFragment extends MainFragment {
     private AppCompatEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity,
-            etOwner, etOwnerContact, etCaretaker, etCaretakercontact, etownerAddress;
+            etOwner, etOwnerContact, etCaretaker, etCaretakercontact, etownerAddress, etNearestPoliceAddress, etSPOfficeAddress;
     private Spinner spDistrict, spCircle, spSSA;
     private AutoCompleteTextView etSiteId, etSiteName;
 
@@ -87,7 +87,7 @@ public class BasicDataFragment extends MainFragment {
     private String SSAId, DistrictId, CirclePosition, SSAPosition, DistrictPosition;
     private long currentMilli;
     private String dateTime, finalDate, finalTime, finalSurveyorName, curtomerSiteIdStr, siteIdStr, finalSiteName, finalAddress,
-            finalCity, finalPincode, Owner, OwnerContact, Caretaker, Caretakercontact, ownerAddress;
+            finalCity, finalPincode, Owner, OwnerContact, Caretaker, Caretakercontact, ownerAddress, stretNearestPoliceAddress, stretSPOfficeAddress;
 
     private int finalCircle, finalSSA, finalDistrict;
     private String[] arrCustomerSiteId;
@@ -127,6 +127,8 @@ public class BasicDataFragment extends MainFragment {
         etownerAddress = findViewById(R.id.etownerAddress);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         //startLocationUpdates();
+        etNearestPoliceAddress = findViewById(R.id.etNearestPoliceAddress);
+        etSPOfficeAddress = findViewById(R.id.etSPOfficeAddress);
     }
 
     @Override
@@ -152,7 +154,6 @@ public class BasicDataFragment extends MainFragment {
     public void getBasicData() {
         setBasiMasterData();
         getCircleData();
-        getPreFilledFields();
     }
 
 
@@ -270,28 +271,6 @@ public class BasicDataFragment extends MainFragment {
         }
     }
 
-    //-----------------Populating Pre Filled Fields---------------------
-    public void getPreFilledFields() {
-        if (!isEmptyStr(strDate)) {
-            etDate.setText(strDate);
-            etTime.setText(strTime);
-            etSurveyorName.setText(strSurveyyorName);
-            etSiteId.setText(strSiteCustomerId);
-            etSiteName.setText(strSiteName);
-            etAddress.setText(strAddress);
-            spCircle.setSelection(Integer.parseInt(strCirclePosition));
-            spSSA.setSelection(Integer.parseInt(strSSAPosition));
-            spDistrict.setSelection(Integer.parseInt(strDistrictPosition));
-            etCity.setText(strCity);
-            etPincode.setText(strPincode);
-            etOwner.setText(strOwner);
-            etOwnerContact.setText(strOwnerContact);
-            etCaretaker.setText(strCaretaker);
-            etCaretakercontact.setText(strCaretakercontact);
-            etownerAddress.setText(strownerAddress);
-
-        }
-    }
 
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
@@ -308,30 +287,6 @@ public class BasicDataFragment extends MainFragment {
         strCirclePosition = basicSharedPref.getString("CirclePosition", "");
         strSSAPosition = basicSharedPref.getString("SSAPosition", "");
         strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");
-      /*  commonFunctions = new ASTUIUtil();
-        basicSharedPref = getContext().getSharedPreferences("BasicSharedPref", MODE_PRIVATE);
-        strMilli = basicSharedPref.getString("MilliSeconds", "");
-        strDate = basicSharedPref.getString("Date", "");
-        strTime = basicSharedPref.getString("Time", "");
-        strSurveyyorName = basicSharedPref.getString("SurveyorName", "");
-        strSiteId = basicSharedPref.getString("SiteId", "");
-        strSiteCustomerId = basicSharedPref.getString("SiteCustomerId", "");
-        strSiteName = basicSharedPref.getString("SiteName", "");
-        strAddress = basicSharedPref.getString("Address", "");
-        strCircleId = basicSharedPref.getString("CircleId", "");
-        strSSAId = basicSharedPref.getString("SSAId", "");
-        strDistrictId = basicSharedPref.getString("DistrictId", "");
-        strCirclePosition = basicSharedPref.getString("CirclePosition", "");
-        strSSAPosition = basicSharedPref.getString("SSAPosition", "");
-        strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");
-        strCity = basicSharedPref.getString("City", "");
-        strPincode = basicSharedPref.getString("Pincode", "");
-        strOwner = basicSharedPref.getString("strOwner", "");
-        strOwnerContact = basicSharedPref.getString("strOwnerContact", "");
-        strCaretaker = basicSharedPref.getString("strCaretaker", "");
-        strCaretakercontact = basicSharedPref.getString("strCaretakercontact", "");
-        strownerAddress = basicSharedPref.getString("strownerAddress", "");*/
-
     }
 
     public void setSSAadapter(String[] arrSSA, int position) {
@@ -406,41 +361,6 @@ public class BasicDataFragment extends MainFragment {
 
     }
 
-    @Override
-    public boolean onBackPressed() {
-        saveBasicDataintSharedPref();
-        return super.onBackPressed();
-    }
-
-    private void saveBasicDataintSharedPref() {
-       /* SharedPreferences.Editor editor = basicSharedPref.edit();
-        editor.putString("Date", finalDate);
-        editor.putString("Time", finalTime);
-        editor.putString("SurveyorName", finalSurveyorName);
-        editor.putString("SiteId", siteIdStr);
-        editor.putString("SiteCustomerId", curtomerSiteIdStr);
-        editor.putString("SiteName", finalSiteName);
-        editor.putString("Address", finalAddress);
-        editor.putString("CircleId", strCircleId);
-        editor.putString("SSAId", SSAId);
-        editor.putString("DistrictId", DistrictId);
-        editor.putString("CirclePosition", CirclePosition);
-        editor.putString("SSAPosition", SSAPosition);
-        editor.putString("DistrictPosition", DistrictPosition);
-        editor.putString("City", finalCity);
-        editor.putString("Pincode", finalPincode);
-        editor.putString("strOwner", Owner);
-        editor.putString("strOwnerContact", OwnerContact);
-        editor.putString("strCaretaker", Caretaker);
-        editor.putString("strCaretakercontact", Caretakercontact);
-        editor.putString("strownerAddress", ownerAddress);
-        editor.putString("MilliSeconds", String.valueOf(currentMilli));
-        editor.commit();*/
-    /*    strCirclePosition = basicSharedPref.getString("CirclePosition", "");
-        strSSAPosition = basicSharedPref.getString("SSAPosition", "");
-        strDistrictPosition = basicSharedPref.getString("DistrictPosition", "");*/
-
-    }
 
     public boolean isValidate() {
         dateTime = String.valueOf(currentMilli);
@@ -460,6 +380,8 @@ public class BasicDataFragment extends MainFragment {
         Caretaker = getTextFromView(this.etCaretaker);
         Caretakercontact = getTextFromView(this.etCaretakercontact);
         ownerAddress = getTextFromView(this.etownerAddress);
+        stretNearestPoliceAddress = getTextFromView(this.etNearestPoliceAddress);
+        stretSPOfficeAddress = getTextFromView(this.etSPOfficeAddress);
         if (spCircle.getSelectedItemPosition() > 1) {
             strCircleId = arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId();
             CirclePosition = String.valueOf(spCircle.getSelectedItemPosition());
@@ -500,6 +422,17 @@ public class BasicDataFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Pincode");
             return false;
         }
+
+        else if (isEmptyStr(stretNearestPoliceAddress)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Nearest Police Station Address");
+            return false;
+        }
+
+        else if (isEmptyStr(stretSPOfficeAddress)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "SP Office Address");
+            return false;
+        }
+
         return true;
     }
 
@@ -532,7 +465,8 @@ public class BasicDataFragment extends MainFragment {
                 BasicData.put("CareTakerNo", Caretakercontact);
                 BasicData.put("Latitude", currentLatitude);
                 BasicData.put("Longitude", currentLongitude);
-
+                BasicData.put("stretNearestPoliceAddress", stretNearestPoliceAddress);
+                BasicData.put("stretSPOfficeAddress", stretSPOfficeAddress);
                 jsonObject.put("BasicData", BasicData);
 
             } catch (JSONException e) {
@@ -556,7 +490,6 @@ public class BasicDataFragment extends MainFragment {
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
-                            saveBasicDataintSharedPref();
                         }
                     } else {
                         ASTUIUtil.showToast("BasiC Data Information has not been updated!");
@@ -718,7 +651,6 @@ public class BasicDataFragment extends MainFragment {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
     }
-
 
 
 }

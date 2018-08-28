@@ -50,9 +50,9 @@ public class BTSFragment extends MainFragment {
     private LinearLayout mContainerView;
     private Button btnSubmit;
     AppCompatEditText etNofCab;
-    AppCompatEditText etNoofDCDB, etNofKroneBox, etNoofRack, etMicrowave;
-    Spinner btstyelSpinner, etbtsOperator;
-    String btsOperator, NoofDCDB, NofKroneBox, NoofRack, Microwave, NofCab, btsty;
+    AppCompatEditText etNoofDCDB, etNofKroneBox, etNoofRack;
+    Spinner btstyelSpinner, etbtsOperator, etMicrowave, etOperatorType;
+    String btsOperator, NoofDCDB, NofKroneBox, NoofRack, Microwave, NofCab, btsty, stretOperatorType;
     String strUserId, strSiteId;
     SharedPreferences userPref;
     int SNo = 1;
@@ -72,6 +72,7 @@ public class BTSFragment extends MainFragment {
         etNoofRack = this.findViewById(R.id.etNoofRack);
         etMicrowave = this.findViewById(R.id.etMicrowave);
         btnSubmit = findViewById(R.id.btnSubmit);
+        etOperatorType = findViewById(R.id.etOperatorType);
     }
 
     @Override
@@ -94,28 +95,6 @@ public class BTSFragment extends MainFragment {
     @Override
     protected void dataToView() {
         getUserPref();
-        getSharedPrefSaveData();
-        if (!isEmptyStr(btsOperator) || !isEmptyStr(NoofDCDB) || !isEmptyStr(NofKroneBox) || !isEmptyStr(NoofRack) ||
-                !isEmptyStr(Microwave) ||
-                !isEmptyStr(NofCab)) {
-            // etbtsOperator.setText(btsOperator);
-            etNofCab.setText(NofCab);
-            etNoofDCDB.setText(NoofDCDB);
-            etNofKroneBox.setText(NofKroneBox);
-            etNoofRack.setText(NoofRack);
-            etMicrowave.setText(Microwave);
-            etNofCab.setText(NofCab);
-        }
-    }
-
-    /*
-     *
-     * get Data in Shared Pref.
-     */
-    public void getSharedPrefSaveData() {
-    /*    pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strbtsOperator = pref.getString("strbtsOperator", "");
-        strNofCab = pref.getString("strNofCab", "");*/
 
     }
 
@@ -134,6 +113,7 @@ public class BTSFragment extends MainFragment {
             btsInfoData.setNoofKroneBox(NofKroneBox);
             btsInfoData.setNoofTransmissionRack(NoofRack);
             btsInfoData.setMicrowave(Microwave);
+            btsInfoData.setOperatorType(stretOperatorType);
             atmDatabase.upsertBTSInfo(btsInfoData);
             showAddMoreItemDialog();
 
@@ -151,9 +131,9 @@ public class BTSFragment extends MainFragment {
         NoofDCDB = getTextFromView(this.etNoofDCDB);
         NofKroneBox = getTextFromView(this.etNofKroneBox);
         NoofRack = getTextFromView(this.etNoofRack);
-        Microwave = getTextFromView(this.etMicrowave);
         btsty = btstyelSpinner.getSelectedItem().toString();
-
+        Microwave = etMicrowave.getSelectedItem().toString();
+        stretOperatorType = etOperatorType.getSelectedItem().toString();
 
         if (isEmptyStr(btsOperator)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter BTS Operator");
@@ -289,7 +269,7 @@ public class BTSFragment extends MainFragment {
         etNoofDCDB.setText("");
         etNofKroneBox.setText("");
         etNoofRack.setText("");
-        etMicrowave.setText("");
+        etMicrowave.setSelection(0);
         etNofCab.setText("");
         btstyelSpinner.setSelection(0);
     }

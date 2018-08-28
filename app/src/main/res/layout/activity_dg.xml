@@ -578,7 +578,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
                 <com.telecom.ast.sitesurvey.component.FNTextView
@@ -612,31 +612,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etDGBatteryMake"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Battery Make"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
                 android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <com.telecom.ast.sitesurvey.component.FNTextView
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_2dp"
-                    android:gravity="center_vertical"
-                    android:text="DG Battery Capacity"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_14dp" />
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <Spinner
-                    android:id="@+id/dBCapacitySpinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/_32dp"
-                    android:popupBackground="@color/white" />
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etDGBatterySrNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Battery Sr. No."
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
 
-                <View
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1dp"
-                    android:layout_marginRight="@dimen/_10dp"
-                    android:background="@color/backgroundColor" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etdgbCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Battery Capacity"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -684,12 +731,232 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
+                    android:text="Condition of wiring"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/etConditionofwiring"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG earthing"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/etDGearthing"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Condition of CANOPY"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/etConditionCANOPY"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etDGRunHourMeter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Run Hour Meter Reading"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Low lube  oil pressure"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/eTDGlowLUBEWire"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
                     android:text="Back Compressor"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
                 <Spinner
                     android:id="@+id/backCompressorSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etDGFuelTank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="DG Fuel Tank Capacity"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="CableGrouting"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/etCableGroutingspinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_32dp"
@@ -731,33 +998,35 @@
             </LinearLayout>
 
 
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Foundation"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
+                <Spinner
+                    android:id="@+id/etDGFoundation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGBatteryMake"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Battery Make"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
@@ -765,81 +1034,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Cooling type"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etConditionofwiring"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Condition of wiring"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/etDGCoolingtype"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGearthing"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG earthing"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etConditionCANOPY"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Condition of CANOPY"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
@@ -847,27 +1066,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Dg Inlet Fuel pipe"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
+                <Spinner
+                    android:id="@+id/etDgintelpipe"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGRunHourMeter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Run Hour Meter"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
@@ -875,135 +1098,62 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Outlet Fuel Pipe"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
+                <Spinner
+                    android:id="@+id/etDgouttelpipe"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/eTDGlowLUBEWire"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG low LUBE Wire"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Exhaust Pipe Condition"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGFuelTank"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Fuel Tank"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/etDGExhaustcondi"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etCableGrouting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="CableGrouting"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGFoundation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Foundation"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGCoolingtype"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Cooling type"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
@@ -1011,54 +1161,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Exhaust Smoke colour "
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDgpipe"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Dg pipe"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/dGExhaustSmokecolour"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGExhaustcondi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Exhaust Pipe Condition"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
@@ -1066,109 +1193,100 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Emergency Stop Switch"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
+                <Spinner
+                    android:id="@+id/etDGEmergencyStopSwitch"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGEmergencyStopSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Emergency Stop Switch"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Rental DG ChangeOver Box"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
+                <Spinner
+                    android:id="@+id/etRentalDGChangeOver"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etRentalDGChangeOver"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Rental DG ChangeOver Box"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="DG Pollution Certificate"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGBatterysn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Battery SerialNo"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/etDGPollutionCertificate"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
 
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGPollutionCertificate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Pollution Certificate"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="fill_parent"

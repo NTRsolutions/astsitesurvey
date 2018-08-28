@@ -79,7 +79,7 @@ public class EBMeterFragment extends MainFragment {
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, waterseedpinner;
     private String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
-    private String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
+    private String make="", model="", capacity="", serialNumber="", yearOfManufacturing="0", description="", type, currentDateTime;
     private SharedPreferences pref;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     private AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etTheftfromSite;

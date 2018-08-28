@@ -78,7 +78,7 @@ public class DGFragment extends MainFragment {
     private ArrayList<EquipMakeDataModel> arrEquipData;
     private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, itemCondition;
+    private String make="", model="", capacity="", serialNumber="", yearOfManufacturing="0", description="", currentDateTime, itemCondition;
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner;
@@ -87,16 +87,17 @@ public class DGFragment extends MainFragment {
     private String mCBStatus, dbAlternatermake, eSN,
             dBCapacity, dgContacter, backCompressor, AutomationCondition, PowerPanelMake, PowerPanelCapacity, DGType, AlternaterSno,
             AlternterCapacity, DGBatteryStatus, DGBatteryMake, Conditionofwiring, DGearthing, ConditionCANOPY,
-            DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgpipe,
-            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGBatterysn, DGPollutionCertificate, straMFPanelSpinner, strnoofDGCylinderSpinner;
-    private String stralternaterPhaseSpinner;
+            DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgintelpipe, Dgoutelpipe,
+            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGPollutionCertificate, straMFPanelSpinner, strnoofDGCylinderSpinner;
+    private String stralternaterPhaseSpinner, stretDGBatterySrNo,strdGExhaustSmokecolour;
     private Spinner mCBStatusSpinner,
-            dBCapacitySpinner, dgContacterSpinner, backCompressorSpinner;
+            dgContacterSpinner, backCompressorSpinner;
 
     private AppCompatEditText etPowerPanelMake, etPowerPanelCapacity, etDGType, etAlternaterSno,
-            etAlternterCapacity, etDGBatteryMake, etConditionofwiring, etDGearthing, etConditionCANOPY,
-            etDGRunHourMeter, eTDGlowLUBEWire, etDGFuelTank, etCableGrouting, etDGFoundation, etDGCoolingtype, etDgpipe,
-            etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver, etDGBatterysn, etDGPollutionCertificate, etdgAlternatermake, eSNSpinner;
+            etAlternterCapacity, etDGBatteryMake,
+            etDGRunHourMeter, etDGFuelTank,
+
+            etdgAlternatermake, eSNSpinner, etdgbCapacity, etDGBatterySrNo;
 
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
@@ -108,7 +109,10 @@ public class DGFragment extends MainFragment {
     private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
-    private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,etDGBatteryStatus;
+    private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,
+            etDGBatteryStatus, etConditionofwiring, etDGearthing, etConditionCANOPY, eTDGlowLUBEWire, etCableGroutingspinner,
+            etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch,  etRentalDGChangeOver,
+            etDGPollutionCertificate,dGExhaustSmokecolour;
 
     @Override
     protected int fragmentLayout() {
@@ -133,7 +137,9 @@ public class DGFragment extends MainFragment {
         mCBStatusSpinner = findViewById(R.id.mCBStatusSpinner);
         etdgAlternatermake = findViewById(R.id.etdgAlternatermake);
         eSNSpinner = findViewById(R.id.eSNSpinner);
-        dBCapacitySpinner = findViewById(R.id.dBCapacitySpinner);
+        etDGBatteryMake = findViewById(R.id.etDGBatteryMake);
+        etdgbCapacity = findViewById(R.id.etdgbCapacity);
+        etDGBatterySrNo = findViewById(R.id.etDGBatterySrNo);
         dgContacterSpinner = findViewById(R.id.dgContacterSpinner);
         backCompressorSpinner = findViewById(R.id.backCompressorSpinner);
         etPowerPanelMake = findViewById(R.id.etPowerPanelMake);
@@ -141,22 +147,20 @@ public class DGFragment extends MainFragment {
         etDGType = findViewById(R.id.etDGType);
         etAlternaterSno = findViewById(R.id.etAlternaterSno);
         etAlternterCapacity = findViewById(R.id.etAlternterCapacity);
-        etDGBatteryStatus = findViewById(R.id.etDGBatteryStatus);
-        etDGBatteryMake = findViewById(R.id.etDGBatteryMake);
         etConditionofwiring = findViewById(R.id.etConditionofwiring);
         etDGearthing = findViewById(R.id.etDGearthing);
         etConditionCANOPY = findViewById(R.id.etConditionCANOPY);
         etDGRunHourMeter = findViewById(R.id.etDGRunHourMeter);
         eTDGlowLUBEWire = findViewById(R.id.eTDGlowLUBEWire);
         etDGFuelTank = findViewById(R.id.etDGFuelTank);
-        etCableGrouting = findViewById(R.id.etCableGrouting);
+        etCableGroutingspinner = findViewById(R.id.etCableGroutingspinner);
         etDGFoundation = findViewById(R.id.etDGFoundation);
         etDGCoolingtype = findViewById(R.id.etDGCoolingtype);
-        etDgpipe = findViewById(R.id.etDgpipe);
+        etDgintelpipe = findViewById(R.id.etDgintelpipe);
+        etDgouttelpipe = findViewById(R.id.etDgouttelpipe);
         etDGExhaustcondi = findViewById(R.id.etDGExhaustcondi);
         etDGEmergencyStopSwitch = findViewById(R.id.etDGEmergencyStopSwitch);
         etRentalDGChangeOver = findViewById(R.id.etRentalDGChangeOver);
-        etDGBatterysn = findViewById(R.id.etDGBatterysn);
         etDGPollutionCertificate = findViewById(R.id.etDGPollutionCertificate);
         dateIcon = findViewById(R.id.dateIcon);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
@@ -167,7 +171,8 @@ public class DGFragment extends MainFragment {
         automationConditionSpiiner = findViewById(R.id.automationConditionSpiiner);
         noofDGCylinderSpinner = findViewById(R.id.noofDGCylinderSpinner);
         alternaterPhaseSpinner = findViewById(R.id.alternaterPhaseSpinner);
-        etDGBatteryStatus = findViewById(R.id.alternaterPhaseSpinner);
+        etDGBatteryStatus = findViewById(R.id.etDGBatteryStatus);
+        dGExhaustSmokecolour = findViewById(R.id.dGExhaustSmokecolour);
     }
 
     @Override
@@ -204,16 +209,16 @@ public class DGFragment extends MainFragment {
         alternaterPhaseSpinner.setAdapter(alternaterPhaseSpinner_arrayda);
 
 
-        final String dBCapacitySpinnerSpineer_array[] = {"CANOPY door lock", "door pannel", "ok", "not ok"};
-        ArrayAdapter<String> dBCapacitySpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dBCapacitySpinnerSpineer_array);
-        dBCapacitySpinner.setAdapter(dBCapacitySpinnerad);
+        final String etConditionofwiring_array[] = {"Ok", "Not ok"};
+        ArrayAdapter<String> etConditionofwiringad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etConditionofwiring_array);
+        etConditionofwiring.setAdapter(etConditionofwiringad);
 
-        final String dgContacterSpinnerarray[] = {"DG Body earth ", "Neutral Earth"};
+        final String dgContacterSpinnerarray[] = {"CANOPY door lock", "door pannel", "ok", "not ok"};
         ArrayAdapter<String> dgContacterSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dgContacterSpinnerarray);
         dgContacterSpinner.setAdapter(dgContacterSpinnerad);
 
 
-        final String backCompressorSpinner_array[] = {"Available", "Not Available"};
+        final String backCompressorSpinner_array[] = {"TOH", "MOH"};
         ArrayAdapter<String> backCompressorSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, backCompressorSpinner_array);
         backCompressorSpinner.setAdapter(backCompressorSpinnerada);
 
@@ -230,6 +235,74 @@ public class DGFragment extends MainFragment {
         final String noofDGCylinderSpinner_array[] = {"2", "3", "4"};
         ArrayAdapter<String> noofDGCylinderSpinner_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, noofDGCylinderSpinner_array);
         noofDGCylinderSpinner.setAdapter(noofDGCylinderSpinner_adapter);
+
+        final String etDGBatteryStatus_array[] = {"working", "not working"};
+        ArrayAdapter<String> etDGBatteryStatus_array_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGBatteryStatus_array);
+        etDGBatteryStatus.setAdapter(etDGBatteryStatus_array_adapter);
+
+        final String etDGearthing_array[] = {"Body earth", "Neutral Earth"};
+        ArrayAdapter<String> etDGearthing_array_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGearthing_array);
+        etDGearthing.setAdapter(etDGearthing_array_adapter);
+
+        final String etConditionCANOPY_array[] = {"OK", "Not OK"};
+        ArrayAdapter<String> etConditionCANOPY_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etConditionCANOPY_array);
+        etConditionCANOPY.setAdapter(etConditionCANOPY_adapter);
+
+
+        final String eTDGlowLUBEWire_array[] = {"Working", "Faulty"};
+        ArrayAdapter<String> eTDGlowLUBEWire_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eTDGlowLUBEWire_array);
+        eTDGlowLUBEWire.setAdapter(eTDGlowLUBEWire_adapter);
+
+
+        final String etCableGroutingspinner_array[] = {"Yes", "No"};
+        ArrayAdapter<String> etCableGroutingspinner_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etCableGroutingspinner_array);
+        etCableGroutingspinner.setAdapter(etCableGroutingspinner_adapter);
+
+
+        final String etDGFoundation_array[] = {"Ok", "Not Ok"};
+        ArrayAdapter<String> etDGFoundation_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGFoundation_array);
+        etDGFoundation.setAdapter(etDGFoundation_adapter);
+
+
+        final String etDGCoolingtype_array[] = {"Air", "Water"};
+        ArrayAdapter<String> etDGCoolingtypen_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGCoolingtype_array);
+        etDGCoolingtype.setAdapter(etDGCoolingtypen_adapter);
+
+
+        final String etDgpipe_array[] = {"Ok", "Not ok"};
+        ArrayAdapter<String> etDgpipe_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDgpipe_array);
+        etDgintelpipe.setAdapter(etDgpipe_adapter);
+
+        final String etDgouttelpipearray[] = {"Ok", "Not ok"};
+        ArrayAdapter<String> etDgouttelpipeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDgouttelpipearray);
+        etDgouttelpipe.setAdapter(etDgouttelpipeadapter);
+
+        final String etDGExhaustcondi_array[] = {"Ok", "Not ok"};
+        ArrayAdapter<String> etDGExhaustcondi_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGExhaustcondi_array);
+        etDGExhaustcondi.setAdapter(etDGExhaustcondi_adapter);
+
+        final String dGExhaustSmokecolour_array[] = {"Blue", "Black", "Grey", "White"};
+        ArrayAdapter<String> dGExhaustSmokecolour_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dGExhaustSmokecolour_array);
+        dGExhaustSmokecolour.setAdapter(dGExhaustSmokecolour_adapter);
+
+
+        final String etDGEmergencyStopSwitch_array[] = {"Ok", "Not Ok"};
+        ArrayAdapter<String> etDGEmergencyStopSwitch_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGEmergencyStopSwitch_array);
+        etDGEmergencyStopSwitch.setAdapter(etDGEmergencyStopSwitch_adapter);
+
+
+        final String etRentalDGChangeOver_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> etRentalDGChangeOver_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etRentalDGChangeOver_array);
+        etRentalDGChangeOver.setAdapter(etRentalDGChangeOver_adapter);
+
+
+
+        final String etDGPollutionCertificate_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> etDGPollutionCertificateadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGPollutionCertificate_array);
+        etDGPollutionCertificate.setAdapter(etDGPollutionCertificateadapter);
+
+
+
 
     }
 
@@ -332,7 +405,7 @@ public class DGFragment extends MainFragment {
                     mCBStatusSpinner.setEnabled(false);
                     etdgAlternatermake.setEnabled(false);
                     eSNSpinner.setEnabled(false);
-                    dBCapacitySpinner.setEnabled(false);
+                    etdgbCapacity.setEnabled(false);
                     dgContacterSpinner.setEnabled(false);
                     backCompressorSpinner.setEnabled(false);
                     automationConditionSpiiner.setEnabled(false);
@@ -349,15 +422,17 @@ public class DGFragment extends MainFragment {
                     etDGRunHourMeter.setEnabled(false);
                     eTDGlowLUBEWire.setEnabled(false);
                     etDGFuelTank.setEnabled(false);
-                    etCableGrouting.setEnabled(false);
+                    etCableGroutingspinner.setEnabled(false);
                     etDGFoundation.setEnabled(false);
                     etDGCoolingtype.setEnabled(false);
-                    etDgpipe.setEnabled(false);
+                    etDgintelpipe.setEnabled(false);
+                    etDgouttelpipe.setEnabled(false);
                     etDGExhaustcondi.setEnabled(false);
                     etDGEmergencyStopSwitch.setEnabled(false);
                     etRentalDGChangeOver.setEnabled(false);
-                    etDGBatterysn.setEnabled(false);
                     etDGPollutionCertificate.setEnabled(false);
+                    etDGBatterySrNo.setEnabled(false);
+                    dGExhaustSmokecolour.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -374,7 +449,7 @@ public class DGFragment extends MainFragment {
                     mCBStatusSpinner.setEnabled(true);
                     etdgAlternatermake.setEnabled(true);
                     eSNSpinner.setEnabled(true);
-                    dBCapacitySpinner.setEnabled(true);
+                    etdgbCapacity.setEnabled(true);
                     dgContacterSpinner.setEnabled(true);
                     backCompressorSpinner.setEnabled(true);
                     automationConditionSpiiner.setEnabled(true);
@@ -391,15 +466,17 @@ public class DGFragment extends MainFragment {
                     etDGRunHourMeter.setEnabled(true);
                     eTDGlowLUBEWire.setEnabled(true);
                     etDGFuelTank.setEnabled(true);
-                    etCableGrouting.setEnabled(true);
+                    etCableGroutingspinner.setEnabled(true);
                     etDGFoundation.setEnabled(true);
                     etDGCoolingtype.setEnabled(true);
-                    etDgpipe.setEnabled(true);
+                    etDgintelpipe.setEnabled(true);
+                    etDgouttelpipe.setEnabled(true);
                     etDGExhaustcondi.setEnabled(true);
                     etDGEmergencyStopSwitch.setEnabled(true);
                     etRentalDGChangeOver.setEnabled(true);
-                    etDGBatterysn.setEnabled(true);
                     etDGPollutionCertificate.setEnabled(true);
+                    etDGBatterySrNo.setEnabled(true);
+                    dGExhaustSmokecolour.setEnabled(true);
                 }
             }
 
@@ -452,7 +529,8 @@ public class DGFragment extends MainFragment {
             dbAlternatermake = getTextFromView(this.etdgAlternatermake);
             eSN = getTextFromView(this.eSNSpinner);
             stralternaterPhaseSpinner = alternaterPhaseSpinner.getSelectedItem().toString();
-            dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
+            dBCapacity = getTextFromView(this.etdgbCapacity);
+            stretDGBatterySrNo = getTextFromView(this.etDGBatterySrNo);
             dgContacter = dgContacterSpinner.getSelectedItem().toString();
             backCompressor = backCompressorSpinner.getSelectedItem().toString();
             AutomationCondition = automationConditionSpiiner.getSelectedItem().toString();
@@ -461,26 +539,27 @@ public class DGFragment extends MainFragment {
             DGType = getTextFromView(this.etDGType);
             AlternaterSno = getTextFromView(this.etAlternaterSno);
             AlternterCapacity = getTextFromView(this.etAlternterCapacity);
-            DGBatteryStatus = getTextFromView(this.etDGBatteryStatus);
+            DGBatteryStatus = etDGBatteryStatus.getSelectedItem().toString();
             DGBatteryMake = getTextFromView(this.etDGBatteryMake);
-            Conditionofwiring = getTextFromView(this.etConditionofwiring);
-            DGearthing = getTextFromView(this.etDGearthing);
-            ConditionCANOPY = getTextFromView(this.etConditionCANOPY);
+            Conditionofwiring = etConditionofwiring.getSelectedItem().toString();
+            DGearthing = etDGearthing.getSelectedItem().toString();
+            ConditionCANOPY = etConditionCANOPY.getSelectedItem().toString();
             DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
-            DGlowLUBEWire = getTextFromView(this.eTDGlowLUBEWire);
+            DGlowLUBEWire = eTDGlowLUBEWire.getSelectedItem().toString();
             DGFuelTank = getTextFromView(this.etDGFuelTank);
-            CableGrouting = getTextFromView(this.etCableGrouting);
-            DGFoundation = getTextFromView(this.etDGFoundation);
-            DGCoolingtype = getTextFromView(this.etDGCoolingtype);
-            Dgpipe = getTextFromView(this.etDgpipe);
-            DGExhaustcondi = getTextFromView(this.etDGExhaustcondi);
-            DGEmergencyStopSwitch = getTextFromView(this.etDGEmergencyStopSwitch);
-            RentalDGChangeOver = getTextFromView(this.etRentalDGChangeOver);
-            DGBatterysn = getTextFromView(this.etDGBatterysn);
-            DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
+            CableGrouting = etCableGroutingspinner.getSelectedItem().toString();
+            DGFoundation = etDGFoundation.getSelectedItem().toString();
+            DGCoolingtype = etDGCoolingtype.getSelectedItem().toString();
+            Dgintelpipe = etDgintelpipe.getSelectedItem().toString();
+            Dgoutelpipe = etDgouttelpipe.getSelectedItem().toString();
+            DGExhaustcondi = etDGExhaustcondi.getSelectedItem().toString();
+            DGEmergencyStopSwitch = etDGEmergencyStopSwitch.getSelectedItem().toString();
+            RentalDGChangeOver = etRentalDGChangeOver.getSelectedItem().toString();
+            DGPollutionCertificate =etDGPollutionCertificate.getSelectedItem().toString();
             straMFPanelSpinner = aMFPanelSpinner.getSelectedItem().toString();
             strnoofDGCylinderSpinner = noofDGCylinderSpinner.getSelectedItem().toString();
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
+            strdGExhaustSmokecolour= dGExhaustSmokecolour.getSelectedItem().toString();
 
 
             if (isEmptyStr(make)) {
@@ -584,7 +663,7 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_AlternaterCapacity", AlternterCapacity);
             EquipmentData.put("DG_BatteryStatus", DGBatteryStatus);
             EquipmentData.put("DG_BatteryMake", DGBatteryMake);
-            EquipmentData.put("DG_BatterySerialNo", DGBatterysn);
+            EquipmentData.put("DG_BatterySerialNo", stretDGBatterySrNo);
             EquipmentData.put("DG_BatteryCapacity", dBCapacity);
             EquipmentData.put("DG_Contacter", dgContacter);
             EquipmentData.put("DG_WiringCondition", Conditionofwiring);
@@ -597,7 +676,8 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_CableGrouting", CableGrouting);
             EquipmentData.put("DG_FoundationStatus", DGFoundation);
             EquipmentData.put("DG_CoolingType", DGCoolingtype);
-            EquipmentData.put("DG_Pipe", Dgpipe);
+            EquipmentData.put("DG_IntelPipe", Dgintelpipe);
+            EquipmentData.put("DG_OuttelPipe", Dgoutelpipe);
             EquipmentData.put("DG_ExhaustPipeCondition", DGExhaustcondi);
             EquipmentData.put("DG_EmergencyStopSwitch", DGEmergencyStopSwitch);
             EquipmentData.put("DG_Rental", "");
@@ -608,6 +688,7 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_AMFPanel", straMFPanelSpinner);
             EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
             EquipmentData.put("DG_stralternaterPhaseSpinner", stralternaterPhaseSpinner);
+            EquipmentData.put("DG_strdGExhaustSmokecolour", strdGExhaustSmokecolour);
 
 
 

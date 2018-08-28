@@ -95,6 +95,24 @@
         <item>Jio</item>
     </string-array>
 
+    <string-array name="Media">
+        <item>OFC</item>
+        <item>Microwave</item>
+    </string-array>
+
+
+    <string-array name="OperatorType">
+        <item>Anchor</item>
+        <item>Sharing</item>
+    </string-array>
+
+
+    <string-array name="RefillingStatus">
+        <item>Filled</item>
+        <item>Empty</item>
+    </string-array>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
