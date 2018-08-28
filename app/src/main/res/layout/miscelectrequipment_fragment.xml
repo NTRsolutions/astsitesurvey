@@ -65,6 +65,42 @@
 
 
                 <LinearLayout
+                    android:id="@+id/ElectricaltypeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4dp"
+                    android:visibility="gone">
+
+                    <com.telecom.ast.sitesurvey.component.FNTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_2dp"
+                        android:gravity="center_vertical"
+                        android:text="Electrical Connection Type"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+
+
+                    <Spinner
+                        android:id="@+id/spinnerElectricaltype"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/_32dp"
+                        android:popupBackground="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1dp"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:background="@color/backgroundColor" />
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_30dp"
@@ -150,16 +186,82 @@
                             android:id="@+id/etEarthingvalue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
                             android:autoSizeTextType="uniform"
                             android:hint="Enter Earthing-Resistance Value."
+                            android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
 
 
                 </LinearLayout>
 
+
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_22dp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4dp">
+
+                    <com.telecom.ast.sitesurvey.component.FNTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:text="Servo Stabiliser"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+
+
+                    <Spinner
+                        android:id="@+id/etServoStabiliserSpinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/_32dp"
+                        android:popupBackground="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1dp"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:background="@color/backgroundColor" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ServoStabiliserCondiLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_22dp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4dp">
+
+                    <com.telecom.ast.sitesurvey.component.FNTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:text="Servo Stabiliser Condition"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+
+
+                    <Spinner
+                        android:id="@+id/StabiliserConditopnSpinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/_32dp"
+                        android:popupBackground="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1dp"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:background="@color/backgroundColor" />
+                </LinearLayout>
+
+
+              <!--  <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_30dp"
@@ -184,7 +286,7 @@
                     </android.support.design.widget.TextInputLayout>
 
 
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

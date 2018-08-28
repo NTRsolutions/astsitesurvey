@@ -5,7 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -38,8 +41,10 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
@@ -47,6 +52,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,7 +82,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     String CurtomerSite_Id;
     AtmDatabase atmDatabase;
     Spinner itemConditionSpinner;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, AnchorOperator, SharingOperator;
+    String make="", model="", capacity="", serialNumber="", yearOfManufacturing="", description="", currentDateTime="", AnchorOperator="", SharingOperator="";
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
@@ -160,22 +167,6 @@ public class InputAlarmPanelFragment extends MainFragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                myCalendar.set(Calendar.MINUTE, minute);
-                timeView.setText(sdfTime.format(myCalendar.getTime()));
-            }
-        };
-        timeView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                new TimePickerDialog(getContext(), time, myCalendar
-                        .get(Calendar.HOUR_OF_DAY), myCalendar
-                        .get(Calendar.MINUTE), true).show();
-            }
-        });*/
     }
 
     @Override
@@ -210,7 +201,6 @@ public class InputAlarmPanelFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        getSharedprefData();
         getUserPref();
         setSpinnerValue();
         atmDatabase = new AtmDatabase(getContext());
@@ -243,21 +233,6 @@ public class InputAlarmPanelFragment extends MainFragment {
                 || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription) || !isEmptyStr(AnchorOperator)
                 || !isEmptyStr(SharingOperator)) {
 
-/*            etMake.setText(strMake);
-            etModel.setText(strModel);
-            etCapacity.setText(strCapacity);
-            etSerialNum.setText(strSerialNum);
-            etYear.setText(strYearOfManufacturing);
-            etDescription.setText(strDescription);
-            etAnchorOperator.setText(AnchorOperator);
-            etSharingOperator.setText(SharingOperator);*/
-
-
-          /*  if (!bateryphoto.equals("") || !cellPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(bateryphoto)).placeholder(R.drawable.noimage).into(batteryimg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(cellPhoto)).placeholder(R.drawable.noimage).into(cellImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }*/
         }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -310,33 +285,6 @@ public class InputAlarmPanelFragment extends MainFragment {
 
     }
 
-    /*
-     *
-     *     Shared Prefrences
-     */
-    public void getSharedprefData() {
-       /* InputAlarmPanelpref = getContext().getSharedPreferences("InputAlarmPanelpref", MODE_PRIVATE);
-        strUserId = InputAlarmPanelpref.getString("USER_ID", "");
-        strMake = InputAlarmPanelpref.getString("ALARMPA_Make", "");
-        strModel = InputAlarmPanelpref.getString("ALARMPA_Model", "");
-        strCapacity = InputAlarmPanelpref.getString("ALARMPA_Capacity", "");
-        strMakeId = InputAlarmPanelpref.getString("ALARMPA_MakeId", "");
-        strModelId = InputAlarmPanelpref.getString("ALARMPA_ModelId", "");
-        strDescriptionId = InputAlarmPanelpref.getString("ALARMPA_DescriptionId", "");
-        strSerialNum = InputAlarmPanelpref.getString("ALARMPA_SerialNum", "");
-        strYearOfManufacturing = InputAlarmPanelpref.getString("ALARMPA_YearOfManufacturing", "");
-        strDescription = InputAlarmPanelpref.getString("ALARMPA_Description", "");
-        bateryphoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto1", "");
-        cellPhoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto2", "");
-        sNoPlatephoto = InputAlarmPanelpref.getString("ALARMPA_batryPhoto3", "");
-        strSavedDateTime = InputAlarmPanelpref.getString("ALARMPA_BbActivitySavedDateTime", "");
-        strSiteId = InputAlarmPanelpref.getString("SiteId", "");
-        itemCondition = InputAlarmPanelpref.getString("ALARMPA_ItemCondition", "");
-        AnchorOperator = InputAlarmPanelpref.getString("ALARMPA_AnchorOperator", "");
-        SharingOperator = InputAlarmPanelpref.getString("ALARMPA_SharingOperator", "");
-*/
-
-    }
 
 
     @Override
@@ -344,39 +292,22 @@ public class InputAlarmPanelFragment extends MainFragment {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-            /*    SharedPreferences.Editor editor = InputAlarmPanelpref.edit();
-                editor.putString("USER_ID", strUserId);
-                editor.putString("ALARMPA_Make", make);
-                editor.putString("ALARMPA_Model", model);
-                editor.putString("ALARMPA_Capacity", capacity);
-                editor.putString("ALARMPA_DescriptionId", strDescriptionId);
-                editor.putString("ALARMPA_MakeId", strMakeId);
-                editor.putString("ALARMPA_ModelId", strModelId);
-                editor.putString("ALARMPA_SerialNum", serialNumber);
-                editor.putString("ALARMPA_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("ALARMPA_Description", description);
-                editor.putString("ALARMPA_batryPhoto1", bateryphoto);
-                editor.putString("ALARMPA_batryPhoto2", cellPhoto);
-                editor.putString("ALARMPA_batryPhoto3", sNoPlatephoto);
-                editor.putString("BbActivitySavedDateTime", currentDateTime);
-                editor.putString("ALARMPA_ItemCondition", itemCondition);
-                editor.putString("ALARMPA_AnchorOperator", AnchorOperator);
-                editor.putString("ALARMPA_SharingOperator", SharingOperator);
-                strModelId = InputAlarmPanelpref.getString("", "");
-                editor.commit();*/
                 saveBasicDataonServer();
             }
 
@@ -435,49 +366,6 @@ public class InputAlarmPanelFragment extends MainFragment {
         return true;
     }
 
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
-                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontimg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
-                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.jpg";
-                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
-                }
-            }
-            //  }
-        }
-    }
-
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -579,4 +467,109 @@ public class InputAlarmPanelFragment extends MainFragment {
         }
     }
 
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, frontimg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, openImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    frontimgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(frontimgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    openImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(openImgFile));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    sNoPlateImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(sNoPlateImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
 }

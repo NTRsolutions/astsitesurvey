@@ -744,7 +744,6 @@ public class ASTUIUtil {
         try {
             PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             version = packageInfo.versionName;
-
         } catch (PackageManager.NameNotFoundException e) {
             // should never happen
             // throw new RuntimeException("Could not get package name: " + e);

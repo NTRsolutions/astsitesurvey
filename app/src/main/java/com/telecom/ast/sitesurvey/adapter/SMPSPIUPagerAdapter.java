@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 
+import com.telecom.ast.sitesurvey.fragment.newsurveyfragment.SmpsFragment;
+
 import java.util.ArrayList;
 
 public class SMPSPIUPagerAdapter extends FragmentStatePagerAdapter {
@@ -21,7 +23,7 @@ public class SMPSPIUPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-               // SmpsFragment tab1 = new SmpsFragment();
+               SmpsFragment tab1 = new SmpsFragment();
                // return tab1;
             case 1:
                 //PIUVoltageStablizerFragment tab2 = new PIUVoltageStablizerFragment();

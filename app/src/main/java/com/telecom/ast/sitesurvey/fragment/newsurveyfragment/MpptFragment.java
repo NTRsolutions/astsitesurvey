@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
 import android.view.View;
@@ -35,8 +38,10 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
@@ -44,6 +49,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,11 +71,11 @@ public class MpptFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
     String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
-    String make, model, capacity, serialNumber, description, currentDateTime, yearOfManufacturing;
+    String make="", model="", capacity="", serialNumber="", description="", currentDateTime="", yearOfManufacturing="";
     AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
     AppCompatEditText etDescription, etMPPTReading;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, MPPTReading, itemCondition;
-    String strMakeId = "0", strModelId, strDescriptionId;
+    String  MPPTReading="0", itemCondition="";
+    String strMakeId = "0";
     Spinner itemStatusSpineer;
     TextView etYear, dateIcon;
     LinearLayout dateLayout;
@@ -78,7 +85,7 @@ public class MpptFragment extends MainFragment {
     SharedPreferences mpptSharedPrefpref, userPref;
 
 
-    String strEqupId;
+    String strEqupId="0";
     private String capcityId = "0";
     private String itemstatus;
     ArrayList<EquipMakeDataModel> equipMakeList;
@@ -130,26 +137,6 @@ public class MpptFragment extends MainFragment {
 
     }
 
-    public void getSharedPrefData() {
-/*        mpptSharedPrefpref = getContext().getSharedPreferences("mpptSharedPref", MODE_PRIVATE);
-        strUserId = mpptSharedPrefpref.getString("USER_ID", "");
-        strMake = mpptSharedPrefpref.getString("MPPT_Make", "");
-        strModel = mpptSharedPrefpref.getString("MPPT_Model", "");
-        strCapacity = mpptSharedPrefpref.getString("MPPT_Capacity", "");
-        strMakeId = mpptSharedPrefpref.getString("MPPT_MakeId", "");
-        strModelId = mpptSharedPrefpref.getString("MPPT_ModelId", "");
-        strDescriptionId = mpptSharedPrefpref.getString("MPPT_DescriptionId", "");
-        strSerialNum = mpptSharedPrefpref.getString("MPPT_SerialNum", "");
-        strYearOfManufacturing = mpptSharedPrefpref.getString("MPPT_YearOfManufacturing", "");
-        strDescription = mpptSharedPrefpref.getString("MPPT_Description", "");
-        frontphoto = mpptSharedPrefpref.getString("MPPT_Photo1", "");
-        openPhoto = mpptSharedPrefpref.getString("MPPT_Photo2", "");
-        sNoPlatephoto = mpptSharedPrefpref.getString("MPPT_Photo3", "");
-        strSavedDateTime = mpptSharedPrefpref.getString("MPPT_EbMeterSavedDateTime", "");
-        strSiteId = mpptSharedPrefpref.getString("SiteId", "");
-        MPPTReading = mpptSharedPrefpref.getString("MPPTReading", "");*/
-
-    }
 
     public void setSpinnerValue() {
         final String itemCondition_array[] = {"Ok", "Not Ok", "Fully Fault"};
@@ -173,7 +160,6 @@ public class MpptFragment extends MainFragment {
     @Override
     protected void dataToView() {
         getUserPref();
-        getSharedPrefData();
         setSpinnerValue();
         atmDatabase = new AtmDatabase(getContext());
         equipList = atmDatabase.getEquipmentData("MPPT");
@@ -202,23 +188,6 @@ public class MpptFragment extends MainFragment {
             }
         });
 
-        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
-                || !isEmptyStr(strSerialNum)
-                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription) ||
-                !isEmptyStr(MPPTReading)) {
-         /*   etMake.setText(strMake);
-            etModel.setText(strModel);
-            etCapacity.setText(strCapacity);
-            etSerialNum.setText(strSerialNum);
-            etYear.setText(strYearOfManufacturing);
-            etDescription.setText(strDescription);
-            etMPPTReading.setText(MPPTReading);*/
-        }
-/*        if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-        }*/
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -295,42 +264,28 @@ public class MpptFragment extends MainFragment {
         });
     }
 
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = false;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-               /* SharedPreferences.Editor editor = pref.edit();
-                editor.putString("MPPT_UserId", strUserId);
-                editor.putString("MPPT_Make", make);
-                editor.putString("MPPT_Model", model);
-                editor.putString("MPPT_Capacity", capacity);
-                editor.putString("MPPT_DescriptionId", strDescriptionId);
-                editor.putString("MPPT_MakeId", strMakeId);
-                editor.putString("MPPT_ModelId", strModelId);
-                editor.putString("MPPT_SerialNum", serialNumber);
-                editor.putString("MPPT_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("MPPT_Description", description);
-                editor.putString("MPPT_Photo1", frontphoto);
-                editor.putString("MPPT_Photo2", openPhoto);
-                editor.putString("MPPT_Photo3", sNoPlatephoto);
-                editor.putString("MPPT_EbMeterSavedDateTime", currentDateTime);
-                editor.putString("MPPTReading", MPPTReading);
-                editor.commit();
-                saveScreenData(true, false);*/
                 saveBasicDataonServer();
             }
         }
@@ -338,6 +293,8 @@ public class MpptFragment extends MainFragment {
 
 
     public boolean isValidate() {
+        itemstatus = itemStatusSpineer.getSelectedItem().toString();
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
         make = etMake.getText().toString();
         model = etCapacity.getText().toString();
         capacity = etCapacity.getText().toString();
@@ -348,8 +305,8 @@ public class MpptFragment extends MainFragment {
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
-        itemstatus = itemStatusSpineer.getSelectedItem().toString();
-        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+
+
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -385,48 +342,8 @@ public class MpptFragment extends MainFragment {
     }
 
 
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
-                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
-                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
-                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
-                }
-            }
-            //  }
-        }
-    }
 
 
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -525,6 +442,111 @@ public class MpptFragment extends MainFragment {
                 }
             }
         }
+    }
+
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, frontImg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, openImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    frontimgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    openImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    sNoPlateImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
     }
 
 }

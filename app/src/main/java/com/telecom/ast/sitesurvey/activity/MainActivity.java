@@ -3,12 +3,15 @@ package com.telecom.ast.sitesurvey.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -28,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.telecom.ast.sitesurvey.ApplicationHelper;
+import com.telecom.ast.sitesurvey.AstAppUgradeDlgActivity;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.fragment.HeaderFragment;
 import com.telecom.ast.sitesurvey.fragment.HomeFragment;
@@ -37,6 +41,10 @@ import com.telecom.ast.sitesurvey.runtimepermission.PermissionUtils;
 import com.telecom.ast.sitesurvey.utils.ASTReqResCode;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.telecom.ast.sitesurvey.ApplicationHelper.application;
@@ -60,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadPage();
         showNavigationMenuItem();
         runTimePermission();
+        checkForceUpdateStatus();
+        AstAppUgradeDlgActivity fnAppUgradeDlgActivity = new AstAppUgradeDlgActivity(MainActivity.this) {
+            @Override
+            public void onSkip() {
+                ASTUIUtil.showToast("Please Update your App");
+            }
+        };
     }
 
     @Override
@@ -532,4 +547,186 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //check app need force update or not
+    @SuppressLint("StaticFieldLeak")
+    private void checkForceUpdateStatus() {
+        final String cureentVersion = ASTUIUtil.getAppVersionName(this);
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String latestVersion = null;
+                try {
+                    String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.telecom.ast.sitesurvey";
+                    org.jsoup.nodes.Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
+                    latestVersion = doc.getElementsByAttributeValue("itemprop", "softwareVersion").first().text();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return latestVersion;
+            }
+
+            @Override
+            protected void onPostExecute(String latestVersion) {
+                super.onPostExecute(latestVersion);
+                if (latestVersion != null) {
+                    if (!cureentVersion.equals(latestVersion)) {
+                        AstAppUgradeDlgActivity fnAppUgradeDlgActivity = new AstAppUgradeDlgActivity(MainActivity.this) {
+                            @Override
+                            public void onSkip() {
+                                ASTUIUtil.showToast("Please Update your App");
+                            }
+                        };
+                        fnAppUgradeDlgActivity.show();
+                    }
+                }
+
+            }
+        }.execute(null, null, null);
+    }
+
+    //alert for force update app from play store
+    public void alertForForceUpdateApp() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        //   builder.setIcon(R.mipmap.ic_launcher);
+        // builder.setTitle(R.string.app_name);
+        builder.setMessage("App New Version Update is Available");
+        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ASTUIUtil.getAppPackageName(getBaseContext()))));
+                dialog.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+
+
+    }
+
+ /*   //check app need force update or not
+    @SuppressLint("StaticFieldLeak")
+    public class checkForceUpdateStatus extends AsyncTask<String, String, JSONObject> {
+
+        private String latestVersion;
+        private String currentVersion;
+        private Context context;
+
+        public checkForceUpdateStatus(String currentVersion, Context context) {
+            this.currentVersion = currentVersion;
+            this.context = context;
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+
+            try {
+                latestVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + context.getPackageName() + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get()
+                        .select("div[itemprop=softwareVersion]")
+                        .first()
+                        .ownText();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new JSONObject();
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (latestVersion != null) {
+                if (!currentVersion.equalsIgnoreCase(latestVersion)) {
+                    // Toast.makeText(context,"update is available.",Toast.LENGTH_LONG).show();
+                    alertForForceUpdateApp();
+                }
+            }
+            super.onPostExecute(jsonObject);
+        }
+
+    }
+
+       *//* final String cureentVersion = ASTUIUtil.getAppVersionName(this);
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String latestVersion = null;
+                try {
+                    String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.telecom.ast.sitesurvey";
+                    org.jsoup.nodes.Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
+                    latestVersion = doc.getElementsByAttributeValue("itemprop", "softwareVersion").first().text();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return latestVersion;
+            }
+
+            @Override
+            protected void onPostExecute(String latestVersion) {
+                super.onPostExecute(latestVersion);
+                if (latestVersion != null) {
+                    if (!cureentVersion.equals(latestVersion)) {
+                        AstAppUgradeDlgActivity fnAppUgradeDlgActivity = new AstAppUgradeDlgActivity(MainActivity.this) {
+                            @Override
+                            public void onSkip() {
+                                ASTUIUtil.showToast("Please Update your App");
+                            }
+                        };
+                        fnAppUgradeDlgActivity.show();
+                    }
+                }
+
+            }
+        }.execute(null, null, null);*//*
+
+
+    //alert for force update app from play store
+    public void alertForForceUpdateApp() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        //   builder.setIcon(R.mipmap.ic_launcher);
+        // builder.setTitle(R.string.app_name);
+        builder.setMessage("App New Version Update is Available");
+        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ASTUIUtil.getAppPackageName(getBaseContext()))));
+                dialog.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+
+
+    }
+
+    // check version on play store and force update
+    public void forceUpdate() {
+        PackageManager packageManager = this.getPackageManager();
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String currentVersion = packageInfo.versionName;
+        new checkForceUpdateStatus(currentVersion, MainActivity.this).execute();
+    }*/
 }

@@ -3,6 +3,9 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,14 +35,18 @@ import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -145,25 +152,29 @@ public class ReadingSmpsFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.clampimage1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1clmp = true;
             isImage2clmp = false;
             isImage1 = false;
             isImage2 = false;
         } else if (view.getId() == R.id.clampimage2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1clmp = false;
             isImage2clmp = true;
             isImage1 = false;
             isImage2 = false;
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1clmp = false;
             isImage2clmp = false;
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1clmp = false;
             isImage2clmp = false;
             isImage1 = false;
@@ -217,57 +228,6 @@ public class ReadingSmpsFragment extends MainFragment {
         return true;
     }
 
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
-                    battVoltageFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(battVoltageFile).into(battVoltageImage);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
-                    adCurrentFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(adCurrentFile).into(loadCurrentImage);
-                } else if (isImage1clmp) {
-                    String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
-                    clampbattVoltageFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(clampbattVoltageFile).into(clampimage1);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2clmp) {
-                    String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
-                    clampadCurrentFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(clampadCurrentFile).into(clampimage2);
-
-
-                }
-            }
-            //  }
-        }
-
-    }
-
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -348,5 +308,118 @@ public class ReadingSmpsFragment extends MainFragment {
 
         return multipartBody;
     }
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, battVoltageImage);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, loadCurrentImage);
+            }
+        } else if (isImage1clmp) {
+            String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, clampimage1);
+            }
+        } else if (isImage2clmp) {
+            String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, clampimage2);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    battVoltageFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(battVoltageFile).into(imageView);
+                } else if (isImage2) {
+                    adCurrentFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(adCurrentFile).into(imageView);
+                } else if (isImage1clmp) {
+                    clampbattVoltageFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(clampbattVoltageFile).into(imageView);
+                }else if (isImage2clmp) {
+                    clampadCurrentFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(clampadCurrentFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
+
 
 }

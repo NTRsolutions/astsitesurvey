@@ -4,8 +4,10 @@ import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
@@ -33,12 +35,19 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class MiscElectricalEquiFragment extends MainFragment {
 
     Spinner spinnerElectrical, spinnerAviationLamp, LightningSpinner, TubeLightSpinner;
-    TextInputEditText etEarthingvalue, etServoStabiliser;
+    TextInputEditText etEarthingvalue;
     Button btnSubmit;
     String strEarthingvalue, Earthingvalue, strspinnerElectrical, strspinnerAviationLamp, strLightningSpinner, TubeLight, ServoStabiliser;
 
     String strUserId, strSiteId;
-    SharedPreferences MiscElect, userPref;
+    SharedPreferences userPref;
+
+    LinearLayout ElectricaltypeLayout;
+    Spinner spinnerElectricaltype;
+    String strspinnerElectricaltype;
+    Spinner etServoStabiliserSpinner, StabiliserConditopnSpinner;
+    LinearLayout ServoStabiliserCondiLayout;
+    String strStabiliserConditopnSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -52,8 +61,13 @@ public class MiscElectricalEquiFragment extends MainFragment {
         LightningSpinner = this.findViewById(R.id.LightningSpinner);
         etEarthingvalue = this.findViewById(R.id.etEarthingvalue);
         btnSubmit = this.findViewById(R.id.btnSubmit);
-        etServoStabiliser = this.findViewById(R.id.etServoStabiliser);
+        etServoStabiliserSpinner = this.findViewById(R.id.etServoStabiliserSpinner);
         TubeLightSpinner = this.findViewById(R.id.TubeLightSpinner);
+
+        ElectricaltypeLayout = this.findViewById(R.id.ElectricaltypeLayout);
+        spinnerElectricaltype = this.findViewById(R.id.spinnerElectricaltype);
+        StabiliserConditopnSpinner = this.findViewById(R.id.StabiliserConditopnSpinner);
+        ServoStabiliserCondiLayout = this.findViewById(R.id.ServoStabiliserCondiLayout);
     }
 
     @Override
@@ -70,16 +84,37 @@ public class MiscElectricalEquiFragment extends MainFragment {
     protected void dataToView() {
         setSpinnerValue();
         getUserPref();
-        getSharedprefData();
-        if (!isEmptyStr(Earthingvalue) || !isEmptyStr(ServoStabiliser)) {
-            etEarthingvalue.setText(Earthingvalue);
-            etServoStabiliser.setText(ServoStabiliser);
-            strspinnerElectrical = spinnerElectrical.getSelectedItem().toString();
-            strspinnerAviationLamp = spinnerAviationLamp.getSelectedItem().toString();
-            strLightningSpinner = LightningSpinner.getSelectedItem().toString();
-            TubeLight = TubeLightSpinner.getSelectedItem().toString();
-            ServoStabiliser = getTextFromView(this.etServoStabiliser);
-        }
+        spinnerElectrical.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Available")) {
+                    ElectricaltypeLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    ElectricaltypeLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        etServoStabiliserSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Available")) {
+                    ServoStabiliserCondiLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    ServoStabiliserCondiLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
     }
 
     private void getUserPref() {
@@ -87,19 +122,7 @@ public class MiscElectricalEquiFragment extends MainFragment {
         strUserId = userPref.getString("USER_ID", "");
         strSiteId = userPref.getString("Site_ID", "");
     }
-    /*
-     *
-     *     Shared Prefrences
-     */
-    public void getSharedprefData() {
-     /*   MiscElect = getContext().getSharedPreferences("MiscElect", MODE_PRIVATE);
-        Earthingvalue = MiscElect.getString("MISC_strbtsOperator", "");
-        strspinnerElectrical = MiscElect.getString("MISC_strspinnerElectrical", "");
-        strspinnerAviationLamp = MiscElect.getString("MISC_strspinnerAviationLamp", "");
-        strLightningSpinner = MiscElect.getString("MISC_strLightningSpinner", "");
-        ServoStabiliser = MiscElect.getString("ServoStabiliser", "");
-        TubeLight = MiscElect.getString("TubeLight", "");*/
-    }
+
 
     public void setSpinnerValue() {
         final String etfiredetectSpineer_array[] = {"Available", "Not Available"};
@@ -114,6 +137,10 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 }
             }
         }
+
+        final String etfiredetectSpineertype_array[] = {"3 Pin", "2 Pin"};
+        ArrayAdapter<String> etfiredetecttype = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineertype_array);
+        spinnerElectricaltype.setAdapter(etfiredetecttype);
 
 
         final String etextinguiserArray[] = {"Available", "Not Available"};
@@ -158,22 +185,21 @@ public class MiscElectricalEquiFragment extends MainFragment {
         }
 
 
+        final String etServoStabiliserSpinnerArray[] = {"Available", "Not Available"};
+        ArrayAdapter<String> etServoStabiliserSpinnerArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etServoStabiliserSpinnerArray);
+        etServoStabiliserSpinner.setAdapter(etServoStabiliserSpinnerArrayAdapter);
+
+
+        final String eServoStabilisercondiArray[] = {"Working", "Faulty"};
+        ArrayAdapter<String> eServoStabilisercondiArrayadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eServoStabilisercondiArray);
+        StabiliserConditopnSpinner.setAdapter(eServoStabilisercondiArrayadapter);
+
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-            /*    SharedPreferences.Editor editor = MiscElect.edit();
-                editor.putString("MISC_strbtsOperator", strEarthingvalue);
-                editor.putString("MISC_strspinnerElectrical", strspinnerElectrical);
-                editor.putString("MISC_strspinnerAviationLamp", strspinnerAviationLamp);
-                editor.putString("MISC_strLightningSpinner", strLightningSpinner);
-
-                editor.putString("ServoStabiliser", ServoStabiliser);
-                editor.putString("TubeLight", TubeLight);
-                editor.commit();*/
-
                 saveBasicDataonServer();
             }
 
@@ -184,10 +210,12 @@ public class MiscElectricalEquiFragment extends MainFragment {
     private boolean isValidate() {
         strEarthingvalue = getTextFromView(this.etEarthingvalue);
         strspinnerElectrical = spinnerElectrical.getSelectedItem().toString();
+        strspinnerElectricaltype = spinnerElectricaltype.getSelectedItem().toString();
         strspinnerAviationLamp = spinnerAviationLamp.getSelectedItem().toString();
         strLightningSpinner = LightningSpinner.getSelectedItem().toString();
         TubeLight = TubeLightSpinner.getSelectedItem().toString();
-        ServoStabiliser = getTextFromView(this.etServoStabiliser);
+        ServoStabiliser = etServoStabiliserSpinner.getSelectedItem().toString();
+        strStabiliserConditopnSpinner = StabiliserConditopnSpinner.getSelectedItem().toString();
         if (isEmptyStr(strEarthingvalue)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Earthing-Resistance Value");
             return false;
@@ -219,7 +247,11 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 MiscEEqpData.put("AviationLamp", strspinnerAviationLamp);
                 MiscEEqpData.put("EarthingResistanceValue", strEarthingvalue);
                 MiscEEqpData.put("ElectricalConnectionfittings", strspinnerElectrical);
+                MiscEEqpData.put("ElectricalConnectionfittingstype", strspinnerElectrical);
                 MiscEEqpData.put("LightningArrester", strLightningSpinner);
+                MiscEEqpData.put("ServoStabiliser", ServoStabiliser);
+                MiscEEqpData.put("ServoStabilisercondition", strStabiliserConditopnSpinner);
+
                 MiscEEqpData.put("TubeLight", TubeLight);
                 jsonObject.put("MiscEEqpData", MiscEEqpData);
             } catch (JSONException e) {

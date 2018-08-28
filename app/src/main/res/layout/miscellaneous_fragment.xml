@@ -71,8 +71,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:inputType="numberDecimal"
                                 android:hint="Enter Shelter 1 size"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -107,6 +107,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -210,6 +211,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -253,8 +255,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:padding="@dimen/_5dp"
                         android:inputType="numberDecimal"
+                        android:padding="@dimen/_5dp"
                         android:text="Outdoor BTS Area"
                         android:textAlignment="center"
                         android:textColor="@color/black"
@@ -315,6 +317,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -421,6 +424,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -493,8 +497,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:inputType="numberDecimal"
                                 android:hint="Enter Plot Size"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -528,6 +532,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -599,9 +604,9 @@
                                 android:id="@+id/etApproachRoad"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Approach Road  width"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -636,6 +641,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView
@@ -706,8 +712,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:inputType="numberDecimal"
                                 android:hint="Enter Boundary Wall Height"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 

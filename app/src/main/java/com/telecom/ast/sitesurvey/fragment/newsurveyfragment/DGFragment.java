@@ -7,23 +7,19 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -33,8 +29,6 @@ import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
-import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
-import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
@@ -42,8 +36,8 @@ import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
-import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
-import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
@@ -51,7 +45,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,58 +58,57 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class DGFragment extends MainFragment {
-    static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isImage2;
-    AppCompatEditText etDescription;
-    AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
-    SharedPreferences pref;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, CurtomerSite_Id;
-    String strMakeId, strModelId;
-    String[] arrMake;
-    String[] arrModel;
-    String[] arrCapacity;
-    AtmDatabase atmDatabase;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    ArrayList<EquipMakeDataModel> arrEquipData;
-    ArrayList<EquipCapacityDataModel> equipCapacityDataList;
-    ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, itemCondition;
-    Button btnSubmit;
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
-    Spinner itemStatusSpineer;
+    private static ImageView frontImg, openImg, sNoPlateImg;
+    private static boolean isImage1, isImage2;
+    private AppCompatEditText etDescription;
+    private AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
+    private SharedPreferences pref;
+    private String strSavedDateTime, strUserId, strSiteId, strDescriptionId, CurtomerSite_Id;
+    private String strMakeId, strModelId;
+    private String[] arrMake;
+    private String[] arrModel;
+    private String[] arrCapacity;
+    private AtmDatabase atmDatabase;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private ArrayList<EquipMakeDataModel> arrEquipData;
+    private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
+    private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
+    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, itemCondition;
+    private Button btnSubmit;
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner;
+    private Spinner itemStatusSpineer;
 
-    String pDistribution, mCBStatus, dbAlternatermake, eSN,
+    private String mCBStatus, dbAlternatermake, eSN,
             dBCapacity, dgContacter, backCompressor, AutomationCondition, PowerPanelMake, PowerPanelCapacity, DGType, AlternaterSno,
             AlternterCapacity, DGBatteryStatus, DGBatteryMake, Conditionofwiring, DGearthing, ConditionCANOPY,
             DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgpipe,
-            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGBatterysn, DGPollutionCertificate;
-
-    Spinner pDistributionSpinner, mCBStatusSpinner, dbAlternatermakeSpinner, eSNSpinner,
+            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGBatterysn, DGPollutionCertificate, straMFPanelSpinner, strnoofDGCylinderSpinner;
+    private String stralternaterPhaseSpinner;
+    private Spinner mCBStatusSpinner,
             dBCapacitySpinner, dgContacterSpinner, backCompressorSpinner;
 
-    AppCompatEditText etAutomationCondition, etPowerPanelMake, etPowerPanelCapacity, etDGType, etAlternaterSno,
-            etAlternterCapacity, etDGBatteryStatus, etDGBatteryMake, etConditionofwiring, etDGearthing, etConditionCANOPY,
+    private AppCompatEditText etPowerPanelMake, etPowerPanelCapacity, etDGType, etAlternaterSno,
+            etAlternterCapacity, etDGBatteryMake, etConditionofwiring, etDGearthing, etConditionCANOPY,
             etDGRunHourMeter, eTDGlowLUBEWire, etDGFuelTank, etCableGrouting, etDGFoundation, etDGCoolingtype, etDgpipe,
-            etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver, etDGBatterysn, etDGPollutionCertificate;
+            etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver, etDGBatterysn, etDGPollutionCertificate, etdgAlternatermake, eSNSpinner;
 
-    TextView etYear, dateIcon;
-    LinearLayout dateLayout;
-    long datemilisec;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    Typeface materialdesignicons_font;
-    SharedPreferences mpptSharedPrefpref, userPref;
+    private TextView etYear, dateIcon;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private Typeface materialdesignicons_font;
+    private SharedPreferences userPref;
 
-    String strEqupId;
+    private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
+    private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,etDGBatteryStatus;
 
     @Override
     protected int fragmentLayout() {
@@ -135,16 +129,13 @@ public class DGFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
-
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
-        pDistributionSpinner = findViewById(R.id.pDistributionSpinner);
         mCBStatusSpinner = findViewById(R.id.mCBStatusSpinner);
-        dbAlternatermakeSpinner = findViewById(R.id.dbAlternatermakeSpinner);
+        etdgAlternatermake = findViewById(R.id.etdgAlternatermake);
         eSNSpinner = findViewById(R.id.eSNSpinner);
         dBCapacitySpinner = findViewById(R.id.dBCapacitySpinner);
         dgContacterSpinner = findViewById(R.id.dgContacterSpinner);
         backCompressorSpinner = findViewById(R.id.backCompressorSpinner);
-        etAutomationCondition = findViewById(R.id.etAutomationCondition);
         etPowerPanelMake = findViewById(R.id.etPowerPanelMake);
         etPowerPanelCapacity = findViewById(R.id.etPowerPanelCapacity);
         etDGType = findViewById(R.id.etDGType);
@@ -172,6 +163,11 @@ public class DGFragment extends MainFragment {
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
+        aMFPanelSpinner = findViewById(R.id.aMFPanelSpinner);
+        automationConditionSpiiner = findViewById(R.id.automationConditionSpiiner);
+        noofDGCylinderSpinner = findViewById(R.id.noofDGCylinderSpinner);
+        alternaterPhaseSpinner = findViewById(R.id.alternaterPhaseSpinner);
+        etDGBatteryStatus = findViewById(R.id.alternaterPhaseSpinner);
     }
 
     @Override
@@ -193,29 +189,19 @@ public class DGFragment extends MainFragment {
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
 
-        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        final String itemStatusSpineer_array[] = {"DG", "Non DG"};
         ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatus);
 
 
-        final String pDistributionSpinner_array[] = {"Available", "Not Available"};
-        ArrayAdapter<String> pDistributionSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, pDistributionSpinner_array);
-        pDistributionSpinner.setAdapter(pDistributionSpinnerada);
-
-
-        final String mCBStatusSpinner_array[] = {"Single Phase", "3 Phase"};
+        final String mCBStatusSpinner_array[] = {"Ok", "Not Ok"};
         ArrayAdapter<String> mCBStatusSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, mCBStatusSpinner_array);
         mCBStatusSpinner.setAdapter(mCBStatusSpinnerada);
 
 
-        final String dbAlternatermakeSpinner_array[] = {"Available", "Not Available"};
-        ArrayAdapter<String> dbAlternatermakeSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dbAlternatermakeSpinner_array);
-        dbAlternatermakeSpinner.setAdapter(dbAlternatermakeSpinnerad);
-
-
-        final String eSNSpinner_array[] = {"Working", "Not working"};
-        ArrayAdapter<String> eSNSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eSNSpinner_array);
-        eSNSpinner.setAdapter(eSNSpinnerada);
+        final String alternaterPhaseSpinner_array[] = {"1 Phase", "3 Phase"};
+        ArrayAdapter<String> alternaterPhaseSpinner_arrayda = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, alternaterPhaseSpinner_array);
+        alternaterPhaseSpinner.setAdapter(alternaterPhaseSpinner_arrayda);
 
 
         final String dBCapacitySpinnerSpineer_array[] = {"CANOPY door lock", "door pannel", "ok", "not ok"};
@@ -232,60 +218,19 @@ public class DGFragment extends MainFragment {
         backCompressorSpinner.setAdapter(backCompressorSpinnerada);
 
 
-    }
+        final String baMFPanelSpinner_array[] = {"Available", "Not Available"};
+        ArrayAdapter<String> aMFPanelSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, baMFPanelSpinner_array);
+        aMFPanelSpinner.setAdapter(aMFPanelSpinnerada);
 
-    /**
-     * Shared Prefrences
-     */
-    public void getSharedPrefData() {
-       /* pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("DG_Make", "");
-        strModel = pref.getString("DG_Model", "");
-        strCapacity = pref.getString("DG_Capacity", "");
-        strMakeId = pref.getString("DG_MakeId", "");
-        strModelId = pref.getString("DG_ModelId", "");
-        strDescriptionId = pref.getString("DG_DescriptionId", "");
-        strSerialNum = pref.getString("DG_SerialNum", "");
-        strYearOfManufacturing = pref.getString("DG_YearOfManufacturing", "");
-        strDescription = pref.getString("DG_Description", "");
-        frontphoto = pref.getString("DG_Photo1", "");
-        openPhoto = pref.getString("DG_Photo2", "");
-        sNoPlatephoto = pref.getString("DG_Photo3", "");
-        strSavedDateTime = pref.getString("DG_SavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
 
-        pDistribution = pref.getString("DG_pDistribution", "");
-        mCBStatus = pref.getString("DG_mCBStatus", "");
-        dbAlternatermake = pref.getString("DG_dbAlternatermake", "");
-        eSN = pref.getString("DG_eSN", "");
-        dBCapacity = pref.getString("DG_dBCapacity", "");
-        dgContacter = pref.getString("DG_dgContacter", "");
-        backCompressor = pref.getString("DG_backCompressor", "");
-        AutomationCondition = pref.getString("DG_AutomationCondition", "");
-        PowerPanelMake = pref.getString("DG_PowerPanelMake", "");
-        PowerPanelCapacity = pref.getString("DG_PowerPanelCapacity", "");
-        DGType = pref.getString("DG_DGType", "");
-        AlternaterSno = pref.getString("DG_AlternaterSno", "");
-        AlternterCapacity = pref.getString("DG_AlternterCapacity", "");
-        DGBatteryStatus = pref.getString("DG_DGBatteryStatus", "");
-        DGBatteryMake = pref.getString("DG_DGBatteryMake", "");
-        Conditionofwiring = pref.getString("DG_Conditionofwiring", "");
-        DGearthing = pref.getString("DG_DGearthing", "");
-        ConditionCANOPY = pref.getString("DG_ConditionCANOPY", "");
-        DGRunHourMer = pref.getString("DG_DGRunHourMer", "");
-        DGlowLUBEWire = pref.getString("DG_DGlowLUBEWire", "");
-        DGFuelTank = pref.getString("DG_DGFuelTank", "");
-        CableGrouting = pref.getString("DG_CableGrouting", "");
-        DGFoundation = pref.getString("DG_DGFoundation", "");
-        DGCoolingtype = pref.getString("DG_DGCoolingtype", "");
-        Dgpipe = pref.getString("DG_Dgpipe", "");
-        DGExhaustcondi = pref.getString("DG_DGExhaustcondi", "");
-        DGEmergencyStopSwitch = pref.getString("DG_DGEmergencyStopSwitch", "");
-        RentalDGChangeOver = pref.getString("DG_RentalDGChangeOver", "");
-        DGBatterysn = pref.getString("DG_DGBatterysn", "");
-        DGPollutionCertificate = pref.getString("DG_DGPollutionCertificate", "");
-*/
+        final String automationConditionSpinner_array[] = {"OK", "Not OK"};
+        ArrayAdapter<String> automationConditionSpinner_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, automationConditionSpinner_array);
+        automationConditionSpiiner.setAdapter(automationConditionSpinner_adapter);
+
+        final String noofDGCylinderSpinner_array[] = {"2", "3", "4"};
+        ArrayAdapter<String> noofDGCylinderSpinner_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, noofDGCylinderSpinner_array);
+        noofDGCylinderSpinner.setAdapter(noofDGCylinderSpinner_adapter);
+
     }
 
     public void setDateofSiteonAir() {
@@ -333,7 +278,6 @@ public class DGFragment extends MainFragment {
         for (int i = 0; i < equipMakeList.size(); i++) {
             arrMake[i] = equipMakeList.get(i).getName();
         }
-        getSharedPrefData();
         setSpinnerValue();
         ArrayAdapter<String> adapterMakeName = new ArrayAdapter<String>(getContext(), android.R.layout.select_dialog_item, arrMake);
 
@@ -358,55 +302,6 @@ public class DGFragment extends MainFragment {
         });
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
-        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
-                || !isEmptyStr(strSerialNum)
-                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription)) {
-        /*    etMake.setText(strMake);
-            etModel.setText(strModel);
-            etCapacity.setText(strCapacity);
-            etSerialNum.setText(strSerialNum);
-            etYear.setText(strYearOfManufacturing);
-            etDescription.setText(strDescription);
-            pDistribution = pDistributionSpinner.getSelectedItem().toString();
-            mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
-            dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
-            eSN = eSNSpinner.getSelectedItem().toString();
-            dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
-            dgContacter = dgContacterSpinner.getSelectedItem().toString();
-            backCompressor = backCompressorSpinner.getSelectedItem().toString();
-            this.etAutomationCondition.setText(AutomationCondition);
-            this.etPowerPanelMake.setText(PowerPanelMake);
-            this.etPowerPanelCapacity.setText(PowerPanelCapacity);
-            this.etDGType.setText(DGType);
-            this.etAlternaterSno.setText(AlternaterSno);
-            this.etAlternterCapacity.setText(AlternterCapacity);
-            this.etDGBatteryStatus.setText(DGBatteryStatus);
-            this.etDGBatteryMake.setText(DGBatteryMake);
-            this.etConditionofwiring.setText(Conditionofwiring);
-            this.etDGearthing.setText(DGearthing);
-            this.etConditionCANOPY.setText(ConditionCANOPY);
-            this.etDGRunHourMeter.setText(DGRunHourMer);
-            this.eTDGlowLUBEWire.setText(DGlowLUBEWire);
-            this.etDGFuelTank.setText(DGFuelTank);
-            this.etCableGrouting.setText(CableGrouting);
-            this.etDGFoundation.setText(DGFoundation);
-            this.etDGCoolingtype.setText(DGCoolingtype);
-            this.etDgpipe.setText(Dgpipe);
-            this.etDGExhaustcondi.setText(DGExhaustcondi);
-            this.etDGEmergencyStopSwitch.setText(DGEmergencyStopSwitch);
-            this.etRentalDGChangeOver.setText(RentalDGChangeOver);
-            this.etDGBatterysn.setText(DGBatterysn);
-            etDGPollutionCertificate.setText(DGPollutionCertificate);
-            itemCondition = itemConditionSpinner.getSelectedItem().toString();
-            arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
-            equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);*/
-          /*  if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }*/
-        }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -421,7 +316,7 @@ public class DGFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("") ? View.VISIBLE : View.GONE);
-                if (selectedItem.equalsIgnoreCase("Not Available")) {
+                if (selectedItem.equalsIgnoreCase("Non DG")) {
                     frontImg.setEnabled(false);
                     openImg.setEnabled(false);
                     sNoPlateImg.setEnabled(false);
@@ -433,16 +328,14 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-
                     itemStatusSpineer.setEnabled(false);
-                    pDistributionSpinner.setEnabled(false);
                     mCBStatusSpinner.setEnabled(false);
-                    dbAlternatermakeSpinner.setEnabled(false);
+                    etdgAlternatermake.setEnabled(false);
                     eSNSpinner.setEnabled(false);
                     dBCapacitySpinner.setEnabled(false);
                     dgContacterSpinner.setEnabled(false);
                     backCompressorSpinner.setEnabled(false);
-                    etAutomationCondition.setEnabled(false);
+                    automationConditionSpiiner.setEnabled(false);
                     etPowerPanelMake.setEnabled(false);
                     etPowerPanelCapacity.setEnabled(false);
                     etDGType.setEnabled(false);
@@ -478,14 +371,13 @@ public class DGFragment extends MainFragment {
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
                     itemStatusSpineer.setEnabled(true);
-                    pDistributionSpinner.setEnabled(true);
                     mCBStatusSpinner.setEnabled(true);
-                    dbAlternatermakeSpinner.setEnabled(true);
+                    etdgAlternatermake.setEnabled(true);
                     eSNSpinner.setEnabled(true);
                     dBCapacitySpinner.setEnabled(true);
                     dgContacterSpinner.setEnabled(true);
                     backCompressorSpinner.setEnabled(true);
-                    etAutomationCondition.setEnabled(true);
+                    automationConditionSpiiner.setEnabled(true);
                     etPowerPanelMake.setEnabled(true);
                     etPowerPanelCapacity.setEnabled(true);
                     etDGType.setEnabled(true);
@@ -523,66 +415,23 @@ public class DGFragment extends MainFragment {
             setDateofSiteonAir();
         }
         if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = true;
+            String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+
             isImage1 = false;
             isImage2 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-              /*  SharedPreferences.Editor editor = pref.edit();
-                editor.putString("DG_UserId", strUserId);
-                editor.putString("DG_Make", make);
-                editor.putString("DG_Model", model);
-                editor.putString("DG_Capacity", capacity);
-                editor.putString("DescriptionId", strDescriptionId);
-                editor.putString("MakeId", strMakeId);
-                editor.putString("ModelId", strModelId);
-                editor.putString("DG_SerialNum", serialNumber);
-                editor.putString("DG_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("DG_Description", description);
-                editor.putString("DG_Photo1", frontphoto);
-                editor.putString("DG_Photo2", openPhoto);
-                editor.putString("DG_Photo3", sNoPlatephoto);
-                editor.putString("DG_SavedDateTime", currentDateTime);
-
-                editor.putString("DG_pDistribution", pDistribution);
-                editor.putString("DG_mCBStatus", mCBStatus);
-                editor.putString("DG_dbAlternatermake", dbAlternatermake);
-                editor.putString("DG_eSN", eSN);
-                editor.putString("DG_dBCapacity", dBCapacity);
-                editor.putString("DG_dgContacter", dgContacter);
-                editor.putString("DG_backCompressor", backCompressor);
-                editor.putString("DG_AutomationCondition", AutomationCondition);
-                editor.putString("DG_PowerPanelMake", PowerPanelMake);
-                editor.putString("DG_PowerPanelCapacity", PowerPanelCapacity);
-                editor.putString("DG_DGType", DGType);
-                editor.putString("DG_AlternaterSno", AlternaterSno);
-                editor.putString("DG_AlternterCapacity", AlternterCapacity);
-                editor.putString("DG_DGBatteryStatus", DGBatteryStatus);
-                editor.putString("DG_DGBatteryMake", DGBatteryMake);
-                editor.putString("DG_Conditionofwiring", Conditionofwiring);
-                editor.putString("DG_DGearthing", DGearthing);
-                editor.putString("DG_ConditionCANOPY", ConditionCANOPY);
-                editor.putString("DG_DGRunHourMer", DGRunHourMer);
-                editor.putString("DG_DGlowLUBEWire", DGlowLUBEWire);
-                editor.putString("DG_DGFuelTank", DGFuelTank);
-                editor.putString("DG_CableGrouting", CableGrouting);
-                editor.putString("DG_DGFoundation", DGFoundation);
-                editor.putString("DG_DGCoolingtype", DGCoolingtype);
-                editor.putString("DG_Dgpipe", Dgpipe);
-                editor.putString("DG_DGExhaustcondi", DGExhaustcondi);
-                editor.putString("DG_DGEmergencyStopSwitch", DGEmergencyStopSwitch);
-                editor.putString("DG_RentalDGChangeOver", RentalDGChangeOver);
-                editor.putString("DG_DGBatterysn", DGBatterysn);
-                editor.putString("DG_DGPollutionCertificate", DGPollutionCertificate);
-                editor.commit();*/
                 saveBasicDataonServer();
             }
         }
@@ -590,47 +439,50 @@ public class DGFragment extends MainFragment {
 
 
     public boolean isValidate() {
-        make = getTextFromView(this.etMake);
-        model = getTextFromView(this.etModel);
-        capacity = getTextFromView(this.etCapacity);
-        serialNumber = getTextFromView(this.etSerialNum);
-        yearOfManufacturing = getTextFromView(this.etYear);
-        description = getTextFromView(this.etDescription);
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        pDistribution = pDistributionSpinner.getSelectedItem().toString();
-        mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
-        dbAlternatermake = dbAlternatermakeSpinner.getSelectedItem().toString();
-        eSN = eSNSpinner.getSelectedItem().toString();
-        dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
-        dgContacter = dgContacterSpinner.getSelectedItem().toString();
-        backCompressor = backCompressorSpinner.getSelectedItem().toString();
-        AutomationCondition = getTextFromView(this.etAutomationCondition);
-        PowerPanelMake = getTextFromView(this.etPowerPanelMake);
-        PowerPanelCapacity = getTextFromView(this.etPowerPanelCapacity);
-        DGType = getTextFromView(this.etDGType);
-        AlternaterSno = getTextFromView(this.etAlternaterSno);
-        AlternterCapacity = getTextFromView(this.etAlternterCapacity);
-        DGBatteryStatus = getTextFromView(this.etDGBatteryStatus);
-        DGBatteryMake = getTextFromView(this.etDGBatteryMake);
-        Conditionofwiring = getTextFromView(this.etConditionofwiring);
-        DGearthing = getTextFromView(this.etDGearthing);
-        ConditionCANOPY = getTextFromView(this.etConditionCANOPY);
-        DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
-        DGlowLUBEWire = getTextFromView(this.eTDGlowLUBEWire);
-        DGFuelTank = getTextFromView(this.etDGFuelTank);
-        CableGrouting = getTextFromView(this.etCableGrouting);
-        DGFoundation = getTextFromView(this.etDGFoundation);
-        DGCoolingtype = getTextFromView(this.etDGCoolingtype);
-        Dgpipe = getTextFromView(this.etDgpipe);
-        DGExhaustcondi = getTextFromView(this.etDGExhaustcondi);
-        DGEmergencyStopSwitch = getTextFromView(this.etDGEmergencyStopSwitch);
-        RentalDGChangeOver = getTextFromView(this.etRentalDGChangeOver);
-        DGBatterysn = getTextFromView(this.etDGBatterysn);
-        DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("DG")) {
+            make = getTextFromView(this.etMake);
+            model = getTextFromView(this.etModel);
+            capacity = getTextFromView(this.etCapacity);
+            serialNumber = getTextFromView(this.etSerialNum);
+            yearOfManufacturing = getTextFromView(this.etYear);
+            description = getTextFromView(this.etDescription);
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            mCBStatus = mCBStatusSpinner.getSelectedItem().toString();
+            dbAlternatermake = getTextFromView(this.etdgAlternatermake);
+            eSN = getTextFromView(this.eSNSpinner);
+            stralternaterPhaseSpinner = alternaterPhaseSpinner.getSelectedItem().toString();
+            dBCapacity = dBCapacitySpinner.getSelectedItem().toString();
+            dgContacter = dgContacterSpinner.getSelectedItem().toString();
+            backCompressor = backCompressorSpinner.getSelectedItem().toString();
+            AutomationCondition = automationConditionSpiiner.getSelectedItem().toString();
+            PowerPanelMake = getTextFromView(this.etPowerPanelMake);
+            PowerPanelCapacity = getTextFromView(this.etPowerPanelCapacity);
+            DGType = getTextFromView(this.etDGType);
+            AlternaterSno = getTextFromView(this.etAlternaterSno);
+            AlternterCapacity = getTextFromView(this.etAlternterCapacity);
+            DGBatteryStatus = getTextFromView(this.etDGBatteryStatus);
+            DGBatteryMake = getTextFromView(this.etDGBatteryMake);
+            Conditionofwiring = getTextFromView(this.etConditionofwiring);
+            DGearthing = getTextFromView(this.etDGearthing);
+            ConditionCANOPY = getTextFromView(this.etConditionCANOPY);
+            DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
+            DGlowLUBEWire = getTextFromView(this.eTDGlowLUBEWire);
+            DGFuelTank = getTextFromView(this.etDGFuelTank);
+            CableGrouting = getTextFromView(this.etCableGrouting);
+            DGFoundation = getTextFromView(this.etDGFoundation);
+            DGCoolingtype = getTextFromView(this.etDGCoolingtype);
+            Dgpipe = getTextFromView(this.etDgpipe);
+            DGExhaustcondi = getTextFromView(this.etDGExhaustcondi);
+            DGEmergencyStopSwitch = getTextFromView(this.etDGEmergencyStopSwitch);
+            RentalDGChangeOver = getTextFromView(this.etRentalDGChangeOver);
+            DGBatterysn = getTextFromView(this.etDGBatterysn);
+            DGPollutionCertificate = getTextFromView(this.etDGPollutionCertificate);
+            straMFPanelSpinner = aMFPanelSpinner.getSelectedItem().toString();
+            strnoofDGCylinderSpinner = noofDGCylinderSpinner.getSelectedItem().toString();
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
 
-        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -666,49 +518,6 @@ public class DGFragment extends MainFragment {
         return true;
     }
 
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
-                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
-                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
-                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
-                }
-            }
-            //  }
-        }
-    }
-
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -764,7 +573,7 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("Capacity", capacity);
             EquipmentData.put("SerialNo", serialNumber);
             EquipmentData.put("MfgDate", datemilisec);
-            EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
+            //  EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
             EquipmentData.put("DG_Type", DGType);
             EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);
             EquipmentData.put("DG_PowerDistPanelCapacity", PowerPanelCapacity);
@@ -796,6 +605,12 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
             EquipmentData.put("DG_ESNo", eSN);
             EquipmentData.put("ItemCondition", itemCondition);
+            EquipmentData.put("DG_AMFPanel", straMFPanelSpinner);
+            EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
+            EquipmentData.put("DG_stralternaterPhaseSpinner", stralternaterPhaseSpinner);
+
+
+
             JSONArray EquipmentDataa = new JSONArray();
             EquipmentDataa.put(EquipmentData);
             jsonObject.put("EquipmentData", EquipmentDataa);
@@ -843,5 +658,106 @@ public class DGFragment extends MainFragment {
                 }
             }
         }
+    }
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, frontImg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, openImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    frontimgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    openImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    sNoPlateImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
     }
 }

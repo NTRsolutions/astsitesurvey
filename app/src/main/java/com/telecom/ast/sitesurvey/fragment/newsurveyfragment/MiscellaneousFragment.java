@@ -3,6 +3,9 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
@@ -28,14 +31,18 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -369,7 +376,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String powerPlantSpinner_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> powerPlantSpinner_arrayadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, powerPlantSpinner_array);
         powerPlantSpinner.setAdapter(powerPlantSpinner_arrayadapter);
-        if (!isEmptyStr(powerPlant )) {
+        if (!isEmptyStr(powerPlant)) {
             for (int i = 0; i < powerPlantSpinner_array.length; i++) {
                 if (powerPlant.equalsIgnoreCase(powerPlantSpinner_array[i])) {
                     powerPlantSpinner.setSelection(i);
@@ -382,7 +389,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String fireSpinne_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> fireSpinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, fireSpinne_array);
         fireSpinner.setAdapter(fireSpinnerAdapter);
-        if (!isEmptyStr(fire )) {
+        if (!isEmptyStr(fire)) {
             for (int i = 0; i < fireSpinne_array.length; i++) {
                 if (fire.equalsIgnoreCase(fireSpinne_array[i])) {
                     fireSpinner.setSelection(i);
@@ -396,7 +403,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String bBCabinetSpinner_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> bBCabinetAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, bBCabinetSpinner_array);
         bBCabinetSpinner.setAdapter(bBCabinetAdapter);
-        if (!isEmptyStr(bBCabinet )) {
+        if (!isEmptyStr(bBCabinet)) {
             for (int i = 0; i < bBCabinetSpinner_array.length; i++) {
                 if (bBCabinet.equalsIgnoreCase(bBCabinetSpinner_array[i])) {
                     bBCabinetSpinner.setSelection(i);
@@ -409,7 +416,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String mainDoorSpineer_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> mainDoorSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, mainDoorSpineer_array);
         mainDoorSpineer.setAdapter(mainDoorSpineeradapter);
-        if (!isEmptyStr(mainDoor )) {
+        if (!isEmptyStr(mainDoor)) {
             for (int i = 0; i < mainDoorSpineer_array.length; i++) {
                 if (mainDoor.equalsIgnoreCase(mainDoorSpineer_array[i])) {
                     mainDoorSpineer.setSelection(i);
@@ -437,7 +444,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String policeSpinner_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> policeSpinneradapater = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, policeSpinner_array);
         policeSpinner.setAdapter(policeSpinneradapater);
-        if(!isEmptyStr(police)) {
+        if (!isEmptyStr(police)) {
             for (int i = 0; i < policeSpinner_array.length; i++) {
                 if (police.equalsIgnoreCase(policeSpinner_array[i])) {
                     policeSpinner.setSelection(i);
@@ -449,7 +456,7 @@ public class MiscellaneousFragment extends MainFragment {
         final String ambulaneSpinner_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> ambulaneSpinneradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, ambulaneSpinner_array);
         ambulaneSpinner.setAdapter(ambulaneSpinneradapter);
-        if (!isEmptyStr(ambulane )) {
+        if (!isEmptyStr(ambulane)) {
             for (int i = 0; i < ambulaneSpinner_array.length; i++) {
                 if (ambulane.equalsIgnoreCase(ambulaneSpinner_array[i])) {
                     ambulaneSpinner.setSelection(i);
@@ -474,7 +481,6 @@ public class MiscellaneousFragment extends MainFragment {
 
 
     }
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.image1) {
@@ -484,7 +490,8 @@ public class MiscellaneousFragment extends MainFragment {
             ismage4 = false;
             ismage5 = false;
             ismage6 = false;
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             ismage1 = false;
             ismage2 = true;
@@ -492,7 +499,8 @@ public class MiscellaneousFragment extends MainFragment {
             ismage4 = false;
             ismage5 = false;
             ismage6 = false;
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             ismage1 = false;
             ismage2 = false;
@@ -500,9 +508,11 @@ public class MiscellaneousFragment extends MainFragment {
             ismage4 = false;
             ismage5 = false;
             ismage6 = false;
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image4) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             ismage1 = false;
             ismage2 = false;
             ismage3 = false;
@@ -516,7 +526,8 @@ public class MiscellaneousFragment extends MainFragment {
             ismage4 = false;
             ismage5 = true;
             ismage6 = false;
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image6) {
             ismage1 = false;
             ismage2 = false;
@@ -524,55 +535,10 @@ public class MiscellaneousFragment extends MainFragment {
             ismage4 = false;
             ismage5 = false;
             ismage6 = true;
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-           /*     shater1size = getTextFromView(this.etshater1size);
-                shater2size = getTextFromView(this.etshater2size);
-                outDoorsize = getTextFromView(this.etoutDoorsize);
-                GateSize = getTextFromView(this.etGateSize);
-                Plot = getTextFromView(this.etPlot);
-                ApproachRoad = getTextFromView(this.etApproachRoad);
-                boundryheight = getTextFromView(this.etboundryheight);
-                Boundarywall = typeBoundarywall.getSelectedItem().toString();*/
-/*                SharedPreferences.Editor editor = MiscSharedPref.edit();
-                editor.putString("USER_ID", strUserId);
-                editor.putString("shater1size", shater1size);
-                editor.putString("shater2size", shater2size);
-                editor.putString("outDoorsize", outDoorsize);
-                editor.putString("GateSize", GateSize);
-                editor.putString("Plot", Plot);
-                editor.putString("ApproachRoad", ApproachRoad);
-                editor.putString("boundryheight", boundryheight);
-                editor.putString("Boundarywall", Boundarywall);
-                editor.putString("shaterimage1", shaterimage1);
-                editor.putString("shaterimage2", shaterimage2);
-                editor.putString("outDoorimage3", outDoorimage3);
-                editor.putString("outDoorimage3", outDoorimage3);
-                editor.putString("GateSizeimage4", GateSizeimage4);
-                editor.putString("Plotimage5", Plotimage5);
-                editor.putString("Approachimage6", Approachimage6);
-                editor.putString("LayoutDiagram", LayoutDiagram);
-                editor.putString("VisitRegister", VisitRegister);
-                editor.putString("siteHygiene", siteHygiene);
-                editor.putString("signagestatus", signagestatus);
-                editor.putString("cablelebelling", cablelebelling);
-                editor.putString("etOtherIssues", etOtherIssues);
-                editor.putString("fSRCopy", fSRCopy);
-                editor.putString("SiteProblem", SiteProblem);
-                editor.putString("ShelterCovered", ShelterCovered);
-                editor.putString("SheltLeakage", SheltLeakage);
-                editor.putString("AnyOtherItem", AnyOtherItem);
-                editor.putString("dFCNOPY", dFCNOPY);
-                editor.putString("bBCabinet", bBCabinet);
-                editor.putString("mainDoor", mainDoor);
-                editor.putString("shelter", shelter);
-                editor.putString("police", police);
-                editor.putString("Technician", Technician);
-                editor.putString("ambulane", ambulane);
-                editor.putString("powerPlant", powerPlant);
-                editor.putString("fire", fire);
-                editor.commit();*/
                 saveBasicDataonServer();
 
             }
@@ -659,61 +625,7 @@ public class MiscellaneousFragment extends MainFragment {
         return true;
     }
 
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (ismage1) {
 
-
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
-                    shaterimage1File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(shaterimage1File).into(image1);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (ismage2) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
-                    shaterimage2File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(shaterimage2File).into(image2);
-                } else if (ismage3) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
-                    outDoorimage3File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(outDoorimage3File).into(image3);
-                } else if (ismage4) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
-                    GateSizeimage4File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(GateSizeimage4File).into(image4);
-                } else if (ismage5) {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
-                    Plotimage5File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(Plotimage5File).into(image5);
-                } else {
-                    String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
-                    Approachimage6File = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(Approachimage6File).into(image6);
-                }
-            }
-            //  }
-        }
-    }
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
 
 
     public void saveBasicDataonServer() {
@@ -953,4 +865,143 @@ public class MiscellaneousFragment extends MainFragment {
         }
         return multipartBody;
     }
+
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (ismage1) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image1);
+            }
+        } else if (ismage2) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image2);
+            }
+
+        } else if (ismage3) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image3);
+            }
+        } else if (ismage4) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image4);
+            }
+        } else if (ismage5) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image5);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image6);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (ismage1) {
+                    shaterimage1File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(shaterimage1File));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (ismage2) {
+                    shaterimage2File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(shaterimage2File));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else if (ismage3) {
+                    outDoorimage3File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(outDoorimage3File));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else if (ismage4) {
+                    GateSizeimage4File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(GateSizeimage4File));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else if (ismage5) {
+                    Plotimage5File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(Plotimage5File));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    Approachimage6File = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(Approachimage6File));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
+
+
 }

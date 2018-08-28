@@ -266,10 +266,10 @@
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etNofLcu"
                         android:layout_width="match_parent"
-                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No Of LCU"
+                        android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -441,9 +441,9 @@
                         android:id="@+id/etNoofRMWorking"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:autoSizeTextType="uniform"
                         android:hint="No of RM Working"
+                        android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -465,10 +465,10 @@
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etNoofRMFaulty"
                         android:layout_width="match_parent"
-                        android:inputType="number"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of RM Faulty"
+                        android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -527,6 +527,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:elevation="@dimen/_6dp"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -566,6 +567,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -612,6 +614,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView

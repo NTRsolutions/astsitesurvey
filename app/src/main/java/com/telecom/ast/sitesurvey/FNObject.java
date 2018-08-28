@@ -310,7 +310,7 @@ public class FNObject implements Cloneable, Parcelable, IObjectHelper {
 	public Map<String, Object> objectMapForMethods() {
 		Map<String, Object> valueMap = new HashMap<>();
 		for (Method classMethod : this.getClass().getMethods()) {
-			if (Modifier.isStatic(classMethod.getModifiers()) || !classMethod.isAnnotationPresent(FNClassPpt.class) || classMethod.getReturnType().equals(Void.TYPE) || classMethod.getParameterTypes().length > 0) {
+			if (Modifier.isStatic(classMethod.getModifiers()) || !classMethod.isAnnotationPresent(ASTClassPpt.class) || classMethod.getReturnType().equals(Void.TYPE) || classMethod.getParameterTypes().length > 0) {
 				continue;
 			}
 			String key = classMethod.getName();

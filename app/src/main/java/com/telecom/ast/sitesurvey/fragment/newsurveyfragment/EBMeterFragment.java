@@ -2,13 +2,16 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
@@ -41,8 +44,10 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
@@ -50,7 +55,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,40 +73,38 @@ import static android.support.v4.provider.FontsContractCompat.FontRequestCallbac
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class EBMeterFragment extends MainFragment {
-    static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isImage2;
-    static String frontphoto, openPhoto, sNoPlatephoto;
-    Button btnSubmit;
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, MeterstatusSpinner;
-    String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
+    private static ImageView frontImg, openImg, sNoPlateImg;
+    private static boolean isImage1, isImage2;
+    private Button btnSubmit;
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, waterseedpinner;
+    private String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
+    private String make, model, capacity, serialNumber, yearOfManufacturing, description, type, currentDateTime;
+    private SharedPreferences pref;
+    private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    private AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etTheftfromSite;
+    private AppCompatEditText etDescription, ebMeterreading;
+    private String strMakeId = "0", strModelId, strDescriptionId;
+    private Spinner itemStatusSpineer;
+    private String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover, TheftfromSite,
+            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strwaterseedpinner, itemCondition, streBbillSpinner;
+    private TextView etYear, dateIcon;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private Typeface materialdesignicons_font;
+    private SharedPreferences userPref;
 
-    SharedPreferences pref;
-    AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etkitkatChangeover, etTheftfromSite;
-    AppCompatEditText etDescription, ebMeterreading;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strMakeId = "0", strModelId, strDescriptionId;
-    Spinner itemStatusSpineer;
-    String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover, TheftfromSite,
-            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strMeterstatusSpinner, itemCondition;
-    TextView etYear, dateIcon;
-    LinearLayout dateLayout;
-    long datemilisec;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    Typeface materialdesignicons_font;
-    SharedPreferences EBMETERSharedPref, userPref;
-
-    String strEqupId;
+    private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    AtmDatabase atmDatabase;
-    String[] arrMake;
-    String[] arrCapacity;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private AtmDatabase atmDatabase;
+    private String[] arrMake;
+    private String[] arrCapacity;
+    private Spinner circuitBreakersSpinner, eBbillSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -128,18 +133,18 @@ public class EBMeterFragment extends MainFragment {
         etALTHTConnection = findViewById(R.id.etALTHTConnection);
         etTransformerEarthing = findViewById(R.id.etTransformerEarthing);
         etmccbStatus = findViewById(R.id.etmccbStatus);
-        etkitkatChangeover = findViewById(R.id.etmcckitkatChangeover);
-
         etTheftfromSite = findViewById(R.id.etTheftfromSite);
         meeterTypeSpinner = findViewById(R.id.meeterTypeSpinner);
         powerTypeSpinner = findViewById(R.id.powerTypeSpinner);
         transformerTypeSpinner = findViewById(R.id.transformerTypeSpinner);
-        MeterstatusSpinner = findViewById(R.id.MeterstatusSpinner);
+        waterseedpinner = findViewById(R.id.waterseedpinner);
         dateIcon = findViewById(R.id.dateIcon);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
+        circuitBreakersSpinner = findViewById(R.id.circuitBreakersSpinner);
+        eBbillSpinner = findViewById(R.id.eBbillSpinner);
     }
 
     @Override
@@ -164,36 +169,6 @@ public class EBMeterFragment extends MainFragment {
     }
 
     public void getSharedPrefData() {
-  /*      EBMETERSharedPref = getContext().getSharedPreferences("EBMETERSharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("EBM_Make", "");
-        strModel = pref.getString("EBM_Model", "");
-        strCapacity = pref.getString("EBM_Capacity", "");
-        strMakeId = pref.getString("EBM_MakeId", "");
-        strModelId = pref.getString("EBM_ModelId", "");
-        strDescriptionId = pref.getString("EBM_DescriptionId", "");
-        strSerialNum = pref.getString("EBM_SerialNum", "");
-        strYearOfManufacturing = pref.getString("EBM_YearOfManufacturing", "");
-        strDescription = pref.getString("EBM_Description", "");
-        frontphoto = pref.getString("EBM_Photo1", "");
-        openPhoto = pref.getString("EBM_Photo2", "");
-        sNoPlatephoto = pref.getString("EBM_Photo3", "");
-        strSavedDateTime = pref.getString("EbMeterSavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
-        meterreading = pref.getString("Meterreading", "");
-        ConnectionNo = pref.getString("EbMeterConnectionNo", "");
-        CableRating = pref.getString("EbMeterCableRating", "");
-        ALTHTConnection = pref.getString("EbMeterALTHTConnection", "");
-        TransformerEarthing = pref.getString("EbMeterTransformerEarthing", "");
-        mccbStatus = pref.getString("EbMetermccbStatus", "");
-
-        kitkatChangeover= pref.getString("EbMeterkitkatChangeover", "");
-        TheftfromSite = pref.getString("EbMeterTheftfromSite", "");
-        strmeeterTypeSpinner = pref.getString("EbMeterstrmeeterTypeSpinner", "");
-        strpowerTypeSpinner = pref.getString("EbMeterstrpowerTypeSpinner", "");
-        strtransformerTypeSpinner = pref.getString("EbMeterstrtransformerTypeSpinner", "");
-        strMeterstatusSpinner = pref.getString("EbMeterstrMeterstatusSpinner", "");*/
-
 
     }
 
@@ -202,7 +177,7 @@ public class EBMeterFragment extends MainFragment {
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemCondition_array);
         itemConditionSpinner.setAdapter(homeadapter);
 
-        final String itemStatusSpineer_array[] = {"Available", "Not Available"};
+        final String itemStatusSpineer_array[] = {"EB", "Non EB"};
         ArrayAdapter<String> itemStatus = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatus);
 
@@ -224,7 +199,18 @@ public class EBMeterFragment extends MainFragment {
 
         final String MeterstatusSpinnerArraay[] = {"Covereds", "Open"};
         ArrayAdapter<String> MeterstatusSpinnerAd = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, MeterstatusSpinnerArraay);
-        MeterstatusSpinner.setAdapter(MeterstatusSpinnerAd);
+        waterseedpinner.setAdapter(MeterstatusSpinnerAd);
+
+
+        final String circuitBreakersSpinnerArraay[] = {"Kit Kat fuse", "MCCB Status", "MCB"};
+        ArrayAdapter<String> circuitBreakersSpinnerAd = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, circuitBreakersSpinnerArraay);
+        circuitBreakersSpinner.setAdapter(circuitBreakersSpinnerAd);
+
+
+        final String eBbillSpinnerSpinnerArraay[] = {"Monthly", "2 months", "Current"};
+        ArrayAdapter<String> eBbillSpinnerSpinnerAd = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eBbillSpinnerSpinnerArraay);
+        eBbillSpinner.setAdapter(eBbillSpinnerSpinnerAd);
+
 
     }
 
@@ -261,41 +247,6 @@ public class EBMeterFragment extends MainFragment {
             }
         });
 
-        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
-                || !isEmptyStr(strSerialNum)
-                || !isEmptyStr(strYearOfManufacturing) || !isEmptyStr(strDescription) || !isEmptyStr(meterreading)
-                || !isEmptyStr(ConnectionNo)
-                || !isEmptyStr(CableRating)
-                || !isEmptyStr(ALTHTConnection)
-                || !isEmptyStr(TransformerEarthing)
-                || !isEmptyStr(mccbStatus)
-                || !isEmptyStr(kitkatChangeover)
-                || !isEmptyStr(TheftfromSite)) {
-  /*          etMake.setText(strMake);
-            etModel.setText(strModel);
-            etCapacity.setText(strCapacity);
-            etSerialNum.setText(strSerialNum);
-            etYear.setText(strYearOfManufacturing);
-            etDescription.setText(strDescription);
-            ebMeterreading.setText(meterreading);
-            etConnectionNo.setText(ConnectionNo);
-            etCableRating.setText(CableRating);
-            etALTHTConnection.setText(ALTHTConnection);
-            etTransformerEarthing.setText(TransformerEarthing);
-            etmccbStatus.setText(mccbStatus);
-            etkitkatChangeover.setText(kitkatChangeover);
-            etTheftfromSite.setText(TheftfromSite);
-            strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
-            strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
-            strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
-            strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();*/
-
-            /*if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }*/
-        }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -309,7 +260,7 @@ public class EBMeterFragment extends MainFragment {
         itemStatusSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
-                if (selectedItem.equalsIgnoreCase("Not Available")) {
+                if (selectedItem.equalsIgnoreCase("Non EB")) {
                     frontImg.setEnabled(false);
                     openImg.setEnabled(false);
                     sNoPlateImg.setEnabled(false);
@@ -327,12 +278,14 @@ public class EBMeterFragment extends MainFragment {
                     etALTHTConnection.setEnabled(false);
                     etTransformerEarthing.setEnabled(false);
                     etmccbStatus.setEnabled(false);
-                    etkitkatChangeover.setEnabled(false);
+                    circuitBreakersSpinner.setEnabled(false);
                     etTheftfromSite.setEnabled(false);
                     meeterTypeSpinner.setEnabled(false);
                     powerTypeSpinner.setEnabled(false);
                     transformerTypeSpinner.setEnabled(false);
-                    MeterstatusSpinner.setEnabled(false);
+                    waterseedpinner.setEnabled(false);
+                    eBbillSpinner.setEnabled(false);
+
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -351,12 +304,13 @@ public class EBMeterFragment extends MainFragment {
                     etALTHTConnection.setEnabled(true);
                     etTransformerEarthing.setEnabled(true);
                     etmccbStatus.setEnabled(true);
-                    etkitkatChangeover.setEnabled(true);
+                    circuitBreakersSpinner.setEnabled(true);
                     etTheftfromSite.setEnabled(true);
                     meeterTypeSpinner.setEnabled(true);
                     powerTypeSpinner.setEnabled(true);
                     transformerTypeSpinner.setEnabled(true);
-                    MeterstatusSpinner.setEnabled(true);
+                    waterseedpinner.setEnabled(true);
+                    eBbillSpinner.setEnabled(true);
                 }
             }
 
@@ -371,47 +325,22 @@ public class EBMeterFragment extends MainFragment {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
+            String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = true;
+            String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = false;
+            String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-        /*        SharedPreferences.Editor editor = pref.edit();
-                editor.putString("EBM_UserId", strUserId);
-                editor.putString("EBM_Make", make);
-                editor.putString("EBM_Model", model);
-                editor.putString("EBM_Capacity", capacity);
-                editor.putString("EBM_DescriptionId", strDescriptionId);
-                editor.putString("EBM_MakeId", strMakeId);
-                editor.putString("EBM_ModelId", strModelId);
-                editor.putString("EBM_SerialNum", serialNumber);
-                editor.putString("EBM_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("EBM_Description", description);
-                editor.putString("Meterreading", meterreading);
-                editor.putString("EBM_Photo1", frontphoto);
-                editor.putString("EBM_Photo2", openPhoto);
-                editor.putString("EBM_Photo3", sNoPlatephoto);
-                editor.putString("EbMeterSavedDateTime", currentDateTime);
-                editor.putString("EbMeterConnectionNo", ConnectionNo);
-                editor.putString("EbMeterCableRating", CableRating);
-                editor.putString("EbMeterALTHTConnection", ALTHTConnection);
-                editor.putString("EbMeterTransformerEarthing", TransformerEarthing);
-                editor.putString("EbMetermccbStatus", mccbStatus);
-                editor.putString("EbMetermccbStatus", kitkatChangeover);
-                editor.putString("EbMeterTheftfromSite", TheftfromSite);
-                editor.putString("EbMeterstrmeeterTypeSpinner", strmeeterTypeSpinner);
-                editor.putString("EbMeterstrpowerTypeSpinner", strpowerTypeSpinner);
-                editor.putString("EbMeterstrtransformerTypeSpinner", strtransformerTypeSpinner);
-                editor.putString("EbMeterstrMeterstatusSpinner", strMeterstatusSpinner);
-                editor.commit();*/
                 saveBasicDataonServer();
             }
         }
@@ -448,29 +377,30 @@ public class EBMeterFragment extends MainFragment {
     }
 
     public boolean isValidate() {
-        make = etMake.getText().toString();
-        model = etCapacity.getText().toString();
-        capacity = etCapacity.getText().toString();
-        serialNumber = etSerialNum.getText().toString();
-        yearOfManufacturing = etYear.getText().toString();
-        description = etDescription.getText().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        meterreading = ebMeterreading.getText().toString();
-        ConnectionNo = etConnectionNo.getText().toString();
-        CableRating = etCableRating.getText().toString();
-        ALTHTConnection = etALTHTConnection.getText().toString();
-        TransformerEarthing = etTransformerEarthing.getText().toString();
-        mccbStatus = etmccbStatus.getText().toString();
-        kitkatChangeover = etkitkatChangeover.getText().toString();
-        TheftfromSite = etTheftfromSite.getText().toString();
-        strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
-        strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
-        strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
-        strMeterstatusSpinner = MeterstatusSpinner.getSelectedItem().toString();
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+        if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("EB")) {
+            make = etMake.getText().toString();
+            model = etCapacity.getText().toString();
+            capacity = etCapacity.getText().toString();
+            serialNumber = etSerialNum.getText().toString();
+            yearOfManufacturing = etYear.getText().toString();
+            description = etDescription.getText().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            meterreading = ebMeterreading.getText().toString();
+            ConnectionNo = etConnectionNo.getText().toString();
+            CableRating = etCableRating.getText().toString();
+            ALTHTConnection = etALTHTConnection.getText().toString();
+            TransformerEarthing = etTransformerEarthing.getText().toString();
+            mccbStatus = etmccbStatus.getText().toString();
+            kitkatChangeover = circuitBreakersSpinner.getSelectedItem().toString();
+            TheftfromSite = etTheftfromSite.getText().toString();
+            strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
+            strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
+            strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
+            strwaterseedpinner = waterseedpinner.getSelectedItem().toString();
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            streBbillSpinner = eBbillSpinner.getSelectedItem().toString();
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -504,51 +434,14 @@ public class EBMeterFragment extends MainFragment {
             }
         } else {
             ASTUIUtil.showToast("Item Not Available");
+            itemCondition = "";
+            strmeeterTypeSpinner = "";
+            strpowerTypeSpinner = "";
+            strtransformerTypeSpinner = "";
+            kitkatChangeover = "";
+            streBbillSpinner = "";
         }
         return true;
-    }
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
-                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontImg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
-                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.jpg";
-                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
-                }
-            }
-            //  }
-        }
-    }
-
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
     }
 
 
@@ -584,8 +477,10 @@ public class EBMeterFragment extends MainFragment {
                 EquipmentData.put("EB_TransformerNeutralEarthing", TransformerEarthing);
                 EquipmentData.put("EB_KitKatChangeOver", kitkatChangeover);
                 EquipmentData.put("EB_MCCBStatus", mccbStatus);
-                EquipmentData.put("EB_WaterShedMeterstatus", "");
+                EquipmentData.put("EB_WaterShedMeterstatus", strwaterseedpinner);
                 EquipmentData.put("EB_TheftfromSite", TheftfromSite);
+                EquipmentData.put("EB_Bill", streBbillSpinner);
+
                 JSONArray EquipmentDataa = new JSONArray();
                 EquipmentDataa.put(EquipmentData);
                 jsonObject.put("EquipmentData", EquipmentDataa);
@@ -657,5 +552,139 @@ public class EBMeterFragment extends MainFragment {
                 }
             }
         }
+    }
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, frontImg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, openImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    frontimgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(frontimgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    openImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(openImgFile));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    sNoPlateImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(sNoPlateImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
+
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
     }
 }

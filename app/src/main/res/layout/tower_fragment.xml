@@ -427,6 +427,7 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
+                            android:scaleType="fitXY"
                             android:layout_weight="1"
                             android:elevation="@dimen/_6dp"
                             android:src="@drawable/noimage" />
@@ -466,6 +467,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
+                            android:scaleType="fitXY"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:src="@drawable/noimage" />
@@ -510,6 +512,7 @@
                         <ImageView
                             android:id="@+id/image3"
                             android:layout_width="match_parent"
+                            android:scaleType="fitXY"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
@@ -551,6 +554,7 @@
                             android:id="@+id/image4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:scaleType="fitXY"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
@@ -597,6 +601,7 @@
                             android:layout_width="@dimen/_130dp"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
+                            android:scaleType="fitXY"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:src="@drawable/noimage" />

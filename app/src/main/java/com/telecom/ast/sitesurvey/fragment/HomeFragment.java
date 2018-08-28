@@ -1,12 +1,9 @@
 package com.telecom.ast.sitesurvey.fragment;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
-
-import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.adapter.HomeFeGridAdapter;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
@@ -23,7 +20,6 @@ import com.telecom.ast.sitesurvey.model.EquipTypeDataModel;
 import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

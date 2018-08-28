@@ -54,6 +54,9 @@ public class FireSystemFragment extends MainFragment {
     String[] arrMake;
     AtmDatabase atmDatabase;
     String[] arrCapacity;
+    Spinner firedetecttypeSpineer, extinguisertypeSpineer;
+    LinearLayout ExtinguiserLayout, FireDetectSystemLayout;
+    String strfiredetecttypeSpineer, strextinguisertypeSpineer;
 
     @Override
     protected int fragmentLayout() {
@@ -69,6 +72,11 @@ public class FireSystemFragment extends MainFragment {
         etCapacity = findViewById(R.id.etCapacity);
         fillEmptyLayout = findViewById(R.id.fillEmptyLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
+
+        ExtinguiserLayout = findViewById(R.id.ExtinguiserLayout);
+        FireDetectSystemLayout = findViewById(R.id.FireDetectSystemLayout);
+        firedetecttypeSpineer = findViewById(R.id.firedetecttypeSpineer);
+        extinguisertypeSpineer = findViewById(R.id.extinguisertypeSpineer);
     }
 
     @Override
@@ -83,7 +91,6 @@ public class FireSystemFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        getSharedprefData();
         getUserPref();
         setSpinnerValue();
         atmDatabase = new AtmDatabase(getContext());
@@ -118,31 +125,35 @@ public class FireSystemFragment extends MainFragment {
                 String selectedItem = parent.getSelectedItem().toString();
                 if (selectedItem.equalsIgnoreCase("Available")) {
                     fillEmptyLayout.setVisibility(View.VISIBLE);
+                    ExtinguiserLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     fillEmptyLayout.setVisibility(View.GONE);
+                    ExtinguiserLayout.setVisibility(View.GONE);
                 }
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        etfiredetectSpineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Available")) {
+                    FireDetectSystemLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    FireDetectSystemLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
-    /*
-     *
-     *     Shared Prefrences
-     */
-    public void getSharedprefData() {
-/*        FireSystemSharedPref = getContext().getSharedPreferences("FireSystemSharedPref", MODE_PRIVATE);
-        strfiredetectSpineer = FireSystemSharedPref.getString("Fire_strfiredetectSpineer", "");
-        strextinguiserSpineer = FireSystemSharedPref.getString("Fire_strextinguiserSpineer", "");
-        stritemStatusSpineer = FireSystemSharedPref.getString("Fire_stritemStatusSpineer", "");
-        status = FireSystemSharedPref.getString("FIRE_status", "");
-        make = FireSystemSharedPref.getString("FIRE_make", "");
-        capacity = FireSystemSharedPref.getString("FIRE_capacity", "");*/
-
-    }
 
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
@@ -164,6 +175,21 @@ public class FireSystemFragment extends MainFragment {
             }
         }
 
+
+        final String etfiredetectSpineertype_array[] = {"Heat", "Smoke"};
+        ArrayAdapter<String> etfiredetecttype = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineertype_array);
+        firedetecttypeSpineer.setAdapter(etfiredetecttype);
+    /*    if (firedetecttypeSpineer != null && !firedetecttypeSpineer.equals("")) {
+            for (int i = 0; i < etfiredetectSpineertype_array.length; i++) {
+                if (strfiredetecttypeSpineer.equalsIgnoreCase(etfiredetectSpineertype_array[i])) {
+                    firedetecttypeSpineer.setSelection(i);
+                } else {
+                    firedetecttypeSpineer.setSelection(0);
+                }
+            }
+        }
+*/
+
         final String etextinguiserArray[] = {"Available", "Not Available"};
         ArrayAdapter<String> etextinguiser = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etextinguiserArray);
         etextinguiserSpineer.setAdapter(etextinguiser);
@@ -176,6 +202,21 @@ public class FireSystemFragment extends MainFragment {
                 }
             }
         }
+
+
+        final String extinguisertypeSpineertype_array[] = {"Co2", "Foam"};
+        ArrayAdapter<String> extinguisertypetype = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, extinguisertypeSpineertype_array);
+        extinguisertypeSpineer.setAdapter(extinguisertypetype);
+    /*    if (extinguisertypeSpineer != null && !extinguisertypeSpineer.equals("")) {
+            for (int i = 0; i < extinguisertypeSpineertype_array.length; i++) {
+                if (strextinguisertypeSpineer.equalsIgnoreCase(extinguisertypeSpineertype_array[i])) {
+                    extinguisertypeSpineer.setSelection(i);
+                } else {
+                    extinguisertypeSpineer.setSelection(0);
+                }
+            }
+        }*/
+
         final String etstatus_array[] = {"Filled ", "Empty"};
         ArrayAdapter<String> etstatusada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etstatus_array);
         etstatusSpinner.setAdapter(etstatusada);
@@ -199,15 +240,6 @@ public class FireSystemFragment extends MainFragment {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
-              /*  SharedPreferences.Editor editor = FireSystemSharedPref.edit();
-                editor.putString("FIRE_strfiredetectSpineer", firedetectSpineer);
-                editor.putString("FIRE_strextinguiserSpineer", firedetectSpineer);
-                editor.putString("FIRE_stritemStatusSpineer", itemStatus);
-                editor.putString("FIRE_status", status);
-                editor.putString("FIRE_make", make);
-                editor.putString("FIRE_capacity", capacity);
-                editor.commit();*/
-
 
             }
 
@@ -219,6 +251,10 @@ public class FireSystemFragment extends MainFragment {
     private boolean isValidate() {
         firedetectSpineer = etfiredetectSpineer.getSelectedItem().toString();
         extinguiserSpineer = etextinguiserSpineer.getSelectedItem().toString();
+
+        strfiredetecttypeSpineer = firedetecttypeSpineer.getSelectedItem().toString();
+        strextinguisertypeSpineer = extinguisertypeSpineer.getSelectedItem().toString();
+
         status = etstatusSpinner.getSelectedItem().toString();
         make = getTextFromView(this.etMake);
         capacity = getTextFromView(this.etCapacity);
@@ -252,7 +288,9 @@ public class FireSystemFragment extends MainFragment {
                 jsonObject.put("Activity", "Fire");
                 JSONObject FireSysData = new JSONObject();
                 FireSysData.put("FireDetectionSystem", firedetectSpineer);
+                FireSysData.put("FireDetectionSystemtype", strfiredetecttypeSpineer);
                 FireSysData.put("Fireextinguiser", extinguiserSpineer);
+                FireSysData.put("Fireextinguisertype", strextinguisertypeSpineer);
                 FireSysData.put("FireextinguiserMake", make);
                 FireSysData.put("FireextinguiserCapacity", capacity);
                 FireSysData.put("Fireextinguiserfilledstatus", status);
@@ -298,19 +336,6 @@ public class FireSystemFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-      /*  if (equpImagList != null && equpImagList.size() > 0) {
-            for (SaveOffLineData data : equpImagList) {
-                if (data != null) {
-                    if (data.getImagePath() != null) {
-                        File inputFile = new File(data.getImagePath());
-                        if (inputFile.exists()) {
-                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
-                        }
-                    }
-                }
-            }
-        }
-*/
         return multipartBody;
     }
 

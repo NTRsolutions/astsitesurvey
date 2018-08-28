@@ -246,4 +246,9 @@ public class FilePickerHelper {
 
         return true;
     }*/
+
+
+  public static Uri isFIleConvert(File file){
+     return Uri.fromFile(file);
+  }
 }

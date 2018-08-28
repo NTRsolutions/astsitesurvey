@@ -1,5 +1,7 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -93,6 +95,14 @@ public class PowerPlantFragment extends MainFragment {
         ApplicationHelper.application().getActivity().updateFragment(fragment, bundle);
 
     }
+
+    /*@Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }*/
+
    /* @Override
     protected int fragmentLayout() {
         return R.layout.sitesurvey_tav_fragment;

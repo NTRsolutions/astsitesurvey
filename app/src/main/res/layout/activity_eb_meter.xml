@@ -388,33 +388,39 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etmcckitkatChangeover"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Kit Kat/Change Over/MCCB  Status"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Circuit Breakers"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
 
+                <Spinner
+                    android:id="@+id/circuitBreakersSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -462,7 +468,7 @@
                     android:textSize="@dimen/_14dp" />
 
                 <Spinner
-                    android:id="@+id/MeterstatusSpinner"
+                    android:id="@+id/waterseedpinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_32dp"
@@ -578,12 +584,46 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:inputType="numberDecimal"
                         android:hint="Enter EB meter Reading"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="EB  bill"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+
+                <Spinner
+                    android:id="@+id/eBbillSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -613,6 +653,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:elevation="@dimen/_6dp"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -652,6 +693,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -698,6 +740,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView

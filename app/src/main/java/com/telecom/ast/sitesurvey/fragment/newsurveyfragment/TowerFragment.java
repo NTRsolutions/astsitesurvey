@@ -6,8 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -38,15 +40,19 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -163,22 +169,6 @@ public class TowerFragment extends MainFragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                myCalendar.set(Calendar.MINUTE, minute);
-                timeView.setText(sdfTime.format(myCalendar.getTime()));
-            }
-        };
-        timeView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                new TimePickerDialog(getContext(), time, myCalendar
-                        .get(Calendar.HOUR_OF_DAY), myCalendar
-                        .get(Calendar.MINUTE), true).show();
-            }
-        });*/
     }
 
 
@@ -212,32 +202,7 @@ public class TowerFragment extends MainFragment {
     @Override
     protected void dataToView() {
         setSpinnerValue();
-        getSharedPrefData();
         getUserPref();
-        if (!isEmptyStr(toerTypestr) || !isEmptyStr(typeheightstr) || !isEmptyStr(datesiteStr) || !isEmptyStr(itemConditionstr)
-                || !isEmptyStr(descriptionstr)
-                || !isEmptyStr(strworkingCondi)
-                || !isEmptyStr(strnoMicrowaveAntenna)
-                || !isEmptyStr(strnoGSMAntenna)
-                || !isEmptyStr(strmissingMem)
-                || !isEmptyStr(strEarthingofTower)) {
-            etHeight.setText(typeheightstr);
-            etYear.setText(datesiteStr);
-            etDescription.setText(descriptionstr);
-            etworkingCondi.setText(strworkingCondi);
-            etnoMicrowaveAntenna.setText(strnoMicrowaveAntenna);
-            etnoGSMAntenna.setText(strnoGSMAntenna);
-            etmissingMem.setText(strmissingMem);
-            etEarthingofTower.setText(strEarthingofTower);
-
-        }
-       /* if (!isEmptyStr(overviewImgstr) || !isEmptyStr(northmgStr) || !isEmptyStr(eastImgStr) || !isEmptyStr(westImgStr) || !isEmptyStr(southImgStr)) {
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(overviewImgstr)).placeholder(R.drawable.noimage).into(overviewImg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(northmgStr)).placeholder(R.drawable.noimage).into(northmg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(eastImgStr)).placeholder(R.drawable.noimage).into(eastImg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(southImgStr)).placeholder(R.drawable.noimage).into(southImg);
-            Picasso.with(ApplicationHelper.application().getContext()).load(new File(westImgStr)).placeholder(R.drawable.noimage).into(westImg);
-        }*/
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -257,64 +222,46 @@ public class TowerFragment extends MainFragment {
         CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
-    public void getSharedPrefData() {
-      /*  towerSharedPrefpref = getContext().getSharedPreferences("TowerSharedPref", MODE_PRIVATE);
-        toerTypestr = towerSharedPrefpref.getString("Tower_Type", "");
-        typeheightstr = towerSharedPrefpref.getString("Tower_Height", "");
-        datesiteStr = towerSharedPrefpref.getString("Tower_Date_SITE", "");
-        itemConditionstr = towerSharedPrefpref.getString("Tower_item_Condi", "");
-        descriptionstr = towerSharedPrefpref.getString("Description", "");
-        overviewImgstr = towerSharedPrefpref.getString("Tower_Photo1", "");
-        northmgStr = towerSharedPrefpref.getString("Tower_Photo2", "");
-        eastImgStr = towerSharedPrefpref.getString("Tower_Photo3", "");
-        southImgStr = towerSharedPrefpref.getString("Tower_Photo4", "");
-        westImgStr = towerSharedPrefpref.getString("Tower_Photo5", "");
-        strSiteId = towerSharedPrefpref.getString("SiteId", "");
-        laEarthingStatus = towerSharedPrefpref.getString("Tower_laEarthingStatusSpinner", "");
-        towerFoundation = towerSharedPrefpref.getString("Tower_towerFoundationSpinner", "");
-        towerFoundation = towerSharedPrefpref.getString("Tower_towerTighteningSpinner", "");
-        strworkingCondi = towerSharedPrefpref.getString("Tower_workingCondi", "");
-        strnoMicrowaveAntenna = towerSharedPrefpref.getString("Tower_noMicrowaveAntenna", "");
-        strnoGSMAntenna = towerSharedPrefpref.getString("Tower_noGSMAntenna", "");
-        strmissingMem = towerSharedPrefpref.getString("Tower_missingMem", "");
-        strEarthingofTower = towerSharedPrefpref.getString("Tower_EarthingofTower", "");*/
-    }
-
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
             isImage2 = false;
             isImage3 = false;
             isImage4 = false;
             isImage5 = false;
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
             isImage3 = false;
             isImage4 = false;
             isImage5 = false;
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = false;
             isImage3 = true;
             isImage4 = false;
             isImage5 = false;
         } else if (view.getId() == R.id.image4) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = false;
             isImage3 = false;
             isImage4 = true;
             isImage5 = false;
         } else if (view.getId() == R.id.image5) {
-            ASTUIUtil.startImagePicker(getHostActivity());
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = false;
             isImage3 = false;
@@ -382,106 +329,10 @@ public class TowerFragment extends MainFragment {
     }
 
 
-    public void saveBasicDataintSharedPref() {
-        /*SharedPreferences.Editor editor = towerSharedPrefpref.edit();
-        editor.putString("Tower_Type", type);
-        editor.putString("Tower_Height", height);
-        editor.putString("Tower_Date_SITE", date);
-        editor.putString("Tower_item_Condi", itemcondion);
-        editor.putString("Tower_Description", descreption);
-        editor.putString("Tower_Photo1", overviewImgstr);
-        editor.putString("Tower_Photo2", northmgStr);
-        editor.putString("Tower_Photo3", eastImgStr);
-        editor.putString("Tower_Photo4", southImgStr);
-        editor.putString("Tower_Photo5", westImgStr);
-        editor.putString("Tower_laEarthingStatusSpinner", strlaEarthingStatusSpinner);
-        editor.putString("Tower_towerFoundationSpinner", strtowerFoundationSpinner);
-        editor.putString("Tower_towerTighteningSpinner", strtowerTighteningSpinner);
-        editor.putString("Tower_workingCondi", workingCondi);
-        editor.putString("Tower_noMicrowaveAntenna", noMicrowaveAntenna);
-        editor.putString("Tower_noGSMAntenna", noGSMAntenna);
-        editor.putString("Tower_missingMem", missingMem);
-        editor.putString("Tower_EarthingofTower", EarthingofTower);
-        editor.commit();*/
-    }
 
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            // if (FNObjectUtil.isNonEmptyStr(deviceFile.getCompressFilePath())) {
-             /* //  File compressPath = new File(deviceFile.getCompressFilePath());
-                if (compressPath.exists()) {
-                    if (isImage1) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(overviewImg);
-                        overviewImgstr = deviceFile.getFilePath().toString();
-                    } else if (isImage2) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(northmg);
-                        northmgStr = deviceFile.getFilePath().toString();
-                    } else if (isImage3) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(eastImg);
-                        eastImgStr = deviceFile.getFilePath().toString();
-                    } else if (isImage4) {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(southImg);
-                        southImgStr = deviceFile.getFilePath().toString();
-                    } else {
-                        Picasso.with(ApplicationHelper.application().getContext()).load(compressPath).into(westImg);
-                        westImgStr = deviceFile.getFilePath().toString();
-                    }
-                    //compressPath.delete();
-                }
-            } else*/
-
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.jpg";
-                    overviewImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(overviewImgFile).into(overviewImg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.jpg";
-                    northmgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(northmgFile).into(northmg);
-                } else if (isImage3) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.jpg";
-                    eastImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(eastImgFile).into(eastImg);
-                } else if (isImage4) {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.jpg";
-                    southImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(southImgFile).into(southImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.jpg";
-                    westImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(westImgFile).into(westImg);
-                }
-            }
-            //  }
-        }
-    }
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
-
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
 
     @Override
     public boolean onBackPressed() {
-        saveBasicDataintSharedPref();
         return super.onBackPressed();
     }
 
@@ -526,7 +377,6 @@ public class TowerFragment extends MainFragment {
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
-                            saveBasicDataintSharedPref();
                         }
                     } else {
                         ASTUIUtil.showToast("BasiC Data Information has not been updated!");
@@ -564,4 +414,131 @@ public class TowerFragment extends MainFragment {
         }
         return multipartBody;
     }
+
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerOverview.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, overviewImg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerNorthPhase.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, northmg);
+            }
+        } else if (isImage3) {
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerEastPhase.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, eastImg);
+            }
+        } else if (isImage4) {
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerSouthPhase.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, southImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_Tower_1_TowerWestPhase.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, westImg);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    overviewImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(overviewImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    northmgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(northmgFile));
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else if (isImage3) {
+                    eastImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(eastImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                } else if (isImage4) {
+                    southImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(southImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                } else {
+                    westImgFile = imgFile;
+                    imageView.setImageURI(FilePickerHelper.isFIleConvert(westImgFile));
+                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
+
 }

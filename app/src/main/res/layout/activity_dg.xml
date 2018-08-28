@@ -181,7 +181,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.8"
                     android:padding="@dimen/_4dp"
-                    android:text="Select Date of Site on Air"
+                    android:text="Select Date of manufacture "
                     android:textSize="@dimen/_14dp" />
 
                 <TextView
@@ -266,12 +266,12 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Power Distribution Panel Status"
+                    android:text="AMF Panel"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
                 <Spinner
-                    android:id="@+id/pDistributionSpinner"
+                    android:id="@+id/aMFPanelSpinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_32dp"
@@ -284,6 +284,36 @@
                     android:background="@color/backgroundColor" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Automation Working Condition"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/automationConditionSpiiner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -320,6 +350,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etPowerPanelMake"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Power Distribution Panel Make "
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etPowerPanelCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Power Distribution Panel Capacity "
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
                 android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
@@ -329,12 +414,124 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Alternater Make"
+                    android:text="No. of DG  Cylinder"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
                 <Spinner
-                    android:id="@+id/dbAlternatermakeSpinner"
+                    android:id="@+id/noofDGCylinderSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etdgAlternatermake"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Alternater Make"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etAlternaterSno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Alternater Sno"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/etAlternterCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Alternter Capacity"
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Alternater Phase"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/alternaterPhaseSpinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_32dp"
@@ -355,18 +552,47 @@
                 android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/eSNSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:hint="Engine Sr. No."
+                        android:textSize="@dimen/_14dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
                 <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="E. SN."
+                    android:text="DG Battery Status"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
                 <Spinner
-                    android:id="@+id/eSNSpinner"
+                    android:id="@+id/etDGBatteryStatus"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_32dp"
@@ -377,6 +603,8 @@
                     android:layout_height="@dimen/_1dp"
                     android:layout_marginRight="@dimen/_10dp"
                     android:background="@color/backgroundColor" />
+
+
             </LinearLayout>
 
 
@@ -491,89 +719,6 @@
 
 
                     <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etAutomationCondition"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Automation Working Condition"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etPowerPanelMake"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Power Distribution Panel Make "
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etPowerPanelCapacity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Power Distribution Panel Capacity "
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etDGType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -586,88 +731,6 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etAlternaterSno"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Alternater Sno"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etAlternterCapacity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Alternter Capacity"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etDGBatteryStatus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="DG Battery Status"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </LinearLayout>
 
 
             <LinearLayout
@@ -1135,6 +1198,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
                             android:elevation="@dimen/_6dp"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -1174,6 +1238,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -1220,6 +1285,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView

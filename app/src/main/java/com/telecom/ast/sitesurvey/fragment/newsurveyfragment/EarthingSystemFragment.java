@@ -30,12 +30,13 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class EarthingSystemFragment extends MainFragment {
-    AppCompatEditText etNoEarthPits, etEarthpitsconnected, etinterConEarthPits, etVoltageEarth, etwireconnected;
-    String strNoEarthPits, strEarthpitsconnected, strinterConEarthPits, strVoltageEarth, strwireconnected;
-    String NoEarthPits, Earthpitsconnected, interConEarthPits, VoltageEarth, wireconnected;
+    AppCompatEditText etNoEarthPits, etVoltageEarth, etwireconnected;
+    String NoEarthPits, Earthpitsconnected, interConEarthPits, VoltageEarth, dgwireconnected, ebwireconnected;
     Button btnSubmit;
     String strUserId, strSiteId;
-    SharedPreferences earthingSharedPref, userPref;
+    SharedPreferences userPref;
+
+    Spinner dgnaturelConnectSpinner, ebnaturelConnectSpinner, InterEarthPitsSpinner, etEarthpitsconnectedSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -45,11 +46,12 @@ public class EarthingSystemFragment extends MainFragment {
     @Override
     protected void loadView() {
         etNoEarthPits = this.findViewById(R.id.etNoEarthPits);
-        etEarthpitsconnected = this.findViewById(R.id.etEarthpitsconnected);
-        etinterConEarthPits = this.findViewById(R.id.etinterConEarthPits);
+        etEarthpitsconnectedSpinner = this.findViewById(R.id.etEarthpitsconnectedSpinner);
         etVoltageEarth = this.findViewById(R.id.etVoltageEarth);
-        etwireconnected = this.findViewById(R.id.etwireconnected);
         btnSubmit = this.findViewById(R.id.btnSubmit);
+        dgnaturelConnectSpinner = this.findViewById(R.id.dgnaturelConnectSpinner);
+        ebnaturelConnectSpinner = this.findViewById(R.id.ebnaturelConnectSpinner);
+        InterEarthPitsSpinner = this.findViewById(R.id.InterEarthPitsSpinner);
     }
 
     @Override
@@ -70,48 +72,36 @@ public class EarthingSystemFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        getSharedPrefData();
         getUserPref();
-        if (!isEmptyStr(strNoEarthPits) || !isEmptyStr(strEarthpitsconnected) || !isEmptyStr(strinterConEarthPits)
-                || !isEmptyStr(strwireconnected)
-                || !isEmptyStr(strVoltageEarth)
-                ) {
-            etNoEarthPits.setText(strNoEarthPits);
-            etEarthpitsconnected.setText(strEarthpitsconnected);
-            etinterConEarthPits.setText(strinterConEarthPits);
-            etVoltageEarth.setText(strVoltageEarth);
-            etwireconnected.setText(strwireconnected);
-        }
+        setSpinnerValue();
     }
 
+    public void setSpinnerValue() {
+        final String etfiredetectSpineer_array[] = {"Connected", "Not Connected"};
+        ArrayAdapter<String> etfiredetect = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineer_array);
+        dgnaturelConnectSpinner.setAdapter(etfiredetect);
 
-    /*
-     *
-     * Shared Prefrences---------------------------------------
-     */
-    public void getSharedPrefData() {
-/*        earthingSharedPref = getContext().getSharedPreferences("EarthingSharedPref", MODE_PRIVATE);
-        strNoEarthPits = earthingSharedPref.getString("EARTH_strNoEarthPits", "");
-        strEarthpitsconnected = earthingSharedPref.getString("EARTH_strEarthpitsconnected", "");
-        strinterConEarthPits = earthingSharedPref.getString("EARTH_strinterConEarthPits", "");
-        strVoltageEarth = earthingSharedPref.getString("EARTH_strVoltageEarth", "");
-        strwireconnected = earthingSharedPref.getString("EARTH_strwireconnected", "");*/
+
+        final String etfiredetectSpineerarray[] = {"Connected", "Not Connected"};
+        ArrayAdapter<String> etty = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineerarray);
+        ebnaturelConnectSpinner.setAdapter(etty);
+
+
+        final String InterEarthPitsSpinneraray[] = {"Connected", "Not Connected"};
+        ArrayAdapter<String> InterEartharrat = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, InterEarthPitsSpinneraray);
+        InterEarthPitsSpinner.setAdapter(InterEartharrat);
+
+
+        final String etEarthpitsconnectedSpinnerarray[] = {"Connected", "Not Connected", "EGB Missing", "IGFB Missing"};
+        ArrayAdapter<String> etEarthpitsconnectedSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etEarthpitsconnectedSpinnerarray);
+        etEarthpitsconnectedSpinner.setAdapter(etEarthpitsconnectedSpinnerad);
     }
-
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-
                 saveBasicDataonServer();
-               /* SharedPreferences.Editor editor = earthingSharedPref.edit();
-                editor.putString("EARTH_strNoEarthPits", NoEarthPits);
-                editor.putString("EARTH_strEarthpitsconnected", Earthpitsconnected);
-                editor.putString("EARTH_strinterConEarthPits", interConEarthPits);
-                editor.putString("EARTH_strVoltageEarth", VoltageEarth);
-                editor.putString("EARTH_strwireconnected", wireconnected);
-                editor.commit();*/
             }
 
         }
@@ -119,10 +109,11 @@ public class EarthingSystemFragment extends MainFragment {
 
     public boolean isValidate() {
         NoEarthPits = etNoEarthPits.getText().toString();
-        Earthpitsconnected = etEarthpitsconnected.getText().toString();
-        interConEarthPits = etinterConEarthPits.getText().toString();
+        Earthpitsconnected = etEarthpitsconnectedSpinner.getSelectedItem().toString();
+        interConEarthPits = InterEarthPitsSpinner.getSelectedItem().toString();
         VoltageEarth = etVoltageEarth.getText().toString();
-        wireconnected = etwireconnected.getText().toString();
+        dgwireconnected = dgnaturelConnectSpinner.getSelectedItem().toString();
+        ebwireconnected = ebnaturelConnectSpinner.getSelectedItem().toString();
         if (isEmptyStr(NoEarthPits)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of EarthPits");
             return false;
@@ -135,8 +126,11 @@ public class EarthingSystemFragment extends MainFragment {
         } else if (isEmptyStr(VoltageEarth)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Voltage between Earth and Neutral");
             return false;
-        } else if (isEmptyStr(wireconnected)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "DG/EB neutral wire connected with earthing");
+        } else if (isEmptyStr(dgwireconnected)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "DG neutral wire connected with earthing");
+            return false;
+        } else if (isEmptyStr(ebwireconnected)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "EB neutral wire connected with earthing");
             return false;
         }
         return true;
@@ -157,7 +151,8 @@ public class EarthingSystemFragment extends MainFragment {
                 EarthingData.put("NoofEarthPits", NoEarthPits);
                 EarthingData.put("NoofEarthpitsconnectedEGBIGB", Earthpitsconnected);
                 EarthingData.put("InterConnectivityofEarthPits", interConEarthPits);
-                EarthingData.put("DGEBneutralwireconnectedwithearthing", wireconnected);
+                EarthingData.put("DGEBneutralwireconnectedwithearthing", dgwireconnected);
+                EarthingData.put("DGEBneutralwireconnectedwithearthing", ebwireconnected);
                 EarthingData.put("VoltagebetweenEarthandNeutral", VoltageEarth);
                 jsonObject.put("EarthingData", EarthingData);
             } catch (JSONException e) {

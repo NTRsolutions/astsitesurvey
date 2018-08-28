@@ -6,8 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
@@ -39,7 +42,9 @@ import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
 
 import org.json.JSONArray;
@@ -47,6 +52,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,17 +76,12 @@ public class IpmsFragment extends MainFragment {
     AppCompatEditText etDescription;
     AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake, etnoofModule, etLcuCapacity, etModel, etModuleCapacity;
     SharedPreferences pref;
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription, strnoofModule, strModuleCapacity, strlcucapacity;
     String strSavedDateTime, strUserId, strSiteId;
-    String strMakeId, strModelId, strDescriptionId, nofModule, ModuleCapacity;
+    String strMakeId = "0", nofModule = "0", ModuleCapacity = "";
     String[] arrMake;
-    String[] arrModel;
     String[] arrCapacity;
-    ArrayList<EquipMakeDataModel> arrEquipData;
-    ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     AtmDatabase atmDatabase;
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, lcucapacity;
+    String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "", lcucapacity = "";
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
     Button btnSubmit;
@@ -87,8 +89,8 @@ public class IpmsFragment extends MainFragment {
             etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
 
     Spinner itemStatusSpineer;
-    String Controller, ConditionbackPlane, BodyEarthing, PositiveEarthing, RatingofCable, AlarmConnection,
-            NoofRMWorking, NoofRMFaulty, SpareFuseStatus, itemStatus, CurtomerSite_Id, itemCondition;
+    String Controller = "", ConditionbackPlane = "", BodyEarthing = "0", PositiveEarthing = "0", RatingofCable = "0", AlarmConnection = "",
+            NoofRMWorking = "0", NoofRMFaulty = "0", SpareFuseStatus = "", CurtomerSite_Id = "", itemCondition = "";
 
 
     SharedPreferences userPref;
@@ -166,43 +168,6 @@ public class IpmsFragment extends MainFragment {
 
     }
 
-    /*
-     *
-     * Shared Prefrences---------------------------------------
-     */
-
-    public void getSharedPrefData() {
-       /* pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strUserId = pref.getString("USER_ID", "");
-        strMake = pref.getString("IPMS_Make", "");
-        strModel = pref.getString("SMP_Model", "");
-        strCapacity = pref.getString("IPMS_Capacity", "");
-        strMakeId = pref.getString("IPMS_MakeId", "");
-        strModelId = pref.getString("IPMS_ModelId", "");
-        strDescriptionId = pref.getString("IPMS_DescriptionId", "");
-        strSerialNum = pref.getString("IPMS_SerialNum", "");
-        strYearOfManufacturing = pref.getString("IPMS_YearOfManufacturing", "");
-        strDescription = pref.getString("IPMS_Description", "");
-        strModuleCapacity = pref.getString("IPMS_ModuleCapacity", "");
-        strlcucapacity = pref.getString("IPMS_Llcucapacity", "");
-        strnoofModule = pref.getString("IPMS_noofModule", "");
-        frontphoto = pref.getString("IPMS_Photo1", "");
-        openPhoto = pref.getString("IPMS__Photo2", "");
-        sNoPlatephoto = pref.getString("IPMS_Photo3", "");
-        strSavedDateTime = pref.getString("IPMS_SavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");
-        Controller = pref.getString("IPMS_Controller", "");
-        ConditionbackPlane = pref.getString("IPMS_ConditionbackPlane", "");
-        BodyEarthing = pref.getString("IPMS_BodyEarthing", "");
-        PositiveEarthing = pref.getString("IPMS_PositiveEarthing", "");
-        RatingofCable = pref.getString("IPMS_RatingofCable", "");
-        AlarmConnection = pref.getString("IPMS_AlarmConnection", "");
-        NoofRMWorking = pref.getString("IPMS_NoofRMWorking", "");
-        NoofRMFaulty = pref.getString("IPMS_NoofRMFaulty", "");
-        SpareFuseStatus = pref.getString("IPMS_SpareFuseStatus", "");
-        itemStatus = pref.getString("IPMS_itemStatus", "");*/
-    }
-
 
     public void setDateofSiteonAir() {
         String myFormat = "yyyy-MM-dd"; //In which you need put here
@@ -230,22 +195,6 @@ public class IpmsFragment extends MainFragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-  /*      final SimpleDateFormat sdfTime = new SimpleDateFormat("HH.mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                myCalendar.set(Calendar.MINUTE, minute);
-                timeView.setText(sdfTime.format(myCalendar.getTime()));
-            }
-        };
-        timeView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                new TimePickerDialog(getContext(), time, myCalendar
-                        .get(Calendar.HOUR_OF_DAY), myCalendar
-                        .get(Calendar.MINUTE), true).show();
-            }
-        });*/
     }
 
     public void setSpinnerValue() {
@@ -261,7 +210,6 @@ public class IpmsFragment extends MainFragment {
     @Override
     protected void dataToView() {
         atmDatabase = new AtmDatabase(getContext());
-        getSharedPrefData();
         getUserPref();
         setSpinnerValue();
         atmDatabase = new AtmDatabase(getContext());
@@ -293,46 +241,6 @@ public class IpmsFragment extends MainFragment {
         });
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
-        if (!isEmptyStr(strMake) || !isEmptyStr(strModel) || !isEmptyStr(strCapacity)
-                || !isEmptyStr(strSerialNum)
-                || !isEmptyStr(strYearOfManufacturing) ||
-                !isEmptyStr(strDescription)
-                || !isEmptyStr(strlcucapacity)
-                || !isEmptyStr(Controller)
-                || !isEmptyStr(ConditionbackPlane)
-                || !isEmptyStr(BodyEarthing)
-                || !isEmptyStr(PositiveEarthing)
-                || !isEmptyStr(AlarmConnection)
-                || !isEmptyStr(NoofRMWorking)
-                || !isEmptyStr(NoofRMFaulty)
-                || !isEmptyStr(SpareFuseStatus)
-                ) {
-            etMake.setText(strMake);
-            etModel.setText(strModel);
-            etCapacity.setText(strCapacity);
-            etSerialNum.setText(strSerialNum);
-            etYear.setText(strYearOfManufacturing);
-            etDescription.setText(strDescription);
-            etLcuCapacity.setText(strlcucapacity);
-            etController.setText(Controller);
-            etConditionbackPlane.setText(strDescription);
-            etBodyEarthing.setText(BodyEarthing);
-            etPositiveEarthing.setText(PositiveEarthing);
-            etRatingofCable.setText(RatingofCable);
-            etAlarmConnection.setText(AlarmConnection);
-            etNoofRMWorking.setText(NoofRMWorking);
-            etNoofRMFaulty.setText(NoofRMFaulty);
-            etSpareFuseStatus.setText(SpareFuseStatus);
-            itemStatus = itemStatusSpineer.getSelectedItem().toString();
-            arrEquipData = atmDatabase.getEquipmentMakeData("DESC", "DG");
-            equipCapacityDataList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
-            equipDescriptionDataList = atmDatabase.getEquipmentDescriptionData("DESC", strModel);
-          /*  if (!frontphoto.equals("") || !openPhoto.equals("") || !sNoPlatephoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(frontphoto)).placeholder(R.drawable.noimage).into(frontimg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(openPhoto)).placeholder(R.drawable.noimage).into(openImg);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(sNoPlatephoto)).placeholder(R.drawable.noimage).into(sNoPlateImg);
-            }*/
-        }
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
@@ -350,48 +258,23 @@ public class IpmsFragment extends MainFragment {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = true;
             isImage2 = false;
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Front.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = true;
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Open.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
-            ASTUIUtil.startImagePicker(getHostActivity());
             isImage1 = false;
             isImage2 = false;
+
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-               /* SharedPreferences.Editor editor = pref.edit();
-                editor.putString("IPMS_UserId", strUserId);
-                editor.putString("IPMS_Make", make);
-                editor.putString("IPMS_Model", model);
-                editor.putString("IPMS_Capacity", capacity);
-                editor.putString("IPMS_DescriptionId", strDescriptionId);
-                editor.putString("IPMS_MakeId", strMakeId);
-                editor.putString("IPMS_ModelId", strModelId);
-                editor.putString("IPMS_SerialNum", serialNumber);
-                editor.putString("IPMS_YearOfManufacturing", yearOfManufacturing);
-                editor.putString("IPMS_Description", description);
-                editor.putString("IPMS_ModuleCapacity", ModuleCapacity);
-                editor.putString("IPMS_Llcucapacity", lcucapacity);
-                editor.putString("IPMS_noofModule", nofModule);
-                editor.putString("IPMS_Photo1", frontphoto);
-                editor.putString("IPMS_Photo2", openPhoto);
-                editor.putString("IPMS_Photo3", sNoPlatephoto);
-                editor.putString("IPMS_SavedDateTime", currentDateTime);
-                editor.putString("IPMS_Controller", Controller);
-                editor.putString("IPMS_ConditionbackPlane", ConditionbackPlane);
-                editor.putString("IPMS_BodyEarthing", BodyEarthing);
-                editor.putString("IPMS_PositiveEarthing", PositiveEarthing);
-                editor.putString("IPMS_RatingofCable", RatingofCable);
-                editor.putString("IPMS_AlarmConnection", AlarmConnection);
-                editor.putString("IPMS_NoofRMWorking", NoofRMWorking);
-                editor.putString("IPMS_NoofRMFaulty", NoofRMFaulty);
-                editor.putString("IPMS_SpareFuseStatus", SpareFuseStatus);
-                editor.putString("IPMS_itemStatus", itemStatus);
-                editor.commit();*/
                 saveBasicDataonServer();
             }
 
@@ -401,29 +284,28 @@ public class IpmsFragment extends MainFragment {
 
 
     public boolean isValidate() {
-        make = etMake.getText().toString();
-        model = etCapacity.getText().toString();
-        capacity = etCapacity.getText().toString();
-        serialNumber = etSerialNum.getText().toString();
-        yearOfManufacturing = etYear.getText().toString();
-        description = etDescription.getText().toString();
-        nofModule = etnoofModule.getText().toString();
-        ModuleCapacity = etModuleCapacity.getText().toString();
-        lcucapacity = etLcuCapacity.getText().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        Controller = etController.getText().toString();
-        ConditionbackPlane = etConditionbackPlane.getText().toString();
-        BodyEarthing = etBodyEarthing.getText().toString();
-        PositiveEarthing = etPositiveEarthing.getText().toString();
-        RatingofCable = etRatingofCable.getText().toString();
-        AlarmConnection = etAlarmConnection.getText().toString();
-        NoofRMWorking = etNoofRMWorking.getText().toString();
-        NoofRMFaulty = etNoofRMFaulty.getText().toString();
-        SpareFuseStatus = etSpareFuseStatus.getText().toString();
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
-
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            make = etMake.getText().toString();
+            model = etCapacity.getText().toString();
+            capacity = etCapacity.getText().toString();
+            serialNumber = etSerialNum.getText().toString();
+            yearOfManufacturing = etYear.getText().toString();
+            description = etDescription.getText().toString();
+            nofModule = etnoofModule.getText().toString();
+            ModuleCapacity = etModuleCapacity.getText().toString();
+            lcucapacity = etLcuCapacity.getText().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            Controller = etController.getText().toString();
+            ConditionbackPlane = etConditionbackPlane.getText().toString();
+            BodyEarthing = etBodyEarthing.getText().toString();
+            PositiveEarthing = etPositiveEarthing.getText().toString();
+            RatingofCable = etRatingofCable.getText().toString();
+            AlarmConnection = etAlarmConnection.getText().toString();
+            NoofRMWorking = etNoofRMWorking.getText().toString();
+            NoofRMFaulty = etNoofRMFaulty.getText().toString();
+            SpareFuseStatus = etSpareFuseStatus.getText().toString();
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -468,50 +350,6 @@ public class IpmsFragment extends MainFragment {
         return true;
     }
 
-
-    /**
-     * THIS USE an ActivityResult
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void updateOnResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FNReqResCode.ATTACHMENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FNFilePicker.EXTRA_SELECTED_MEDIA);
-            getResult(files);
-
-        }
-    }
-
-
-    public void getPickedFiles(ArrayList<MediaFile> files) {
-        for (MediaFile deviceFile : files) {
-            if (deviceFile.getFilePath() != null && deviceFile.getFilePath().exists()) {
-                if (isImage1) {
-                    String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Front.jpg";
-                    frontimgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(frontimg);
-                    //overviewImgstr = deviceFile.getFilePath().toString();
-                } else if (isImage2) {
-                    String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Open.jpg";
-                    openImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(openImg);
-                } else {
-                    String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_SerialNoPlate.jpg";
-                    sNoPlateImgFile = ASTUIUtil.renameFile(deviceFile.getFileName(), imageName);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(sNoPlateImg);
-                }
-            }
-            //  }
-        }
-    }
-
-
-    public void getResult(ArrayList<MediaFile> files) {
-        getPickedFiles(files);
-    }
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -566,7 +404,11 @@ public class IpmsFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your IPMS Data save Successfully");
-                            showAddMoreItemDialog();
+                            if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+                                showAddMoreItemDialog();
+                            } else {
+                                reloadBackScreen();
+                            }
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
@@ -674,4 +516,109 @@ public class IpmsFragment extends MainFragment {
             }
         }
     }
+
+    /**
+     * THIS USE an ActivityResult
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        if (isImage1) {
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Front.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, frontimg);
+            }
+        } else if (isImage2) {
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_Open.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, openImg);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_IPMS_" + EquipmentSno + "_SerialNoPlate.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, sNoPlateImg);
+            }
+        }
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                if (isImage1) {
+                    frontimgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                } else if (isImage2) {
+                    openImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                } else {
+                    sNoPlateImgFile = imgFile;
+                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                }
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
+    }
+
 }
