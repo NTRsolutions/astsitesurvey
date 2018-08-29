@@ -592,6 +592,7 @@ public class TowerFragment extends MainFragment {
     private void compresImage(final File file, final String fileName, final ImageView imageView) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
+            Uri uri;
             ASTProgressBar progressBar;
 
             @Override
@@ -608,10 +609,13 @@ public class TowerFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
+                        if (imgFile.exists()) {
+                            imgFile.delete();
+                        }
                         InputStream iStream = getContext().getContentResolver().openInputStream(uri);
                         byte[] inputData = FilePickerHelper.getBytes(iStream);
 
@@ -637,25 +641,16 @@ public class TowerFragment extends MainFragment {
                 // imageView.setImageBitmap(bitmap);
                 if (isImage1) {
                     overviewImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(overviewImgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
                 } else if (isImage2) {
                     northmgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(northmgFile));
-                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
                 } else if (isImage3) {
                     eastImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(eastImgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
                 } else if (isImage4) {
                     southImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(southImgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
                 } else {
                     westImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(westImgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
                 }
+                imageView.setImageURI(uri);
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }

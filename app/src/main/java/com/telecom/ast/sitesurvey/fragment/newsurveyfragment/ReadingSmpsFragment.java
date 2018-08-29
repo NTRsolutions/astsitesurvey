@@ -360,6 +360,7 @@ public class ReadingSmpsFragment extends MainFragment {
     private void compresImage(final File file, final String fileName, final ImageView imageView) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
+            Uri uri;
             ASTProgressBar progressBar;
             @Override
             protected void onPreExecute() {
@@ -374,10 +375,13 @@ public class ReadingSmpsFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
+                        if (imgFile.exists()) {
+                            imgFile.delete();
+                        }
                         InputStream iStream = getContext().getContentResolver().openInputStream(uri);
                         byte[] inputData = FilePickerHelper.getBytes(iStream);
 
@@ -402,17 +406,14 @@ public class ReadingSmpsFragment extends MainFragment {
                 // imageView.setImageBitmap(bitmap);
                 if (isImage1) {
                     battVoltageFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(battVoltageFile).into(imageView);
                 } else if (isImage2) {
                     adCurrentFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(adCurrentFile).into(imageView);
                 } else if (isImage1clmp) {
                     clampbattVoltageFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(clampbattVoltageFile).into(imageView);
                 }else if (isImage2clmp) {
                     clampadCurrentFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(clampadCurrentFile).into(imageView);
                 }
+                imageView.setImageURI(uri);
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }

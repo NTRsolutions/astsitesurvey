@@ -81,7 +81,7 @@ public class HomeFragment extends MainFragment {
             String serviceURLEquipment = Constant.BASE_URL + Constant.EQUIPMENT_MASTER_URL;
             /*ArrayList<CircleMasterDataModel> arrCircleData = atmDatabase.getAllCircleData("Desc");
             ArrayList<SiteMasterDataModel> arrSiteData = atmDatabase.getAllSiteData("Desc");
-            ArrayList<EquipMakeDataModel> arrEquipData = atmDatabase.getEquipmentMakeData("Desc", "BB");
+            ArrayList<EquipMakeDataModel> arrEquipData = at mDatabase.getEquipmentMakeData("Desc", "BB");
             if (arrCircleData != null && arrCircleData.size() <= 0)
                 getCircleMaster(serviceURLCircle);
             if (arrSiteData != null && arrSiteData.size() <= 0)
