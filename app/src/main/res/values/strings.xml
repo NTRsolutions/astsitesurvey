@@ -112,7 +112,49 @@
         <item>Empty</item>
     </string-array>
 
+    <string-array name="DieselfuillDone">
+        <item>CareTaker</item>
+        <item>Technician</item>
+        <item>Filler</item>
+    </string-array>
 
+    <string-array name="igbstatus">
+        <item>Available</item>
+        <item>Not Available</item>
+    </string-array>
+
+    <string-array name="egbstatus">
+        <item>Available</item>
+        <item>Not Available</item>
+    </string-array>
+
+
+    <string-array name="connectedstatus">
+        <item>Connected</item>
+        <item>Not Connected</item>
+    </string-array>
+    <string-array name="NoEarthPits">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="actype">
+        <item>Window</item>
+        <item>Split</item>
+        <item>Space Maker AC</item>
+    </string-array>
+    <string-array name="AirconStatus">
+        <item>Working</item>
+        <item>Compressure Not Working</item>
+        <item>Blower Not working</item>
+        <item> Controller Not working</item>
+    </string-array>
+
+    <string-array name="ACALARm">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

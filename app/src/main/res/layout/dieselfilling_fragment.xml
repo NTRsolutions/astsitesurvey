@@ -115,6 +115,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/_30dp"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_4dp">
+
+                    <com.telecom.ast.sitesurvey.component.FNTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_2dp"
+                        android:gravity="center_vertical"
+                        android:text="Diesel Filling Done by"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_14dp" />
+
+
+                    <Spinner
+                        android:id="@+id/etDieselfuillDone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:entries="@array/DieselfuillDone"
+                        android:minHeight="@dimen/_32dp"
+                        android:popupBackground="@color/white" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1dp"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:background="@color/backgroundColor" />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
                     android:orientation="horizontal"
                     android:padding="@dimen/_4dp">
 
@@ -127,16 +163,17 @@
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                         <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/etDieselfuillDone"
+                            android:id="@+id/etBitPlan"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Diesel Filling Done by CareTaker/Technician/Filler"
+                            android:hint="Bit Plan (No. of Days)"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
 
 
                 </LinearLayout>
+
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

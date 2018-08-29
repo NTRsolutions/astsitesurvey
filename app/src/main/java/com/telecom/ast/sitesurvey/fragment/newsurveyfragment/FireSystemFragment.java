@@ -342,7 +342,6 @@ public class FireSystemFragment extends MainFragment {
                 FireSysData.put("MakeID", strMakeId);
                 FireSysData.put("stretRefillingStatusSpinner", stretRefillingStatusSpinner);
                 FireSysData.put("RefillingFilledDate", datemilisec);
-
                 jsonObject.put("FireSysData", FireSysData);
             } catch (JSONException e) {
                 e.printStackTrace();

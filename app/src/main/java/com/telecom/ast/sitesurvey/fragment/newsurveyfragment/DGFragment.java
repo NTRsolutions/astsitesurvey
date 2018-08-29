@@ -93,7 +93,7 @@ public class DGFragment extends MainFragment {
     private Spinner mCBStatusSpinner,
             dgContacterSpinner, backCompressorSpinner;
 
-    private AppCompatEditText etPowerPanelMake, etPowerPanelCapacity, etDGType, etAlternaterSno,
+    private AppCompatEditText etPowerPanelMake, etPowerPanelCapacity, etAlternaterSno,
             etAlternterCapacity, etDGBatteryMake,
             etDGRunHourMeter, etDGFuelTank,
 
@@ -113,7 +113,6 @@ public class DGFragment extends MainFragment {
             etDGBatteryStatus, etConditionofwiring, etDGearthing, etConditionCANOPY, eTDGlowLUBEWire, etCableGroutingspinner,
             etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch,  etRentalDGChangeOver,
             etDGPollutionCertificate,dGExhaustSmokecolour;
-
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_dg;
@@ -144,7 +143,6 @@ public class DGFragment extends MainFragment {
         backCompressorSpinner = findViewById(R.id.backCompressorSpinner);
         etPowerPanelMake = findViewById(R.id.etPowerPanelMake);
         etPowerPanelCapacity = findViewById(R.id.etPowerPanelCapacity);
-        etDGType = findViewById(R.id.etDGType);
         etAlternaterSno = findViewById(R.id.etAlternaterSno);
         etAlternterCapacity = findViewById(R.id.etAlternterCapacity);
         etConditionofwiring = findViewById(R.id.etConditionofwiring);
@@ -411,7 +409,6 @@ public class DGFragment extends MainFragment {
                     automationConditionSpiiner.setEnabled(false);
                     etPowerPanelMake.setEnabled(false);
                     etPowerPanelCapacity.setEnabled(false);
-                    etDGType.setEnabled(false);
                     etAlternaterSno.setEnabled(false);
                     etAlternterCapacity.setEnabled(false);
                     etDGBatteryStatus.setEnabled(false);
@@ -455,7 +452,6 @@ public class DGFragment extends MainFragment {
                     automationConditionSpiiner.setEnabled(true);
                     etPowerPanelMake.setEnabled(true);
                     etPowerPanelCapacity.setEnabled(true);
-                    etDGType.setEnabled(true);
                     etAlternaterSno.setEnabled(true);
                     etAlternterCapacity.setEnabled(true);
                     etDGBatteryStatus.setEnabled(true);
@@ -536,7 +532,6 @@ public class DGFragment extends MainFragment {
             AutomationCondition = automationConditionSpiiner.getSelectedItem().toString();
             PowerPanelMake = getTextFromView(this.etPowerPanelMake);
             PowerPanelCapacity = getTextFromView(this.etPowerPanelCapacity);
-            DGType = getTextFromView(this.etDGType);
             AlternaterSno = getTextFromView(this.etAlternaterSno);
             AlternterCapacity = getTextFromView(this.etAlternterCapacity);
             DGBatteryStatus = etDGBatteryStatus.getSelectedItem().toString();

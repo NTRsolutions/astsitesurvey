@@ -172,46 +172,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:padding="@dimen/_5dp"
                     android:hint="@string/Enter_Manufacturing_Date"
+                    android:padding="@dimen/_5dp"
                     android:textSize="@dimen/_14dp" />
 
                 <TextView
                     android:id="@+id/dateIcon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="0.2"
                     android:gravity="center"
                     android:padding="@dimen/_3dp"
-                    android:layout_gravity="center"
                     android:text="ic"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20dp" />
             </LinearLayout>
-            <!--   <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_margin="@dimen/_4dp"
-                   android:minHeight="@dimen/_30dp"
-                   android:orientation="horizontal">
-
-                   <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_marginRight="10dp"
-                       app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                       app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                       <com.telecom.ast.sitesurvey.component.FNEditText
-                           android:id="@+id/etYear"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:autoSizeTextType="uniform"
-                           android:hint="@string/Enter_Manufacturing_Date"
-                           android:textSize="@dimen/_14dp" />
-                   </android.support.design.widget.TextInputLayout>
-
-               </LinearLayout>-->
 
 
             <LinearLayout
@@ -287,12 +263,12 @@
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                     <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etNoofItems"
+                        android:id="@+id/etCellVoltage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of Items"
-                        android:inputType="number"
+                        android:hint="BB Voltage"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -325,31 +301,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_4dp"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etCellVoltage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="Cell Voltage"
-                        android:inputType="numberDecimal"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -479,9 +430,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
-                            android:scaleType="fitXY"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -520,9 +471,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
-                            android:scaleType="fitXY"
                             android:layout_alignParentTop="true"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView
@@ -569,8 +520,8 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
-                            android:scaleType="fitXY"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/noimage" />
 
                         <TextView

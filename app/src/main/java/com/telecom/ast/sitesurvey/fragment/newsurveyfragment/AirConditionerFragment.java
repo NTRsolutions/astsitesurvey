@@ -74,43 +74,43 @@ import static android.support.v4.provider.FontsContractCompat.FontRequestCallbac
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class AirConditionerFragment extends MainFragment {
-    static ImageView frontimg, openImg, sNoPlateImg;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    static boolean isImage1, isImage2;
-    Button btnSubmit;
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
-    AppCompatEditText etDescription, etNumberOfAC,
-            etaCType, etacACWorkingCondition, etCompresserStatus, etACAlarms, etSocketandPlug;
-    AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    SharedPreferences pref;
-    String strSavedDateTime, strUserId, strSiteId, sNoAC, CurtomerSite_Id;
-    String strMakeId;
-    String[] arrMake;
-    AtmDatabase atmDatabase;
-    String[] arrCapacity;
-    String[] arrModel;
+    private static ImageView frontimg, openImg, sNoPlateImg;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static boolean isImage1, isImage2;
+    private Button btnSubmit;
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner, etaCType,etACAlarms,etacACWorkingCondition;
+    private AppCompatEditText etDescription, etNumberOfAC;
 
-    ArrayList<EquipMakeDataModel> arrEquipData;
-    ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    ArrayList<EquipCapacityDataModel> equipCapacityDataList;
+    private AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    private SharedPreferences pref;
+    private String strSavedDateTime, strUserId, strSiteId, sNoAC, CurtomerSite_Id;
+    private String strMakeId;
+    private String[] arrMake;
+    private AtmDatabase atmDatabase;
+    private String[] arrCapacity;
+    private String[] arrModel;
 
-    String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs;
-    Spinner itemStatusSpineer;
-    String aCType, acACWorkingCondition, CompresserStatus, ACAlarms, SocketandPlug, itemCondition;
-    SharedPreferences userPref;
-    TextView etYear, dateIcon;
-    Typeface materialdesignicons_font;
-    LinearLayout dateLayout;
-    long datemilisec;
-    int EquipmentSno = 1;
+    private ArrayList<EquipMakeDataModel> arrEquipData;
+    private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
 
-    String strEqupId;
+    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs;
+    private Spinner itemStatusSpineer;
+    private String aCType, acACWorkingCondition, ACAlarms, itemCondition;
+    private SharedPreferences userPref;
+    private TextView etYear, dateIcon;
+    private Typeface materialdesignicons_font;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private int EquipmentSno = 1;
+
+    private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
 
     @Override
     protected int fragmentLayout() {
@@ -135,9 +135,7 @@ public class AirConditionerFragment extends MainFragment {
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         etaCType = findViewById(R.id.etaCType);
         etacACWorkingCondition = findViewById(R.id.etacACWorkingCondition);
-        etCompresserStatus = findViewById(R.id.etCompresserStatus);
         etACAlarms = findViewById(R.id.etACAlarms);
-        etSocketandPlug = findViewById(R.id.etSocketandPlug);
         dateIcon = findViewById(R.id.dateIcon);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
@@ -268,9 +266,7 @@ public class AirConditionerFragment extends MainFragment {
                     descriptionLayout.setEnabled(false);
                     etaCType.setEnabled(false);
                     etacACWorkingCondition.setEnabled(false);
-                    etCompresserStatus.setEnabled(false);
                     etACAlarms.setEnabled(false);
-                    etSocketandPlug.setEnabled(false);
 
                 } else {
                     frontimg.setEnabled(true);
@@ -287,9 +283,7 @@ public class AirConditionerFragment extends MainFragment {
                     descriptionLayout.setEnabled(true);
                     etaCType.setEnabled(true);
                     etacACWorkingCondition.setEnabled(true);
-                    etCompresserStatus.setEnabled(true);
                     etACAlarms.setEnabled(true);
-                    etSocketandPlug.setEnabled(true);
                 }
             }
 
@@ -336,11 +330,9 @@ public class AirConditionerFragment extends MainFragment {
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
         numOfACs = etNumberOfAC.getText().toString();
-        aCType = etaCType.getText().toString();
-        acACWorkingCondition = etacACWorkingCondition.getText().toString();
-        CompresserStatus = etCompresserStatus.getText().toString();
-        ACAlarms = etACAlarms.getText().toString();
-        SocketandPlug = etSocketandPlug.getText().toString();
+        aCType = etaCType.getSelectedItem().toString();
+        acACWorkingCondition = etacACWorkingCondition.getSelectedItem().toString();
+        ACAlarms = etACAlarms.getSelectedItem().toString();
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
@@ -408,9 +400,7 @@ public class AirConditionerFragment extends MainFragment {
                 EquipmentDataa.put("AC_Type", aCType);
                 EquipmentDataa.put("AIR_CON_Number", numOfACs);
                 EquipmentDataa.put("AC_WorkingCondition", acACWorkingCondition);
-                EquipmentDataa.put("AC_CompresserandBlowerWorking", CompresserStatus);
                 EquipmentDataa.put("AC_Alarms", ACAlarms);
-                EquipmentDataa.put("AC_SocketandPlug", SocketandPlug);
 
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
@@ -505,11 +495,9 @@ public class AirConditionerFragment extends MainFragment {
         etYear.setText("");
         etDescription.setText("");
         etNumberOfAC.setText("");
-        etaCType.setText("");
-        etacACWorkingCondition.setText("");
-        etCompresserStatus.setText("");
-        etACAlarms.setText("");
-        etSocketandPlug.setText("");
+        etaCType.setSelection(0);
+        etacACWorkingCondition.setSelection(0);
+        etACAlarms.setSelection(0);
         itemStatusSpineer.setSelection(0);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);
