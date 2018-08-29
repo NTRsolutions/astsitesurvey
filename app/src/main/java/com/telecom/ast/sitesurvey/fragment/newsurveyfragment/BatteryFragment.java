@@ -71,7 +71,7 @@ public class BatteryFragment extends MainFragment {
     private File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
     private boolean isImage1, isImage2;
     private AppCompatAutoCompleteTextView etMake;
-    private AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
+    private AppCompatEditText etDescription, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     private String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
@@ -120,7 +120,6 @@ public class BatteryFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         descriptionLayout = findViewById(R.id.descriptionLayout);
-        etNoofItems = findViewById(R.id.etNoofItems);
         etNoofCell = findViewById(R.id.etNoofCell);
         etCellVoltage = findViewById(R.id.etCellVoltage);
         etNoofWeakCells = findViewById(R.id.etNoofWeakCells);
@@ -265,7 +264,6 @@ public class BatteryFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-                    etNoofItems.setEnabled(false);
                     etNoofCell.setEnabled(false);
                     etCellVoltage.setEnabled(false);
                     etNoofWeakCells.setEnabled(false);
@@ -284,7 +282,6 @@ public class BatteryFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
-                    etNoofItems.setEnabled(true);
                     etNoofCell.setEnabled(true);
                     etCellVoltage.setEnabled(true);
                     etNoofWeakCells.setEnabled(true);
@@ -356,7 +353,6 @@ public class BatteryFragment extends MainFragment {
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             description = getTextFromView(this.etDescription);
             currentDateTime = String.valueOf(System.currentTimeMillis());
-            NoofItems = getTextFromView(this.etNoofItems);
             NoofCell = getTextFromView(this.etNoofCell);
             CellVoltage = getTextFromView(this.etCellVoltage);
             NoofWeakCells = getTextFromView(this.etNoofWeakCells);
@@ -443,7 +439,6 @@ public class BatteryFragment extends MainFragment {
             EquipmentData.put("SerialNo", serialNumber);
             EquipmentData.put("MfgDate", datemilisec);
             EquipmentData.put("ItemCondition", itemCondition);
-            EquipmentData.put("BB_NoofBB", NoofItems);
             EquipmentData.put("BB_NoofCell", NoofCell);
             EquipmentData.put("BB_CellVoltage", CellVoltage);
             EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
@@ -652,7 +647,6 @@ public class BatteryFragment extends MainFragment {
         etSerialNum.setText("");
         etYear.setText("");
         etDescription.setText("");
-        etNoofItems.setText("");
         etNoofCell.setText("");
         etCellVoltage.setText("");
         etNoofWeakCells.setText("");

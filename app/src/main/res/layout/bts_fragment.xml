@@ -59,7 +59,6 @@
             </LinearLayout>
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,31 +92,6 @@
                     android:layout_marginRight="@dimen/_10dp"
                     android:background="@color/backgroundColor" />
             </LinearLayout>
-
-
-       <!--     <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etbtsOperator"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="BTS Operator Name"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>-->
 
 
             <LinearLayout
@@ -196,8 +170,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:inputType="numberDecimal"
                         android:hint="No of Krone Box"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -223,37 +197,81 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:inputType="numberDecimal"
                         android:hint="No of Transmission Rack"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/_30dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="@dimen/_4dp">
 
-
-                <android.support.design.widget.TextInputLayout
+                <com.telecom.ast.sitesurvey.component.FNTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    app:counterOverflowTextAppearance="@style/CounterOverFlow"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Media(Transmission)"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
 
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/etMicrowave"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:hint="OFC /Microwave"
-                        android:textSize="@dimen/_14dp" />
-                </android.support.design.widget.TextInputLayout>
 
+                <Spinner
+                    android:id="@+id/etMicrowave"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/Media"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Operator Type"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+
+                <Spinner
+                    android:id="@+id/etOperatorType"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/OperatorType"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
             </LinearLayout>
 
 
