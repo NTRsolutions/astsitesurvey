@@ -188,7 +188,7 @@ public class FilePickerHelper {
 
     public static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
+        int bufferSize = 1024*16;
         byte[] buffer = new byte[bufferSize];
 
         int len = 0;
@@ -248,7 +248,7 @@ public class FilePickerHelper {
     }*/
 
 
-  public static Uri isFIleConvert(File file){
-     return Uri.fromFile(file);
-  }
+    public static Uri isFIleConvert(File file) {
+        return Uri.fromFile(file);
+    }
 }

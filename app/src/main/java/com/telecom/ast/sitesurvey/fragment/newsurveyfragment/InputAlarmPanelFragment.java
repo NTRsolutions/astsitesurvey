@@ -510,6 +510,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     private void compresImage(final File file, final String fileName, final ImageView imageView) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
+            Uri uri;
             ASTProgressBar progressBar;
 
             @Override
@@ -526,10 +527,13 @@ public class InputAlarmPanelFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
+                        if (imgFile.exists()) {
+                            imgFile.delete();
+                        }
                         InputStream iStream = getContext().getContentResolver().openInputStream(uri);
                         byte[] inputData = FilePickerHelper.getBytes(iStream);
 
@@ -554,17 +558,12 @@ public class InputAlarmPanelFragment extends MainFragment {
                 // imageView.setImageBitmap(bitmap);
                 if (isImage1) {
                     frontimgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(frontimgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
                 } else if (isImage2) {
                     openImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(openImgFile));
-                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
                 } else {
                     sNoPlateImgFile = imgFile;
-                    imageView.setImageURI(FilePickerHelper.isFIleConvert(sNoPlateImgFile));
-                    //  Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
                 }
+                imageView.setImageURI(uri);
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }

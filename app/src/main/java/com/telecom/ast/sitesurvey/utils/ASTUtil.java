@@ -302,6 +302,9 @@ public class ASTUtil {
 
     public static File getFilePath(Context context) {
         File directory = new File(context.getFilesDir(), Contants.APP_DIRECTORY);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         return directory;
     }
 

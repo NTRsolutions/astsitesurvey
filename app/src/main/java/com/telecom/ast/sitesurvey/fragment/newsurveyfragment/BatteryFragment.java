@@ -41,6 +41,7 @@ import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
@@ -52,6 +53,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,19 +64,17 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BatteryFragment extends MainFragment {
 
-    private static ImageView batteryimg, cellImg, sNoPlateImg;
-    private static File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
-    private static boolean isImage1, isImage2;
+    private ImageView batteryimg, cellImg, sNoPlateImg;
+    private File batteryimgFile, cellImgFile, sNoPlateImgImgFile;
+    private boolean isImage1, isImage2;
     private AppCompatAutoCompleteTextView etMake;
     private AppCompatEditText etDescription, etNoofItems, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
             etTightnessofBentCaps, etCellInterconnecting;
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
-    private static String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
+    private String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
     private String NoofItems = "0", NoofCell = "0", CellVoltage = "0", NoofWeakCells = "0", BackUpinHrs = "0",
             TightnessofBentCaps = "0", CellInterconnecting = "0";
     private String strMakeId = "0", strEqupId = "0";
@@ -300,7 +300,7 @@ public class BatteryFragment extends MainFragment {
     }
 
     private void getUserPref() {
-        userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
+        userPref = getContext().getSharedPreferences("SharedPref", getContext().MODE_PRIVATE);
         strUserId = userPref.getString("USER_ID", "");
         strSiteId = userPref.getString("Site_ID", "");
         CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
@@ -363,26 +363,26 @@ public class BatteryFragment extends MainFragment {
             BackUpinHrs = getTextFromView(this.etBackUpinHrs);
             TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
             CellInterconnecting = getTextFromView(this.etCellInterconnecting);
-            if (isEmptyStr(make)) {
+            if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
-            } else if (isEmptyStr(model)) {
+            } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
-            } else if (isEmptyStr(serialNumber)) {
+            } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
 
-            } else if (isEmptyStr(itemCondition)) {
+            } else if (ASTObjectUtil.isEmptyStr(itemCondition)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
                 return false;
-            } else if (isEmptyStr(yearOfManufacturing)) {
+            } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
-            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (batteryimgFile == null || !batteryimgFile.exists()) {
@@ -576,7 +576,8 @@ public class BatteryFragment extends MainFragment {
     //compres image
     private void compresImage(final File file, final String fileName, final ImageView imageView) {
         new AsyncTask<Void, Void, Boolean>() {
-            File imgFile;
+            File finalimgFile;
+            Uri uri;
             ASTProgressBar progressBar;
 
             @Override
@@ -593,17 +594,17 @@ public class BatteryFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                    Uri uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
-                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
-                    if (imgFile.exists()) {
-                        imgFile.delete();
+                    finalimgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    if (finalimgFile.exists()) {
+                        finalimgFile.delete();
                     }
                     try {
                         InputStream iStream = getContext().getContentResolver().openInputStream(uri);
                         byte[] inputData = FilePickerHelper.getBytes(iStream);
 
-                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        FileOutputStream fOut = new FileOutputStream(finalimgFile);
                         fOut.write(inputData);
                         //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                         fOut.flush();
@@ -623,17 +624,18 @@ public class BatteryFragment extends MainFragment {
                 super.onPostExecute(flag);
                 // imageView.setImageBitmap(bitmap);
                 if (isImage1) {
-                    batteryimgFile = imgFile;
-                    imageView.invalidate();
-                    imageView.setImageBitmap(null);
-                    Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(imageView);
+                    batteryimgFile = finalimgFile;
+                    imageView.setImageURI(uri);
+                    //Picasso.with(ApplicationHelper.application().getContext()).load(batteryimgFile).into(imageView);
 
                 } else if (isImage2) {
-                    cellImgFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(imageView);
+                    cellImgFile = finalimgFile;
+                    imageView.setImageURI(uri);
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(cellImgFile).into(imageView);
                 } else {
-                    sNoPlateImgImgFile = imgFile;
-                    Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).memoryPolicy(MemoryPolicy.NO_CACHE).into(imageView);
+                    sNoPlateImgImgFile = finalimgFile;
+                    imageView.setImageURI(uri);
+                    //Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgImgFile).memoryPolicy(MemoryPolicy.NO_CACHE).into(imageView);
                 }
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
@@ -662,7 +664,6 @@ public class BatteryFragment extends MainFragment {
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
         itemConditionSpinner.setSelection(0);
     }
-
 
 
 }
