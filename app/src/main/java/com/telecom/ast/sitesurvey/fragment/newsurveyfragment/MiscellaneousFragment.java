@@ -66,12 +66,12 @@ public class MiscellaneousFragment extends MainFragment {
             signagestatus, cablelebelling, etOtherIssues,
             fSRCopy, SiteProblem, ShelterCovered, SheltLeakage,
             AnyOtherItem, dFCNOPY, bBCabinet, mainDoor, shelter, police,
-            ambulane, Technician, VisitRegister, siteHygiene, powerPlant, fire;
+            ambulane, Technician, VisitRegister, siteHygiene, powerPlant, fire,stretWaterLogging;
 
     Spinner typeBoundarywall, signagestatusSpinner, cablelebellingSpinner, etOtherIssuesSpinner,
             fSRCopyspinner, SiteProblemspinner, ShelterCoveredSpinner, SheltLeakageSpinner,
             etAnyOtherItemSpinner, dFCNOPYSpinner, bBCabinetSpinner, mainDoorSpineer, shelterSpinner, policeSpinner,
-            ambulaneSpinner, TechnicianSpinner, powerPlantSpinner, fireSpinner;
+            ambulaneSpinner, TechnicianSpinner, powerPlantSpinner, fireSpinner,etWaterLogging;
 
     Button btnSubmit;
     SharedPreferences MiscSharedPref, userPref;
@@ -118,6 +118,7 @@ public class MiscellaneousFragment extends MainFragment {
         powerPlantSpinner = findViewById(R.id.powerPlantSpinner);
         fireSpinner = findViewById(R.id.fireSpinner);
         btnSubmit = findViewById(R.id.btnSubmit);
+        etWaterLogging= findViewById(R.id.etWaterLogging);
     }
 
     @Override
@@ -156,7 +157,7 @@ public class MiscellaneousFragment extends MainFragment {
     }
 
     public void setSpinnerValue() {
-        final String typeboundrywall_array[] = {"Barb wire", "wall", "mixed", "None"};
+        final String typeboundrywall_array[] = {"RCC Wall", "Fencing"};
         ArrayAdapter<String> homeadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, typeboundrywall_array);
         typeBoundarywall.setAdapter(homeadapter);
         if (Boundarywall != null && !Boundarywall.equals("")) {
@@ -247,7 +248,7 @@ public class MiscellaneousFragment extends MainFragment {
             }
         }
 
-        final String SheltLeakageSpinner_array[] = {"Available", "Not Available"};
+        final String SheltLeakageSpinner_array[] = {"Yes", "No"};
         ArrayAdapter<String> SheltLeakageadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, SheltLeakageSpinner_array);
         SheltLeakageSpinner.setAdapter(SheltLeakageadapter);
         if (SheltLeakage != null && !SheltLeakage.equals("")) {
@@ -500,6 +501,7 @@ public class MiscellaneousFragment extends MainFragment {
         ambulane = ambulaneSpinner.getSelectedItem().toString();
         powerPlant = powerPlantSpinner.getSelectedItem().toString();
         fire = fireSpinner.getSelectedItem().toString();
+        stretWaterLogging=etWaterLogging.getSelectedItem().toString();
 
         if (isEmptyStr(shater1size)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter 1 Size");
@@ -547,6 +549,10 @@ public class MiscellaneousFragment extends MainFragment {
         }
         else if (DiagramFile == null || !DiagramFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Layout Diagram Image");
+            return false;
+        }
+        else if (isEmptyStr(stretWaterLogging)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Water Logging");
             return false;
         }
 
@@ -608,6 +614,7 @@ public class MiscellaneousFragment extends MainFragment {
             jsonObject.put("ShelterCovered", ShelterCovered);
             jsonObject.put("ShelterLeakage", SheltLeakage);
             jsonObject.put("AnyOtherItem", AnyOtherItem);
+            jsonObject.put("WaterLogging", etWaterLogging);
 
             JSONObject MiscItemData1 = new JSONObject();
             MiscItemData1.put("Code", "1");

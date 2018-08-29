@@ -156,6 +156,16 @@
         <item>No</item>
     </string-array>
 
+    <string-array name="waterLoging">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="SignageBoardStatus">
+        <item>Danger</item>
+        <item>Caution</item>
+        <item>Warning</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
