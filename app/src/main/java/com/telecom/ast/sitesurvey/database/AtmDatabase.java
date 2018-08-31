@@ -295,7 +295,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.execSQL(CREATE_DESCRIPTION_TABLE);
 
 
-        String CREATE_BTSInfo_TABLE = "CREATE TABLE BTSInfo(sno INTEGR,type TEXT,btsName TEXT, CabinetQty TEXT,NoofDCDBBox TEXT,NoofKroneBox TEXT,NoofTransmissionRack TEXT,Microwave TEXT)";
+        String CREATE_BTSInfo_TABLE = "CREATE TABLE BTSInfo(sno INTEGR,type TEXT,btsName TEXT, CabinetQty TEXT,NoofDCDBBox TEXT,NoofKroneBox TEXT,NoofTransmissionRack TEXT,Microwave TEXT,OperatorType TEXT)";
         db.execSQL(CREATE_BTSInfo_TABLE);
     }
 
@@ -319,7 +319,6 @@ public class AtmDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_MAKE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_CAPACITY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT_DESCRIPTION);
-
         db.execSQL("DROP TABLE IF EXISTS BTSInfo");
 
         onCreate(db);
@@ -1097,6 +1096,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         ob.setNoofKroneBox(cursor.getString(5));
         ob.setNoofTransmissionRack(cursor.getString(6));
         ob.setMicrowave(cursor.getString(7));
+        ob.setOperatorType(cursor.getString(8));
     }
 
     public boolean insertBTSInfoData(BtsInfoData ob) {
@@ -1128,6 +1128,7 @@ public class AtmDatabase extends SQLiteOpenHelper {
         values.put("NoofKroneBox", ob.getNoofKroneBox());
         values.put("NoofTransmissionRack", ob.getNoofTransmissionRack());
         values.put("Microwave", ob.getMicrowave());
+        values.put("OperatorType",ob.getOperatorType());
     }
 
     public ArrayList<BtsInfoData> getAllBTSInfoList() {

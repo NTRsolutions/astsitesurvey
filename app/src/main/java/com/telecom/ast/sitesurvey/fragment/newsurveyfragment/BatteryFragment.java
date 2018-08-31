@@ -426,7 +426,6 @@ public class BatteryFragment extends MainFragment {
             mainObj.put("Site_ID", strSiteId);
             mainObj.put("User_ID", strUserId);
             mainObj.put("Activity", "Equipment");
-
             JSONObject EquipmentData = new JSONObject();
             EquipmentData.put("EquipmentStatus", itemstatus);
             EquipmentData.put("EquipmentSno", screenPosition);
@@ -440,12 +439,12 @@ public class BatteryFragment extends MainFragment {
             EquipmentData.put("MfgDate", datemilisec);
             EquipmentData.put("ItemCondition", itemCondition);
             EquipmentData.put("BB_NoofCell", NoofCell);
-            EquipmentData.put("BB_CellVoltage", CellVoltage);
+            EquipmentData.put("BB_BattVoltage", CellVoltage);
+            EquipmentData.put("BB_CellVoltage", 0);
             EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
             EquipmentData.put("BB_BackUp", BackUpinHrs);
             EquipmentData.put("BB_TightnessofBentCaps", TightnessofBentCaps);
             EquipmentData.put("BB_CellInterconnectingstriptightness", CellInterconnecting);
-
             JSONArray equipArray = new JSONArray();
             equipArray.put(EquipmentData);
             mainObj.put("EquipmentData", equipArray);

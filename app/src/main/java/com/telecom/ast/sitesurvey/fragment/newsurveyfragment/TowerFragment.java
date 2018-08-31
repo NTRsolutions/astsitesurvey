@@ -77,23 +77,22 @@ public class TowerFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, typeTowerSpinner,
-            laEarthingStatusSpinner, towerFoundationSpinner, towerTighteningSpinner;
-    private String strUserId, strSiteId, CurtomerSite_Id, strSavedDateTime, strworkingCondi, strnoMicrowaveAntenna, strnoGSMAntenna, strmissingMem, strEarthingofTower,
-            strlaEarthingStatusSpinner, strtowerFoundationSpinner, strtowerTighteningSpinner;
-    private SharedPreferences towerSharedPrefpref, userPref;
+            laEarthingStatusSpinner,  towerTighteningSpinner;
+    private String strUserId, strSiteId, CurtomerSite_Id,
+              strtowerTighteningSpinner;
+    private SharedPreferences  userPref;
     private AppCompatEditText etHeight, etDescription,
-            etnoMicrowaveAntenna, etnoGSMAntenna, etmissingMem, TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
-    private String toerTypestr, typeheightstr, datesiteStr, itemConditionstr, descriptionstr;
+            etnoMicrowaveAntenna, etnoGSMAntenna,  TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
     private String type, height, date, itemcondion, descreption,
-            workingCondi, workingCondistatus, noMicrowaveAntenna, noGSMAntenna, missingMem, EarthingofTower, EarthingofTowerstatus, stretAnyTowerAngleMissing,
-            laEarthingStatus, towerFoundation, towerTightening;
+            workingCondi,  noMicrowaveAntenna, noGSMAntenna,  EarthingofTower, EarthingofTowerstatus, stretAnyTowerAngleMissing,
+            laEarthingStatus;
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
     private long datemilisec;
     private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
     private Typeface materialdesignicons_font;
-    private LinearLayout WorkingStatusAVLayout, laEarthingConnetLauout, PolenoteConnectedLayout, miisingangelSizeLayout, etBoltMissingLayout;
-    private Spinner etworkingCondi, etworkingCondistatus, laEarthingConnetSpinner, etEarthingofTower, etAnyTowerAngleMissing, etTowerFoundationBolt;
+    private LinearLayout  laEarthingConnetLauout, PolenoteConnectedLayout, miisingangelSizeLayout, etBoltMissingLayout;
+    private Spinner etworkingCondi, laEarthingConnetSpinner, etEarthingofTower, etAnyTowerAngleMissing, etTowerFoundationBolt;
     private String strlaEarthingConnetSpinner, stretTowerAngleMissingSize, stretTowerFoundationBolt, stretFoundationBoltmissingquantity;
 
     private AppCompatEditText etFoundationBoltmissingquantity;
@@ -120,18 +119,14 @@ public class TowerFragment extends MainFragment {
         etworkingCondi = findViewById(R.id.etworkingCondi);
         etnoMicrowaveAntenna = findViewById(R.id.etnoMicrowaveAntenna);
         etnoGSMAntenna = findViewById(R.id.etnoGSMAntenna);
-        etmissingMem = findViewById(R.id.etmissingMem);
         etEarthingofTower = findViewById(R.id.etEarthingofTower);
         laEarthingStatusSpinner = findViewById(R.id.laEarthingStatusSpinner);
-        towerFoundationSpinner = findViewById(R.id.towerFoundationSpinner);
         towerTighteningSpinner = findViewById(R.id.towerTighteningSpinner);
         dateIcon = findViewById(R.id.dateIcon);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
-        etworkingCondistatus = findViewById(R.id.etworkingCondistatus);
-        WorkingStatusAVLayout = findViewById(R.id.WorkingStatusAVLayout);
         laEarthingConnetSpinner = findViewById(R.id.laEarthingConnetSpinner);
         laEarthingConnetLauout = findViewById(R.id.laEarthingConnetLauout);
         PolenoteConnectedLayout = findViewById(R.id.PolenoteConnectedLayout);
@@ -206,10 +201,6 @@ public class TowerFragment extends MainFragment {
         laEarthingStatusSpinner.setAdapter(laEarthingStatus);
 
 
-        final String towerFoundation_array[] = {"Available", "Not Available", "Covered", "Grouted"};
-        ArrayAdapter<String> towerFoundation = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, towerFoundation_array);
-        towerFoundationSpinner.setAdapter(towerFoundation);
-
 
         final String towerTightening_array[] = {"Done", "Not Done"};
         ArrayAdapter<String> towerTightening = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, towerTightening_array);
@@ -221,9 +212,6 @@ public class TowerFragment extends MainFragment {
         etworkingCondi.setAdapter(etworkingCondiada);
 
 
-        final String etworkingCondistatus_array[] = {"Working", "Not Working"};
-        ArrayAdapter<String> etworkingCondistatusada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etworkingCondistatus_array);
-        etworkingCondistatus.setAdapter(etworkingCondistatusada);
 
 
         final String laEarthingConnetSpinner_array[] = {"Connected", "Not Connected"};
@@ -261,15 +249,6 @@ public class TowerFragment extends MainFragment {
         });
 
 
-        etworkingCondi.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getSelectedItem().toString();
-                WorkingStatusAVLayout.setVisibility(selectedItem.equalsIgnoreCase("Available") ? View.VISIBLE : View.GONE);
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         laEarthingStatusSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -381,24 +360,22 @@ public class TowerFragment extends MainFragment {
     public boolean isValidate() {
         type = typeTowerSpinner.getSelectedItem().toString();
         itemcondion = itemConditionSpinner.getSelectedItem().toString();
-        strlaEarthingStatusSpinner = laEarthingStatusSpinner.getSelectedItem().toString();
+        laEarthingStatus = laEarthingStatusSpinner.getSelectedItem().toString();
         strlaEarthingConnetSpinner = laEarthingConnetSpinner.getSelectedItem().toString();
-        strtowerFoundationSpinner = towerFoundationSpinner.getSelectedItem().toString();
         strtowerTighteningSpinner = towerTighteningSpinner.getSelectedItem().toString();
         height = etHeight.getText().toString();
         date = etYear.getText().toString();
         descreption = etDescription.getText().toString();
         workingCondi = etworkingCondi.getSelectedItem().toString();
-        workingCondistatus = etworkingCondistatus.getSelectedItem().toString();
         noMicrowaveAntenna = etnoMicrowaveAntenna.getText().toString();
         noGSMAntenna = etnoGSMAntenna.getText().toString();
-        missingMem = etmissingMem.getText().toString();
         EarthingofTower = etEarthingofTower.getSelectedItem().toString();
         EarthingofTowerstatus = TowerPolenoteConnectedDesc.getText().toString();
         stretAnyTowerAngleMissing = etAnyTowerAngleMissing.getSelectedItem().toString();
         stretTowerAngleMissingSize = etTowerAngleMissingSize.getText().toString();
         stretTowerFoundationBolt = etTowerFoundationBolt.getSelectedItem().toString();
         stretFoundationBoltmissingquantity = etFoundationBoltmissingquantity.getText().toString();
+
 
         if (isEmptyStr(type)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Type");
@@ -459,6 +436,7 @@ public class TowerFragment extends MainFragment {
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
             JSONObject jsonObject = new JSONObject();
             try {
+
                 jsonObject.put("Site_ID", strSiteId);
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Tower");
@@ -468,17 +446,17 @@ public class TowerFragment extends MainFragment {
                 TowerData.put("SiteOnAirDate", datemilisec);
                 TowerData.put("Condition", itemcondion);
                 TowerData.put("AVWorkingCondition", workingCondi);
-                TowerData.put("AVWorkingConditionstatus", workingCondistatus);
                 TowerData.put("LAEarthingStatus", laEarthingStatus);
                 TowerData.put("LAEarthingStatusConnected", strlaEarthingConnetSpinner);
                 TowerData.put("NoofMicrowaveAntenna", noMicrowaveAntenna);
                 TowerData.put("NoofGSMAntenna", noGSMAntenna);
-                TowerData.put("TowerFoundationVolt", towerFoundation);
-                TowerData.put("TowerTightening", towerTightening);
+                TowerData.put("TowerFoundationBolt", stretTowerFoundationBolt);
+                TowerData.put("TowerFoundationBolt_Missing", stretFoundationBoltmissingquantity);
+                TowerData.put("TowerTightening", strtowerTighteningSpinner);
                 TowerData.put("EarthingofeachTowerPole", EarthingofTower);
-                TowerData.put("EarthingofeachTowerPole", EarthingofTowerstatus);
-                TowerData.put("stretAnyTowerAngleMissing", stretAnyTowerAngleMissing);
-                TowerData.put("stretTowerAngleMissingSize", stretTowerAngleMissingSize);
+                TowerData.put("EarthingofeachTowerPole_Detail", EarthingofTowerstatus);
+                TowerData.put("TowerAngleMissing", stretAnyTowerAngleMissing);
+                TowerData.put("TowerAngleMissing_Size", stretTowerAngleMissingSize);
 
 
                 jsonObject.put("TowerData", TowerData);

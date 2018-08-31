@@ -330,19 +330,26 @@ public class FireSystemFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "Fire");
                 JSONObject FireSysData = new JSONObject();
-                FireSysData.put("FireDetectionSystem", firedetectSpineer);
-                FireSysData.put("FireDetectionSystemtype", strfiredetecttypeSpineer);
-                FireSysData.put("Fireextinguiser", extinguiserSpineer);
-                FireSysData.put("Fireextinguisertype", strextinguisertypeSpineer);
+                if (firedetectSpineer.equalsIgnoreCase("Available")) {
+                    FireSysData.put("FireDetectionSystem", strfiredetecttypeSpineer);
+                } else {
+                    FireSysData.put("FireDetectionSystem", firedetectSpineer);
+                }
+                if (extinguiserSpineer.equalsIgnoreCase("Available")) {
+                    FireSysData.put("Fireextinguiser", strextinguisertypeSpineer);
+                } else {
+                    FireSysData.put("Fireextinguiser", extinguiserSpineer);
+                }
                 FireSysData.put("FireextinguiserMake", make);
                 FireSysData.put("FireextinguiserCapacity", capacity);
                 FireSysData.put("Fireextinguiserfilledstatus", status);
                 FireSysData.put("CapacityID", capcityId);
                 FireSysData.put("Equipment", "Fire");
                 FireSysData.put("MakeID", strMakeId);
-                FireSysData.put("stretRefillingStatusSpinner", stretRefillingStatusSpinner);
+                FireSysData.put("Fireextinguiserfilledstatus", stretRefillingStatusSpinner);
                 FireSysData.put("RefillingFilledDate", datemilisec);
                 jsonObject.put("FireSysData", FireSysData);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

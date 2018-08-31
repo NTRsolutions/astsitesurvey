@@ -131,7 +131,6 @@ public class DieselFillingFragment extends MainFragment {
                 DieselFillingData.put("FillingInDGTank", Fillingother);
                 DieselFillingData.put("DieselFillingDoneby", DieselfuillDone);
                 DieselFillingData.put("BitPlan", stretBitPlan);
-
                 jsonObject.put("DieselFillingData", DieselFillingData);
             } catch (JSONException e) {
                 e.printStackTrace();

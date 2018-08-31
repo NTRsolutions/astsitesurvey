@@ -397,11 +397,10 @@ public class AirConditionerFragment extends MainFragment {
                 EquipmentDataa.put("SerialNo", serialNumber);
                 EquipmentDataa.put("MfgDate", datemilisec);
                 EquipmentDataa.put("ItemCondition", itemCondition);
-                EquipmentDataa.put("AC_Type", aCType);
+                EquipmentDataa.put("ACType", aCType);
                 EquipmentDataa.put("AIR_CON_Number", numOfACs);
                 EquipmentDataa.put("AC_WorkingCondition", acACWorkingCondition);
                 EquipmentDataa.put("AC_Alarms", ACAlarms);
-
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);

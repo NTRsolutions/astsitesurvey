@@ -109,19 +109,6 @@ public class ReadingSmpsFragment extends MainFragment {
 
     }
 
-    /*
-     *
-     * Shared Prefrences---------------------------------------
-     */
-
-    public void getSharedPrefData() {
-   /*     pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strBattVoltage = pref.getString("READING_BattVoltage", "");
-        strLoadCurrent = pref.getString("READING_LoadCurrent", "");
-        battVoltagephoto = pref.getString("BattVoltagephoto", "");
-        adCurrentPhoto = pref.getString("AdCurrentPhoto", "");
-        batteryDisChaphoto = pref.getString("BatteryDisChaphoto", "");*/
-    }
 
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
@@ -132,16 +119,10 @@ public class ReadingSmpsFragment extends MainFragment {
 
     @Override
     protected void dataToView() {
-        getSharedPrefData();
         getUserPref();
         if (!isEmptyStr(strBattVoltage) || !isEmptyStr(strLoadCurrent)) {
             etBattVoltage.setText(strBattVoltage);
             etLoadCurrent.setText(strLoadCurrent);
-          /*  if (!battVoltagephoto.equals("") || !adCurrentPhoto.equals("") || !batteryDisChaphoto.equals("")) {
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(battVoltagephoto)).placeholder(R.drawable.noimage).into(battVoltageImage);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(adCurrentPhoto)).placeholder(R.drawable.noimage).into(loadCurrentImage);
-                Picasso.with(ApplicationHelper.application().getContext()).load(new File(batteryDisChaphoto)).placeholder(R.drawable.noimage).into(batteryDisChaImage);
-            }*/
         }
         if (!isEmptyStr(strclampmeBattVoltage) || !isEmptyStr(strclampLoadCurrent)) {
             etclampBattVoltage.setText(strclampmeBattVoltage);
@@ -181,13 +162,6 @@ public class ReadingSmpsFragment extends MainFragment {
             isImage2 = true;
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
-               /* SharedPreferences.Editor editor = pref.edit();
-                editor.putString("READING_BattVoltage", BattVoltage);
-                editor.putString("READING_LoadCurrent", LoadCurrent);
-                editor.putString("BattVoltagephoto", battVoltagephoto);
-                editor.putString("AdCurrentPhoto", adCurrentPhoto);
-                editor.putString("BatteryDisChaphoto", batteryDisChaphoto);
-                editor.commit();*/
                 saveBasicDataonServer();
             }
 
@@ -249,13 +223,10 @@ public class ReadingSmpsFragment extends MainFragment {
                 BBclampMeterData.put("BBEquipment_ID", "Clamp");
                 BBclampMeterData.put("BattVoltage", BattVoltageclamp);
                 BBclampMeterData.put("LoadCurrent", LoadCurrentclamp);
-
                 JSONArray jsonObjectarray = new JSONArray();
                 jsonObjectarray.put(BBData);
                 jsonObjectarray.put(BBclampMeterData);
-
                 jsonObject.put("BBData", jsonObjectarray);
-
 
             } catch (JSONException e) {
                 e.printStackTrace();

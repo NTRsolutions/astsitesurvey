@@ -1,13 +1,17 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -20,35 +24,42 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
+import com.telecom.ast.sitesurvey.utils.ASTUtil;
+import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class EarthingSystemFragment extends MainFragment {
     private AppCompatEditText etVoltageEarth, etwireconnected, etvalueInterGrid;
-    private String NoEarthPits, Earthpitsconnected, interConEarthPits, VoltageEarth, dgwireconnected, ebwireconnected;
+    private String NoEarthPits, interConEarthPits, VoltageEarth, dgwireconnected, ebwireconnected;
     private Button btnSubmit;
-    private String strUserId, strSiteId;
+    private String strUserId, strSiteId, CurtomerSite_Id;
     private SharedPreferences userPref;
 
-    private Spinner dgnaturelConnectSpinner, ebnaturelConnectSpinner, InterEarthPitsSpinner, etEarthpitsconnectedSpinner,
+    private Spinner dgnaturelConnectSpinner, ebnaturelConnectSpinner, InterEarthPitsSpinner,
             IGBStatusSpinner, EGBStatusSpinner, IGBconnectedStatusSpinner, egbconnectedStatusSpinner, etNoEarthPits;
     private String strIGBStatusSpinner, strEGBStatusSpinner, strIGBconnectedStatusSpinner, stregbconnectedStatusSpinner;
 
     private LinearLayout igbConnectedLayout, egbConnectedLayout;
     private LinearLayout ValueofEarthpitLayout1, ValueofEarthpitLayout2, ValueofEarthpitLayout3, ValueofEarthpitLayout4;
     private AppCompatEditText etValueofEarthpit1, etValueofEarthpit2, etValueofEarthpit3, etValueofEarthpit4;
-    private String stretValueofEarthpit1, stretValueofEarthpit2, stretValueofEarthpit3, stretValueofEarthpit4, stretvalueInterGrid;
+    private String stretValueofEarthpit1="0", stretValueofEarthpit2, stretValueofEarthpit3, stretValueofEarthpit4, stretvalueInterGrid;
+    private LinearLayout EarthPitsImageLayout;
+    private ImageView EarthPitsImage;
+    private static File EarthPitsFile;
 
     @Override
     protected int fragmentLayout() {
@@ -58,7 +69,6 @@ public class EarthingSystemFragment extends MainFragment {
     @Override
     protected void loadView() {
         etNoEarthPits = this.findViewById(R.id.etNoEarthPits);
-        etEarthpitsconnectedSpinner = this.findViewById(R.id.etEarthpitsconnectedSpinner);
         etVoltageEarth = this.findViewById(R.id.etVoltageEarth);
         btnSubmit = this.findViewById(R.id.btnSubmit);
         dgnaturelConnectSpinner = this.findViewById(R.id.dgnaturelConnectSpinner);
@@ -80,11 +90,14 @@ public class EarthingSystemFragment extends MainFragment {
         etValueofEarthpit2 = this.findViewById(R.id.etValueofEarthpit2);
         etValueofEarthpit3 = this.findViewById(R.id.etValueofEarthpit3);
         etValueofEarthpit4 = this.findViewById(R.id.etValueofEarthpit4);
+        EarthPitsImageLayout = this.findViewById(R.id.EarthPitsImageLayout);
+        EarthPitsImage = this.findViewById(R.id.EarthPitsImage);
     }
 
     @Override
     protected void setClickListeners() {
         btnSubmit.setOnClickListener(this);
+        EarthPitsImage.setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +109,7 @@ public class EarthingSystemFragment extends MainFragment {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         strUserId = userPref.getString("USER_ID", "");
         strSiteId = userPref.getString("Site_ID", "");
+        CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
     @Override
@@ -127,6 +141,20 @@ public class EarthingSystemFragment extends MainFragment {
 
                 } else {
                     egbConnectedLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        InterEarthPitsSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Connected")) {
+                    EarthPitsImageLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    EarthPitsImageLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -214,14 +242,14 @@ public class EarthingSystemFragment extends MainFragment {
         InterEarthPitsSpinner.setAdapter(InterEartharrat);
 
 
-        final String etEarthpitsconnectedSpinnerarray[] = {"Connected", "Not Connected"};
-        ArrayAdapter<String> etEarthpitsconnectedSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etEarthpitsconnectedSpinnerarray);
-        etEarthpitsconnectedSpinner.setAdapter(etEarthpitsconnectedSpinnerad);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnSubmit) {
+        if (view.getId() == R.id.EarthPitsImage) {
+            String imageName = CurtomerSite_Id + "_Earthing_1_InterGridofEarthPits.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
             }
@@ -231,7 +259,6 @@ public class EarthingSystemFragment extends MainFragment {
 
     public boolean isValidate() {
         NoEarthPits = etNoEarthPits.getSelectedItem().toString();
-        Earthpitsconnected = etEarthpitsconnectedSpinner.getSelectedItem().toString();
         interConEarthPits = InterEarthPitsSpinner.getSelectedItem().toString();
         VoltageEarth = etVoltageEarth.getText().toString();
         dgwireconnected = dgnaturelConnectSpinner.getSelectedItem().toString();
@@ -251,10 +278,7 @@ public class EarthingSystemFragment extends MainFragment {
         if (isEmptyStr(NoEarthPits)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of EarthPits");
             return false;
-        } else if (isEmptyStr(Earthpitsconnected)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Earthpits connected  EGB/IGB");
-            return false;
-        } else if (isEmptyStr(interConEarthPits)) {
+        }  else if (isEmptyStr(interConEarthPits)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Inter Connectivity of EarthPits");
             return false;
         } else if (isEmptyStr(VoltageEarth)) {
@@ -283,20 +307,26 @@ public class EarthingSystemFragment extends MainFragment {
                 jsonObject.put("Activity", "Earthing");
                 JSONObject EarthingData = new JSONObject();
                 EarthingData.put("NoofEarthPits", NoEarthPits);
-                EarthingData.put("NoofEarthpitsconnectedEGBIGB", Earthpitsconnected);
-                EarthingData.put("InterConnectivityofEarthPits", interConEarthPits);
-                EarthingData.put("DGEBneutralwireconnectedwithearthing", dgwireconnected);
-                EarthingData.put("DGEBneutralwireconnectedwithearthing", ebwireconnected);
+                EarthingData.put("InterGridConnectivityofEarthPits", interConEarthPits);
+                EarthingData.put("DGneutralwireconnectedwithearthing", dgwireconnected);
+                EarthingData.put("EBneutralwireconnectedwithearthing", ebwireconnected);
                 EarthingData.put("VoltagebetweenEarthandNeutral", VoltageEarth);
-                EarthingData.put("IGBStatus", strIGBStatusSpinner);
-                EarthingData.put("EGBStatus", strEGBStatusSpinner);
-                EarthingData.put("IGBconnectedStatus", strIGBconnectedStatusSpinner);
-                EarthingData.put("EGBconnectedStatus", stregbconnectedStatusSpinner);
-                EarthingData.put("stretvalueInterGrid", stretvalueInterGrid);
-                EarthingData.put("stretValueofEarthpit1", stretValueofEarthpit1);
-                EarthingData.put("stretValueofEarthpit2", stretValueofEarthpit2);
-                EarthingData.put("stretValueofEarthpit3", stretValueofEarthpit3);
-                EarthingData.put("stretValueofEarthpit4", stretValueofEarthpit4);
+
+                if (strIGBStatusSpinner.equalsIgnoreCase("Available")) {
+                    EarthingData.put("IGB_Status", strIGBconnectedStatusSpinner);
+                } else {
+                    EarthingData.put("IGB_Status", strIGBStatusSpinner);
+                }
+                if (strEGBStatusSpinner.equalsIgnoreCase("Available")) {
+                    EarthingData.put("EGB_Status", stregbconnectedStatusSpinner);
+                } else {
+                    EarthingData.put("EGB_Status", strEGBStatusSpinner);
+                }
+                EarthingData.put("EarthPit1Value", stretValueofEarthpit1);
+                EarthingData.put("EarthPit2Value", stretValueofEarthpit2);
+                EarthingData.put("EarthPit3Value", stretValueofEarthpit3);
+                EarthingData.put("EarthPit4Value", stretValueofEarthpit4);
+                EarthingData.put("InterGridValue", stretvalueInterGrid);
                 jsonObject.put("EarthingData", EarthingData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -334,19 +364,90 @@ public class EarthingSystemFragment extends MainFragment {
     private MultipartBody.Builder setMultipartBodyVaule() {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
         MultipartBody.Builder multipartBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-      /*  if (equpImagList != null && equpImagList.size() > 0) {
-            for (SaveOffLineData data : equpImagList) {
-                if (data != null) {
-                    if (data.getImagePath() != null) {
-                        File inputFile = new File(data.getImagePath());
-                        if (inputFile.exists()) {
-                            multipartBody.addFormDataPart("PMInstalEqupImages", data.getImageName(), RequestBody.create(MEDIA_TYPE_PNG, inputFile));
+        if (EarthPitsFile != null && EarthPitsFile.exists()) {
+            multipartBody.addFormDataPart(EarthPitsFile.getName(), EarthPitsFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, EarthPitsFile));
+        }
+
+
+        return multipartBody;
+    }
+
+    @Override
+    public void updateOnResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            onCaptureImageResult();
+        }
+    }
+
+    //capture image compress
+    private void onCaptureImageResult() {
+        String imageName = CurtomerSite_Id + "_Earthing_1_InterGridofEarthPits.jpg";
+        File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+        if (file.exists()) {
+            compresImage(file, imageName, EarthPitsImage);
+        }
+
+    }
+
+
+    //compres image
+    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+        new AsyncTask<Void, Void, Boolean>() {
+            File imgFile;
+            Uri uri;
+            ASTProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+//compress file
+                Boolean flag = false;
+                int ot = FilePickerHelper.getExifRotation(file);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                if (bitmap != null) {
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+//save compresed file into location
+                    imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
+                    try {
+                        if (imgFile.exists()) {
+                            imgFile.delete();
                         }
+                        InputStream iStream = getContext().getContentResolver().openInputStream(uri);
+                        byte[] inputData = FilePickerHelper.getBytes(iStream);
+
+                        FileOutputStream fOut = new FileOutputStream(imgFile);
+                        fOut.write(inputData);
+                        //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        iStream.close();
+                        flag = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
                     }
                 }
+                return flag;
             }
-        }
-*/
-        return multipartBody;
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                // imageView.setImageBitmap(bitmap);
+                EarthPitsFile = imgFile;
+
+                imageView.setImageURI(uri);
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+        }.execute();
+
     }
 }

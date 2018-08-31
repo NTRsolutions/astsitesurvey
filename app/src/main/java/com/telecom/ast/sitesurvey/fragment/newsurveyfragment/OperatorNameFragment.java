@@ -41,7 +41,7 @@ public class OperatorNameFragment extends MainFragment {
     //Spinner btstyelSpinner ;
     String btsOperator, NofCab, btscurrentbtSide, btscurrent, btsvVoltagebtsside, btsvollatagesmpsside;
     String strbtsOperator, strNofCab, strbtscurrentbtSide, strbtscurrent, strbtsvVoltagebtsside, strbtsvollatagesmpsside, btstype;
-    String NoofDCDB, NofKroneBox, NoofRack, Microwave;
+    String NoofDCDB, NofKroneBox, NoofRack, Microwave,operatorType;
     SharedPreferences pref;
     String strUserId, strSiteId;
     SharedPreferences userPref;
@@ -106,6 +106,7 @@ public class OperatorNameFragment extends MainFragment {
             NofKroneBox = btsInfoData.getNoofKroneBox();
             NoofRack = btsInfoData.getNoofTransmissionRack();
             Microwave = btsInfoData.getMicrowave();
+            operatorType=btsInfoData.getOperatorType();
         }
 
 
@@ -117,6 +118,7 @@ public class OperatorNameFragment extends MainFragment {
             etbtsvVoltagebtsside.setText(strbtsvVoltagebtsside);
             etbtsvollatagesmpsside.setText(strbtsvollatagesmpsside);
             btstyelSpinner.setText(btstype);
+
            /* if (btstyelSpinner.getSelectedItem().toString().equalsIgnoreCase(btstype)) {
 
             }*/
@@ -138,16 +140,6 @@ public class OperatorNameFragment extends MainFragment {
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
-
-             /*   SharedPreferences.Editor editor = pref.edit();
-                editor.putString("strbtsOperator", strbtsOperator);
-                editor.putString("strNofCab", strNofCab);
-                editor.putString("strbtscurrentbtSide", strbtscurrentbtSide);
-                editor.putString("strbtscurrent", strbtscurrent);
-                editor.putString("strbtsvVoltagebtsside", strbtsvVoltagebtsside);
-                editor.putString("strbtsvollatagesmpsside", strbtsvollatagesmpsside);
-                editor.commit();
-*/
             }
         }
     }
@@ -160,9 +152,9 @@ public class OperatorNameFragment extends MainFragment {
         strbtsvVoltagebtsside = getTextFromView(this.etbtsvVoltagebtsside);
         strbtsvollatagesmpsside = getTextFromView(this.etbtsvollatagesmpsside);
         btstype = getTextFromView(this.btstyelSpinner);
-        // btstype = btstyelSpinner.getSelectedItem().toString();
-
         if (isEmptyStr(strbtsOperator)) {
+            // btstype = btstyelSpinner.getSelectedItem().toString();
+
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Operator name ");
             return false;
         } else if (isEmptyStr(strNofCab)) {
@@ -206,7 +198,10 @@ public class OperatorNameFragment extends MainFragment {
                 BTSData.put("NoofDCDBBox", NoofDCDB);
                 BTSData.put("NoofKroneBox", NofKroneBox);
                 BTSData.put("NoofTransmissionRack", NoofRack);
-                BTSData.put("Microwave", Microwave);
+                BTSData.put("Transmission_Media", Microwave);
+                BTSData.put("Operator_Type", operatorType);
+
+
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
                 jsonObject.put("BTSData", jsonArray);

@@ -80,10 +80,10 @@ public class BasicDataFragment extends MainFragment {
     private ArrayList<SSAmasterDataModel> arrSSAData = new ArrayList<>();
     private SharedPreferences basicSharedPref;
     private SharedPreferences userPref;
-    private String userId, strDate, strTime, strSurveyyorName, strSiteId, strAddress, strMilli;
-    private String strCircleId, strSSAId, strDistrictId, strCity, strPincode, strSiteCustomerId, strSiteName;
-    private String strCirclePosition, strSSAPosition, strDistrictPosition,
-            strOwner, strOwnerContact, strCaretaker, strCaretakercontact, strownerAddress;
+
+    private String userId;
+    private String strCircleId;
+    private String strCirclePosition, strSSAPosition, strDistrictPosition;
     private String SSAId, DistrictId, CirclePosition, SSAPosition, DistrictPosition;
     private long currentMilli;
     private String dateTime, finalDate, finalTime, finalSurveyorName, curtomerSiteIdStr, siteIdStr, finalSiteName, finalAddress,
@@ -382,15 +382,15 @@ public class BasicDataFragment extends MainFragment {
         ownerAddress = getTextFromView(this.etownerAddress);
         stretNearestPoliceAddress = getTextFromView(this.etNearestPoliceAddress);
         stretSPOfficeAddress = getTextFromView(this.etSPOfficeAddress);
-        if (spCircle.getSelectedItemPosition() > 1) {
+        if (spCircle.getSelectedItemPosition() > 0) {
             strCircleId = arrCircleData.get(spCircle.getSelectedItemPosition() - 1).getCircleId();
             CirclePosition = String.valueOf(spCircle.getSelectedItemPosition());
         }
-        if (spSSA.getSelectedItemPosition() > 1) {
+        if (spSSA.getSelectedItemPosition() > 0) {
             SSAId = arrSSAData.get(spSSA.getSelectedItemPosition() - 1).getSSAid();
             SSAPosition = String.valueOf(spSSA.getSelectedItemPosition());
         }
-        if (spDistrict.getSelectedItemPosition() > 1) {
+        if (spDistrict.getSelectedItemPosition() > 0) {
             DistrictId = arrDistrictData.get(spDistrict.getSelectedItemPosition() - 1).getDistrictId();
             DistrictPosition = String.valueOf(spDistrict.getSelectedItemPosition());
         }
@@ -421,14 +421,10 @@ public class BasicDataFragment extends MainFragment {
         } else if (isEmptyStr(finalPincode)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Pincode");
             return false;
-        }
-
-        else if (isEmptyStr(stretNearestPoliceAddress)) {
+        } else if (isEmptyStr(stretNearestPoliceAddress)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Nearest Police Station Address");
             return false;
-        }
-
-        else if (isEmptyStr(stretSPOfficeAddress)) {
+        } else if (isEmptyStr(stretSPOfficeAddress)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "SP Office Address");
             return false;
         }
@@ -465,8 +461,8 @@ public class BasicDataFragment extends MainFragment {
                 BasicData.put("CareTakerNo", Caretakercontact);
                 BasicData.put("Latitude", currentLatitude);
                 BasicData.put("Longitude", currentLongitude);
-                BasicData.put("stretNearestPoliceAddress", stretNearestPoliceAddress);
-                BasicData.put("stretSPOfficeAddress", stretSPOfficeAddress);
+                BasicData.put("PoliceStationAddress", stretNearestPoliceAddress);
+                BasicData.put("SPOfficeAddress", stretSPOfficeAddress);
                 jsonObject.put("BasicData", BasicData);
 
             } catch (JSONException e) {
@@ -485,8 +481,9 @@ public class BasicDataFragment extends MainFragment {
                             SharedPreferences.Editor editor = userPref.edit();
                             editor.putString("Site_ID", siteIdStr);
                             editor.putString("CurtomerSite_Id", curtomerSiteIdStr);
-
                             editor.commit();
+
+
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());

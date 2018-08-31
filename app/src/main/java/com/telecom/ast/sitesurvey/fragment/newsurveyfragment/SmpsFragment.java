@@ -71,7 +71,7 @@ public class SmpsFragment extends MainFragment {
     static ImageView frontimg, openImg, sNoPlateImg;
     static File frontimgFile, openImgFile, sNoPlateImgFile;
     static boolean isImage1, isImage2;
-    AppCompatEditText etDescription, etnoofModule, etModuleCapacity;
+    AppCompatEditText etDescription, etnoofModule, etModuleCapacity,etRatingofCable;
     AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     SharedPreferences pref, smpsShrepreforrpiu;
     String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
@@ -87,10 +87,10 @@ public class SmpsFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
 
-    AppCompatEditText etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etRatingofCable, etAlarmConnection,
-            etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
+    AppCompatEditText
+            etNoofRMWorking, etNoofRMFaulty;
 
-    Spinner itemStatusSpineer;
+    Spinner itemStatusSpineer,etController,etConditionbackPlane,etBodyEarthing,etPositiveEarthing,etAlarmConnection,etSpareFuseStatus;
     String Controller="", ConditionbackPlane="", BodyEarthing="0", PositiveEarthing="0", RatingofCable="0", AlarmConnection="",
             NoofRMWorking="0", NoofRMFaulty="0", SpareFuseStatus="", itemCondition="";
 
@@ -297,15 +297,15 @@ public class SmpsFragment extends MainFragment {
         description = etDescription.getText().toString();
         nofModule = etnoofModule.getText().toString();
         ModuleCapacity = etModuleCapacity.getText().toString();
-        Controller = etController.getText().toString();
-        ConditionbackPlane = etConditionbackPlane.getText().toString();
-        BodyEarthing = etBodyEarthing.getText().toString();
-        PositiveEarthing = etPositiveEarthing.getText().toString();
+        Controller = etController.getSelectedItem().toString();
+        ConditionbackPlane = etConditionbackPlane.getSelectedItem().toString();
+        BodyEarthing = etBodyEarthing.getSelectedItem().toString();
+        PositiveEarthing = etPositiveEarthing.getSelectedItem().toString();
         RatingofCable = etRatingofCable.getText().toString();
-        AlarmConnection = etAlarmConnection.getText().toString();
+        AlarmConnection = etAlarmConnection.getSelectedItem().toString();
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
-        SpareFuseStatus = etSpareFuseStatus.getText().toString();
+        SpareFuseStatus = etSpareFuseStatus.getSelectedItem().toString();
 
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
@@ -382,9 +382,9 @@ public class SmpsFragment extends MainFragment {
                 EquipmentDataa.put("PP_AlarmConnectionStatus", AlarmConnection);
                 EquipmentDataa.put("PP_WorkingRM", NoofRMWorking);
                 EquipmentDataa.put("PP_FaultyRM", NoofRMFaulty);
-                EquipmentDataa.put("PP_SpareFuseStatusHRC", SpareFuseStatus);
-                EquipmentDataa.put("SMPS_Modules_Qt", nofModule);
-                EquipmentDataa.put("SMPS_Module_Capacity", ModuleCapacity);
+                EquipmentDataa.put("PP_BattFuseStatus", SpareFuseStatus);
+                EquipmentDataa.put("SMPSModulesQt", nofModule);
+                EquipmentDataa.put("SMPSModuleCapacity", ModuleCapacity);
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);
@@ -480,15 +480,15 @@ public class SmpsFragment extends MainFragment {
         etSerialNum.setText("");
         etYear.setText("");
         etDescription.setText("");
-        etController.setText("");
-        etConditionbackPlane.setText("");
-        etBodyEarthing.setText("");
-        etPositiveEarthing.setText("");
-        etRatingofCable.setText("");
-        etAlarmConnection.setText("");
+        etController.setSelection(0);
+        etConditionbackPlane.setSelection(0);
+        etBodyEarthing.setSelection(0);
+        etPositiveEarthing.setSelection(0);
+        etRatingofCable.setSelection(0);
+        etAlarmConnection.setSelection(0);
         etNoofRMWorking.setText("");
         etNoofRMFaulty.setText("");
-        etSpareFuseStatus.setText("");
+        etSpareFuseStatus.setSelection(0);
         itemStatusSpineer.setSelection(0);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);

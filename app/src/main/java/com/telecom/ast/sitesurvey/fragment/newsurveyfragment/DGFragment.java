@@ -105,7 +105,7 @@ public class DGFragment extends MainFragment {
     private static File frontimgFile, openImgFile, sNoPlateImgFile;
     private Typeface materialdesignicons_font;
     private SharedPreferences userPref;
-
+    private SharedPreferences noofPhaseprf;
     private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
@@ -610,6 +610,11 @@ public class DGFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Site Equipment DG Details updated Successfully");
+                            noofPhaseprf = getContext().getSharedPreferences("noofPhaseprf", MODE_PRIVATE);
+                            SharedPreferences.Editor editornoofPhaseprf = noofPhaseprf.edit();
+                            editornoofPhaseprf.putString("noofPhase", stralternaterPhaseSpinner);
+                            editornoofPhaseprf.commit();
+
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
@@ -649,8 +654,8 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("MfgDate", datemilisec);
             //  EquipmentData.put("DG_PowerDistPanelStatus", pDistribution);
             EquipmentData.put("DG_Type", DGType);
-            EquipmentData.put("DG_PowerDistPanelMake", PowerPanelMake);
-            EquipmentData.put("DG_PowerDistPanelCapacity", PowerPanelCapacity);
+            EquipmentData.put("DG_AMFPanelMake", PowerPanelMake);
+            EquipmentData.put("DG_AMFPanelCapacity", PowerPanelCapacity);
             EquipmentData.put("DG_AutomationWorkingCondition", AutomationCondition);
             EquipmentData.put("DG_MCBStatus", mCBStatus);
             EquipmentData.put("DG_AlternaterMake", dbAlternatermake);
@@ -665,28 +670,25 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_Earthing", DGearthing);
             EquipmentData.put("DG_CANOPYCondition", ConditionCANOPY);
             EquipmentData.put("DG_RunHourMeter", DGRunHourMer);
-            EquipmentData.put("DG_LowLUBEWire", DGlowLUBEWire);
+            EquipmentData.put("DG_LLOP", DGlowLUBEWire);
             EquipmentData.put("DG_BackCompressor", backCompressor);
-            EquipmentData.put("DG_FuelTankStatus", DGFuelTank);
+            EquipmentData.put("DG_FuelTankCapacity", DGFuelTank);
             EquipmentData.put("DG_CableGrouting", CableGrouting);
             EquipmentData.put("DG_FoundationStatus", DGFoundation);
             EquipmentData.put("DG_CoolingType", DGCoolingtype);
-            EquipmentData.put("DG_IntelPipe", Dgintelpipe);
-            EquipmentData.put("DG_OuttelPipe", Dgoutelpipe);
+            EquipmentData.put("DG_InletFuelPipe", Dgintelpipe);
+            EquipmentData.put("DG_OutletFuelPipe", Dgoutelpipe);
             EquipmentData.put("DG_ExhaustPipeCondition", DGExhaustcondi);
             EquipmentData.put("DG_EmergencyStopSwitch", DGEmergencyStopSwitch);
             EquipmentData.put("DG_Rental", "");
             EquipmentData.put("DG_ChangeOverBox", RentalDGChangeOver);
             EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
-            EquipmentData.put("DG_ESNo", eSN);
+            EquipmentData.put("DG_EngineSNo", eSN);
             EquipmentData.put("ItemCondition", itemCondition);
             EquipmentData.put("DG_AMFPanel", straMFPanelSpinner);
             EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
-            EquipmentData.put("DG_stralternaterPhaseSpinner", stralternaterPhaseSpinner);
-            EquipmentData.put("DG_strdGExhaustSmokecolour", strdGExhaustSmokecolour);
-
-
-
+            EquipmentData.put("DG_AlternaterPhase", stralternaterPhaseSpinner);
+            EquipmentData.put("DG_ExhaustSmokeColour", strdGExhaustSmokecolour);
             JSONArray EquipmentDataa = new JSONArray();
             EquipmentDataa.put(EquipmentData);
             jsonObject.put("EquipmentData", EquipmentDataa);

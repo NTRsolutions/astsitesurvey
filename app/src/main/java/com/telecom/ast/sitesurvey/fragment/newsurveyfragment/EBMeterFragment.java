@@ -79,14 +79,14 @@ public class EBMeterFragment extends MainFragment {
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, waterseedpinner;
     private String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
-    private String make="", model="", capacity="", serialNumber="", yearOfManufacturing="0", description="", type, currentDateTime;
-    private SharedPreferences pref;
+    private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "0", description = "", type, currentDateTime;
+    private SharedPreferences noofebPhaseprf;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    private AppCompatEditText etConnectionNo, etCableRating, etALTHTConnection, etTransformerEarthing, etmccbStatus, etTheftfromSite;
+    private AppCompatEditText etConnectionNo, etCableRating;
     private AppCompatEditText etDescription, ebMeterreading;
     private String strMakeId = "0", strModelId, strDescriptionId;
     private Spinner itemStatusSpineer;
-    private String ConnectionNo, CableRating, ALTHTConnection, TransformerEarthing, mccbStatus, kitkatChangeover, TheftfromSite,
+    private String ConnectionNo, CableRating, TransformerEarthing, kitkatChangeover, TheftfromSite,
             strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strwaterseedpinner, itemCondition, streBbillSpinner;
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
@@ -105,6 +105,9 @@ public class EBMeterFragment extends MainFragment {
     private String[] arrMake;
     private String[] arrCapacity;
     private Spinner circuitBreakersSpinner, eBbillSpinner;
+    AppCompatEditText etMeterSerialNo, etCableRatingPIU;
+    String stretMeterSerialNo, stretCableRatingPIU;
+    Spinner etTheftfromSite, etTransformerEarthing;
 
     @Override
     protected int fragmentLayout() {
@@ -130,9 +133,7 @@ public class EBMeterFragment extends MainFragment {
 
         etConnectionNo = findViewById(R.id.etConnectionNo);
         etCableRating = findViewById(R.id.etCableRating);
-        etALTHTConnection = findViewById(R.id.etALTHTConnection);
         etTransformerEarthing = findViewById(R.id.etTransformerEarthing);
-        etmccbStatus = findViewById(R.id.etmccbStatus);
         etTheftfromSite = findViewById(R.id.etTheftfromSite);
         meeterTypeSpinner = findViewById(R.id.meeterTypeSpinner);
         powerTypeSpinner = findViewById(R.id.powerTypeSpinner);
@@ -145,6 +146,8 @@ public class EBMeterFragment extends MainFragment {
         dateLayout = findViewById(R.id.dateLayout);
         circuitBreakersSpinner = findViewById(R.id.circuitBreakersSpinner);
         eBbillSpinner = findViewById(R.id.eBbillSpinner);
+        etMeterSerialNo = findViewById(R.id.etMeterSerialNo);
+        etCableRatingPIU = findViewById(R.id.etCableRatingPIU);
     }
 
     @Override
@@ -182,12 +185,12 @@ public class EBMeterFragment extends MainFragment {
         itemStatusSpineer.setAdapter(itemStatus);
 
 
-        final String meeterTypeSpinnerArray[] = {"Single Phase", "3 Phase"};
+        final String meeterTypeSpinnerArray[] = {"1 Phase", "3 Phase"};
         ArrayAdapter<String> meeterTypeSpinnerArrayad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, meeterTypeSpinnerArray);
         meeterTypeSpinner.setAdapter(meeterTypeSpinnerArrayad);
 
 
-        final String powerTypeSpinnerarray[] = {"Temporary", "3 Phase"};
+        final String powerTypeSpinnerarray[] = {"Domestic", "Non Domestic"};
         ArrayAdapter<String> powerTypeSpinnerarrayad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, powerTypeSpinnerarray);
         powerTypeSpinner.setAdapter(powerTypeSpinnerarrayad);
 
@@ -207,7 +210,7 @@ public class EBMeterFragment extends MainFragment {
         circuitBreakersSpinner.setAdapter(circuitBreakersSpinnerAd);
 
 
-        final String eBbillSpinnerSpinnerArraay[] = {"Monthly", "2 months", "Current"};
+        final String eBbillSpinnerSpinnerArraay[] = {"Monthly", "2 months"};
         ArrayAdapter<String> eBbillSpinnerSpinnerAd = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, eBbillSpinnerSpinnerArraay);
         eBbillSpinner.setAdapter(eBbillSpinnerSpinnerAd);
 
@@ -275,9 +278,7 @@ public class EBMeterFragment extends MainFragment {
                     ebMeterreading.setEnabled(false);
                     etConnectionNo.setEnabled(false);
                     etCableRating.setEnabled(false);
-                    etALTHTConnection.setEnabled(false);
                     etTransformerEarthing.setEnabled(false);
-                    etmccbStatus.setEnabled(false);
                     circuitBreakersSpinner.setEnabled(false);
                     etTheftfromSite.setEnabled(false);
                     meeterTypeSpinner.setEnabled(false);
@@ -285,6 +286,8 @@ public class EBMeterFragment extends MainFragment {
                     transformerTypeSpinner.setEnabled(false);
                     waterseedpinner.setEnabled(false);
                     eBbillSpinner.setEnabled(false);
+                    etMeterSerialNo.setEnabled(false);
+                    etCableRatingPIU.setEnabled(false);
 
                 } else {
                     frontImg.setEnabled(true);
@@ -301,9 +304,7 @@ public class EBMeterFragment extends MainFragment {
                     ebMeterreading.setEnabled(true);
                     etConnectionNo.setEnabled(true);
                     etCableRating.setEnabled(true);
-                    etALTHTConnection.setEnabled(true);
                     etTransformerEarthing.setEnabled(true);
-                    etmccbStatus.setEnabled(true);
                     circuitBreakersSpinner.setEnabled(true);
                     etTheftfromSite.setEnabled(true);
                     meeterTypeSpinner.setEnabled(true);
@@ -311,6 +312,8 @@ public class EBMeterFragment extends MainFragment {
                     transformerTypeSpinner.setEnabled(true);
                     waterseedpinner.setEnabled(true);
                     eBbillSpinner.setEnabled(true);
+                    etMeterSerialNo.setEnabled(true);
+                    etCableRatingPIU.setEnabled(true);
                 }
             }
 
@@ -389,11 +392,9 @@ public class EBMeterFragment extends MainFragment {
             meterreading = ebMeterreading.getText().toString();
             ConnectionNo = etConnectionNo.getText().toString();
             CableRating = etCableRating.getText().toString();
-            ALTHTConnection = etALTHTConnection.getText().toString();
-            TransformerEarthing = etTransformerEarthing.getText().toString();
-            mccbStatus = etmccbStatus.getText().toString();
+            TransformerEarthing = etTransformerEarthing.getSelectedItem().toString();
             kitkatChangeover = circuitBreakersSpinner.getSelectedItem().toString();
-            TheftfromSite = etTheftfromSite.getText().toString();
+            TheftfromSite = etTheftfromSite.getSelectedItem().toString();
             strmeeterTypeSpinner = meeterTypeSpinner.getSelectedItem().toString();
             strpowerTypeSpinner = powerTypeSpinner.getSelectedItem().toString();
             strtransformerTypeSpinner = transformerTypeSpinner.getSelectedItem().toString();
@@ -401,6 +402,9 @@ public class EBMeterFragment extends MainFragment {
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             currentDateTime = String.valueOf(System.currentTimeMillis());
             streBbillSpinner = eBbillSpinner.getSelectedItem().toString();
+            stretMeterSerialNo = etMeterSerialNo.getText().toString();
+            stretCableRatingPIU = etCableRatingPIU.getText().toString();
+
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -470,17 +474,18 @@ public class EBMeterFragment extends MainFragment {
                 EquipmentData.put("ItemCondition", itemCondition);
                 EquipmentData.put("EB_Type", strmeeterTypeSpinner);
                 EquipmentData.put("EB_ConnectionNo", ConnectionNo);
-                EquipmentData.put("EB_PowerType", strpowerTypeSpinner);
-                EquipmentData.put("EB_CableRating", CableRating);
-                EquipmentData.put("EB_ConnectionType", "");
+                EquipmentData.put("EB_PowerType", "");
+                EquipmentData.put("EB_CableRating_Transformer_Meter", CableRating);
+                EquipmentData.put("EB_ConnectionType", strpowerTypeSpinner);
                 EquipmentData.put("EB_TransformerType", strtransformerTypeSpinner);
                 EquipmentData.put("EB_TransformerNeutralEarthing", TransformerEarthing);
-                EquipmentData.put("EB_KitKatChangeOver", kitkatChangeover);
-                EquipmentData.put("EB_MCCBStatus", mccbStatus);
+                EquipmentData.put("EB_CircuitBreaker", kitkatChangeover);
                 EquipmentData.put("EB_WaterShedMeterstatus", strwaterseedpinner);
                 EquipmentData.put("EB_TheftfromSite", TheftfromSite);
-                EquipmentData.put("EB_Bill", streBbillSpinner);
-
+                EquipmentData.put("EB_BillingCycle", streBbillSpinner);
+                EquipmentData.put("EB_MeterSerialNo", stretMeterSerialNo);
+                EquipmentData.put("EB_CableRating_EB_PP", stretCableRatingPIU);
+                EquipmentData.put("EBMeterReading", meterreading);
                 JSONArray EquipmentDataa = new JSONArray();
                 EquipmentDataa.put(EquipmentData);
                 jsonObject.put("EquipmentData", EquipmentDataa);
@@ -497,6 +502,12 @@ public class EBMeterFragment extends MainFragment {
                     if (data != null) {
                         if (data.getStatus() == 1) {
                             ASTUIUtil.showToast("Your EB Meter Data save Successfully");
+
+                            noofebPhaseprf = getContext().getSharedPreferences("noofebPhaseprf", MODE_PRIVATE);
+                            SharedPreferences.Editor editornoofPhaseprf = noofebPhaseprf.edit();
+                            editornoofPhaseprf.putString("noofebPhase", strmeeterTypeSpinner);
+                            editornoofPhaseprf.commit();
+
                             reloadBackScreen();
                         } else {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
@@ -613,7 +624,7 @@ public class EBMeterFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {

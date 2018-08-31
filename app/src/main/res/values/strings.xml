@@ -161,11 +161,68 @@
         <item>No</item>
     </string-array>
 
+
     <string-array name="SignageBoardStatus">
         <item>Danger</item>
         <item>Caution</item>
         <item>Warning</item>
     </string-array>
+
+    <string-array name="SiteVisitRegister">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="etOwnerIssues">
+        <item>Night Access problem</item>
+        <item>Owner agreement Issue</item>
+        <item>Critical Owner issue </item>
+    </string-array>
+
+    <string-array name="etCriticalOwnerissue">
+        <item>Highly capture site</item>
+        <item>Extra Diesel dimand</item>
+        <item>EB Theft</item>
+        <item>EDG power theft</item>
+        <item> Owner permises</item>
+
+    </string-array>
+
+    <string-array name="aviationLampworkingstatus">
+        <item>connected</item>
+        <item>Not connected</item>
+    </string-array>
+    <string-array name="numberofPhaseSpinner">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="controllersmps">
+        <item>Working</item>
+        <item>Not Working</item>
+    </string-array>
+
+    <string-array name="ConditionofBackPlane">
+        <item>Ok</item>
+        <item>Not OK</item>
+    </string-array>
+
+
+    <string-array name="ipmsstatus">
+        <item>Working</item>
+        <item> Not Working</item>
+    </string-array>
+    <string-array name="SiteAutomationStatus">
+        <item>Auto</item>
+        <item>Manual</item>
+    </string-array>
+
+
+    <string-array name="signingkey">
+        <item>Available</item>
+        <item>Not Available</item>
+    </string-array>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -28,7 +28,7 @@ public class PowerPlantFragment extends MainFragment {
     int count = 1;
     // Initializing a new String Array
     static final String[] gridviewItem = new String[]{
-            "SMPS", "IPMS", "PIU"};
+            "SMPS", "IPMS/PIU/AMF Panel"};
 
 
     @Override
@@ -67,15 +67,16 @@ public class PowerPlantFragment extends MainFragment {
                 if (position == 0) {
                     SmpsFragment smpsFragment = new SmpsFragment();
                     openBasicDataFragment(smpsFragment, "SMPS");
-                } else if (position == 1) {
+              /*  } else if (position == 1) {
                     IpmsFragment ipmsFragment = new IpmsFragment();
-                    openBasicDataFragment(ipmsFragment, "IPMS");
-                } else {
+                    openBasicDataFragment(ipmsFragment, "");
+                */
+                } else if (position == 1) {
                     piuenable = getContext().getSharedPreferences("PiuenablePref", MODE_PRIVATE);
                     boolean isenablePiu = piuenable.getBoolean("PIU_ENABLE", false);
                     if (isenablePiu) {
                         PIUVoltageStablizerFragment piuVoltageStablizerFragment = new PIUVoltageStablizerFragment();
-                        openBasicDataFragment(piuVoltageStablizerFragment, "PIU");
+                        openBasicDataFragment(piuVoltageStablizerFragment, "IPMS/PIU/AMF Panel");
                     } else {
                         ASTUIUtil.showToast("Please Fill and Submitted  SMPS data information First");
                     }

@@ -35,13 +35,23 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SiteOnDgSetFragment extends MainFragment {
-    AppCompatEditText etDGCurrent, etDGFrequency, etDGVoltage, etBatChangeCurrent, etBatteryVoltage;
-    SharedPreferences SITEDGpref;
-    String strDgCurrent, strDgFrequency, strDgVoltage, strBatteryChargeCurrent, strBatteryVoltage;
-    String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
-    Button btnSubmit;
-    SharedPreferences userPref;
-    String dgCurrent, dgFrequency, dgVoltage, batteryChargeCurrent, batteryVoltage;
+    private AppCompatEditText etDGCurrentRphase, etDGCurrentBphase, etDGCurrentYphase,
+            etDGVoltageYphase, etDGVoltageBphase, etDGVoltageRphase, etDGFrequencyRphase, etDGFrequencyYphase, etDGFrequencyBphase,
+            etBatChangeCurrent, etBatteryVoltage;
+
+
+    private String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
+    private Button btnSubmit;
+    private SharedPreferences userPref;
+    private SharedPreferences noofPhaseprf;
+    private String batteryChargeCurrent, batteryVoltage, dgrCurrent, dgyCurrent, dgbCurrent,
+            stretDGVoltageYphase, stretDGVoltageBphase, stretDGVoltageRphase,
+            stretDGFrequencyRphase, stretDGFrequencyYphase, stretDGFrequencyBphase;
+    String noofPhase;
+
+    private LinearLayout etDGCurrentRphaseLayout, etDGCurrentBphaseLayout, etDGCurrentYphaseLayout,
+            etDGVoltageRphaseLayout, etDGVoltageYphaseLayout, etDGVoltageBphaseLayout,
+            etDGFrequencyRphaseLayout, etDGFrequencyYphaseLayout, etDGFrequencyBphaseLayout;
 
     @Override
     protected int fragmentLayout() {
@@ -50,12 +60,29 @@ public class SiteOnDgSetFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        etDGCurrent = findViewById(R.id.etDGCurrent);
-        etDGFrequency = findViewById(R.id.etDGFrequency);
-        etDGVoltage = findViewById(R.id.etDGVoltage);
+
+        btnSubmit = findViewById(R.id.btnSubmit);
+        etDGCurrentRphase = findViewById(R.id.etDGCurrentRphase);
         etBatChangeCurrent = findViewById(R.id.etBatChangeCurrent);
         etBatteryVoltage = findViewById(R.id.etBatteryVoltage);
-        btnSubmit = findViewById(R.id.btnSubmit);
+
+        etDGCurrentRphaseLayout = findViewById(R.id.etDGCurrentRphaseLayout);
+        etDGCurrentBphase = findViewById(R.id.etDGCurrentBphase);
+        etDGCurrentYphase = findViewById(R.id.etDGCurrentYphase);
+        etDGCurrentBphaseLayout = findViewById(R.id.etDGCurrentBphaseLayout);
+        etDGCurrentYphaseLayout = findViewById(R.id.etDGCurrentYphaseLayout);
+        etDGVoltageYphase = findViewById(R.id.etDGVoltageYphase);
+        etDGVoltageBphase = findViewById(R.id.etDGVoltageBphase);
+        etDGVoltageRphase = findViewById(R.id.etDGVoltageRphase);
+        etDGVoltageRphaseLayout = findViewById(R.id.etDGVoltageRphaseLayout);
+        etDGVoltageYphaseLayout = findViewById(R.id.etDGVoltageYphaseLayout);
+        etDGVoltageBphaseLayout = findViewById(R.id.etDGVoltageBphaseLayout);
+        etDGFrequencyRphaseLayout = findViewById(R.id.etDGFrequencyRphaseLayout);
+        etDGFrequencyYphaseLayout = findViewById(R.id.etDGFrequencyYphaseLayout);
+        etDGFrequencyBphaseLayout = findViewById(R.id.etDGFrequencyBphaseLayout);
+        etDGFrequencyRphase = findViewById(R.id.etDGFrequencyRphase);
+        etDGFrequencyYphase = findViewById(R.id.etDGFrequencyYphase);
+        etDGFrequencyBphase = findViewById(R.id.etDGFrequencyBphase);
     }
 
     @Override
@@ -75,29 +102,34 @@ public class SiteOnDgSetFragment extends MainFragment {
         CurtomerSite_Id = userPref.getString("CurtomerSite_Id", "");
     }
 
-    public void getSharedPrefData() {
-       /* SITEDGpref = getContext().getSharedPreferences("SITEDGpref", MODE_PRIVATE);
-        strDgCurrent = SITEDGpref.getString("DgCurrent", "");
-        strDgFrequency = SITEDGpref.getString("DgFrequency", "");
-        strDgVoltage = SITEDGpref.getString("DgVoltage", "");
-        strBatteryChargeCurrent = SITEDGpref.getString("BatteryChargeCurrent", "");
-        strBatteryVoltage = SITEDGpref.getString("BatteryVoltage", "");
-        strUserId = SITEDGpref.getString("USER_ID", "");
-        strSavedDateTime = SITEDGpref.getString("SetOnDGSavedDateTime", "");*/
-    }
 
     @Override
     protected void dataToView() {
         getUserPref();
-        getSharedPrefData();
-        if (!isEmptyStr(strDgCurrent) || !isEmptyStr(strDgFrequency)
-                || !isEmptyStr(strDgVoltage)
-                || !isEmptyStr(strBatteryChargeCurrent) || !isEmptyStr(strBatteryVoltage)) {
-            etDGCurrent.setText(strDgCurrent);
-            etDGFrequency.setText(strDgFrequency);
-            etDGVoltage.setText(strDgVoltage);
-            etBatChangeCurrent.setText(strBatteryChargeCurrent);
-            etBatteryVoltage.setText(strBatteryVoltage);
+        noofPhaseprf = getContext().getSharedPreferences("noofPhaseprf", MODE_PRIVATE);
+        noofPhase = noofPhaseprf.getString("noofPhase", "");
+
+
+        if (noofPhase.equalsIgnoreCase("1 Phase")) {
+            etDGCurrentRphaseLayout.setVisibility(View.VISIBLE);
+            etDGCurrentBphaseLayout.setVisibility(View.GONE);
+            etDGCurrentYphaseLayout.setVisibility(View.GONE);
+            etDGVoltageRphaseLayout.setVisibility(View.VISIBLE);
+            etDGVoltageYphaseLayout.setVisibility(View.GONE);
+            etDGVoltageBphaseLayout.setVisibility(View.GONE);
+            etDGFrequencyRphaseLayout.setVisibility(View.VISIBLE);
+            etDGFrequencyYphaseLayout.setVisibility(View.GONE);
+            etDGFrequencyBphaseLayout.setVisibility(View.GONE);
+        } else {
+            etDGCurrentRphaseLayout.setVisibility(View.VISIBLE);
+            etDGCurrentBphaseLayout.setVisibility(View.VISIBLE);
+            etDGCurrentYphaseLayout.setVisibility(View.VISIBLE);
+            etDGVoltageRphaseLayout.setVisibility(View.VISIBLE);
+            etDGVoltageYphaseLayout.setVisibility(View.VISIBLE);
+            etDGVoltageBphaseLayout.setVisibility(View.VISIBLE);
+            etDGFrequencyRphaseLayout.setVisibility(View.VISIBLE);
+            etDGFrequencyYphaseLayout.setVisibility(View.VISIBLE);
+            etDGFrequencyBphaseLayout.setVisibility(View.VISIBLE);
         }
 
     }
@@ -105,31 +137,29 @@ public class SiteOnDgSetFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
-            dgCurrent = etDGCurrent.getText().toString().trim();
-            dgFrequency = etDGFrequency.getText().toString().trim();
-            dgVoltage = etDGVoltage.getText().toString().trim();
+            dgrCurrent = etDGCurrentRphase.getText().toString().trim();
+            dgyCurrent = etDGCurrentYphase.getText().toString().trim();
+            dgbCurrent = etDGCurrentBphase.getText().toString().trim();
+            stretDGVoltageRphase = etDGVoltageRphase.getText().toString().trim();
+            stretDGVoltageYphase = etDGVoltageYphase.getText().toString().trim();
+            stretDGVoltageBphase = etDGVoltageBphase.getText().toString().trim();
+            stretDGFrequencyRphase = etDGFrequencyRphase.getText().toString().trim();
+            stretDGFrequencyYphase = etDGFrequencyYphase.getText().toString().trim();
+            stretDGFrequencyBphase = etDGFrequencyBphase.getText().toString().trim();
+
             batteryChargeCurrent = etBatChangeCurrent.getText().toString().trim();
             batteryVoltage = etBatteryVoltage.getText().toString().trim();
-            if (isEmptyStr(dgCurrent)) {
+            if (isEmptyStr(dgrCurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
-            } else if (isEmptyStr(dgFrequency)) {
+            } else if (isEmptyStr(stretDGFrequencyRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
-            } else if (isEmptyStr(dgVoltage)) {
+            } else if (isEmptyStr(stretDGVoltageRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
             } else if (isEmptyStr(batteryChargeCurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Battery Charge Current");
             } else if (isEmptyStr(batteryVoltage)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Battery Voltage");
             } else {
-                /*SharedPreferences.Editor editor = SITEDGpref.edit();
-                editor.putString("UserId", strUserId);
-                editor.putString("DgCurrent", dgCurrent);
-                editor.putString("DgFrequency", dgFrequency);
-                editor.putString("DgVoltage", dgVoltage);
-                editor.putString("BatteryChargeCurrent", batteryChargeCurrent);
-                editor.putString("BatteryVoltage", batteryVoltage);
-                editor.putString("SetOnDGSavedDateTime", strSavedDateTime);
-                editor.commit();*/
                 saveBasicDataonServer();
             }
         }
@@ -147,11 +177,17 @@ public class SiteOnDgSetFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "DG");
                 JSONObject DGData = new JSONObject();
-                DGData.put("DG_Current", dgCurrent);
-                DGData.put("DG_Frequency", dgFrequency);
-                DGData.put("DG_Voltage", dgVoltage);
-                DGData.put("Battery_Voltage", batteryVoltage);
-                DGData.put("Battery_ChargeCurrent", batteryChargeCurrent);
+                DGData.put("DG_CurrentR", dgrCurrent);
+                DGData.put("DG_CurrentY", dgyCurrent);
+                DGData.put("DG_CurrentB", dgbCurrent);
+                DGData.put("DG_VoltageR", stretDGVoltageRphase);
+                DGData.put("DG_VoltageY", stretDGVoltageYphase);
+                DGData.put("DG_VoltageB", stretDGVoltageBphase);
+                DGData.put("DG_FrequencyR", stretDGFrequencyRphase);
+                DGData.put("DG_FrequencyY", stretDGFrequencyYphase);
+                DGData.put("DG_FrequencyB", stretDGFrequencyBphase);
+                DGData.put("DG_BattVoltage", batteryVoltage);
+                DGData.put("DG_BattChargeCurrent", batteryChargeCurrent);
                 jsonObject.put("DGData", DGData);
             } catch (JSONException e) {
                 e.printStackTrace();

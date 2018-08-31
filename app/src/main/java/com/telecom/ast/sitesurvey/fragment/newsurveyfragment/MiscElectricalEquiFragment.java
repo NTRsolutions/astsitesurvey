@@ -1,11 +1,15 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -24,6 +28,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -34,20 +39,22 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MiscElectricalEquiFragment extends MainFragment {
 
-    Spinner spinnerElectrical, spinnerAviationLamp, LightningSpinner, TubeLightSpinner;
-    TextInputEditText etEarthingvalue;
-    Button btnSubmit;
-    String strEarthingvalue, Earthingvalue, strspinnerElectrical, strspinnerAviationLamp, strLightningSpinner, TubeLight, ServoStabiliser;
-
-    String strUserId, strSiteId;
-    SharedPreferences userPref;
-
-    LinearLayout ElectricaltypeLayout;
-    Spinner spinnerElectricaltype;
-    String strspinnerElectricaltype;
-    Spinner etServoStabiliserSpinner, StabiliserConditopnSpinner;
-    LinearLayout ServoStabiliserCondiLayout;
-    String strStabiliserConditopnSpinner;
+    private Spinner spinnerElectrical, spinnerAviationLamp, LightningSpinner, StabiliserTypeSpinner;
+    private TextInputEditText etEarthingvalue;
+    private Button btnSubmit;
+    private String strEarthingvalue, Earthingvalue, strspinnerElectrical, strspinnerAviationLamp, strLightningSpinner, strStabiliserTypeSpinner, ServoStabiliser;
+    private String strUserId, strSiteId;
+    private SharedPreferences userPref;
+    private LinearLayout ElectricaltypeLayout;
+    private AutoCompleteTextView spinnerElectricaltype;
+    private String strspinnerElectricalfaultytype, strstraviationLampworkingstatus, strLightningArresterstatus;
+    private Spinner etServoStabiliserSpinner, StabiliserConditopnSpinner, aviationLampworkingstatus, LightningArresterstatus,
+            numberofPhaseSpinner;
+    private TextInputEditText etServoStabilisermake, etServoStabilisercapacity;
+    private LinearLayout ServoStabiliserCondiLayout, LampstatusLayout, LightningArresterstatusLayout,
+            ServoStabilisercapacityLayout, ServoStabiliserMakeLayout;
+    private String strStabiliserConditopnSpinner, stretServoStabilisermake, stretServoStabilisercapacity, strnumberofPhaseSpinner;
+    TextInputLayout spinnerElectricaltypeLayuot;
 
     @Override
     protected int fragmentLayout() {
@@ -62,17 +69,31 @@ public class MiscElectricalEquiFragment extends MainFragment {
         etEarthingvalue = this.findViewById(R.id.etEarthingvalue);
         btnSubmit = this.findViewById(R.id.btnSubmit);
         etServoStabiliserSpinner = this.findViewById(R.id.etServoStabiliserSpinner);
-        TubeLightSpinner = this.findViewById(R.id.TubeLightSpinner);
-
+        StabiliserTypeSpinner = this.findViewById(R.id.StabiliserTypeSpinner);
         ElectricaltypeLayout = this.findViewById(R.id.ElectricaltypeLayout);
         spinnerElectricaltype = this.findViewById(R.id.spinnerElectricaltype);
         StabiliserConditopnSpinner = this.findViewById(R.id.StabiliserConditopnSpinner);
         ServoStabiliserCondiLayout = this.findViewById(R.id.ServoStabiliserCondiLayout);
+        aviationLampworkingstatus = this.findViewById(R.id.aviationLampworkingstatus);
+        LampstatusLayout = this.findViewById(R.id.LampstatusLayout);
+
+        LightningArresterstatus = this.findViewById(R.id.LightningArresterstatus);
+        LightningArresterstatusLayout = this.findViewById(R.id.LightningArresterstatusLayout);
+
+        etServoStabilisermake = this.findViewById(R.id.etServoStabilisermake);
+        etServoStabilisercapacity = this.findViewById(R.id.etServoStabilisercapacity);
+        ServoStabilisercapacityLayout = this.findViewById(R.id.ServoStabilisercapacityLayout);
+        ServoStabiliserMakeLayout = this.findViewById(R.id.ServoStabiliserMakeLayout);
+        numberofPhaseSpinner = this.findViewById(R.id.numberofPhaseSpinner);
+        spinnerElectricaltypeLayuot = this.findViewById(R.id.spinnerElectricaltypeLayuot);
     }
 
     @Override
     protected void setClickListeners() {
         btnSubmit.setOnClickListener(this);
+        this.spinnerElectricaltype.setOnClickListener(this);
+        spinnerElectricaltype.setOnClickListener(this);
+        spinnerElectricaltypeLayuot.setOnClickListener(this);
     }
 
     @Override
@@ -87,7 +108,7 @@ public class MiscElectricalEquiFragment extends MainFragment {
         spinnerElectrical.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
-                if (selectedItem.equalsIgnoreCase("Available")) {
+                if (selectedItem.equalsIgnoreCase("Not Working")) {
                     ElectricaltypeLayout.setVisibility(View.VISIBLE);
 
                 } else {
@@ -104,9 +125,13 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 String selectedItem = parent.getSelectedItem().toString();
                 if (selectedItem.equalsIgnoreCase("Available")) {
                     ServoStabiliserCondiLayout.setVisibility(View.VISIBLE);
+                    ServoStabilisercapacityLayout.setVisibility(View.VISIBLE);
+                    ServoStabiliserMakeLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     ServoStabiliserCondiLayout.setVisibility(View.GONE);
+                    ServoStabilisercapacityLayout.setVisibility(View.GONE);
+                    ServoStabiliserMakeLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -114,7 +139,41 @@ public class MiscElectricalEquiFragment extends MainFragment {
             }
         });
 
+      /*  spinnerElectricaltype.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                showSelectFaultyItemDialog();
+            }
+        });
+*/
 
+        spinnerAviationLamp.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Available")) {
+                    LampstatusLayout.setVisibility(View.VISIBLE);
+                } else {
+                    LampstatusLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        LightningSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Available")) {
+                    LightningArresterstatusLayout.setVisibility(View.VISIBLE);
+                } else {
+                    LightningArresterstatusLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private void getUserPref() {
@@ -125,7 +184,7 @@ public class MiscElectricalEquiFragment extends MainFragment {
 
 
     public void setSpinnerValue() {
-        final String etfiredetectSpineer_array[] = {"Available", "Not Available"};
+        final String etfiredetectSpineer_array[] = {"Working", "Not Working"};
         ArrayAdapter<String> etfiredetect = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineer_array);
         spinnerElectrical.setAdapter(etfiredetect);
         if (!isEmptyStr(strEarthingvalue)) {
@@ -137,11 +196,6 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 }
             }
         }
-
-        final String etfiredetectSpineertype_array[] = {"3 Pin", "2 Pin"};
-        ArrayAdapter<String> etfiredetecttype = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etfiredetectSpineertype_array);
-        spinnerElectricaltype.setAdapter(etfiredetecttype);
-
 
         final String etextinguiserArray[] = {"Available", "Not Available"};
         ArrayAdapter<String> etextinguiser = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etextinguiserArray);
@@ -171,15 +225,15 @@ public class MiscElectricalEquiFragment extends MainFragment {
         }
 
 
-        final String TubeLightSpinnerArray[] = {"Available", "Not Available"};
+        final String TubeLightSpinnerArray[] = {"Dry", "Oil"};
         ArrayAdapter<String> TubeLightSpinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, TubeLightSpinnerArray);
-        TubeLightSpinner.setAdapter(TubeLightSpinnerAdapter);
-        if (!isEmptyStr(TubeLight)) {
+        StabiliserTypeSpinner.setAdapter(TubeLightSpinnerAdapter);
+        if (!isEmptyStr(strStabiliserTypeSpinner)) {
             for (int i = 0; i < TubeLightSpinnerArray.length; i++) {
-                if (TubeLight.equalsIgnoreCase(TubeLightSpinnerArray[i])) {
-                    TubeLightSpinner.setSelection(i);
+                if (strStabiliserTypeSpinner.equalsIgnoreCase(TubeLightSpinnerArray[i])) {
+                    StabiliserTypeSpinner.setSelection(i);
                 } else {
-                    TubeLightSpinner.setSelection(0);
+                    StabiliserTypeSpinner.setSelection(0);
                 }
             }
         }
@@ -198,7 +252,9 @@ public class MiscElectricalEquiFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnSubmit) {
+        if (view.getId() == R.id.spinnerElectricaltype || view.getId() == R.id.spinnerElectricaltypeLayuot) {
+            showSelectFaultyItemDialog();
+        } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
             }
@@ -210,12 +266,20 @@ public class MiscElectricalEquiFragment extends MainFragment {
     private boolean isValidate() {
         strEarthingvalue = getTextFromView(this.etEarthingvalue);
         strspinnerElectrical = spinnerElectrical.getSelectedItem().toString();
-        strspinnerElectricaltype = spinnerElectricaltype.getSelectedItem().toString();
+        strspinnerElectricalfaultytype = spinnerElectricaltype.getText().toString();
         strspinnerAviationLamp = spinnerAviationLamp.getSelectedItem().toString();
         strLightningSpinner = LightningSpinner.getSelectedItem().toString();
-        TubeLight = TubeLightSpinner.getSelectedItem().toString();
+        strStabiliserTypeSpinner = StabiliserTypeSpinner.getSelectedItem().toString();
         ServoStabiliser = etServoStabiliserSpinner.getSelectedItem().toString();
         strStabiliserConditopnSpinner = StabiliserConditopnSpinner.getSelectedItem().toString();
+        strstraviationLampworkingstatus = aviationLampworkingstatus.getSelectedItem().toString();
+        strLightningArresterstatus = LightningArresterstatus.getSelectedItem().toString();
+
+        stretServoStabilisermake = getTextFromView(this.etServoStabilisermake);
+        stretServoStabilisercapacity = getTextFromView(this.etServoStabilisercapacity);
+        strnumberofPhaseSpinner = numberofPhaseSpinner.getSelectedItem().toString();
+
+
         if (isEmptyStr(strEarthingvalue)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Earthing-Resistance Value");
             return false;
@@ -244,19 +308,28 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "MiscEEqp");
                 JSONObject MiscEEqpData = new JSONObject();
-                MiscEEqpData.put("AviationLamp", strspinnerAviationLamp);
-                MiscEEqpData.put("EarthingResistanceValue", strEarthingvalue);
-                MiscEEqpData.put("ElectricalConnectionfittings", strspinnerElectrical);
-                MiscEEqpData.put("ElectricalConnectionfittingstype", strspinnerElectrical);
+                MiscEEqpData.put("ShelterLightandWiring", strspinnerElectrical);
+                MiscEEqpData.put("ShelterLightandWiring_Detail", strspinnerElectricalfaultytype);
+                if (strspinnerAviationLamp.equalsIgnoreCase("Available")) {
+                    MiscEEqpData.put("AviationLamp", strstraviationLampworkingstatus);
+                } else {
+                    MiscEEqpData.put("AviationLamp", strspinnerAviationLamp);
+                }
                 MiscEEqpData.put("LightningArrester", strLightningSpinner);
+                MiscEEqpData.put("ShelterLightandWiring_Detail", strLightningArresterstatus);
+                MiscEEqpData.put("EarthingResistanceValue", strEarthingvalue);
                 MiscEEqpData.put("ServoStabiliser", ServoStabiliser);
                 MiscEEqpData.put("ServoStabilisercondition", strStabiliserConditopnSpinner);
-
-                MiscEEqpData.put("TubeLight", TubeLight);
+                MiscEEqpData.put("ServoStabiliserMake", stretServoStabilisermake);
+                MiscEEqpData.put("ServoStabiliserCapacity", stretServoStabilisercapacity);
+                MiscEEqpData.put("ServoStabiliserType", strStabiliserTypeSpinner);
+                MiscEEqpData.put("ServoStabiliserPhase", strnumberofPhaseSpinner);
                 jsonObject.put("MiscEEqpData", MiscEEqpData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
             HashMap<String, String> payloadList = new HashMap<String, String>();
             payloadList.put("JsonData", jsonObject.toString());
             MultipartBody.Builder multipartBody = setMultipartBodyVaule();
@@ -305,4 +378,42 @@ public class MiscElectricalEquiFragment extends MainFragment {
 */
         return multipartBody;
     }
+
+    protected CharSequence[] faulityItem = {"Tube lights", "2Power socket", "Shelter outside light", "Other"};
+    protected ArrayList<CharSequence> selectedfaulityItem = new ArrayList<CharSequence>();
+
+    protected void showSelectFaultyItemDialog() {
+        boolean[] checkedItems = new boolean[faulityItem.length];
+        int count = faulityItem.length;
+        for (int i = 0; i < count; i++)
+            checkedItems[i] = selectedfaulityItem.contains(faulityItem[i]);
+        DialogInterface.OnMultiChoiceClickListener coloursDialogListener = new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked)
+                    selectedfaulityItem.add(faulityItem[which]);
+                else
+                    selectedfaulityItem.remove(faulityItem[which]);
+                onChangeSelectedItem();
+
+            }
+
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Select Faulty Items");
+        builder.setMultiChoiceItems(faulityItem, checkedItems, coloursDialogListener);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    protected void onChangeSelectedItem() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (CharSequence colour : selectedfaulityItem)
+            stringBuilder.append(colour + ",");
+        spinnerElectricaltype.setText(stringBuilder.toString());
+
+    }
+
 }

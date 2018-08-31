@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
@@ -70,42 +72,45 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class PIUVoltageStablizerFragment extends MainFragment {
-    static ImageView frontimg, openImg, sNoPlateImg;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    static boolean isImage1, isImage2;
-    AppCompatEditText etDescription, etetNofLcu;
-    AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    SharedPreferences pref;
-    String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
-    String strMakeId="",  NofLcu="0";
-    String[] arrMake;
-    String[] arrModel;
-    String[] arrCapacity;
-    AtmDatabase atmDatabase;
-    String make="", model="", capacity="", serialNumber="", yearOfManufacturing="", description="", currentDateTime="";
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
-    AppCompatEditText etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etRatingofCable, etAlarmConnection,
-            etNoofRMWorking, etNoofRMFaulty, etSpareFuseStatus;
+    private static ImageView frontimg, openImg, sNoPlateImg;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static boolean isImage1, isImage2;
+    private AppCompatEditText etDescription, etetNofLcu;
+    private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    private SharedPreferences pref;
+    private String  strUserId, strSiteId, CurtomerSite_Id;
+    private String strMakeId = "0", NofLcu = "0";
+    private String[] arrMake;
+    private String[] arrModel;
+    private String[] arrCapacity;
+    private AtmDatabase atmDatabase;
+    private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "";
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner;
 
-    Spinner itemStatusSpineer;
-    String Controller="", ConditionbackPlane="", BodyEarthing="0", PositiveEarthing="0", RatingofCable="0", AlarmConnection="",
-            NoofRMWorking="0", NoofRMFaulty="0", SpareFuseStatus="0", itemCondition="";
 
-    SharedPreferences userPref;
-    TextView etYear, dateIcon;
-    Typeface materialdesignicons_font;
-    LinearLayout dateLayout;
-    long datemilisec;
-    int EquipmentSno = 1;
-    Button btnSubmit;
-    String strEqupId="0";
+    private Spinner itemStatusSpineer;
+    private String    itemCondition = "";
+
+    private SharedPreferences userPref;
+    private TextView etYear, dateIcon;
+    private Typeface materialdesignicons_font;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private int EquipmentSno = 1;
+    private Button btnSubmit;
+    private String strEqupId = "0";
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    SharedPreferences smpsShrepreforrpiu;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private SharedPreferences smpsShrepreforrpiu;
+    private Spinner nameofNameofEquipment, workingStatus, SiteAutomationStatus;
+    private String strnameofNameofEquipment, strworkingStatus, stretnotworkingText, strSiteAutomationStatus;
+    LinearLayout noofLcuLauout, notworkinsItemLayout;
+    private AutoCompleteTextView etnotworkingText;
+    TextInputLayout etnotworlyTextInput;
 
     @Override
     protected int fragmentLayout() {
@@ -126,15 +131,6 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         etetNofLcu = findViewById(R.id.etNofLcu);
-        etController = findViewById(R.id.etController);
-        etConditionbackPlane = findViewById(R.id.etConditionbackPlane);
-        etBodyEarthing = findViewById(R.id.etBodyEarthing);
-        etPositiveEarthing = findViewById(R.id.etPositiveEarthing);
-        etRatingofCable = findViewById(R.id.etRatingofCable);
-        etAlarmConnection = findViewById(R.id.etAlarmConnection);
-        etNoofRMWorking = findViewById(R.id.etNoofRMWorking);
-        etNoofRMFaulty = findViewById(R.id.etNoofRMFaulty);
-        etSpareFuseStatus = findViewById(R.id.etSpareFuseStatus);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
         dateIcon = findViewById(R.id.dateIcon);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
@@ -142,6 +138,13 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
+        nameofNameofEquipment = findViewById(R.id.nameofNameofEquipment);
+        noofLcuLauout = findViewById(R.id.noofLcuLauout);
+        workingStatus = findViewById(R.id.workingStatus);
+        notworkinsItemLayout = findViewById(R.id.notworkinsItemLayout);
+        etnotworkingText = findViewById(R.id.etnotworlyText);
+        SiteAutomationStatus = findViewById(R.id.SiteAutomationStatus);
+        etnotworlyTextInput = findViewById(R.id.etnotworlyTextInput);
     }
 
     @Override
@@ -151,6 +154,9 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         sNoPlateImg.setOnClickListener(this);
         dateLayout.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        notworkinsItemLayout.setOnClickListener(this);
+        etnotworlyTextInput.setOnClickListener(this);
+        etnotworkingText.setOnClickListener(this);
     }
 
     @Override
@@ -167,6 +173,11 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         final String itemStatusSpineer_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> itemStatusSpineeradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, itemStatusSpineer_array);
         itemStatusSpineer.setAdapter(itemStatusSpineeradapter);
+
+        final String nameofNameofEquipmentSpineer_array[] = {"IPMS", "PIU", "AMF"};
+        ArrayAdapter<String> nameofNameofEquipmentdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, nameofNameofEquipmentSpineer_array);
+        nameofNameofEquipment.setAdapter(nameofNameofEquipmentdapter);
+
 
     }
 
@@ -211,8 +222,8 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         setSpinnerValue();
         getUserPref();
         atmDatabase = new AtmDatabase(getContext());
-        equipList = atmDatabase.getEquipmentData("PIU");
-        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", "PIU");
+        equipList = atmDatabase.getEquipmentData(strnameofNameofEquipment);
+        equipMakeList = atmDatabase.getEquipmentMakeData("Desc", strnameofNameofEquipment);
         arrMake = new String[equipMakeList.size()];
         for (int i = 0; i < equipMakeList.size(); i++) {
             arrMake[i] = equipMakeList.get(i).getName();
@@ -246,27 +257,47 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
+        workingStatus.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Not Working")) {
+                    notworkinsItemLayout.setVisibility(View.VISIBLE);
+
+                } else {
+                    notworkinsItemLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
     }
 
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.dateLayout) {
+        if (view.getId() == R.id.notworkinsItemLayout || view.getId() == R.id.etnotworlyTextInput || view.getId() == R.id.etnotworlyText) {
+            showSelectFaultyItemDialog();
+        } else if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_Front.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Front.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             isImage1 = false;
             isImage2 = true;
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Open.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             isImage1 = false;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_SerialNoPlate.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_SerialNoPlate.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValiDate()) {
@@ -278,26 +309,20 @@ public class PIUVoltageStablizerFragment extends MainFragment {
 
     public boolean isValiDate() {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
+        strnameofNameofEquipment = nameofNameofEquipment.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
-        make = etMake.getText().toString();
-        model = etCapacity.getText().toString();
-        capacity = etCapacity.getText().toString();
-        serialNumber = etSerialNum.getText().toString();
-        yearOfManufacturing = etYear.getText().toString();
-        description = etDescription.getText().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
-        NofLcu = etetNofLcu.getText().toString();
-        Controller = etController.getText().toString();
-        ConditionbackPlane = etConditionbackPlane.getText().toString();
-        BodyEarthing = etBodyEarthing.getText().toString();
-        PositiveEarthing = etPositiveEarthing.getText().toString();
-        RatingofCable = etRatingofCable.getText().toString();
-        AlarmConnection = etAlarmConnection.getText().toString();
-        NoofRMWorking = etNoofRMWorking.getText().toString();
-        NoofRMFaulty = etNoofRMFaulty.getText().toString();
-        SpareFuseStatus = etSpareFuseStatus.getText().toString();
-
+            make = etMake.getText().toString();
+            model = etCapacity.getText().toString();
+            capacity = etCapacity.getText().toString();
+            serialNumber = etSerialNum.getText().toString();
+            yearOfManufacturing = etYear.getText().toString();
+            description = etDescription.getText().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
+            NofLcu = etetNofLcu.getText().toString();
+            strworkingStatus = workingStatus.getSelectedItem().toString();
+            stretnotworkingText = etnotworkingText.getText().toString();
+            strSiteAutomationStatus = SiteAutomationStatus.getSelectedItem().toString();
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -349,24 +374,18 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 EquipmentDataa.put("EquipmentID", strEqupId);
                 EquipmentDataa.put("CapacityID", capcityId);
                 EquipmentDataa.put("EquipmentSno", EquipmentSno);
-                EquipmentDataa.put("Equipment", "PIU");
+                EquipmentDataa.put("Equipment", strnameofNameofEquipment);
                 EquipmentDataa.put("MakeID", strMakeId);
                 EquipmentDataa.put("Make", make);
                 EquipmentDataa.put("Capacity", capacity);
                 EquipmentDataa.put("SerialNo", serialNumber);
                 EquipmentDataa.put("MfgDate", datemilisec);
                 EquipmentDataa.put("ItemCondition", itemCondition);
-                EquipmentDataa.put("PP_Controller", Controller);
-                EquipmentDataa.put("PP_BackPlaneCondition", ConditionbackPlane);
-                EquipmentDataa.put("PP_BodyEarthing", BodyEarthing);
-                EquipmentDataa.put("PP_PositiveBusBarEarthing", PositiveEarthing);
-                EquipmentDataa.put("PP_CableRating", RatingofCable);
-                EquipmentDataa.put("PP_AlarmConnectionStatus", AlarmConnection);
-                EquipmentDataa.put("PP_WorkingRM", NoofRMWorking);
-                EquipmentDataa.put("PP_FaultyRM", NoofRMFaulty);
-                EquipmentDataa.put("PP_SpareFuseStatusHRC", SpareFuseStatus);
-                EquipmentDataa.put("PIU_LCU_Qt", NofLcu);
-                EquipmentDataa.put("PIU_LCU_Capacity", "0");
+                EquipmentDataa.put("PIULCUQt", NofLcu);
+                EquipmentDataa.put("PIULCUCapacity", "0");
+                EquipmentDataa.put("PP_WorkingStatus", strworkingStatus);
+                EquipmentDataa.put("PP_WorkingStatus_Detail", stretnotworkingText);
+                EquipmentDataa.put("PP_AutomationStatus", strSiteAutomationStatus);
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);
@@ -384,10 +403,10 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                     ContentData data = new Gson().fromJson(result, ContentData.class);
                     if (data != null) {
                         if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your PIU Data save Successfully");
+                            ASTUIUtil.showToast("Your" + strnameofNameofEquipment + "Data save Successfully");
                             if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
                                 showAddMoreItemDialog();
-                            }else{
+                            } else {
                                 reloadBackScreen();
                             }
                             smpsShrepreforrpiu = getContext().getSharedPreferences("PiuenablePref", MODE_PRIVATE);
@@ -397,7 +416,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                             ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
                         }
                     } else {
-                        ASTUIUtil.showToast("Your PIU Data has not been updated!");
+                        ASTUIUtil.showToast("Your" + strnameofNameofEquipment + " Data has not been updated!");
                     }
                     if (progressBar.isShowing()) {
                         progressBar.dismiss();
@@ -462,16 +481,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         etSerialNum.setText("");
         etYear.setText("");
         etDescription.setText("");
-        etController.setText("");
-        etConditionbackPlane.setText("");
-        etBodyEarthing.setText("");
-        etPositiveEarthing.setText("");
-        etRatingofCable.setText("");
-        etAlarmConnection.setText("");
-        etNoofRMWorking.setText("");
         etetNofLcu.setText("");
-        etNoofRMFaulty.setText("");
-        etSpareFuseStatus.setText("");
         itemStatusSpineer.setSelection(0);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(frontimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(openImg);
@@ -517,19 +527,19 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_Front.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Front.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, frontimg);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Open.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, openImg);
             }
         } else {
-            String imageName = CurtomerSite_Id + "_PIU_" + EquipmentSno + "_SerialNoPlate.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, sNoPlateImg);
@@ -559,7 +569,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
@@ -601,6 +611,43 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 }
             }
         }.execute();
+
+    }
+
+    protected CharSequence[] faulityItem = {"Contractar", "LCU 1", "LCU 2", "MCB", "Controler Card", "Cantroler Display", "Intrernal Wiring"};
+    protected ArrayList<CharSequence> selectedfaulityItem = new ArrayList<CharSequence>();
+
+    protected void showSelectFaultyItemDialog() {
+        boolean[] checkedItems = new boolean[faulityItem.length];
+        int count = faulityItem.length;
+        for (int i = 0; i < count; i++)
+            checkedItems[i] = selectedfaulityItem.contains(faulityItem[i]);
+        DialogInterface.OnMultiChoiceClickListener coloursDialogListener = new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked)
+                    selectedfaulityItem.add(faulityItem[which]);
+                else
+                    selectedfaulityItem.remove(faulityItem[which]);
+                onChangeSelectedItem();
+
+            }
+
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Select Faulty Items");
+        builder.setMultiChoiceItems(faulityItem, checkedItems, coloursDialogListener);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    protected void onChangeSelectedItem() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (CharSequence colour : selectedfaulityItem)
+            stringBuilder.append(colour + ",");
+        etnotworkingText.setText(stringBuilder.toString());
 
     }
 }

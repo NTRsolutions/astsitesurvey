@@ -54,27 +54,31 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MiscellaneousFragment extends MainFragment {
-    TextInputEditText etshater2size, etoutDoorsize, etGateSize, etPlot, etApproachRoad, etboundryheight;
-    TextInputEditText etshater1size, etVisitRegister, etsiteHygiene;
-    ImageView image1, image2, image3, image4, image5, image6,
-            DiagramImage;
-    static boolean ismage1, ismage2, ismage3, ismage4, ismage5, ismage6, isDiagramImage;
-    File shaterimage1File, shaterimage2File, outDoorimage3File, GateSizeimage4File, Plotimage5File, Approachimage6File,DiagramFile;
+    private TextInputEditText etGateSize, etPlot, etApproachRoad, etboundryheight;
+    private TextInputEditText etshater1size;
+    private ImageView image1, image4, image5, image6,
+            DiagramImage, SiteHygieneImage;
+    private static boolean ismage1, ismage4, ismage5, ismage6, isDiagramImage;
+    private File shaterimage1File, GateSizeimage4File, Plotimage5File,
+            Approachimage6File, DiagramFile, SiteHygieneFile;
 
-    String shater1size, shater2size, outDoorsize, GateSize, Plot, ApproachRoad, boundryheight, Boundarywall;
-    String strUserId, strSiteId, CurtomerSite_Id,
-            signagestatus, cablelebelling, etOtherIssues,
-            fSRCopy, SiteProblem, ShelterCovered, SheltLeakage,
+    private String shater1size, GateSize, Plot, ApproachRoad, boundryheight, Boundarywall;
+    private String strUserId, strSiteId, CurtomerSite_Id,
+            signagestatus, cablelebelling, stretOtherIssues,
+            fSRCopy, ShelterCovered, SheltLeakage,
             AnyOtherItem, dFCNOPY, bBCabinet, mainDoor, shelter, police,
-            ambulane, Technician, VisitRegister, siteHygiene, powerPlant, fire,stretWaterLogging;
+            ambulane, Technician, VisitRegister, powerPlant, fire, stretWaterLogging, stretOwnerIssues, stretCriticalOwnerissue;
 
-    Spinner typeBoundarywall, signagestatusSpinner, cablelebellingSpinner, etOtherIssuesSpinner,
-            fSRCopyspinner, SiteProblemspinner, ShelterCoveredSpinner, SheltLeakageSpinner,
+
+    private Spinner typeBoundarywall, signagestatusSpinner, cablelebellingSpinner, etOtherIssuesSpinner,
+            fSRCopyspinner, ShelterCoveredSpinner, SheltLeakageSpinner,
             etAnyOtherItemSpinner, dFCNOPYSpinner, bBCabinetSpinner, mainDoorSpineer, shelterSpinner, policeSpinner,
-            ambulaneSpinner, TechnicianSpinner, powerPlantSpinner, fireSpinner,etWaterLogging;
+            ambulaneSpinner, TechnicianSpinner, powerPlantSpinner, fireSpinner, etWaterLogging, etVisitRegister, etOwnerIssues, etCriticalOwnerissue;
 
-    Button btnSubmit;
-    SharedPreferences MiscSharedPref, userPref;
+    private Button btnSubmit;
+    private SharedPreferences userPref;
+    private Spinner dangerSpinner, cautionSpinner, warningSpinner;
+    private String strdangerSpinner, strcautionSpinner, strwarningSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -84,27 +88,22 @@ public class MiscellaneousFragment extends MainFragment {
     @Override
     protected void loadView() {
         etshater1size = findViewById(R.id.etshater1size);
-        etshater2size = findViewById(R.id.etshater2size);
-        etoutDoorsize = findViewById(R.id.etoutDoorsize);
         etGateSize = findViewById(R.id.etGateSize);
         etPlot = findViewById(R.id.etPlot);
         etApproachRoad = findViewById(R.id.etApproachRoad);
         etboundryheight = findViewById(R.id.etboundryheight);
         image1 = findViewById(R.id.image1);
-        image2 = findViewById(R.id.image2);
-        image3 = findViewById(R.id.image3);
         image4 = findViewById(R.id.image4);
         image5 = findViewById(R.id.image5);
         image6 = findViewById(R.id.image6);
         DiagramImage = findViewById(R.id.DiagramImage);
+        SiteHygieneImage = findViewById(R.id.SiteHygieneImage);
         typeBoundarywall = findViewById(R.id.typeBoundarywall);
         etVisitRegister = findViewById(R.id.etVisitRegister);
-        etsiteHygiene = findViewById(R.id.etsiteHygiene);
         signagestatusSpinner = findViewById(R.id.signagestatusSpinner);
         cablelebellingSpinner = findViewById(R.id.cablelebellingSpinner);
         etOtherIssuesSpinner = findViewById(R.id.etOtherIssuesSpinner);
         fSRCopyspinner = findViewById(R.id.fSRCopyspinner);
-        SiteProblemspinner = findViewById(R.id.SiteProblemspinner);
         ShelterCoveredSpinner = findViewById(R.id.ShelterCoveredSpinner);
         SheltLeakageSpinner = findViewById(R.id.SheltLeakageSpinner);
         etAnyOtherItemSpinner = findViewById(R.id.etAnyOtherItemSpinner);
@@ -118,21 +117,24 @@ public class MiscellaneousFragment extends MainFragment {
         powerPlantSpinner = findViewById(R.id.powerPlantSpinner);
         fireSpinner = findViewById(R.id.fireSpinner);
         btnSubmit = findViewById(R.id.btnSubmit);
-        etWaterLogging= findViewById(R.id.etWaterLogging);
+        etWaterLogging = findViewById(R.id.etWaterLogging);
+        etOwnerIssues = findViewById(R.id.etOwnerIssues);
+        etCriticalOwnerissue = findViewById(R.id.etCriticalOwnerissue);
+        dangerSpinner = findViewById(R.id.dangerSpinner);
+        cautionSpinner = findViewById(R.id.cautionSpinner);
+        warningSpinner = findViewById(R.id.warningSpinner);
     }
 
     @Override
     protected void setClickListeners() {
         image1.setOnClickListener(this);
-        image2.setOnClickListener(this);
-        image3.setOnClickListener(this);
         image4.setOnClickListener(this);
         image5.setOnClickListener(this);
         image6.setOnClickListener(this);
         DiagramImage.setOnClickListener(this);
 //        typeBoundarywall.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-
+        SiteHygieneImage.setOnClickListener(this);
     }
 
     @Override
@@ -196,12 +198,12 @@ public class MiscellaneousFragment extends MainFragment {
             }
         }
 
-        final String etOtherIssues_array[] = {" History of Site Theft", "Pending Payments to technician,Caretaker,owner", "diesel filler", "Municipality tax due etc ", "Owner aggreement copy available or not with due date", "Owner Change"};
+        final String etOtherIssues_array[] = {" Municipality tax due etc", "diesel filler", "Gram punchayat Tax ", "State devlopment authority tax", "No  dues certificate to be taken"};
         ArrayAdapter<String> etOtherIssuesadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etOtherIssues_array);
         etOtherIssuesSpinner.setAdapter(etOtherIssuesadapter);
-        if (etOtherIssues != null && !etOtherIssues.equals("")) {
+        if (stretOtherIssues != null && !stretOtherIssues.equals("")) {
             for (int i = 0; i < etOtherIssues_array.length; i++) {
-                if (etOtherIssues.equalsIgnoreCase(etOtherIssues_array[i])) {
+                if (stretOtherIssues.equalsIgnoreCase(etOtherIssues_array[i])) {
                     etOtherIssuesSpinner.setSelection(i);
                 } else {
                     etOtherIssuesSpinner.setSelection(0);
@@ -218,19 +220,6 @@ public class MiscellaneousFragment extends MainFragment {
                     fSRCopyspinner.setSelection(i);
                 } else {
                     fSRCopyspinner.setSelection(0);
-                }
-            }
-        }
-
-        final String SiteProblemspAdapter_array[] = {"Night Access problem", "Water Logging"};
-        ArrayAdapter<String> SiteProblemspAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, SiteProblemspAdapter_array);
-        SiteProblemspinner.setAdapter(SiteProblemspAdapter);
-        if (SiteProblem != null && !SiteProblem.equals("")) {
-            for (int i = 0; i < SiteProblemspAdapter_array.length; i++) {
-                if (SiteProblem.equalsIgnoreCase(SiteProblemspAdapter_array[i])) {
-                    SiteProblemspinner.setSelection(i);
-                } else {
-                    SiteProblemspinner.setSelection(0);
                 }
             }
         }
@@ -400,53 +389,27 @@ public class MiscellaneousFragment extends MainFragment {
     public void onClick(View view) {
         if (view.getId() == R.id.image1) {
             ismage1 = true;
-            ismage2 = false;
-            ismage3 = false;
             ismage4 = false;
             ismage5 = false;
             ismage6 = false;
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
-            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
-        } else if (view.getId() == R.id.image2) {
-            ismage1 = false;
-            ismage2 = true;
-            ismage3 = false;
-            ismage4 = false;
-            ismage5 = false;
-            ismage6 = false;
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
-            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
-        } else if (view.getId() == R.id.image3) {
-            ismage1 = false;
-            ismage2 = false;
-            ismage3 = true;
-            ismage4 = false;
-            ismage5 = false;
-            ismage6 = false;
-            String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image4) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_MainGateSize.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             ismage1 = false;
-            ismage2 = false;
-            ismage3 = false;
             ismage4 = true;
             ismage5 = false;
             ismage6 = false;
         } else if (view.getId() == R.id.image5) {
             ismage1 = false;
-            ismage2 = false;
-            ismage3 = false;
             ismage4 = false;
             ismage5 = true;
             ismage6 = false;
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Plot.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image6) {
             ismage1 = false;
-            ismage2 = false;
-            ismage3 = false;
             ismage4 = false;
             ismage5 = false;
             ismage6 = true;
@@ -454,13 +417,19 @@ public class MiscellaneousFragment extends MainFragment {
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.DiagramImage) {
             ismage1 = false;
-            ismage2 = false;
-            ismage3 = false;
             ismage4 = false;
             ismage5 = false;
             ismage6 = false;
             isDiagramImage = true;
             String imageName = CurtomerSite_Id + "_MiscItem_1_LayoutDiagram.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.SiteHygieneImage) {
+            ismage1 = false;
+            ismage4 = false;
+            ismage5 = false;
+            ismage6 = false;
+            isDiagramImage = false;
+            String imageName = CurtomerSite_Id + "_MiscItem_1_SiteHygiene.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
@@ -475,20 +444,16 @@ public class MiscellaneousFragment extends MainFragment {
     // ----validation -----
     private boolean isValidate() {
         shater1size = getTextFromView(this.etshater1size);
-        shater2size = getTextFromView(this.etshater2size);
-        outDoorsize = getTextFromView(this.etoutDoorsize);
         GateSize = getTextFromView(this.etGateSize);
         Plot = getTextFromView(this.etPlot);
         ApproachRoad = getTextFromView(this.etApproachRoad);
         boundryheight = getTextFromView(this.etboundryheight);
         Boundarywall = typeBoundarywall.getSelectedItem().toString();
-        VisitRegister = getTextFromView(this.etVisitRegister);
-        siteHygiene = getTextFromView(this.etsiteHygiene);
+        VisitRegister = etVisitRegister.getSelectedItem().toString();
         signagestatus = signagestatusSpinner.getSelectedItem().toString();
         cablelebelling = cablelebellingSpinner.getSelectedItem().toString();
-        etOtherIssues = etOtherIssuesSpinner.getSelectedItem().toString();
+        stretOtherIssues = etOtherIssuesSpinner.getSelectedItem().toString();
         fSRCopy = fSRCopyspinner.getSelectedItem().toString();
-        SiteProblem = SiteProblemspinner.getSelectedItem().toString();
         ShelterCovered = ShelterCoveredSpinner.getSelectedItem().toString();
         SheltLeakage = SheltLeakageSpinner.getSelectedItem().toString();
         AnyOtherItem = etAnyOtherItemSpinner.getSelectedItem().toString();
@@ -501,16 +466,15 @@ public class MiscellaneousFragment extends MainFragment {
         ambulane = ambulaneSpinner.getSelectedItem().toString();
         powerPlant = powerPlantSpinner.getSelectedItem().toString();
         fire = fireSpinner.getSelectedItem().toString();
-        stretWaterLogging=etWaterLogging.getSelectedItem().toString();
+        stretWaterLogging = etWaterLogging.getSelectedItem().toString();
+        stretOwnerIssues = etOwnerIssues.getSelectedItem().toString();
+        stretCriticalOwnerissue = etCriticalOwnerissue.getSelectedItem().toString();
+        strdangerSpinner = dangerSpinner.getSelectedItem().toString();
+        strcautionSpinner = cautionSpinner.getSelectedItem().toString();
+        strwarningSpinner = warningSpinner.getSelectedItem().toString();
 
         if (isEmptyStr(shater1size)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter 1 Size");
-            return false;
-        } else if (isEmptyStr(shater2size)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter 2 Size");
-            return false;
-        } else if (isEmptyStr(outDoorsize)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Outdoor Size");
             return false;
         } else if (isEmptyStr(GateSize)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter GateSize");
@@ -531,12 +495,6 @@ public class MiscellaneousFragment extends MainFragment {
         } else if (shaterimage1File == null || !shaterimage1File.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select shater  1 Photo");
             return false;
-        } else if (shaterimage2File == null || !shaterimage2File.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select shater 2  Photo");
-            return false;
-        } else if (outDoorimage3File == null || !outDoorimage3File.exists()) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select outDoor   Photo");
-            return false;
         } else if (GateSizeimage4File == null || !GateSizeimage4File.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select GateSize   Photo");
             return false;
@@ -546,16 +504,16 @@ public class MiscellaneousFragment extends MainFragment {
         } else if (Approachimage6File == null || !Approachimage6File.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Approach  Photo");
             return false;
-        }
-        else if (DiagramFile == null || !DiagramFile.exists()) {
+        } else if (DiagramFile == null || !DiagramFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Layout Diagram Image");
             return false;
-        }
-        else if (isEmptyStr(stretWaterLogging)) {
+        } else if (SiteHygieneFile == null || !SiteHygieneFile.exists()) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select SiteHygiene Image");
+            return false;
+        } else if (isEmptyStr(stretWaterLogging)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Water Logging");
             return false;
         }
-
 
 
         return true;
@@ -605,46 +563,47 @@ public class MiscellaneousFragment extends MainFragment {
             jsonObject.put("Site_ID", strSiteId);
             jsonObject.put("User_ID", strUserId);
             jsonObject.put("Activity", "MiscItem");
-            jsonObject.put("SignageBoardStatus", signagestatus);
             jsonObject.put("CablelebellingandTagging", cablelebelling);
             jsonObject.put("VisitRegister", VisitRegister);
             jsonObject.put("FSRCopy", fSRCopy);
-            jsonObject.put("SiteaccessProblem", SiteProblem);
-            jsonObject.put("SiteHygiene", siteHygiene);
+            jsonObject.put("OtherIssues", stretOtherIssues);
+            jsonObject.put("OwnerIssues", stretOwnerIssues);
+            jsonObject.put("CriticalOwnerIssues", stretCriticalOwnerissue);
             jsonObject.put("ShelterCovered", ShelterCovered);
             jsonObject.put("ShelterLeakage", SheltLeakage);
             jsonObject.put("AnyOtherItem", AnyOtherItem);
-            jsonObject.put("WaterLogging", etWaterLogging);
+            jsonObject.put("WaterLogging", stretWaterLogging);
+            // jsonObject.put("SiteHygiene", siteHygiene);
 
             JSONObject MiscItemData1 = new JSONObject();
             MiscItemData1.put("Code", "1");
-            MiscItemData1.put("Item", "Shelter1");
+            MiscItemData1.put("Item", "Shelter");
             MiscItemData1.put("Key", "");
             MiscItemData1.put("Status", "");
             MiscItemData1.put("Type", "");
             MiscItemData1.put("Size", shater1size);
 
-            JSONObject MiscItemData2 = new JSONObject();
+     /*       JSONObject MiscItemData2 = new JSONObject();
             MiscItemData2.put("Code", "1");
             MiscItemData2.put("Item", "Shelter2");
             MiscItemData2.put("Key", "");
             MiscItemData2.put("Status", "");
             MiscItemData2.put("Type", "");
-            MiscItemData2.put("Size", shater2size);
+            MiscItemData2.put("Size", shater2size);*/
 
-
+/*
             JSONObject MiscItemData3 = new JSONObject();
             MiscItemData3.put("Code", "1");
             MiscItemData3.put("Item", "OutdoorBTSArea");
             MiscItemData3.put("Key", "");
             MiscItemData3.put("Status", "");
             MiscItemData3.put("Type", "");
-            MiscItemData3.put("Size", outDoorsize);
+            MiscItemData3.put("Size", outDoorsize);*/
 
 
             JSONObject MiscItemData4 = new JSONObject();
             MiscItemData4.put("Code", "1");
-            MiscItemData4.put("Item", "GateSize");
+            MiscItemData4.put("Item", "MainGateSize");
             MiscItemData4.put("Key", "");
             MiscItemData4.put("Status", "");
             MiscItemData4.put("Type", "");
@@ -653,11 +612,12 @@ public class MiscellaneousFragment extends MainFragment {
 
             JSONObject MiscItemData5 = new JSONObject();
             MiscItemData5.put("Code", "1");
-            MiscItemData5.put("Item", "Plote");
+            MiscItemData5.put("Item", "Plot");
             MiscItemData5.put("Status", "");
             MiscItemData5.put("Type", "");
             MiscItemData5.put("Key", "");
             MiscItemData5.put("Size", Plot);
+
             JSONObject MiscItemData6 = new JSONObject();
             MiscItemData1.put("Code", "1");
             MiscItemData6.put("Item", "ApproachRoad");
@@ -672,8 +632,7 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemData7.put("Key", "");
             MiscItemData7.put("Status", "");
             MiscItemData7.put("Type", Boundarywall);
-            MiscItemData7.put("Size", "0");
-
+            MiscItemData7.put("Size", boundryheight);
 
             JSONObject MiscItemData8 = new JSONObject();
             MiscItemData8.put("Code", "1");
@@ -694,7 +653,7 @@ public class MiscellaneousFragment extends MainFragment {
             JSONObject MiscItemData10 = new JSONObject();
             MiscItemData10.put("Code", "1");
             MiscItemData10.put("Item", "Site Keys");
-            MiscItemData10.put("Key", "Poer Plant");
+            MiscItemData10.put("Key", "Power Plant");
             MiscItemData10.put("Status", powerPlant);
             MiscItemData10.put("Type", "");
             MiscItemData10.put("Size", "0");
@@ -750,10 +709,51 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemData16.put("Type", "");
             MiscItemData16.put("Size", "0");
 
+
+            JSONObject MiscItemData18 = new JSONObject();
+            MiscItemData18.put("Code", "1");
+            MiscItemData18.put("Item", "LayoutDiagram");
+            MiscItemData18.put("Key", "");
+            MiscItemData18.put("Status", "");
+            MiscItemData18.put("Type", "");
+            MiscItemData18.put("Size", "0");
+
+            JSONObject MiscItemData19 = new JSONObject();
+            MiscItemData19.put("Code", "1");
+            MiscItemData19.put("Item", "SiteHygiene");
+            MiscItemData19.put("Key", "");
+            MiscItemData19.put("Status", "");
+            MiscItemData19.put("Type", "");
+            MiscItemData19.put("Size", "0");
+
+            JSONObject MiscItemData17 = new JSONObject();
+            MiscItemData17.put("Code", "1");
+            MiscItemData17.put("Item", "Signage Board");
+            MiscItemData17.put("Key", "Danger");
+            MiscItemData17.put("Status", strdangerSpinner);
+            MiscItemData17.put("Type", "");
+            MiscItemData17.put("Size", "0");
+
+            JSONObject MiscItemData120 = new JSONObject();
+            MiscItemData120.put("Code", "1");
+            MiscItemData120.put("Item", "Signage Board");
+            MiscItemData120.put("Key", "Caution");
+            MiscItemData120.put("Status", strcautionSpinner);
+            MiscItemData120.put("Type", "");
+            MiscItemData120.put("Size", "0");
+
+            JSONObject MiscItemData121 = new JSONObject();
+            MiscItemData121.put("Code", "1");
+            MiscItemData121.put("Item", "Signage Board");
+            MiscItemData121.put("Key", "Warning");
+            MiscItemData121.put("Status", strwarningSpinner);
+            MiscItemData121.put("Type", "");
+            MiscItemData121.put("Size", "0");
+
             JSONArray MiscItemDataarray = new JSONArray();
             MiscItemDataarray.put(MiscItemData1);
-            MiscItemDataarray.put(MiscItemData2);
-            MiscItemDataarray.put(MiscItemData3);
+            //  MiscItemDataarray.put(MiscItemData2);
+            // MiscItemDataarray.put(MiscItemData3);
             MiscItemDataarray.put(MiscItemData4);
             MiscItemDataarray.put(MiscItemData5);
             MiscItemDataarray.put(MiscItemData6);
@@ -766,6 +766,11 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemDataarray.put(MiscItemData14);
             MiscItemDataarray.put(MiscItemData15);
             MiscItemDataarray.put(MiscItemData16);
+            MiscItemDataarray.put(MiscItemData17);
+            MiscItemDataarray.put(MiscItemData120);
+            MiscItemDataarray.put(MiscItemData121);
+            MiscItemDataarray.put(MiscItemData18);
+            MiscItemDataarray.put(MiscItemData19);
             jsonObject.put("MiscItemData", MiscItemDataarray);
 
         } catch (JSONException e) {
@@ -781,12 +786,6 @@ public class MiscellaneousFragment extends MainFragment {
         if (shaterimage1File.exists()) {
             multipartBody.addFormDataPart(shaterimage1File.getName(), shaterimage1File.getName(), RequestBody.create(MEDIA_TYPE_PNG, shaterimage1File));
         }
-        if (shaterimage2File.exists()) {
-            multipartBody.addFormDataPart(shaterimage2File.getName(), shaterimage2File.getName(), RequestBody.create(MEDIA_TYPE_PNG, shaterimage2File));
-        }
-        if (outDoorimage3File.exists()) {
-            multipartBody.addFormDataPart(outDoorimage3File.getName(), outDoorimage3File.getName(), RequestBody.create(MEDIA_TYPE_PNG, outDoorimage3File));
-        }
         if (GateSizeimage4File.exists()) {
             multipartBody.addFormDataPart(GateSizeimage4File.getName(), GateSizeimage4File.getName(), RequestBody.create(MEDIA_TYPE_PNG, GateSizeimage4File));
         }
@@ -800,6 +799,9 @@ public class MiscellaneousFragment extends MainFragment {
 
         if (DiagramFile.exists()) {
             multipartBody.addFormDataPart(DiagramFile.getName(), DiagramFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, DiagramFile));
+        }
+        if (SiteHygieneFile.exists()) {
+            multipartBody.addFormDataPart(SiteHygieneFile.getName(), SiteHygieneFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, SiteHygieneFile));
         }
 
 
@@ -824,32 +826,19 @@ public class MiscellaneousFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (ismage1) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter1.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, image1);
             }
-        } else if (ismage2) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter2.jpg";
-            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
-            if (file.exists()) {
-                compresImage(file, imageName, image2);
-            }
-
-        } else if (ismage3) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_OutdoorBTSArea.jpg";
-            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
-            if (file.exists()) {
-                compresImage(file, imageName, image3);
-            }
         } else if (ismage4) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_GateSize.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_MainGateSize.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, image4);
             }
         } else if (ismage5) {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_Plote.jpg";
+            String imageName = CurtomerSite_Id + "_MiscItem_1_Plot.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, image5);
@@ -860,13 +849,21 @@ public class MiscellaneousFragment extends MainFragment {
             if (file.exists()) {
                 compresImage(file, imageName, image6);
             }
-        } else {
-            String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
+        } else if (isDiagramImage) {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_LayoutDiagram.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image6);
+                compresImage(file, imageName, DiagramImage);
+            }
+        } else {
+            String imageName = CurtomerSite_Id + "_MiscItem_1_SiteHygiene.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, SiteHygieneImage);
             }
         }
+
+
     }
 
 
@@ -891,7 +888,7 @@ public class MiscellaneousFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
@@ -921,23 +918,29 @@ public class MiscellaneousFragment extends MainFragment {
                 super.onPostExecute(flag);
                 if (ismage1) {
                     shaterimage1File = imgFile;
-                } else if (ismage2) {
-                    shaterimage2File = imgFile;
-                } else if (ismage3) {
-                    outDoorimage3File = imgFile;
                 } else if (ismage4) {
                     GateSizeimage4File = imgFile;
                 } else if (ismage5) {
                     Plotimage5File = imgFile;
-                } else {
+                } else if (ismage6) {
                     Approachimage6File = imgFile;
+                } else if (isDiagramImage) {
+                    DiagramFile = imgFile;
+                } else {
+                    SiteHygieneFile = imgFile;
                 }
+
+
                 imageView.setImageURI(uri);
-                if (progressBar.isShowing()) {
+                if (progressBar.isShowing())
+
+                {
                     progressBar.dismiss();
                 }
             }
-        }.execute();
+        }.
+
+                execute();
 
     }
 

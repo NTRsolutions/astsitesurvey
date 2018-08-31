@@ -45,13 +45,23 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SetOnEBFragment extends MainFragment {
-    AppCompatEditText etebCurrent, etebVolatge, etEbFrequency, etbattcharging, etBattcurrent;
-    String strCurrent, strVoltage, strFrequency, battcharging, Battcurrent;
+    AppCompatEditText etEBCurrentRphase, etEBCurrentBphase, etEBCurrentYphase,
+            etEBVoltageYphase, etEBVoltageBphase, etEBVoltageRphase, etEBFrequencyRphase, etEBFrequencyYphase, etEBFrequencyBphase,
+            etbattcharging, etBattcurrent;
+    String dgrCurrent, dgyCurrent, dgbCurrent,
+            stretEBVoltageYphase, stretEBVoltageBphase, stretEBVoltageRphase,
+            stretEBFrequencyRphase, stretEBFrequencyYphase, stretEBFrequencyBphase;
     String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
     AtmDatabase atmDatabase;
     Button btnSubmit;
     SharedPreferences userPref;
-    String ebCurrent,ebFrequency,ebVoltage,batrycharging,battcurrent;
+    String batrycharging, battcurrent;
+
+
+    private LinearLayout etEBCurrentRphaseLayout, etEBCurrentBphaseLayout, etEBCurrentYphaseLayout,
+            etEBVoltageRphaseLayout, etEBVoltageYphaseLayout, etEBVoltageBphaseLayout,
+            etEBFrequencyRphaseLayout, etEBFrequencyYphaseLayout, etEBFrequencyBphaseLayout;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_set_on_eb;
@@ -59,12 +69,28 @@ public class SetOnEBFragment extends MainFragment {
 
     @Override
     protected void loadView() {
-        etebCurrent = findViewById(R.id.etebCurrent);
-        etebVolatge = findViewById(R.id.etebVolatge);
-        etEbFrequency = findViewById(R.id.etEbFrequency);
+
         etbattcharging = findViewById(R.id.etbattcharging);
         etBattcurrent = findViewById(R.id.etBattcurrent);
         btnSubmit = findViewById(R.id.btnSubmit);
+        etEBCurrentRphase = findViewById(R.id.etEBCurrentRphase);
+        etEBCurrentBphase = findViewById(R.id.etEBCurrentBphase);
+        etEBCurrentYphase = findViewById(R.id.etEBCurrentYphase);
+        etEBCurrentRphaseLayout = findViewById(R.id.etEBCurrentRphaseLayout);
+        etEBCurrentBphaseLayout = findViewById(R.id.etEBCurrentBphaseLayout);
+        etEBCurrentYphaseLayout = findViewById(R.id.etEBCurrentYphaseLayout);
+        etEBVoltageYphase = findViewById(R.id.etEBVoltageYphase);
+        etEBVoltageBphase = findViewById(R.id.etEBVoltageBphase);
+        etEBVoltageRphase = findViewById(R.id.etEBVoltageRphase);
+        etEBVoltageRphaseLayout = findViewById(R.id.etEBVoltageRphaseLayout);
+        etEBVoltageYphaseLayout = findViewById(R.id.etEBVoltageYphaseLayout);
+        etEBVoltageBphaseLayout = findViewById(R.id.etEBVoltageBphaseLayout);
+        etEBFrequencyRphaseLayout = findViewById(R.id.etEBFrequencyRphaseLayout);
+        etEBFrequencyYphaseLayout = findViewById(R.id.etEBFrequencyYphaseLayout);
+        etEBFrequencyBphaseLayout = findViewById(R.id.etEBFrequencyBphaseLayout);
+        etEBFrequencyRphase = findViewById(R.id.etEBFrequencyRphase);
+        etEBFrequencyYphase = findViewById(R.id.etEBFrequencyYphase);
+        etEBFrequencyBphase = findViewById(R.id.etEBFrequencyBphase);
 
     }
 
@@ -78,34 +104,38 @@ public class SetOnEBFragment extends MainFragment {
 
     }
 
-    public void getSharedPrefData() {
-   /*     pref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
-        strCurrent = pref.getString("ebCurrent", "");
-        strVoltage = pref.getString("ebVoltage", "");
-        strFrequency = pref.getString("ebFrequency", "");
-        battcharging = pref.getString("battcharging", "");
-        Battcurrent = pref.getString("Battcurrent", "");
-        strUserId = pref.getString("USER_ID", "");
-        strSavedDateTime = pref.getString("SetOnEbSavedDateTime", "");
-        strSiteId = pref.getString("SiteId", "");*/
-    }
-
+    private SharedPreferences noofebPhaseprf;
+    String noofebPhase;
 
     @Override
     protected void dataToView() {
         getUserPref();
         atmDatabase = new AtmDatabase(getContext());
-        getSharedPrefData();
-        if (!isEmptyStr(strCurrent) || !isEmptyStr(strVoltage)
-                || !isEmptyStr(strFrequency) || !isEmptyStr(battcharging)
-                ||!isEmptyStr(Battcurrent)) {
-            etebCurrent.setText(strCurrent);
-            etebVolatge.setText(strVoltage);
-            etEbFrequency.setText(strFrequency);
-            etbattcharging.setText(battcharging);
-            etBattcurrent.setText(Battcurrent);
-
+        noofebPhaseprf = getContext().getSharedPreferences("noofebPhaseprf", MODE_PRIVATE);
+        noofebPhase = noofebPhaseprf.getString("noofebPhase", "");
+        if (noofebPhase.equalsIgnoreCase("1 Phase")) {
+            etEBCurrentRphaseLayout.setVisibility(View.VISIBLE);
+            etEBCurrentBphaseLayout.setVisibility(View.GONE);
+            etEBCurrentYphaseLayout.setVisibility(View.GONE);
+            etEBVoltageRphaseLayout.setVisibility(View.VISIBLE);
+            etEBVoltageYphaseLayout.setVisibility(View.GONE);
+            etEBVoltageBphaseLayout.setVisibility(View.GONE);
+            etEBFrequencyRphaseLayout.setVisibility(View.VISIBLE);
+            etEBFrequencyYphaseLayout.setVisibility(View.GONE);
+            etEBFrequencyBphaseLayout.setVisibility(View.GONE);
+        } else {
+            etEBCurrentRphaseLayout.setVisibility(View.VISIBLE);
+            etEBCurrentBphaseLayout.setVisibility(View.VISIBLE);
+            etEBCurrentYphaseLayout.setVisibility(View.VISIBLE);
+            etEBVoltageRphaseLayout.setVisibility(View.VISIBLE);
+            etEBVoltageYphaseLayout.setVisibility(View.VISIBLE);
+            etEBVoltageBphaseLayout.setVisibility(View.VISIBLE);
+            etEBFrequencyRphaseLayout.setVisibility(View.VISIBLE);
+            etEBFrequencyYphaseLayout.setVisibility(View.VISIBLE);
+            etEBFrequencyBphaseLayout.setVisibility(View.VISIBLE);
         }
+
+
     }
 
 
@@ -119,43 +149,33 @@ public class SetOnEBFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnSubmit) {
-             ebCurrent = etebCurrent.getText().toString().trim();
-             ebFrequency = etebVolatge.getText().toString().trim();
-             ebVoltage = etEbFrequency.getText().toString().trim();
-             batrycharging = etbattcharging.getText().toString().trim();
-             battcurrent = etBattcurrent.getText().toString().trim();
-            if (isEmptyStr(ebCurrent)) {
+            dgrCurrent = etEBCurrentRphase.getText().toString().trim();
+            dgyCurrent = etEBCurrentYphase.getText().toString().trim();
+            dgbCurrent = etEBCurrentBphase.getText().toString().trim();
+            stretEBVoltageRphase = etEBVoltageRphase.getText().toString().trim();
+            stretEBVoltageYphase = etEBVoltageYphase.getText().toString().trim();
+            stretEBVoltageBphase = etEBVoltageBphase.getText().toString().trim();
+            stretEBFrequencyRphase = etEBFrequencyRphase.getText().toString().trim();
+            stretEBFrequencyYphase = etEBFrequencyYphase.getText().toString().trim();
+            stretEBFrequencyBphase = etEBFrequencyBphase.getText().toString().trim();
+            batrycharging = etbattcharging.getText().toString().trim();
+            battcurrent = etBattcurrent.getText().toString().trim();
+            if (isEmptyStr(dgbCurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
-            } else if (isEmptyStr(ebFrequency)) {
+            } else if (isEmptyStr(stretEBFrequencyRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
-            } else if (isEmptyStr(ebVoltage)) {
+            } else if (isEmptyStr(stretEBFrequencyRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
             } else if (isEmptyStr(batrycharging)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Voltage");
             } else if (isEmptyStr(battcurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Current");
             } else {
-              /*  SharedPreferences.Editor editor = pref.edit();
-                editor.putString("UserId", strUserId);
-                editor.putString("ebCurrent", ebCurrent);
-                editor.putString("ebFrequency", ebFrequency);
-                editor.putString("ebVoltage", ebVoltage);
-                editor.putString("battcharging", batrycharging);
-                editor.putString("Battcurrent", battcurrent);
-                editor.putString("SetOnEbSavedDateTime", strSavedDateTime);
-                editor.commit();
-                ASTProgressBar progressDialog = new ASTProgressBar(getContext());
-                progressDialog.show();
-                //  saveBasicDataDetails();
-                //  saveEbMeterDataDetails();
-                //   saveSiteOnDg();
-                //   saveSiteOnEb();
-                //  saveEquipmentData();
-                progressDialog.dismiss();*/
                 saveBasicDataonServer();
             }
         }
     }
+
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
             final ASTProgressBar progressBar = new ASTProgressBar(getContext());
@@ -167,11 +187,17 @@ public class SetOnEBFragment extends MainFragment {
                 jsonObject.put("User_ID", strUserId);
                 jsonObject.put("Activity", "EB");
                 JSONObject EBData = new JSONObject();
-                EBData.put("EB_Current", ebCurrent);
-                EBData.put("EB_Frequency", ebFrequency);
-                EBData.put("EB_Voltage", ebVoltage);
-                EBData.put("Battery_Voltage", batrycharging);
-                EBData.put("Battery_ChargeCurrent", battcurrent);
+                EBData.put("EB_BattVoltage", batrycharging);
+                EBData.put("EB_BattChargeCurrent", battcurrent);
+                EBData.put("EB_CurrentR", dgrCurrent);
+                EBData.put("EB_CurrentY", dgyCurrent);
+                EBData.put("EB_CurrentB", dgbCurrent);
+                EBData.put("EB_VoltageR", stretEBVoltageRphase);
+                EBData.put("EB_VoltageY", stretEBVoltageYphase);
+                EBData.put("EB_VoltageB", stretEBVoltageBphase);
+                EBData.put("EB_FrequencyR", stretEBFrequencyRphase);
+                EBData.put("EB_FrequencyY", stretEBFrequencyYphase);
+                EBData.put("EB_FrequencyB", stretEBFrequencyBphase);
                 jsonObject.put("EBData", EBData);
             } catch (JSONException e) {
                 e.printStackTrace();
