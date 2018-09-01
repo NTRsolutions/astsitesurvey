@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
@@ -423,10 +425,6 @@ public class TowerFragment extends MainFragment {
     }
 
 
-    @Override
-    public boolean onBackPressed() {
-        return super.onBackPressed();
-    }
 
 
     public void saveBasicDataonServer() {
@@ -636,5 +634,32 @@ public class TowerFragment extends MainFragment {
         }.execute();
 
     }
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
 
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
+    }
 }

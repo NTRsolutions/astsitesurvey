@@ -1,6 +1,8 @@
 package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.AdapterView;
@@ -182,5 +184,34 @@ public class DieselFillingFragment extends MainFragment {
         }
 */
         return multipartBody;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
+
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
     }
 }

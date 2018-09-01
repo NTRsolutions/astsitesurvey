@@ -95,6 +95,7 @@ public class FireSystemFragment extends MainFragment {
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
+        FilledDate=findViewById(R.id.FilledDate);
     }
 
     @Override
@@ -271,7 +272,7 @@ public class FireSystemFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.dateLayout) {
+        if (view.getId() == R.id.FilledDateLayout) {
             setFilledDate();
         }
         if (view.getId() == R.id.btnSubmit) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
@@ -183,5 +184,32 @@ public class BTSFragment extends MainFragment {
         etNofCab.setText("");
         btstyelSpinner.setSelection(0);
     }
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
 
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
+    }
 }

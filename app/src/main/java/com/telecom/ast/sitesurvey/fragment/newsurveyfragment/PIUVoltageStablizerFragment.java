@@ -650,4 +650,33 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         etnotworkingText.setText(stringBuilder.toString());
 
     }
+
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
+
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
+    }
 }

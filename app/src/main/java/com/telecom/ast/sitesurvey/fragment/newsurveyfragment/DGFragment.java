@@ -2,12 +2,14 @@ package com.telecom.ast.sitesurvey.fragment.newsurveyfragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Html;
 import android.view.View;
@@ -685,7 +687,7 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_PollutionCertificate", DGPollutionCertificate);
             EquipmentData.put("DG_EngineSNo", eSN);
             EquipmentData.put("ItemCondition", itemCondition);
-            EquipmentData.put("DG_AMFPanel", straMFPanelSpinner);
+            EquipmentData.put("DG_AMFPanelStatus", straMFPanelSpinner);
             EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
             EquipmentData.put("DG_AlternaterPhase", stralternaterPhaseSpinner);
             EquipmentData.put("DG_ExhaustSmokeColour", strdGExhaustSmokecolour);
@@ -840,4 +842,35 @@ public class DGFragment extends MainFragment {
         }.execute();
 
     }
+
+
+    @Override
+    public boolean onBackPressed() {
+        return isGoBack();
+    }
+
+    boolean isgoBack;
+
+    private boolean isGoBack() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle("Warning");
+        alertDialog.setMessage("Are you Sure you want go to Back Screen");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                reloadBackScreen();
+                isgoBack = true;
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                isgoBack = false;
+                dialog.dismiss();
+
+            }
+        });
+        alertDialog.show();
+        return isgoBack;
+    }
+
 }
