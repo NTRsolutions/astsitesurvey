@@ -63,6 +63,7 @@
                                 android:autoSizeTextType="uniform"
                                 android:hint="Batt Voltage"
                                 android:inputType="numberDecimal"
+                                android:maxLength="5"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -89,6 +90,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Load Current"
+                                android:maxLength="5"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -233,6 +235,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Batt Voltage"
+                                android:maxLength="5"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -260,6 +263,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Load Current"
+                                android:maxLength="5"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>

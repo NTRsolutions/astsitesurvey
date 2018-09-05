@@ -44,6 +44,7 @@
                         android:autoSizeTextType="uniform"
                         android:hint="EB Current R Phase"
                         android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -71,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Current Y Phase"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -98,6 +100,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Current B Phase"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -126,7 +129,8 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Voltage R Phase"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -155,7 +159,8 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Voltage Y Phase"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -183,7 +188,8 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Voltage B Phase"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -211,6 +217,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Frequency R Phase"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -239,6 +246,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Frequency Y Phase"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -268,6 +276,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="EB Frequency B Phase"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -295,7 +304,8 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Batt Charging Voltage"
-                        android:inputType="numberDecimal"
+                        android:inputType="number"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -323,6 +333,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Batt Charging Current"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

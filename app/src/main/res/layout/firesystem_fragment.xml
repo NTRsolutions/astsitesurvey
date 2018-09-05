@@ -244,6 +244,7 @@
                         android:autoSizeTextType="uniform"
                         android:hint="@string/Enter_Capacity"
                         android:inputType="numberDecimal"
+                        android:maxLength="1"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -74,7 +74,8 @@ public class IpmsFragment extends MainFragment {
     static File frontimgFile, openImgFile, sNoPlateImgFile;
     static boolean isImage1, isImage2;
     AppCompatEditText etDescription;
-    AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake, etnoofModule, etLcuCapacity, etModel, etModuleCapacity;
+    AppCompatAutoCompleteTextView etSerialNum, etCapacity, etMake, etnoofModule, etModel, etModuleCapacity;
+    AppCompatEditText etLcuCapacity;
     SharedPreferences pref;
     String strSavedDateTime, strUserId, strSiteId;
     String strMakeId = "0", nofModule = "0", ModuleCapacity = "";
@@ -578,7 +579,7 @@ public class IpmsFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {

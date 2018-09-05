@@ -343,7 +343,7 @@ public class BatteryFragment extends MainFragment {
 
     // ----validation -----
     private boolean isValidate() {
-        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{2})?$";
+        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{0,2})?$";
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = getTextFromView(this.etMake);

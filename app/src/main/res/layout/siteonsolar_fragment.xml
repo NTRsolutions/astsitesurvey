@@ -59,6 +59,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -81,6 +83,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -124,6 +128,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -146,6 +152,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -189,6 +197,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -211,6 +221,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -254,6 +266,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -276,6 +290,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -319,6 +335,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -341,6 +359,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -385,6 +405,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -407,6 +429,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -450,6 +474,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -472,6 +498,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB CURRENT"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -537,6 +565,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="AGB OP Current"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -601,6 +631,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Current"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -644,6 +676,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -709,6 +743,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -731,6 +767,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Current"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -773,6 +811,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Volatage"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>
@@ -795,6 +835,8 @@
                         android:background="@android:color/white"
                         android:gravity="left|center_vertical"
                         android:hint="Enter Current"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
                 </android.support.v7.widget.CardView>

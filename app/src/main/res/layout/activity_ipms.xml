@@ -317,13 +317,12 @@
                     app:counterOverflowTextAppearance="@style/CounterOverFlow"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/etLcuCapacity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
                         android:hint="No Of LCU"
-                        android:maxLength="3"
+                        android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

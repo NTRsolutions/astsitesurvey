@@ -260,7 +260,7 @@ public class EarthingSystemFragment extends MainFragment {
     }
 
     public boolean isValidate() {
-        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{2})?$";
+        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{0,2})?$";
         NoEarthPits = etNoEarthPits.getSelectedItem().toString();
         interConEarthPits = InterEarthPitsSpinner.getSelectedItem().toString();
         VoltageEarth = etVoltageEarth.getText().toString();
@@ -287,23 +287,27 @@ public class EarthingSystemFragment extends MainFragment {
         } else if (isEmptyStr(VoltageEarth)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Voltage between Earth and Neutral");
             return false;
-        } else if (isEmptyStr(dgwireconnected)) {
+        } else if (!VoltageEarth.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid  Voltage between Earth and Neutral input like this xx.xx");
+            return false;
+        }
+        else if (isEmptyStr(dgwireconnected)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "DG neutral wire connected with earthing");
             return false;
         } else if (isEmptyStr(ebwireconnected)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "EB neutral wire connected with earthing");
             return false;
         }else if (!stretValueofEarthpit1.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit1 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit2.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit2 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit3.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit3 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit4.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit4 input like this xx.xx");
             return false;
         }
         return true;

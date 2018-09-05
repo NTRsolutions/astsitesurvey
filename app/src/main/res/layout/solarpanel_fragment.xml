@@ -73,6 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:maxLength="2"
                         android:autoSizeTextType="uniform"
                         android:hint="Enter No of Panels"
                         android:textSize="@dimen/_14dp" />
@@ -125,6 +126,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
+                        android:maxLength="2"
                         android:hint="Enter capacity per panel"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

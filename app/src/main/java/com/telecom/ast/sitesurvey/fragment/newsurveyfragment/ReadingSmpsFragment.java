@@ -172,6 +172,7 @@ public class ReadingSmpsFragment extends MainFragment {
 
 
     public boolean isValidate() {
+        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{0,2})?$";
         BattVoltage = etBattVoltage.getText().toString();
         LoadCurrent = etLoadCurrent.getText().toString();
         BattVoltageclamp = etclampBattVoltage.getText().toString();
@@ -179,8 +180,14 @@ public class ReadingSmpsFragment extends MainFragment {
         if (isEmptyStr(BattVoltage)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Batt Voltage");
             return false;
+        } else if (!BattVoltage.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Batt Voltage input like this xx.xx");
+            return false;
         } else if (isEmptyStr(LoadCurrent)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Load Current");
+            return false;
+        } else if (!LoadCurrent.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Load Current input like this xx.xx");
             return false;
         } else if (battVoltageFile == null || !battVoltageFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Batt Voltage Photo");
@@ -189,10 +196,16 @@ public class ReadingSmpsFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Load Current Photo");
             return false;
         } else if (isEmptyStr(BattVoltageclamp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Batt Voltage");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Clamp Meter Batt Voltage");
+            return false;
+        } else if (!BattVoltageclamp.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Clamp Meter Batt Voltage input like this xx.xx");
             return false;
         } else if (isEmptyStr(LoadCurrentclamp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Load Current");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Clamp Meter Load Current");
+            return false;
+        } else if (!LoadCurrentclamp.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Clamp Meter Batt Voltage input like this xx.xx");
             return false;
         } else if (clampbattVoltageFile == null || !clampbattVoltageFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Batt Voltage Photo");
@@ -298,7 +311,6 @@ public class ReadingSmpsFragment extends MainFragment {
     }
 
 
-
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
@@ -335,12 +347,14 @@ public class ReadingSmpsFragment extends MainFragment {
             File imgFile;
             Uri uri;
             ASTProgressBar progressBar;
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 progressBar = new ASTProgressBar(getContext());
                 progressBar.show();
             }
+
             @Override
             protected Boolean doInBackground(Void... voids) {
 //compress file
@@ -348,7 +362,7 @@ public class ReadingSmpsFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
@@ -383,7 +397,7 @@ public class ReadingSmpsFragment extends MainFragment {
                     adCurrentFile = imgFile;
                 } else if (isImage1clmp) {
                     clampbattVoltageFile = imgFile;
-                }else if (isImage2clmp) {
+                } else if (isImage2clmp) {
                     clampadCurrentFile = imgFile;
                 }
                 imageView.setImageURI(uri);
