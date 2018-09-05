@@ -115,6 +115,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No.of Cabinets"
+                        android:maxLength="2"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -144,6 +145,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of DCDB Box"
+                        android:maxLength="2"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -171,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of Krone Box"
+                        android:maxLength="2"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -198,6 +201,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of Transmission Rack"
+                        android:maxLength="2"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

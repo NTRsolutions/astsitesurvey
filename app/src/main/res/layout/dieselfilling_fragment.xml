@@ -76,6 +76,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            android:inputType="number"
+                            android:maxLength="2"
                             android:hint="Quality of Diesel"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
@@ -167,6 +169,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
+                            android:inputType="number"
+                            android:maxLength="2"
                             android:hint="Bit Plan (No. of Days)"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>

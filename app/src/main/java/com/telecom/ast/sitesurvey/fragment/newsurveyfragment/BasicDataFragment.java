@@ -353,7 +353,15 @@ public class BasicDataFragment extends MainFragment {
         if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 getSiteId();
-                saveBasicDataonServer();
+                if (OwnerContact.length() > 0) {
+                    if (OwnerContact.length() != 10) {
+                        ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Owner phone no!");
+                    } else {
+                        saveBasicDataonServer();
+                    }
+                } else {
+                    saveBasicDataonServer();
+                }
             }
 
 
@@ -422,10 +430,10 @@ public class BasicDataFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Pincode");
             return false;
         } else if (isEmptyStr(stretNearestPoliceAddress)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Nearest Police Station Address");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Nearest Police Station Address");
             return false;
         } else if (isEmptyStr(stretSPOfficeAddress)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "SP Office Address");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter SP Office Address");
             return false;
         }
 
@@ -434,73 +442,86 @@ public class BasicDataFragment extends MainFragment {
 
 
     public void saveBasicDataonServer() {
-        if (ASTUIUtil.isOnline(getContext())) {
-            final ASTProgressBar progressBar = new ASTProgressBar(getContext());
-            progressBar.show();
-            String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("Site_ID", siteIdStr);
-                jsonObject.put("User_ID", userId);
-                jsonObject.put("Activity", "Basic");
-                JSONObject BasicData = new JSONObject();
-                BasicData.put("SiteName", finalSiteName);
-                BasicData.put("Address", finalAddress);
-                BasicData.put("CircleID", strCircleId);
-                BasicData.put("State", finalCircle);
-                BasicData.put("SSAID", finalSSA);
-                BasicData.put("DistrictID", finalDistrict);
-                BasicData.put("City", finalCity);
-                BasicData.put("Pincode", finalPincode);
-                BasicData.put("DateTime", dateTimeMili);//finalDate
-                BasicData.put("Surveyor", finalSurveyorName);
-                BasicData.put("Owner", Owner);
-                BasicData.put("OwnerContactNo", OwnerContact);
-                BasicData.put("OwnerAddress", ownerAddress);
-                BasicData.put("CareTaker", Caretaker);
-                BasicData.put("CareTakerNo", Caretakercontact);
-                BasicData.put("Latitude", currentLatitude);
-                BasicData.put("Longitude", currentLongitude);
-                BasicData.put("PoliceStationAddress", stretNearestPoliceAddress);
-                BasicData.put("SPOfficeAddress", stretSPOfficeAddress);
-                jsonObject.put("BasicData", BasicData);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+        boolean phhoneval = true;
+        if (Caretakercontact.length() > 0) {
+            if (Caretakercontact.length() != 10) {
+                phhoneval = false;
+            } else {
+                phhoneval = true;
             }
-            HashMap<String, String> payloadList = new HashMap<String, String>();
-            payloadList.put("JsonData", jsonObject.toString());
-            MultipartBody.Builder multipartBody = setMultipartBodyVaule();
-            FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
-                @Override
-                public void receiveData(String result) {
-                    ContentData data = new Gson().fromJson(result, ContentData.class);
-                    if (data != null) {
-                        if (data.getStatus() == 1) {
-                            ASTUIUtil.showToast("Your Data save Successfully");
-                            SharedPreferences.Editor editor = userPref.edit();
-                            editor.putString("Site_ID", siteIdStr);
-                            editor.putString("CurtomerSite_Id", curtomerSiteIdStr);
-                            editor.commit();
-
-
-                            reloadBackScreen();
-                        } else {
-                            ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
-                        }
-                    } else {
-                        ASTUIUtil.showToast("BasiC Data Information has not been updated!");
-                    }
-                    if (progressBar.isShowing()) {
-                        progressBar.dismiss();
-                    }
-                }
-            };
-            fileUploaderHelper.execute();
         } else {
-            ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+            phhoneval = true;
         }
+        if (phhoneval) {
+            if (ASTUIUtil.isOnline(getContext())) {
+                final ASTProgressBar progressBar = new ASTProgressBar(getContext());
+                progressBar.show();
+                String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("Site_ID", siteIdStr);
+                    jsonObject.put("User_ID", userId);
+                    jsonObject.put("Activity", "Basic");
+                    JSONObject BasicData = new JSONObject();
+                    BasicData.put("SiteName", finalSiteName);
+                    BasicData.put("Address", finalAddress);
+                    BasicData.put("CircleID", strCircleId);
+                    BasicData.put("State", finalCircle);
+                    BasicData.put("SSAID", finalSSA);
+                    BasicData.put("DistrictID", finalDistrict);
+                    BasicData.put("City", finalCity);
+                    BasicData.put("Pincode", finalPincode);
+                    BasicData.put("DateTime", dateTimeMili);//finalDate
+                    BasicData.put("Surveyor", finalSurveyorName);
+                    BasicData.put("Owner", Owner);
+                    BasicData.put("OwnerContactNo", OwnerContact);
+                    BasicData.put("OwnerAddress", ownerAddress);
+                    BasicData.put("CareTaker", Caretaker);
+                    BasicData.put("CareTakerNo", Caretakercontact);
+                    BasicData.put("Latitude", currentLatitude);
+                    BasicData.put("Longitude", currentLongitude);
+                    BasicData.put("PoliceStationAddress", stretNearestPoliceAddress);
+                    BasicData.put("SPOfficeAddress", stretSPOfficeAddress);
+                    jsonObject.put("BasicData", BasicData);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                HashMap<String, String> payloadList = new HashMap<String, String>();
+                payloadList.put("JsonData", jsonObject.toString());
+                MultipartBody.Builder multipartBody = setMultipartBodyVaule();
+                FileUploaderHelper fileUploaderHelper = new FileUploaderHelper(getContext(), payloadList, multipartBody, serviceURL) {
+                    @Override
+                    public void receiveData(String result) {
+                        ContentData data = new Gson().fromJson(result, ContentData.class);
+                        if (data != null) {
+                            if (data.getStatus() == 1) {
+                                ASTUIUtil.showToast("Your Data save Successfully");
+                                SharedPreferences.Editor editor = userPref.edit();
+                                editor.putString("Site_ID", siteIdStr);
+                                editor.putString("CurtomerSite_Id", curtomerSiteIdStr);
+                                editor.commit();
+
+
+                                reloadBackScreen();
+                            } else {
+                                ASTUIUtil.alertForErrorMessage(Contants.Error, getContext());
+                            }
+                        } else {
+                            ASTUIUtil.showToast("BasiC Data Information has not been updated!");
+                        }
+                        if (progressBar.isShowing()) {
+                            progressBar.dismiss();
+                        }
+                    }
+                };
+                fileUploaderHelper.execute();
+            } else {
+                ASTUIUtil.alertForErrorMessage(Contants.OFFLINE_MESSAGE, getContext());//off line msg....
+            }
+        } else {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Caretaker phone no!");
+        }
     }
 
     //add pm install images into MultipartBody for send as multipart

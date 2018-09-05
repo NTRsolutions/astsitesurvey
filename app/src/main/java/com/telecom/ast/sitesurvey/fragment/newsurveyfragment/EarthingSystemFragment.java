@@ -260,6 +260,7 @@ public class EarthingSystemFragment extends MainFragment {
     }
 
     public boolean isValidate() {
+        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{2})?$";
         NoEarthPits = etNoEarthPits.getSelectedItem().toString();
         interConEarthPits = InterEarthPitsSpinner.getSelectedItem().toString();
         VoltageEarth = etVoltageEarth.getText().toString();
@@ -291,6 +292,18 @@ public class EarthingSystemFragment extends MainFragment {
             return false;
         } else if (isEmptyStr(ebwireconnected)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "EB neutral wire connected with earthing");
+            return false;
+        }else if (!stretValueofEarthpit1.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            return false;
+        }else if (!stretValueofEarthpit2.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            return false;
+        }else if (!stretValueofEarthpit3.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+            return false;
+        }else if (!stretValueofEarthpit4.matches(twoDecimalRegExp)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
             return false;
         }
         return true;

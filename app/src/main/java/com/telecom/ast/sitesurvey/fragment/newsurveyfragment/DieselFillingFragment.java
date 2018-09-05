@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.telecom.ast.sitesurvey.R;
@@ -90,6 +91,9 @@ public class DieselFillingFragment extends MainFragment {
     }
 
     public boolean isValidate() {
+        String dieselRegExp = "^[0-9]{0,3}(\\.[0-9]{1})?$";
+        String EbRegExp = "^[0-9]{0,6}(\\.[0-9]{1})?$";
+
         LPD = etLPD.getText().toString();
         QualityDiesel = etQualityDiesel.getText().toString();
         Fillingother = etFillingother.getText().toString();
@@ -107,7 +111,7 @@ public class DieselFillingFragment extends MainFragment {
         } else if (isEmptyStr(DieselfuillDone)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Diesel Filling Done by CareTaker/Technician/Filler");
             return false;
-        } else if (isEmptyStr(stretBitPlan)) {
+        }  else if (isEmptyStr(stretBitPlan)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Bit Plan (No. of Days)");
             return false;
         }

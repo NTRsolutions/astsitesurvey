@@ -243,6 +243,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Connection No"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -382,6 +382,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Owner Contact No"
+                        android:maxLength="10"
                         android:inputType="phone"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -451,6 +452,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Caretaker Contact No"
+                        android:maxLength="10"
                         android:inputType="phone"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

@@ -343,6 +343,7 @@ public class BatteryFragment extends MainFragment {
 
     // ----validation -----
     private boolean isValidate() {
+        String twoDecimalRegExp = "^[0-9]{0,2}(\\.[0-9]{2})?$";
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = getTextFromView(this.etMake);
@@ -380,6 +381,9 @@ public class BatteryFragment extends MainFragment {
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (!CellVoltage.matches(twoDecimalRegExp)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
                 return false;
             } else if (batteryimgFile == null || !batteryimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");

@@ -72,6 +72,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="No. of Shelter"
+                                android:maxLength="1"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -116,7 +117,7 @@
                                     android:background="@color/bg_color"
                                     android:elevation="@dimen/_6dp"
                                     android:padding="@dimen/_5dp"
-                                    android:text="Shelter 1 Photo"
+                                    android:text="Shelter Photo"
                                     android:textAlignment="center"
                                     android:textColor="@color/blackMedium"
                                     android:textSize="@dimen/_13dp" />
@@ -287,7 +288,6 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Main Gate size"
-                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -395,7 +395,6 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Site Plot Size"
-                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -503,7 +502,6 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Approach Road  width"
-                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -610,7 +608,6 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Boundary Wall Height"
-                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 

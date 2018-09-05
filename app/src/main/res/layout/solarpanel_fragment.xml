@@ -152,6 +152,7 @@
                         android:autoSizeTextType="uniform"
                         android:inputType="numberDecimal"
                         android:hint="Enter No of AGB"
+                        android:maxLength="1"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

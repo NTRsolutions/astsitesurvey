@@ -74,7 +74,6 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Enter Tower Height"
-                        android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -297,6 +296,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of Microwave Antenna"
+                        android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -323,6 +323,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of GSM Antenna"
+                        android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -540,6 +541,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
+                        android:inputType="number"
                         android:hint="Tower Foundation Bolt missing quantity"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
