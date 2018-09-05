@@ -415,6 +415,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Value of Earthpit 1"
+                            android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
@@ -444,6 +445,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Value of Earthpit 2"
+                            android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
@@ -473,6 +475,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Value of Earthpit 3"
+                            android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
@@ -502,6 +505,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Value of Earthpit 4"
+                            android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
