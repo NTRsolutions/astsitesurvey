@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -66,11 +67,11 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class BasicDataFragment extends MainFragment {
-    private AppCompatEditText etDate, etTime, etSurveyorName, etAddress, etPincode, etCity,
+    private AppCompatEditText etDate, etTime, etAddress, etPincode, etCity,
             etOwner, etOwnerContact, etCaretaker, etCaretakercontact, etownerAddress, etNearestPoliceAddress, etSPOfficeAddress;
     private Spinner spDistrict, spCircle, spSSA;
     private AutoCompleteTextView etSiteId, etSiteName;
-
+    TextView etSurveyorName;
     private Button btnSubmit;
     private AtmDatabase atmDatabase;
     private ASTUIUtil commonFunctions;
@@ -275,6 +276,10 @@ public class BasicDataFragment extends MainFragment {
     private void getUserPref() {
         userPref = getContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
         userId = userPref.getString("USER_ID", "");
+        String USER_NAME = userPref.getString("USER_NAME", "");
+        String EMP_NAME = userPref.getString("EMP_NAME", "");
+        finalSurveyorName = EMP_NAME;
+        etSurveyorName.setText(EMP_NAME);
         //  strSiteId = userPref.getString("strSiteId", "");
     }    /*
      *
@@ -374,7 +379,7 @@ public class BasicDataFragment extends MainFragment {
         dateTime = String.valueOf(currentMilli);
         finalDate = getTextFromView(this.etDate);
         finalTime = getTextFromView(this.etTime);
-        finalSurveyorName = getTextFromView(this.etSurveyorName);
+        //finalSurveyorName = getTextFromView(this.etSurveyorName);
         curtomerSiteIdStr = getTextFromView(this.etSiteId);
         finalSiteName = getTextFromView(this.etSiteName);
         finalAddress = getTextFromView(this.etAddress);

@@ -355,11 +355,29 @@ public class BatteryFragment extends MainFragment {
             description = getTextFromView(this.etDescription);
             currentDateTime = String.valueOf(System.currentTimeMillis());
             NoofCell = getTextFromView(this.etNoofCell);
+            if (NoofCell.equals("")) {
+                NoofCell = "0";
+            }
             CellVoltage = getTextFromView(this.etCellVoltage);
+            if (CellVoltage.equals("")) {
+                CellVoltage = "0";
+            }
             NoofWeakCells = getTextFromView(this.etNoofWeakCells);
+            if (NoofWeakCells.equals("")) {
+                NoofWeakCells = "0";
+            }
             BackUpinHrs = getTextFromView(this.etBackUpinHrs);
+            if (BackUpinHrs.equals("")) {
+                BackUpinHrs = "0";
+            }
             TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
+            if (TightnessofBentCaps.equals("")) {
+                TightnessofBentCaps = "0";
+            }
             CellInterconnecting = getTextFromView(this.etCellInterconnecting);
+            if (CellInterconnecting.equals("")) {
+                CellInterconnecting = "0";
+            }
             if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
