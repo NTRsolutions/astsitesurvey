@@ -291,6 +291,7 @@ public class SplashScreen extends AppCompatActivity {
         });
     }
 
+
     /**
      * Parse and Save  CircleMaster Data
      */
