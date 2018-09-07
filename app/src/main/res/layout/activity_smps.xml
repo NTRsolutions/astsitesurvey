@@ -272,7 +272,7 @@
                         android:autoSizeTextType="uniform"
                         android:hint="No of Modules Available at Site"
                         android:inputType="number"
-                        android:maxLength="2"
+
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -559,7 +559,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="No of RM Working"
-                        android:maxLength="2"
+
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -585,7 +585,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Number Of Rm Faulty"
-                        android:maxLength="2"
+
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

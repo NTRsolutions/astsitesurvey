@@ -32,6 +32,7 @@ import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.BtsInfoData;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import org.json.JSONArray;
@@ -136,13 +137,24 @@ public class BTSFragment extends MainFragment {
         Microwave = etMicrowave.getSelectedItem().toString();
         stretOperatorType = etOperatorType.getSelectedItem().toString();
 
-        if (isEmptyStr(btsOperator)) {
+        if (ASTObjectUtil.isEmptyStr(btsOperator)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter BTS Operator");
             return false;
-        } else if (isEmptyStr(NofCab)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Cab.");
+        } else if (ASTObjectUtil.isEmptyStr(NofCab)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Number Of Cabinets");
+            return false;
+        } else if (ASTObjectUtil.isEmptyStr(NoofDCDB)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Number Of Dcdb Box");
+            return false;
+        } else if (ASTObjectUtil.isEmptyStr(NofKroneBox)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Number Of Krone Box");
+            return false;
+        } else if (ASTObjectUtil.isEmptyStr(NoofRack)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Number Of Transmission Rack");
             return false;
         }
+
+
         return true;
     }
 
@@ -184,6 +196,7 @@ public class BTSFragment extends MainFragment {
         etNofCab.setText("");
         btstyelSpinner.setSelection(0);
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

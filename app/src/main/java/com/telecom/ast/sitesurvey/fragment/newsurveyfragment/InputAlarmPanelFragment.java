@@ -42,6 +42,7 @@ import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
@@ -84,7 +85,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     String CurtomerSite_Id;
     AtmDatabase atmDatabase;
     Spinner itemConditionSpinner;
-    String make="", model="", capacity="", serialNumber="", yearOfManufacturing="", description="", currentDateTime="", AnchorOperator="", SharingOperator="";
+    String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "", AnchorOperator = "", SharingOperator = "";
     Button btnSubmit;
     LinearLayout descriptionLayout;
     Spinner itemStatusSpineer;
@@ -288,7 +289,6 @@ public class InputAlarmPanelFragment extends MainFragment {
     }
 
 
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.dateLayout) {
@@ -331,26 +331,32 @@ public class InputAlarmPanelFragment extends MainFragment {
         currentDateTime = String.valueOf(System.currentTimeMillis());
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
-            if (isEmptyStr(make)) {
+            if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
-            } else if (isEmptyStr(model)) {
+            } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
-            } else if (isEmptyStr(serialNumber)) {
+            } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-            } else if (isEmptyStr(itemCondition)) {
+            } else if (ASTObjectUtil.isEmptyStr(itemCondition)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
                 return false;
-            } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+            } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
-            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(AnchorOperator)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Anchor Operator");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(SharingOperator)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Sharing Operator");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
@@ -359,9 +365,11 @@ public class InputAlarmPanelFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
                 return false;
             }
+
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }
@@ -529,7 +537,7 @@ public class InputAlarmPanelFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
@@ -573,6 +581,7 @@ public class InputAlarmPanelFragment extends MainFragment {
         }.execute();
 
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

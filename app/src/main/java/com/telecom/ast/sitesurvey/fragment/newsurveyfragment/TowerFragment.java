@@ -41,6 +41,7 @@ import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
@@ -79,21 +80,21 @@ public class TowerFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, typeTowerSpinner,
-            laEarthingStatusSpinner,  towerTighteningSpinner;
+            laEarthingStatusSpinner, towerTighteningSpinner;
     private String strUserId, strSiteId, CurtomerSite_Id,
-              strtowerTighteningSpinner;
-    private SharedPreferences  userPref;
+            strtowerTighteningSpinner;
+    private SharedPreferences userPref;
     private AppCompatEditText etHeight, etDescription,
-            etnoMicrowaveAntenna, etnoGSMAntenna,  TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
+            etnoMicrowaveAntenna, etnoGSMAntenna, TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
     private String type, height, date, itemcondion, descreption,
-            workingCondi,  noMicrowaveAntenna, noGSMAntenna,  EarthingofTower, EarthingofTowerstatus, stretAnyTowerAngleMissing,
+            workingCondi, noMicrowaveAntenna, noGSMAntenna, EarthingofTower, EarthingofTowerstatus, stretAnyTowerAngleMissing,
             laEarthingStatus;
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
     private long datemilisec;
     private File overviewImgFile, northmgFile, eastImgFile, southImgFile, westImgFile;
     private Typeface materialdesignicons_font;
-    private LinearLayout  laEarthingConnetLauout, PolenoteConnectedLayout, miisingangelSizeLayout, etBoltMissingLayout;
+    private LinearLayout laEarthingConnetLauout, PolenoteConnectedLayout, miisingangelSizeLayout, etBoltMissingLayout;
     private Spinner etworkingCondi, laEarthingConnetSpinner, etEarthingofTower, etAnyTowerAngleMissing, etTowerFoundationBolt;
     private String strlaEarthingConnetSpinner, stretTowerAngleMissingSize, stretTowerFoundationBolt, stretFoundationBoltmissingquantity;
 
@@ -203,7 +204,6 @@ public class TowerFragment extends MainFragment {
         laEarthingStatusSpinner.setAdapter(laEarthingStatus);
 
 
-
         final String towerTightening_array[] = {"Done", "Not Done"};
         ArrayAdapter<String> towerTightening = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, towerTightening_array);
         towerTighteningSpinner.setAdapter(towerTightening);
@@ -212,8 +212,6 @@ public class TowerFragment extends MainFragment {
         final String etworkingCondi_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> etworkingCondiada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etworkingCondi_array);
         etworkingCondi.setAdapter(etworkingCondiada);
-
-
 
 
         final String laEarthingConnetSpinner_array[] = {"Connected", "Not Connected"};
@@ -229,7 +227,7 @@ public class TowerFragment extends MainFragment {
         ArrayAdapter<String> etAnyTowerAngleMissingTowerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etAnyTowerAngleMissing_array);
         etAnyTowerAngleMissing.setAdapter(etAnyTowerAngleMissingTowerada);
 
-        final String etTowerFoundationBolt_array[] = {"Covered", "Grouted","Missing"};
+        final String etTowerFoundationBolt_array[] = {"Covered", "Grouted", "Missing"};
         ArrayAdapter<String> etTowerFoundationBoltada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etTowerFoundationBolt_array);
         etTowerFoundationBolt.setAdapter(etTowerFoundationBoltada);
 
@@ -249,7 +247,6 @@ public class TowerFragment extends MainFragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
 
 
         laEarthingStatusSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
@@ -379,25 +376,34 @@ public class TowerFragment extends MainFragment {
         stretFoundationBoltmissingquantity = etFoundationBoltmissingquantity.getText().toString();
 
 
-        if (isEmptyStr(type)) {
+        if (ASTObjectUtil.isEmptyStr(type)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Type");
             return false;
-        } else if (isEmptyStr(height)) {
+        } else if (ASTObjectUtil.isEmptyStr(height)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Height");
             return false;
-        } else if (isEmptyStr(date)) {
+        } else if (ASTObjectUtil.isEmptyStr(date)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Site Date");
             return false;
-        } else if (isEmptyStr(itemcondion)) {
+        } else if (ASTObjectUtil.isEmptyStr(itemcondion)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Condition");
             return false;
-        } else if (isEmptyStr(descreption) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+        } else if (ASTObjectUtil.isEmptyStr(descreption) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
             return false;
-        }/* else if (isEmptyStr(descreption)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+        } else if (ASTObjectUtil.isEmptyStr(noMicrowaveAntenna)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Number Of Microwave Antenna ");
             return false;
-        }*/ else if (overviewImgFile == null || !overviewImgFile.exists()) {
+        } else if (ASTObjectUtil.isEmptyStr(noGSMAntenna)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Number Of Gsm Antenna ");
+            return false;
+        } else if (ASTObjectUtil.isEmptyStr(stretAnyTowerAngleMissing)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Any Tower Angle Missing ");
+            return false;
+        } else if (ASTObjectUtil.isEmptyStr(stretTowerFoundationBolt)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Foundation Bolt");
+            return false;
+        } else if (overviewImgFile == null || !overviewImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Overview Photo");
             return false;
         } else if (eastImgFile == null || !eastImgFile.exists()) {
@@ -412,19 +418,11 @@ public class TowerFragment extends MainFragment {
         } else if (westImgFile == null || !westImgFile.exists()) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select West Photo");
             return false;
-        } else if (isEmptyStr(stretAnyTowerAngleMissing)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Any Tower Angle Missing ");
-            return false;
-        } else if (isEmptyStr(stretTowerFoundationBolt)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Tower Foundation Bolt");
-            return false;
         }
 
 
         return true;
     }
-
-
 
 
     public void saveBasicDataonServer() {
@@ -634,6 +632,7 @@ public class TowerFragment extends MainFragment {
         }.execute();
 
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

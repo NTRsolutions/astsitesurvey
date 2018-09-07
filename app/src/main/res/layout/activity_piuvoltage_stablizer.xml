@@ -303,7 +303,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Number Of Lcu"
-                        android:maxLength="2"
+
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

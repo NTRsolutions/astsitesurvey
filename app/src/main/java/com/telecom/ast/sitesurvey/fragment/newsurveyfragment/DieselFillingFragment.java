@@ -19,6 +19,7 @@ import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import org.json.JSONException;
@@ -99,19 +100,19 @@ public class DieselFillingFragment extends MainFragment {
         Fillingother = etFillingother.getText().toString();
         DieselfuillDone = etDieselfuillDone.getSelectedItem().toString();
         stretBitPlan = etBitPlan.getText().toString();
-        if (isEmptyStr(LPD)) {
+        if (ASTObjectUtil.isEmptyStr(LPD)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LPD");
             return false;
-        } else if (isEmptyStr(QualityDiesel)) {
+        } else if (ASTObjectUtil.isEmptyStr(QualityDiesel)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Quality of Diesel");
             return false;
-        } else if (isEmptyStr(Fillingother)) {
+        } else if (ASTObjectUtil.isEmptyStr(Fillingother)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Filling In DG Tank or Any Other ");
             return false;
-        } else if (isEmptyStr(DieselfuillDone)) {
+        } else if (ASTObjectUtil.isEmptyStr(DieselfuillDone)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Diesel Filling Done by CareTaker/Technician/Filler");
             return false;
-        }  else if (isEmptyStr(stretBitPlan)) {
+        }  else if (ASTObjectUtil.isEmptyStr(stretBitPlan)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Bit Plan (No. of Days)");
             return false;
         }

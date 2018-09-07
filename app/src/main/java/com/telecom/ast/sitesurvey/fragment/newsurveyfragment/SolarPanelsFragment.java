@@ -26,6 +26,7 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.DistrictMasterDataModel;
 import com.telecom.ast.sitesurvey.model.SSAmasterDataModel;
 import com.telecom.ast.sitesurvey.model.SiteMasterDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import org.json.JSONException;
@@ -126,16 +127,16 @@ public class SolarPanelsFragment extends MainFragment {
         Make = getTextFromView(this.etMake);
         capacitypanel = getTextFromView(this.etcapacitypanel);
         noOfAgb = getTextFromView(this.etNoofAGb);
-            if (isEmptyStr(NoofPanel)) {
+            if (ASTObjectUtil.isEmptyStr(NoofPanel)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Panel");
                 return false;
-            } else if (isEmptyStr(Make)) {
+            } else if (ASTObjectUtil.isEmptyStr(Make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
-            } else if (isEmptyStr(capacitypanel)) {
+            } else if (ASTObjectUtil.isEmptyStr(capacitypanel)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity panel");
                 return false;
-            } else if (isEmptyStr(noOfAgb)) {
+            } else if (ASTObjectUtil.isEmptyStr(noOfAgb)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of AGB");
                 return false;
             }

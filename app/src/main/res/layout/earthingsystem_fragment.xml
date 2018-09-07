@@ -170,7 +170,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Voltage between Earth And Neutral"
+                            android:hint="Voltage Between Earth And Neutral"
                             android:inputType="numberDecimal"
                             android:maxLength="5"
                             android:textSize="@dimen/_14dp" />
@@ -535,7 +535,7 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Value Of Inter/ Grid (Ohm)"
-                            android:maxLength="2"
+
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>

@@ -25,6 +25,7 @@ import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
@@ -298,18 +299,23 @@ public class EarthingSystemFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "EB neutral wire connected with earthing");
             return false;
         }else if (!stretValueofEarthpit1.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit1 input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit1 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit2.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit2 input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit2 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit3.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit3 input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit3 input like this xx.xx");
             return false;
         }else if (!stretValueofEarthpit4.matches(twoDecimalRegExp)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Earthpit4 input like this xx.xx");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit4 input like this xx.xx");
             return false;
         }
+        else if (ASTObjectUtil.isEmptyStr(stretvalueInterGrid)) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Value Of Inter/ Grid (Ohm)");
+            return false;
+        }
+
         return true;
     }
 

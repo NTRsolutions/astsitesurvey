@@ -39,6 +39,7 @@ import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
@@ -73,10 +74,10 @@ public class MpptFragment extends MainFragment {
     LinearLayout descriptionLayout;
     Spinner itemConditionSpinner;
     String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
-    String make="", model="", capacity="", serialNumber="", description="", currentDateTime="", yearOfManufacturing="";
+    String make = "", model = "", capacity = "", serialNumber = "", description = "", currentDateTime = "", yearOfManufacturing = "";
     AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
     AppCompatEditText etDescription, etMPPTReading;
-    String  MPPTReading="0", itemCondition="";
+    String MPPTReading = "0", itemCondition = "";
     String strMakeId = "0";
     Spinner itemStatusSpineer;
     TextView etYear, dateIcon;
@@ -87,7 +88,7 @@ public class MpptFragment extends MainFragment {
     SharedPreferences mpptSharedPrefpref, userPref;
 
 
-    String strEqupId="0";
+    String strEqupId = "0";
     private String capcityId = "0";
     private String itemstatus;
     ArrayList<EquipMakeDataModel> equipMakeList;
@@ -297,49 +298,47 @@ public class MpptFragment extends MainFragment {
     public boolean isValidate() {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
-        make = etMake.getText().toString();
-        model = etCapacity.getText().toString();
-        capacity = etCapacity.getText().toString();
-        serialNumber = etSerialNum.getText().toString();
-        yearOfManufacturing = etYear.getText().toString();
-        MPPTReading = etMPPTReading.getText().toString();
-        description = etDescription.getText().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        currentDateTime = String.valueOf(System.currentTimeMillis());
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
-            if (isEmptyStr(make)) {
+            make = etMake.getText().toString();
+            model = etCapacity.getText().toString();
+            capacity = etCapacity.getText().toString();
+            serialNumber = etSerialNum.getText().toString();
+            yearOfManufacturing = etYear.getText().toString();
+            MPPTReading = etMPPTReading.getText().toString();
+            description = etDescription.getText().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            currentDateTime = String.valueOf(System.currentTimeMillis());
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
+            if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
-            } else if (isEmptyStr(model)) {
+            } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
-            } else if (isEmptyStr(serialNumber)) {
+            } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-            } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+            } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
-            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (isEmptyStr(MPPTReading)) {
+            } else if (ASTObjectUtil.isEmptyStr(MPPTReading)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter MPPT Reading");
                 return false;
-            }else if (frontimgFile == null || !frontimgFile.exists()) {
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
             } else if (openImgFile == null || !openImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
                 return false;
             }
-
-
 
 
         } else {
@@ -347,9 +346,6 @@ public class MpptFragment extends MainFragment {
         }
         return true;
     }
-
-
-
 
 
     public void saveBasicDataonServer() {
@@ -467,7 +463,6 @@ public class MpptFragment extends MainFragment {
     }
 
 
-
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
@@ -513,7 +508,7 @@ public class MpptFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {
@@ -556,6 +551,7 @@ public class MpptFragment extends MainFragment {
         }.execute();
 
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

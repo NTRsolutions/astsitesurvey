@@ -254,7 +254,6 @@
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
                             android:hint="Enter Earthing-Resistance Value."
-                            android:maxLength="2"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
                     </android.support.design.widget.TextInputLayout>
