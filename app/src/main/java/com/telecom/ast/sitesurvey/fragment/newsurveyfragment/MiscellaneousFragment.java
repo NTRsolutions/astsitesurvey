@@ -476,7 +476,7 @@ public class MiscellaneousFragment extends MainFragment {
         strwarningSpinner = warningSpinner.getSelectedItem().toString();
 
         if (isEmptyStr(shater1size)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter 1 Size");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter  Size");
             return false;
         } else if (isEmptyStr(GateSize)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter GateSize");
