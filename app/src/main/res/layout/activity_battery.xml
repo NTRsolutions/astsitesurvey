@@ -324,7 +324,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:maxLength="2"
-                        android:hint="No of Weak Cells"
+                        android:hint="No Of Weak Cells"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -377,7 +377,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Tightness of Bent Caps"
+                        android:hint="Tightness Of Bent Caps"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -403,7 +403,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Cell Interconnecting strip tightness"
+                        android:hint="Cell Interconnecting Strip Tightness"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -307,7 +307,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     }
 
 
-    public boolean isValiDate() {
+    public boolean  isValiDate() {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         strnameofNameofEquipment = nameofNameofEquipment.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {

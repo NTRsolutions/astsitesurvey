@@ -17,8 +17,7 @@ import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 
 import java.util.ArrayList;
 
-public class
-NewSurveyFragment extends MainFragment {
+public class NewSurveyFragment extends MainFragment {
     SwitchViewPager mPager;
 
     @Override

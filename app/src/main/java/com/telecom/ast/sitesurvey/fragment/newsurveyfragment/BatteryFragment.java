@@ -75,8 +75,8 @@ public class BatteryFragment extends MainFragment {
             etTightnessofBentCaps, etCellInterconnecting;
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     private String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
-    private String NoofItems = "0", NoofCell = "0", CellVoltage = "0", NoofWeakCells = "0", BackUpinHrs = "0",
-            TightnessofBentCaps = "0", CellInterconnecting = "0";
+    private String NoofItems = "", NoofCell = "", CellVoltage = "", NoofWeakCells = "", BackUpinHrs = "",
+            TightnessofBentCaps = "", CellInterconnecting = "0";
     private String strMakeId = "0", strEqupId = "0";
     private ArrayList<EquipMakeDataModel> equipMakeList;
     private ArrayList<EquipMakeDataModel> equipList;
@@ -354,7 +354,7 @@ public class BatteryFragment extends MainFragment {
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             description = getTextFromView(this.etDescription);
             currentDateTime = String.valueOf(System.currentTimeMillis());
-            NoofCell = getTextFromView(this.etNoofCell);
+      /*      NoofCell = getTextFromView(this.etNoofCell);
             if (NoofCell.equals("")) {
                 NoofCell = "0";
             }
@@ -377,7 +377,7 @@ public class BatteryFragment extends MainFragment {
             CellInterconnecting = getTextFromView(this.etCellInterconnecting);
             if (CellInterconnecting.equals("")) {
                 CellInterconnecting = "0";
-            }
+            }*/
             if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -400,6 +400,26 @@ public class BatteryFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
+            } else if (ASTObjectUtil.isEmptyStr(NoofCell)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Cell");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(NoofWeakCells)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Of Weak Cells");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(BackUpinHrs)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Back Up in Hrs");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(TightnessofBentCaps)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Tightness Of Bent Caps");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(CellInterconnecting)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cell Interconnecting Strip Tightness");
+                return false;
+
             } else if (!CellVoltage.matches(twoDecimalRegExp)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
                 return false;
@@ -413,6 +433,8 @@ public class BatteryFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
+
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }

@@ -300,17 +300,34 @@ public class SmpsFragment extends MainFragment {
         ModuleCapacity = etModuleCapacity.getText().toString();
         Controller = etController.getSelectedItem().toString();
         ConditionbackPlane = etConditionbackPlane.getSelectedItem().toString();
-        BodyEarthing = etBodyEarthing.getSelectedItem().toString();
-        PositiveEarthing = etPositiveEarthing.getSelectedItem().toString();
-        RatingofCable = etRatingofCable.getText().toString();
         AlarmConnection = etAlarmConnection.getSelectedItem().toString();
         NoofRMWorking = etNoofRMWorking.getText().toString();
         NoofRMFaulty = etNoofRMFaulty.getText().toString();
         SpareFuseStatus = etSpareFuseStatus.getSelectedItem().toString();
-
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
 
+            RatingofCable = etRatingofCable.getText().toString();
+            if (RatingofCable.equals("")) {
+                RatingofCable = "0";
+            }
+
+            BodyEarthing = etBodyEarthing.getSelectedItem().toString();
+            if (BodyEarthing.equals("")) {
+                BodyEarthing = "0";
+            }
+            PositiveEarthing = etPositiveEarthing.getSelectedItem().toString();
+            if (PositiveEarthing.equals("")) {
+                PositiveEarthing = "0";
+            }
+            NoofRMWorking = etNoofRMWorking.getText().toString();
+            if (NoofRMWorking.equals("")) {
+                NoofRMWorking = "0";
+            }
+            NoofRMFaulty = etNoofRMFaulty.getText().toString();
+            if (NoofRMFaulty.equals("")) {
+                NoofRMFaulty = "0";
+            }
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;

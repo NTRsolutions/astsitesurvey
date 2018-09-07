@@ -37,6 +37,7 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
@@ -80,7 +81,7 @@ public class DGFragment extends MainFragment {
     private ArrayList<EquipMakeDataModel> arrEquipData;
     private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
     private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    private String make="", model="", capacity="", serialNumber="", yearOfManufacturing="0", description="", currentDateTime, itemCondition;
+    private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "0", description = "", currentDateTime, itemCondition;
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner;
@@ -91,7 +92,7 @@ public class DGFragment extends MainFragment {
             AlternterCapacity, DGBatteryStatus, DGBatteryMake, Conditionofwiring, DGearthing, ConditionCANOPY,
             DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgintelpipe, Dgoutelpipe,
             DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGPollutionCertificate, straMFPanelSpinner, strnoofDGCylinderSpinner;
-    private String stralternaterPhaseSpinner, stretDGBatterySrNo,strdGExhaustSmokecolour;
+    private String stralternaterPhaseSpinner, stretDGBatterySrNo, strdGExhaustSmokecolour;
     private Spinner mCBStatusSpinner,
             dgContacterSpinner, backCompressorSpinner;
 
@@ -99,7 +100,7 @@ public class DGFragment extends MainFragment {
             etAlternterCapacity, etDGBatteryMake,
             etDGRunHourMeter, etDGFuelTank,
 
-            etdgAlternatermake, eSNSpinner, etdgbCapacity, etDGBatterySrNo;
+    etdgAlternatermake, eSNSpinner, etdgbCapacity, etDGBatterySrNo;
 
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
@@ -113,8 +114,9 @@ public class DGFragment extends MainFragment {
     private String itemstatus;
     private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,
             etDGBatteryStatus, etConditionofwiring, etDGearthing, etConditionCANOPY, eTDGlowLUBEWire, etCableGroutingspinner,
-            etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch,  etRentalDGChangeOver,
-            etDGPollutionCertificate,dGExhaustSmokecolour;
+            etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver,
+            etDGPollutionCertificate, dGExhaustSmokecolour;
+
     @Override
     protected int fragmentLayout() {
         return R.layout.activity_dg;
@@ -296,12 +298,9 @@ public class DGFragment extends MainFragment {
         etRentalDGChangeOver.setAdapter(etRentalDGChangeOver_adapter);
 
 
-
         final String etDGPollutionCertificate_array[] = {"Available", "Not Available"};
         ArrayAdapter<String> etDGPollutionCertificateadapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGPollutionCertificate_array);
         etDGPollutionCertificate.setAdapter(etDGPollutionCertificateadapter);
-
-
 
 
     }
@@ -541,7 +540,6 @@ public class DGFragment extends MainFragment {
             Conditionofwiring = etConditionofwiring.getSelectedItem().toString();
             DGearthing = etDGearthing.getSelectedItem().toString();
             ConditionCANOPY = etConditionCANOPY.getSelectedItem().toString();
-            DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
             DGlowLUBEWire = eTDGlowLUBEWire.getSelectedItem().toString();
             DGFuelTank = getTextFromView(this.etDGFuelTank);
             CableGrouting = etCableGroutingspinner.getSelectedItem().toString();
@@ -552,12 +550,15 @@ public class DGFragment extends MainFragment {
             DGExhaustcondi = etDGExhaustcondi.getSelectedItem().toString();
             DGEmergencyStopSwitch = etDGEmergencyStopSwitch.getSelectedItem().toString();
             RentalDGChangeOver = etRentalDGChangeOver.getSelectedItem().toString();
-            DGPollutionCertificate =etDGPollutionCertificate.getSelectedItem().toString();
+            DGPollutionCertificate = etDGPollutionCertificate.getSelectedItem().toString();
             straMFPanelSpinner = aMFPanelSpinner.getSelectedItem().toString();
             strnoofDGCylinderSpinner = noofDGCylinderSpinner.getSelectedItem().toString();
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
-            strdGExhaustSmokecolour= dGExhaustSmokecolour.getSelectedItem().toString();
-
+            strdGExhaustSmokecolour = dGExhaustSmokecolour.getSelectedItem().toString();
+            DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
+            if (DGRunHourMer.equals("")) {
+                DGRunHourMer = "0";
+            }
 
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -572,7 +573,7 @@ public class DGFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
             } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
@@ -587,6 +588,8 @@ public class DGFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
+
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }
@@ -798,7 +801,7 @@ public class DGFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {

@@ -266,7 +266,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="AMF Panel"
+                    android:text="Amf Panel"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -304,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="AMF Panel Make "
+                        android:hint="Amf Panel Make "
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -332,7 +332,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="AMF Panel Capacity "
+                        android:hint="Amf Panel Capacity "
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -383,7 +383,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="MCB Status"
+                    android:text="Mcb Status"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -415,7 +415,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="No. of DG  Cylinder"
+                    android:text="No.Of Dg  Cylinder"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -588,7 +588,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Battery Status"
+                    android:text="Dg Battery Status"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -629,7 +629,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="DG Battery Make"
+                        android:hint="Dg Battery Make"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -656,7 +656,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="DG Battery Sr. No."
+                        android:hint="Dg Battery Sr.No."
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -681,7 +681,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="DG Battery Capacity"
+                        android:hint="Dg Battery Capacity"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -700,7 +700,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Contacter"
+                    android:text="Dg Contacter"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -732,7 +732,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Condition of wiring"
+                    android:text="Condition Of Wiring"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -766,7 +766,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG earthing"
+                    android:text="Dg Earthing"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -799,7 +799,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Condition of CANOPY"
+                    android:text="Condition Of Canopy"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -840,7 +840,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="DG Run Hour Meter Reading"
+                        android:hint="Dg Run Hour Meter Reading"
                         android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -862,7 +862,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Low lube  oil pressure"
+                    android:text="Low Lube  Oil Pressure"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -932,7 +932,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="DG Fuel Tank Capacity"
+                        android:hint="Dg Fuel Tank Capacity"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -984,7 +984,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Foundation"
+                    android:text="Dg Foundation"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1016,7 +1016,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Cooling type"
+                    android:text="Dg Cooling type"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1048,7 +1048,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Dg Inlet Fuel pipe"
+                    android:text="Dg Inlet Fuel Pipe"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1080,7 +1080,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Outlet Fuel Pipe"
+                    android:text="Dg Outlet Fuel Pipe"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1111,7 +1111,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Exhaust Pipe Condition"
+                    android:text="Dg Exhaust Pipe Condition"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1143,7 +1143,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Exhaust Smoke colour "
+                    android:text="Dg Exhaust Smoke Colour "
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1175,7 +1175,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Emergency Stop Switch"
+                    android:text="Dg Emergency Stop Switch"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -1239,7 +1239,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="DG Pollution Certificate"
+                    android:text="Dg Pollution Certificate"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
