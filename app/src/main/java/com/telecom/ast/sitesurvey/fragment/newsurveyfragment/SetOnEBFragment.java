@@ -48,9 +48,9 @@ public class SetOnEBFragment extends MainFragment {
     AppCompatEditText etEBCurrentRphase, etEBCurrentBphase, etEBCurrentYphase,
             etEBVoltageYphase, etEBVoltageBphase, etEBVoltageRphase, etEBFrequencyRphase, etEBFrequencyYphase, etEBFrequencyBphase,
             etbattcharging, etBattcurrent;
-    String dgrCurrent, dgyCurrent, dgbCurrent,
-            stretEBVoltageYphase, stretEBVoltageBphase, stretEBVoltageRphase,
-            stretEBFrequencyRphase, stretEBFrequencyYphase, stretEBFrequencyBphase;
+    String dgrCurrent="0", dgyCurrent="0", dgbCurrent="0",
+            stretEBVoltageYphase="0", stretEBVoltageBphase="0", stretEBVoltageRphase="0",
+            stretEBFrequencyRphase="0", stretEBFrequencyYphase="0", stretEBFrequencyBphase="0";
     String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
     AtmDatabase atmDatabase;
     Button btnSubmit;
@@ -160,11 +160,11 @@ public class SetOnEBFragment extends MainFragment {
             stretEBFrequencyBphase = etEBFrequencyBphase.getText().toString().trim();
             batrycharging = etbattcharging.getText().toString().trim();
             battcurrent = etBattcurrent.getText().toString().trim();
-            if (isEmptyStr(dgbCurrent)) {
+            if (isEmptyStr(dgrCurrent)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Current");
             } else if (isEmptyStr(stretEBFrequencyRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Frequency");
-            } else if (isEmptyStr(stretEBFrequencyRphase)) {
+            } else if (isEmptyStr(stretEBVoltageRphase)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Provide Voltage");
             } else if (isEmptyStr(batrycharging)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Batt Charging Voltage");

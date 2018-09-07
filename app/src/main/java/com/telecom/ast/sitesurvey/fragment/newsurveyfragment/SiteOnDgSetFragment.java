@@ -44,9 +44,9 @@ public class SiteOnDgSetFragment extends MainFragment {
     private Button btnSubmit;
     private SharedPreferences userPref;
     private SharedPreferences noofPhaseprf;
-    private String batteryChargeCurrent, batteryVoltage, dgrCurrent, dgyCurrent, dgbCurrent,
-            stretDGVoltageYphase, stretDGVoltageBphase, stretDGVoltageRphase,
-            stretDGFrequencyRphase, stretDGFrequencyYphase, stretDGFrequencyBphase;
+    private String batteryChargeCurrent, batteryVoltage, dgrCurrent="0", dgyCurrent="0", dgbCurrent="0",
+            stretDGVoltageYphase="0", stretDGVoltageBphase="0", stretDGVoltageRphase="0",
+            stretDGFrequencyRphase="0", stretDGFrequencyYphase="0", stretDGFrequencyBphase="0";
     String noofPhase;
 
     private LinearLayout etDGCurrentRphaseLayout, etDGCurrentBphaseLayout, etDGCurrentYphaseLayout,
