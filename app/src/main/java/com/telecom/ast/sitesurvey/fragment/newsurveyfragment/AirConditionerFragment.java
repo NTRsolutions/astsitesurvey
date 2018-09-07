@@ -80,7 +80,7 @@ public class AirConditionerFragment extends MainFragment {
     private static boolean isImage1, isImage2;
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
-    private Spinner itemConditionSpinner, etaCType,etACAlarms,etacACWorkingCondition;
+    private Spinner itemConditionSpinner, etaCType, etACAlarms, etacACWorkingCondition;
     private AppCompatEditText etDescription, etNumberOfAC;
 
     private AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
@@ -358,6 +358,15 @@ public class AirConditionerFragment extends MainFragment {
             } else if (isEmptyStr(numOfACs)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter AC Quantity");
                 return false;
+            } else if (isEmptyStr(aCType)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Type");
+                return false;
+            } else if (isEmptyStr(acACWorkingCondition)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Aircon Status");
+                return false;
+            } else if (isEmptyStr(ACAlarms)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Alarms");
+                return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
@@ -587,7 +596,7 @@ public class AirConditionerFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
                     try {

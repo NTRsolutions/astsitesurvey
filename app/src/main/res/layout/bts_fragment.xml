@@ -114,9 +114,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No.of Cabinets"
-                        android:maxLength="2"
+                        android:hint="Number Of Cabinets"
                         android:inputType="numberDecimal"
+                        android:maxLength="2"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -144,9 +144,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of DCDB Box"
-                        android:maxLength="2"
+                        android:hint="Number Of Dcdb Box"
                         android:inputType="numberDecimal"
+                        android:maxLength="2"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -172,9 +172,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of Krone Box"
-                        android:maxLength="2"
+                        android:hint="Number Of Krone Box"
                         android:inputType="numberDecimal"
+                        android:maxLength="2"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -200,9 +200,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of Transmission Rack"
-                        android:maxLength="2"
+                        android:hint="Number Of Transmission Rack"
                         android:inputType="numberDecimal"
+                        android:maxLength="2"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

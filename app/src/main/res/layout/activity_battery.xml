@@ -295,7 +295,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of Cell"
+                        android:hint="Number Of Cell"
                         android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
@@ -324,7 +324,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:maxLength="2"
-                        android:hint="No Of Weak Cells"
+                        android:hint="Number Of Weak Cells"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
@@ -534,7 +534,7 @@
                             android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Sr No Plate Photo"
+                            android:text="Sr Number Plate Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />

@@ -348,7 +348,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
                 return false;
             }
         } else {

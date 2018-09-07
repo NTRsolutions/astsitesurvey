@@ -87,12 +87,15 @@ public class DGFragment extends MainFragment {
     private Spinner itemConditionSpinner;
     private Spinner itemStatusSpineer;
 
-    private String mCBStatus, dbAlternatermake, eSN,
-            dBCapacity, dgContacter, backCompressor, AutomationCondition, PowerPanelMake, PowerPanelCapacity, DGType, AlternaterSno,
-            AlternterCapacity, DGBatteryStatus, DGBatteryMake, Conditionofwiring, DGearthing, ConditionCANOPY,
-            DGRunHourMer, DGlowLUBEWire, DGFuelTank, CableGrouting, DGFoundation, DGCoolingtype, Dgintelpipe, Dgoutelpipe,
-            DGExhaustcondi, DGEmergencyStopSwitch, RentalDGChangeOver, DGPollutionCertificate, straMFPanelSpinner, strnoofDGCylinderSpinner;
-    private String stralternaterPhaseSpinner, stretDGBatterySrNo, strdGExhaustSmokecolour;
+    private String mCBStatus = "", dbAlternatermake = "", eSN = "0",
+            dBCapacity = "", dgContacter = "", backCompressor = "", AutomationCondition = "", PowerPanelMake = "", PowerPanelCapacity = "",
+            DGType, AlternaterSno = "",
+            AlternterCapacity = "", DGBatteryStatus = "", DGBatteryMake = "", Conditionofwiring = "", DGearthing = "0", ConditionCANOPY = "",
+            DGRunHourMer = "0", DGlowLUBEWire = "", DGFuelTank = "", CableGrouting = "", DGFoundation = "", DGCoolingtype = "",
+            Dgintelpipe = "", Dgoutelpipe = "",
+            DGExhaustcondi = "", DGEmergencyStopSwitch = "", RentalDGChangeOver = "", DGPollutionCertificate = "",
+            straMFPanelSpinner = "", strnoofDGCylinderSpinner = "";
+    private String stralternaterPhaseSpinner = "", stretDGBatterySrNo = "", strdGExhaustSmokecolour = "";
     private Spinner mCBStatusSpinner,
             dgContacterSpinner, backCompressorSpinner;
 
@@ -578,6 +581,139 @@ public class DGFragment extends MainFragment {
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
+            } else if (ASTObjectUtil.isEmptyStr(straMFPanelSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Amf Panel");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(PowerPanelMake)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Amf Panel Make");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(PowerPanelCapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Amf Panel Capacity");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(AutomationCondition)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Automation Working Condition");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(mCBStatus)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Mcb Status");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(strnoofDGCylinderSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  No.Of Dg  Cylinder");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(dbAlternatermake)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Alternater Make");
+                return false;
+
+
+            } else if (ASTObjectUtil.isEmptyStr(AlternaterSno)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Alternater Sno");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(AlternterCapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Alternter Capacity");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(stralternaterPhaseSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Alternater Phase");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(eSN)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Engine Sr. No.");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGBatteryStatus)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Dg Battery Status");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGBatteryMake)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Dg Battery Make");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(stretDGBatterySrNo)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Battery Sr.No.");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(dBCapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Dg Battery Capacity");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(dgContacter)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Contacter");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(Conditionofwiring)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Condition Of Wiring");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGearthing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Earthing");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(ConditionCANOPY)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Condition Of Canopy");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGRunHourMer)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Run Hour Meter Reading");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGlowLUBEWire)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Low Lube  Oil Pressure");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(backCompressor)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Back Compressor");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGFuelTank)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Fuel Tank Capacity");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(CableGrouting)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter CableGrouting");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGFoundation)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Foundation");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGCoolingtype)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter   Dg Cooling type");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(Dgintelpipe)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Inlet Fuel Pipe");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(Dgoutelpipe)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Dg Outlet Fuel Pipe");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGExhaustcondi)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Exhaust Pipe Condition");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(strdGExhaustSmokecolour)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Dg Exhaust Smoke Colour");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGEmergencyStopSwitch)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Emergency Stop Switch");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(RentalDGChangeOver)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Rental DG ChangeOver Box");
+                return false;
+
+            } else if (ASTObjectUtil.isEmptyStr(DGPollutionCertificate)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Dg Pollution Certificate");
+                return false;
+
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
@@ -585,7 +721,7 @@ public class DGFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
                 return false;
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
                 return false;
             }
 

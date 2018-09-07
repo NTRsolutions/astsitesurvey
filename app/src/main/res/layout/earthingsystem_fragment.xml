@@ -40,7 +40,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="No of EarthPits"
+                        android:text="Number Of Earthpits"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -77,7 +77,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="Inter(Grid) Connectivity of EarthPits"
+                        android:text="Inter(Grid) Connectivity of Earthpits"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -136,7 +136,7 @@
                                 android:background="@color/bg_color"
                                 android:elevation="@dimen/_6dp"
                                 android:padding="@dimen/_5dp"
-                                android:text="Inter(Grid) EarthPits Image"
+                                android:text="Inter(Grid) Earthpits Image"
                                 android:textAlignment="center"
                                 android:textColor="@color/blackMedium"
                                 android:textSize="@dimen/_13dp" />
@@ -170,7 +170,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Voltage between Earth and Neutral"
+                            android:hint="Voltage between Earth And Neutral"
                             android:inputType="numberDecimal"
                             android:maxLength="5"
                             android:textSize="@dimen/_14dp" />
@@ -193,7 +193,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="DG neutral wire connected with earthing"
+                        android:text="Dg Neutral Wire Connected With Earthing"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -227,7 +227,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="EB neutral wire connected with earthing"
+                        android:text="Eb Neutral Wire Connected With Earthing"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -261,7 +261,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="IGB Status"
+                        android:text="Igb Status"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -297,7 +297,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="IGB Connected Status"
+                        android:text="Igb Connected Status"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -331,7 +331,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="EGB Status"
+                        android:text="Egb Status"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -366,7 +366,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_2dp"
                         android:gravity="center_vertical"
-                        android:text="EGB Connected Status"
+                        android:text="Egb Connected Status"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_14dp" />
 
@@ -415,7 +415,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Value of Earthpit 1"
+                            android:hint="Value Of Earthpit 1"
                             android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
@@ -475,7 +475,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Value of Earthpit 3"
+                            android:hint="Value Of Earthpit 3"
                             android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
@@ -505,7 +505,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Value of Earthpit 4"
+                            android:hint="Value Of Earthpit 4"
                             android:maxLength="5"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />
@@ -534,7 +534,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:autoSizeTextType="uniform"
-                            android:hint="Value of Inter/ Grid (Ohm)"
+                            android:hint="Value Of Inter/ Grid (Ohm)"
                             android:maxLength="2"
                             android:inputType="numberDecimal"
                             android:textSize="@dimen/_14dp" />

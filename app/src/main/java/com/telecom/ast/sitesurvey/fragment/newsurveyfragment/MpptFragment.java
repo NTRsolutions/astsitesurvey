@@ -307,8 +307,6 @@ public class MpptFragment extends MainFragment {
         currentDateTime = String.valueOf(System.currentTimeMillis());
         currentDateTime = String.valueOf(System.currentTimeMillis());
         itemCondition = itemConditionSpinner.getSelectedItem().toString();
-
-
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
@@ -327,7 +325,10 @@ public class MpptFragment extends MainFragment {
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (frontimgFile == null || !frontimgFile.exists()) {
+            } else if (isEmptyStr(MPPTReading)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter MPPT Reading");
+                return false;
+            }else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
             } else if (openImgFile == null || !openImgFile.exists()) {
@@ -337,6 +338,10 @@ public class MpptFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
             }
+
+
+
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }

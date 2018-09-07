@@ -74,8 +74,8 @@
     <string name="item_status">Item Status</string>
     <string name="Description">Description</string>
     <string name="Enter_Make">Enter Make</string>
-    <string name="Enter_Model_No.">Enter Model No.</string>
-    <string name="EnterSerial_Num">Enter Serial No.</string>
+    <string name="Enter_Model_No.">Enter Model Number</string>
+    <string name="EnterSerial_Num">Enter Serial Number</string>
     <string name="Enter_Capacity">Enter Capacity</string>
     <string name="Enter_Manufacturing_Date">Select Manufacturing Date</string>
     <string name="Enter_Description">Enter Description</string>

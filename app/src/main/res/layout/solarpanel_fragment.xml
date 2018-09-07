@@ -75,7 +75,7 @@
                         android:inputType="number"
                         android:maxLength="2"
                         android:autoSizeTextType="uniform"
-                        android:hint="Enter No of Panels"
+                        android:hint="Enter Number Of Panels"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
@@ -127,7 +127,7 @@
                         android:inputType="numberDecimal"
                         android:autoSizeTextType="uniform"
                         android:maxLength="2"
-                        android:hint="Enter capacity per panel"
+                        android:hint="Enter Capacity Per Panel"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -153,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:inputType="numberDecimal"
-                        android:hint="Enter No of AGB"
+                        android:hint="Enter Number Of Agb"
                         android:maxLength="1"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>

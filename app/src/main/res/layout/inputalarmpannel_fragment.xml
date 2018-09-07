@@ -419,7 +419,7 @@
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Sr No Plate Photo"
+                            android:text="Sr Number Plate Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />

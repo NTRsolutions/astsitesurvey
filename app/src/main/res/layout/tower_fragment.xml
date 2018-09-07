@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
                     android:padding="@dimen/_5dp"
-                    android:text="Select SiteOnAirDate"
+                    android:text="Select Site On AirDate"
                     android:textSize="@dimen/_14dp" />
 
                 <TextView
@@ -296,7 +296,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of Microwave Antenna"
+                        android:hint="Number Of Microwave Antenna"
                         android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
@@ -323,7 +323,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="No of GSM Antenna"
+                        android:hint="Number Of Gsm Antenna"
                         android:maxLength="2"
                         android:inputType="number"
                         android:textSize="@dimen/_14dp" />
@@ -379,7 +379,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Earthing of each Tower Pole"
+                    android:text="Earthing Of Each Tower Pole"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -543,7 +543,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:inputType="number"
-                        android:hint="Tower Foundation Bolt missing quantity"
+                        android:hint="Tower Foundation Bolt Missing Quantity"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -78,7 +78,7 @@ public class EBMeterFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, waterseedpinner;
-    private String strUserId = "0", strSavedDateTime, meterreading, strSiteId, CurtomerSite_Id;
+    private String strUserId = "0", strSavedDateTime, meterreading = "0", strSiteId = "0", CurtomerSite_Id = "0";
     private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "0", description = "", type, currentDateTime;
     private SharedPreferences noofebPhaseprf;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
@@ -86,12 +86,14 @@ public class EBMeterFragment extends MainFragment {
     private AppCompatEditText etDescription, ebMeterreading;
     private String strMakeId = "0", strModelId, strDescriptionId;
     private Spinner itemStatusSpineer;
-    private String ConnectionNo, CableRating, TransformerEarthing, kitkatChangeover, TheftfromSite,
-            strmeeterTypeSpinner, strpowerTypeSpinner, strtransformerTypeSpinner, strwaterseedpinner, itemCondition, streBbillSpinner;
+    private String ConnectionNo = "", CableRating = "", TransformerEarthing = "", kitkatChangeover = "", TheftfromSite = "",
+            strmeeterTypeSpinner = "", strpowerTypeSpinner = "", strtransformerTypeSpinner = "", strwaterseedpinner = "", itemCondition = "",
+            streBbillSpinner = "";
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
     private long datemilisec;
     private static File frontimgFile, openImgFile, sNoPlateImgFile;
+
     private Typeface materialdesignicons_font;
     private SharedPreferences userPref;
 
@@ -423,6 +425,39 @@ public class EBMeterFragment extends MainFragment {
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
+            } else if (isEmptyStr(meterreading)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading");
+                return false;
+            } else if (isEmptyStr(ConnectionNo)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection No");
+                return false;
+            } else if (isEmptyStr(stretMeterSerialNo)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Meter Serial No");
+                return false;
+            } else if (isEmptyStr(strpowerTypeSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection Type");
+                return false;
+            } else if (isEmptyStr(stretCableRatingPIU)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cable Rating (Transformer to EB Meter)");
+                return false;
+            } else if (isEmptyStr(stretCableRatingPIU)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cable Rating ( EB Meter to PIU/IPMS/AMF))");
+                return false;
+            } else if (isEmptyStr(TransformerEarthing)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Transformer Neutral Earthing))");
+                return false;
+            } else if (isEmptyStr(kitkatChangeover)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Circuit Breakers))");
+                return false;
+            } else if (isEmptyStr(strwaterseedpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Water Shed Meter status))");
+                return false;
+            } else if (isEmptyStr(TheftfromSite)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  EB Theft from Site))");
+                return false;
+            } else if (isEmptyStr(streBbillSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  EB  bill))");
+                return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
                 return false;
@@ -432,10 +467,9 @@ public class EBMeterFragment extends MainFragment {
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
                 return false;
-            } else if (isEmptyStr(meterreading)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Ac");
-                return false;
             }
+
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
             itemCondition = "";

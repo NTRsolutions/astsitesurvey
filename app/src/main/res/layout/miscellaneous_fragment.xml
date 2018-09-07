@@ -71,7 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:hint="No. of Shelter"
+                                android:hint="Number of Shelter"
                                 android:maxLength="1"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
@@ -684,7 +684,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center_vertical"
-                            android:text="DF CNOPY"
+                            android:text="Df Cnopy"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_14dp" />
 
@@ -714,7 +714,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center_vertical"
-                            android:text="BB Cabinet"
+                            android:text="Bb Cabinet"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_14dp" />
 

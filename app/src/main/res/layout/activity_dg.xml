@@ -304,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Amf Panel Make "
+                        android:hint="Amf Panel Make"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -415,7 +415,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="No.Of Dg  Cylinder"
+                    android:text="Number Of Dg  Cylinder"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 
@@ -567,7 +567,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Engine Sr. No."
+                        android:hint="Engine Sr. Number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -656,7 +656,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="Dg Battery Sr.No."
+                        android:hint="Dg Battery Sr.Number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -1382,7 +1382,7 @@
                             android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Sr No Plate Photo"
+                            android:text="Sr Number Plate Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
