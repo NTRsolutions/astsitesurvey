@@ -313,7 +313,7 @@ public class MpptFragment extends MainFragment {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = etMake.getText().toString();
-            model = etCapacity.getText().toString();
+            model = etModel.getText().toString();
             capacity = etCapacity.getText().toString();
             serialNumber = etSerialNum.getText().toString();
             yearOfManufacturing = etYear.getText().toString();
@@ -328,11 +328,11 @@ public class MpptFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");

@@ -402,7 +402,7 @@ public class EBMeterFragment extends MainFragment {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("EB")) {
             make = etMake.getText().toString();
-            model = etCapacity.getText().toString();
+            model = etModel.getText().toString();
             capacity = etCapacity.getText().toString();
             serialNumber = etSerialNum.getText().toString();
             yearOfManufacturing = etYear.getText().toString();
@@ -430,20 +430,17 @@ public class EBMeterFragment extends MainFragment {
             } else if (isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
             } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Manufacturing Date");
                 return false;
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-                return false;
-            } else if (isEmptyStr(meterreading)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading");
                 return false;
             } else if (isEmptyStr(ConnectionNo)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection No");
@@ -451,14 +448,17 @@ public class EBMeterFragment extends MainFragment {
             } else if (isEmptyStr(stretMeterSerialNo)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Meter Serial No");
                 return false;
-            } else if (isEmptyStr(strpowerTypeSpinner)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection Type");
-                return false;
             } else if (isEmptyStr(stretCableRatingPIU)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cable Rating (Transformer to EB Meter)");
                 return false;
             } else if (isEmptyStr(stretCableRatingPIU)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cable Rating ( EB Meter to PIU/IPMS/AMF))");
+                return false;
+            } else if (isEmptyStr(meterreading)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading");
+                return false;
+            } else if (isEmptyStr(strpowerTypeSpinner)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection Type");
                 return false;
             } else if (isEmptyStr(TransformerEarthing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Transformer Neutral Earthing))");

@@ -307,7 +307,7 @@ public class SmpsFragment extends MainFragment {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = etMake.getText().toString();
-            model = etCapacity.getText().toString();
+            model = etModel.getText().toString();
             capacity = etCapacity.getText().toString();
             serialNumber = etSerialNum.getText().toString();
             yearOfManufacturing = etYear.getText().toString();
@@ -324,6 +324,12 @@ public class SmpsFragment extends MainFragment {
             currentDateTime = String.valueOf(System.currentTimeMillis());
 
             RatingofCable = etRatingofCable.getText().toString();
+            BodyEarthing = etBodyEarthing.getSelectedItem().toString();
+            PositiveEarthing = etPositiveEarthing.getSelectedItem().toString();
+            NoofRMWorking = etNoofRMWorking.getText().toString();
+            NoofRMFaulty = etNoofRMFaulty.getText().toString();
+
+           /* RatingofCable = etRatingofCable.getText().toString();
             if (RatingofCable.equals("")) {
                 RatingofCable = "0";
             }
@@ -343,26 +349,41 @@ public class SmpsFragment extends MainFragment {
             NoofRMFaulty = etNoofRMFaulty.getText().toString();
             if (NoofRMFaulty.equals("")) {
                 NoofRMFaulty = "0";
-            }
+            }*/
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
             } else if (isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
             } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            }  else if (frontimgFile == null || !frontimgFile.exists()) {
+            } else if (isEmptyStr(nofModule)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Modules Available at Site");
+                return false;
+            } else if (isEmptyStr(ModuleCapacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Module Capacity");
+                return false;
+            } else if (isEmptyStr(RatingofCable)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter BB to SMPS Cable Rating");
+                return false;
+            } else if (isEmptyStr(NoofRMWorking)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of RM Working");
+                return false;
+            } else if (isEmptyStr(NoofRMFaulty)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Number Of Rm Faulty");
+                return false;
+            } else if (frontimgFile == null || !frontimgFile.exists()) {
                 if (isFaulty) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
                 } else {

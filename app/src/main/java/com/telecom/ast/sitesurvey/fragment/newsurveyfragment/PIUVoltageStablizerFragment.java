@@ -328,7 +328,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         strnameofNameofEquipment = nameofNameofEquipment.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = etMake.getText().toString();
-            model = etCapacity.getText().toString();
+            model = etModel.getText().toString();
             capacity = etCapacity.getText().toString();
             serialNumber = etSerialNum.getText().toString();
             yearOfManufacturing = etYear.getText().toString();
@@ -345,17 +345,20 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             } else if (isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
+            } else if (isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
             } else if (isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
+                return false;
+            } else if (isEmptyStr(NofLcu)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Number Of Lcu");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
                 if (isFaulty) {

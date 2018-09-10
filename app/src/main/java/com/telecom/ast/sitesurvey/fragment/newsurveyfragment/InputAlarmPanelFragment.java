@@ -335,7 +335,7 @@ public class InputAlarmPanelFragment extends MainFragment {
     // ----validation -----
     private boolean isValidate() {
         make = getTextFromView(this.etMake);
-        model = getTextFromView(this.etCapacity);
+        model = getTextFromView(this.etModel);
         capacity = getTextFromView(this.etCapacity);
         serialNumber = getTextFromView(this.etSerialNum);
         AnchorOperator = getTextFromView(this.etAnchorOperator);
@@ -352,11 +352,11 @@ public class InputAlarmPanelFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(itemCondition)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
