@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,7 @@ import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
@@ -107,9 +109,12 @@ public class EBMeterFragment extends MainFragment {
     private String[] arrMake;
     private String[] arrCapacity;
     private Spinner circuitBreakersSpinner, eBbillSpinner;
-    AppCompatEditText etMeterSerialNo, etCableRatingPIU;
-    String stretMeterSerialNo, stretCableRatingPIU;
-    Spinner etTheftfromSite, etTransformerEarthing;
+    private AppCompatEditText etMeterSerialNo, etCableRatingPIU;
+    private String stretMeterSerialNo, stretCableRatingPIU;
+    private Spinner etTheftfromSite, etTransformerEarthing;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
     @Override
     protected int fragmentLayout() {
@@ -150,6 +155,10 @@ public class EBMeterFragment extends MainFragment {
         eBbillSpinner = findViewById(R.id.eBbillSpinner);
         etMeterSerialNo = findViewById(R.id.etMeterSerialNo);
         etCableRatingPIU = findViewById(R.id.etCableRatingPIU);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -256,6 +265,14 @@ public class EBMeterFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -459,17 +476,24 @@ public class EBMeterFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  EB  bill))");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo(EB meter reading image)");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
-
-
         } else {
             ASTUIUtil.showToast("Item Not Available");
             itemCondition = "";

@@ -396,6 +396,7 @@
                 android:padding="@dimen/_4dp">
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/image1ImageCardview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_130dp"
                     android:layout_margin="@dimen/_8dp"
@@ -421,6 +422,7 @@
                             android:src="@drawable/noimage" />
 
                         <TextView
+                            android:id="@+id/frontPhotolabl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/bg_color"
@@ -436,6 +438,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/image2ImageCardview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_130dp"
                     android:layout_margin="@dimen/_8dp"
@@ -484,6 +487,7 @@
                 android:padding="@dimen/_4dp">
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/image3ImageCardview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_130dp"
                     android:layout_margin="@dimen/_8dp"

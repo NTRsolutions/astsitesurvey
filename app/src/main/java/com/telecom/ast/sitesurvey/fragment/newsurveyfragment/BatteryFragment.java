@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -75,8 +76,8 @@ public class BatteryFragment extends MainFragment {
             etTightnessofBentCaps, etCellInterconnecting;
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     private String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
-    private String NoofItems = "", NoofCell = "", CellVoltage = "", NoofWeakCells = "", BackUpinHrs = "",
-            TightnessofBentCaps = "", CellInterconnecting = "0";
+    private String NoofItems = "0", NoofCell = "0", CellVoltage = "0", NoofWeakCells = "0", BackUpinHrs = "0",
+            TightnessofBentCaps = "0", CellInterconnecting = "0";
     private String strMakeId = "0", strEqupId = "0";
     private ArrayList<EquipMakeDataModel> equipMakeList;
     private ArrayList<EquipMakeDataModel> equipList;
@@ -99,7 +100,9 @@ public class BatteryFragment extends MainFragment {
     private int screenPosition = 1;
     private Button btnSubmmit;
     private String itemstatus;
-
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
     @Override
     protected int fragmentLayout() {
@@ -141,6 +144,10 @@ public class BatteryFragment extends MainFragment {
         next = findViewById(R.id.next);
         done = findViewById(R.id.done);
         btnSubmmit = findViewById(R.id.btnSubmmit);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
 
     }
 
@@ -243,6 +250,15 @@ public class BatteryFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -347,14 +363,24 @@ public class BatteryFragment extends MainFragment {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
             make = getTextFromView(this.etMake);
-            model = getTextFromView(this.etCapacity);
+            model = getTextFromView(this.etModel);
             capacity = getTextFromView(this.etCapacity);
             serialNumber = getTextFromView(this.etSerialNum);
             yearOfManufacturing = getTextFromView(this.etYear);
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             description = getTextFromView(this.etDescription);
             currentDateTime = String.valueOf(System.currentTimeMillis());
-      /*      NoofCell = getTextFromView(this.etNoofCell);
+            CellVoltage = getTextFromView(this.etCellVoltage);
+            NoofCell = getTextFromView(this.etNoofCell);
+            NoofWeakCells = getTextFromView(this.etNoofWeakCells);
+            BackUpinHrs = getTextFromView(this.etBackUpinHrs);
+            TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
+            CellInterconnecting = getTextFromView(this.etCellInterconnecting);
+
+
+
+
+        /*    NoofCell = getTextFromView(this.etNoofCell);
             if (NoofCell.equals("")) {
                 NoofCell = "0";
             }
@@ -384,54 +410,61 @@ public class BatteryFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
             } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-
-            } else if (ASTObjectUtil.isEmptyStr(itemCondition)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(itemCondition)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Item Condition");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
+            } else if (ASTObjectUtil.isEmptyStr(CellVoltage)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter BB Voltage");
+                return false;
             } else if (ASTObjectUtil.isEmptyStr(NoofCell)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Cell");
                 return false;
-
             } else if (ASTObjectUtil.isEmptyStr(NoofWeakCells)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Of Weak Cells");
                 return false;
-
             } else if (ASTObjectUtil.isEmptyStr(BackUpinHrs)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Back Up in Hrs");
                 return false;
-
             } else if (ASTObjectUtil.isEmptyStr(TightnessofBentCaps)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Tightness Of Bent Caps");
                 return false;
-
             } else if (ASTObjectUtil.isEmptyStr(CellInterconnecting)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cell Interconnecting Strip Tightness");
                 return false;
-
             } else if (!CellVoltage.matches(twoDecimalRegExp)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
                 return false;
             } else if (batteryimgFile == null || !batteryimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Battery Bank Photo");
+                }
+
                 return false;
-            } else if (cellImgFile == null || !cellImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
-                return false;
-            } else if (sNoPlateImgImgFile == null || !sNoPlateImgImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (cellImgFile == null || !cellImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select One Cell Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgImgFile == null || !sNoPlateImgImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no  PhoPlateto");
+                    return false;
+                }
             }
 
 

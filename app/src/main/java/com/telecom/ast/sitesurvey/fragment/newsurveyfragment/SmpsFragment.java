@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNReqResCode;
@@ -69,45 +71,48 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SmpsFragment extends MainFragment {
-    static ImageView frontimg, openImg, sNoPlateImg;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    static boolean isImage1, isImage2;
-    AppCompatEditText etDescription, etnoofModule, etModuleCapacity,etRatingofCable;
-    AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
-    SharedPreferences pref, smpsShrepreforrpiu;
-    String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
-    String strMakeId="0", nofModule="0", ModuleCapacity="0";
-    String[] arrMake;
-    String[] arrModel;
-    String[] arrCapacity;
-    ArrayList<EquipMakeDataModel> arrEquipData;
-    ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
-    ArrayList<EquipCapacityDataModel> equipCapacityDataList;
-    AtmDatabase atmDatabase;
-    String make="", model="", capacity="", serialNumber="", yearOfManufacturing="0", description="", currentDateTime="";
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
+    private static ImageView frontimg, openImg, sNoPlateImg;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static boolean isImage1, isImage2;
+    private AppCompatEditText etDescription, etnoofModule, etModuleCapacity, etRatingofCable;
+    private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
+    private SharedPreferences pref, smpsShrepreforrpiu;
+    private String strSavedDateTime, strUserId, strSiteId, CurtomerSite_Id;
+    private String strMakeId = "0", nofModule = "0", ModuleCapacity = "0";
+    private String[] arrMake;
+    private String[] arrModel;
+    private String[] arrCapacity;
+    private ArrayList<EquipMakeDataModel> arrEquipData;
+    private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
+    private AtmDatabase atmDatabase;
+    private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "0", description = "", currentDateTime = "";
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner;
 
-    AppCompatEditText
+    private AppCompatEditText
             etNoofRMWorking, etNoofRMFaulty;
 
-    Spinner itemStatusSpineer,etController,etConditionbackPlane,etBodyEarthing,etPositiveEarthing,etAlarmConnection,etSpareFuseStatus;
-    String Controller="", ConditionbackPlane="", BodyEarthing="0", PositiveEarthing="0", RatingofCable="0", AlarmConnection="",
-            NoofRMWorking="0", NoofRMFaulty="0", SpareFuseStatus="", itemCondition="";
+    private Spinner itemStatusSpineer, etController, etConditionbackPlane, etBodyEarthing, etPositiveEarthing, etAlarmConnection, etSpareFuseStatus;
+    private String Controller = "", ConditionbackPlane = "", BodyEarthing = "0", PositiveEarthing = "0", RatingofCable = "0", AlarmConnection = "",
+            NoofRMWorking = "0", NoofRMFaulty = "0", SpareFuseStatus = "", itemCondition = "";
 
-    SharedPreferences userPref;
-    TextView etYear, dateIcon;
-    Typeface materialdesignicons_font;
-    LinearLayout dateLayout;
-    long datemilisec;
-    int EquipmentSno = 1;
-    Button btnSubmit;
-    String strEqupId="0";
+    private SharedPreferences userPref;
+    private TextView etYear, dateIcon;
+    private Typeface materialdesignicons_font;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private int EquipmentSno = 1;
+    private Button btnSubmit;
+    private String strEqupId = "0";
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
     @Override
     protected int fragmentLayout() {
@@ -145,6 +150,10 @@ public class SmpsFragment extends MainFragment {
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -247,6 +256,13 @@ public class SmpsFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -290,22 +306,22 @@ public class SmpsFragment extends MainFragment {
     public boolean isValidate() {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
-        make = etMake.getText().toString();
-        model = etCapacity.getText().toString();
-        capacity = etCapacity.getText().toString();
-        serialNumber = etSerialNum.getText().toString();
-        yearOfManufacturing = etYear.getText().toString();
-        description = etDescription.getText().toString();
-        nofModule = etnoofModule.getText().toString();
-        ModuleCapacity = etModuleCapacity.getText().toString();
-        Controller = etController.getSelectedItem().toString();
-        ConditionbackPlane = etConditionbackPlane.getSelectedItem().toString();
-        AlarmConnection = etAlarmConnection.getSelectedItem().toString();
-        NoofRMWorking = etNoofRMWorking.getText().toString();
-        NoofRMFaulty = etNoofRMFaulty.getText().toString();
-        SpareFuseStatus = etSpareFuseStatus.getSelectedItem().toString();
-        itemCondition = itemConditionSpinner.getSelectedItem().toString();
-        currentDateTime = String.valueOf(System.currentTimeMillis());
+            make = etMake.getText().toString();
+            model = etCapacity.getText().toString();
+            capacity = etCapacity.getText().toString();
+            serialNumber = etSerialNum.getText().toString();
+            yearOfManufacturing = etYear.getText().toString();
+            description = etDescription.getText().toString();
+            nofModule = etnoofModule.getText().toString();
+            ModuleCapacity = etModuleCapacity.getText().toString();
+            Controller = etController.getSelectedItem().toString();
+            ConditionbackPlane = etConditionbackPlane.getSelectedItem().toString();
+            AlarmConnection = etAlarmConnection.getSelectedItem().toString();
+            NoofRMWorking = etNoofRMWorking.getText().toString();
+            NoofRMFaulty = etNoofRMFaulty.getText().toString();
+            SpareFuseStatus = etSpareFuseStatus.getSelectedItem().toString();
+            itemCondition = itemConditionSpinner.getSelectedItem().toString();
+            currentDateTime = String.valueOf(System.currentTimeMillis());
 
             RatingofCable = etRatingofCable.getText().toString();
             if (RatingofCable.equals("")) {
@@ -346,21 +362,24 @@ public class SmpsFragment extends MainFragment {
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
-            } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+            }  else if (frontimgFile == null || !frontimgFile.exists()) {
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");
-                return false;
-            } else if (isEmptyStr(nofModule)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Nof Of Modules");
-                return false;
-            } else if (isEmptyStr(ModuleCapacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Module Capacity");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
         } else {
             ASTUIUtil.showToast("Item Not Available");
@@ -423,7 +442,7 @@ public class SmpsFragment extends MainFragment {
                             ASTUIUtil.showToast("Your SMPS Data save Successfully");
                             if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
                                 showAddMoreItemDialog();
-                            }else{
+                            } else {
                                 reloadBackScreen();
                             }
                             SharedPreferences.Editor editor = smpsShrepreforrpiu.edit();
@@ -596,7 +615,7 @@ public class SmpsFragment extends MainFragment {
                 int ot = FilePickerHelper.getExifRotation(file);
                 Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
                 if (bitmap != null) {
-                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
+                    uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
                     imgFile = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator, fileName);
 
@@ -628,10 +647,10 @@ public class SmpsFragment extends MainFragment {
                 // imageView.setImageBitmap(bitmap);
                 if (isImage1) {
                     frontimgFile = imgFile;
-                   // Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(frontimgFile).into(imageView);
                 } else if (isImage2) {
                     openImgFile = imgFile;
-                  // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
+                    // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
                 } else {
                     sNoPlateImgFile = imgFile;
                     //Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
@@ -644,6 +663,7 @@ public class SmpsFragment extends MainFragment {
         }.execute();
 
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

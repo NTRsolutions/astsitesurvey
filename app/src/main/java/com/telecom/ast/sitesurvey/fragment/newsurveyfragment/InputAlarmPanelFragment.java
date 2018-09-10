@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -72,37 +73,39 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class InputAlarmPanelFragment extends MainFragment {
 
-    static ImageView frontimg, openImg, sNoPlateImg;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    static boolean isImage1, isImage2;
-    AppCompatEditText etDescription;
-    AppCompatEditText etAnchorOperator, etSharingOperator;
-    AppCompatAutoCompleteTextView etMake, etModel, etCapacity, etSerialNum;
+    private static ImageView frontimg, openImg, sNoPlateImg;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static boolean isImage1, isImage2;
+    private AppCompatEditText etDescription;
+    private AppCompatEditText etAnchorOperator, etSharingOperator;
+    private AppCompatAutoCompleteTextView etMake, etModel, etCapacity, etSerialNum;
 
-    String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
-    String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
-    String strMakeId = "0", strModelId;
-    String CurtomerSite_Id;
-    AtmDatabase atmDatabase;
-    Spinner itemConditionSpinner;
-    String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "", AnchorOperator = "", SharingOperator = "";
-    Button btnSubmit;
-    LinearLayout descriptionLayout;
-    Spinner itemStatusSpineer;
-    SharedPreferences userPref;
-    TextView etYear, dateIcon;
-    Typeface materialdesignicons_font;
-    LinearLayout dateLayout;
-    long datemilisec;
-
-    String strEqupId;
+    private String strMake, strModel, strCapacity, strSerialNum, strYearOfManufacturing, strDescription;
+    private String strSavedDateTime, strUserId, strSiteId, strDescriptionId, itemCondition;
+    private String strMakeId = "0", strModelId;
+    private String CurtomerSite_Id;
+    private AtmDatabase atmDatabase;
+    private Spinner itemConditionSpinner;
+    private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "", AnchorOperator = "", SharingOperator = "";
+    private Button btnSubmit;
+    private LinearLayout descriptionLayout;
+    private Spinner itemStatusSpineer;
+    private SharedPreferences userPref;
+    private TextView etYear, dateIcon;
+    private Typeface materialdesignicons_font;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private String strEqupId;
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    String[] arrMake;
-    String[] arrCapacity;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private String[] arrMake;
+    private String[] arrCapacity;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
 
     @Override
@@ -133,6 +136,10 @@ public class InputAlarmPanelFragment extends MainFragment {
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -241,7 +248,15 @@ public class InputAlarmPanelFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+
             }
+
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -359,14 +374,23 @@ public class InputAlarmPanelFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Sharing Operator");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
 
 

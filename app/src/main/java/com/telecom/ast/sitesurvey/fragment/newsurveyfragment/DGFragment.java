@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -119,6 +120,10 @@ public class DGFragment extends MainFragment {
             etDGBatteryStatus, etConditionofwiring, etDGearthing, etConditionCANOPY, eTDGlowLUBEWire, etCableGroutingspinner,
             etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver,
             etDGPollutionCertificate, dGExhaustSmokecolour;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
+
 
     @Override
     protected int fragmentLayout() {
@@ -178,6 +183,10 @@ public class DGFragment extends MainFragment {
         alternaterPhaseSpinner = findViewById(R.id.alternaterPhaseSpinner);
         etDGBatteryStatus = findViewById(R.id.etDGBatteryStatus);
         dGExhaustSmokecolour = findViewById(R.id.dGExhaustSmokecolour);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -377,10 +386,19 @@ public class DGFragment extends MainFragment {
         });
         ASTUIUtil commonFunctions = new ASTUIUtil();
         final String currentDate = commonFunctions.getFormattedDate("dd/MM/yyyy", System.currentTimeMillis());
+
         itemConditionSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "  Front Photo(DG run hr meter reading image");
+
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -403,7 +421,6 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-                    itemStatusSpineer.setEnabled(false);
                     mCBStatusSpinner.setEnabled(false);
                     etdgAlternatermake.setEnabled(false);
                     eSNSpinner.setEnabled(false);
@@ -427,6 +444,7 @@ public class DGFragment extends MainFragment {
                     etDGFoundation.setEnabled(false);
                     etDGCoolingtype.setEnabled(false);
                     etDgintelpipe.setEnabled(false);
+                    alternaterPhaseSpinner.setEnabled(false);
                     etDgouttelpipe.setEnabled(false);
                     etDGExhaustcondi.setEnabled(false);
                     etDGEmergencyStopSwitch.setEnabled(false);
@@ -446,7 +464,6 @@ public class DGFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
-                    itemStatusSpineer.setEnabled(true);
                     mCBStatusSpinner.setEnabled(true);
                     etdgAlternatermake.setEnabled(true);
                     eSNSpinner.setEnabled(true);
@@ -459,6 +476,7 @@ public class DGFragment extends MainFragment {
                     etAlternaterSno.setEnabled(true);
                     etAlternterCapacity.setEnabled(true);
                     etDGBatteryStatus.setEnabled(true);
+                    alternaterPhaseSpinner.setEnabled(true);
                     etDGBatteryMake.setEnabled(true);
                     etConditionofwiring.setEnabled(true);
                     etDGearthing.setEnabled(true);
@@ -563,22 +581,22 @@ public class DGFragment extends MainFragment {
                 DGRunHourMer = "0";
             }
 
-            if (isEmptyStr(make)) {
+            if (ASTObjectUtil.isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
                 return false;
             } else if (isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (isEmptyStr(capacity)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
-                return false;
-            } else if (isEmptyStr(serialNumber)) {
+            } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-            } else if (isEmptyStr(yearOfManufacturing)) {
+            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
+                return false;
+            } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
-            } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(straMFPanelSpinner)) {
@@ -642,6 +660,10 @@ public class DGFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Dg Battery Capacity");
                 return false;
 
+            } else if (ASTObjectUtil.isEmptyStr(DGRunHourMer)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Run Hour Meter Reading");
+                return false;
+
             } else if (ASTObjectUtil.isEmptyStr(dgContacter)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Contacter");
                 return false;
@@ -656,10 +678,6 @@ public class DGFragment extends MainFragment {
 
             } else if (ASTObjectUtil.isEmptyStr(ConditionCANOPY)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Condition Of Canopy");
-                return false;
-
-            } else if (ASTObjectUtil.isEmptyStr(DGRunHourMer)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Dg Run Hour Meter Reading");
                 return false;
 
             } else if (ASTObjectUtil.isEmptyStr(DGlowLUBEWire)) {
@@ -715,24 +733,29 @@ public class DGFragment extends MainFragment {
                 return false;
 
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select DG Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo(DG run hr meter reading image)");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
-
-
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }
-
         return true;
     }
-
 
     public void saveBasicDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
@@ -917,7 +940,8 @@ public class DGFragment extends MainFragment {
     }
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+    private void compresImage(final File file, final String fileName,
+                              final ImageView imageView) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
             Uri uri;

@@ -126,7 +126,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_2dp"
                     android:gravity="center_vertical"
-                    android:text="Item Condition"
+                    android:text="Tower Condition"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_14dp" />
 

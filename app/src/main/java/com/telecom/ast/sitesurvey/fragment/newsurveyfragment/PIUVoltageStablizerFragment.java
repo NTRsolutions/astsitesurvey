@@ -15,6 +15,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,6 +45,7 @@ import com.telecom.ast.sitesurvey.model.ContentData;
 import com.telecom.ast.sitesurvey.model.EquipCapacityDataModel;
 import com.telecom.ast.sitesurvey.model.EquipDescriptionDataModel;
 import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
+import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
@@ -78,7 +80,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     private AppCompatEditText etDescription, etetNofLcu;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     private SharedPreferences pref;
-    private String  strUserId, strSiteId, CurtomerSite_Id;
+    private String strUserId, strSiteId, CurtomerSite_Id;
     private String strMakeId = "0", NofLcu = "0";
     private String[] arrMake;
     private String[] arrModel;
@@ -90,7 +92,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
 
 
     private Spinner itemStatusSpineer;
-    private String    itemCondition = "";
+    private String itemCondition = "";
 
     private SharedPreferences userPref;
     private TextView etYear, dateIcon;
@@ -108,9 +110,12 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     private SharedPreferences smpsShrepreforrpiu;
     private Spinner nameofNameofEquipment, workingStatus, SiteAutomationStatus;
     private String strnameofNameofEquipment, strworkingStatus, stretnotworkingText, strSiteAutomationStatus;
-    LinearLayout noofLcuLauout, notworkinsItemLayout;
+    private LinearLayout noofLcuLauout, notworkinsItemLayout;
     private AutoCompleteTextView etnotworkingText;
-    TextInputLayout etnotworlyTextInput;
+    private TextInputLayout etnotworlyTextInput;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
     @Override
     protected int fragmentLayout() {
@@ -145,6 +150,10 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         etnotworkingText = findViewById(R.id.etnotworlyText);
         SiteAutomationStatus = findViewById(R.id.SiteAutomationStatus);
         etnotworlyTextInput = findViewById(R.id.etnotworlyTextInput);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -252,6 +261,13 @@ public class PIUVoltageStablizerFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -307,7 +323,7 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     }
 
 
-    public boolean  isValiDate() {
+    public boolean isValiDate() {
         itemstatus = itemStatusSpineer.getSelectedItem().toString();
         strnameofNameofEquipment = nameofNameofEquipment.getSelectedItem().toString();
         if (itemStatusSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
@@ -342,14 +358,23 @@ public class PIUVoltageStablizerFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
         } else {
             ASTUIUtil.showToast("Item Not Available");

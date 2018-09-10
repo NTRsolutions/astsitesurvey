@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -68,35 +69,36 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MpptFragment extends MainFragment {
-    static ImageView frontImg, openImg, sNoPlateImg;
-    static boolean isImage1, isImage2;
-    Button btnSubmit;
-    LinearLayout descriptionLayout;
-    Spinner itemConditionSpinner;
-    String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
-    String make = "", model = "", capacity = "", serialNumber = "", description = "", currentDateTime = "", yearOfManufacturing = "";
-    AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
-    AppCompatEditText etDescription, etMPPTReading;
-    String MPPTReading = "0", itemCondition = "";
-    String strMakeId = "0";
-    Spinner itemStatusSpineer;
-    TextView etYear, dateIcon;
-    LinearLayout dateLayout;
-    long datemilisec;
-    static File frontimgFile, openImgFile, sNoPlateImgFile;
-    Typeface materialdesignicons_font;
-    SharedPreferences mpptSharedPrefpref, userPref;
-
-
-    String strEqupId = "0";
+    private static ImageView frontImg, openImg, sNoPlateImg;
+    private static boolean isImage1, isImage2;
+    private Button btnSubmit;
+    private LinearLayout descriptionLayout;
+    private Spinner itemConditionSpinner;
+    private String strUserId, strSavedDateTime, strSiteId, CurtomerSite_Id;
+    private String make = "", model = "", capacity = "", serialNumber = "", description = "", currentDateTime = "", yearOfManufacturing = "";
+    private AutoCompleteTextView etCapacity, etMake, etSerialNum, etModel;
+    private AppCompatEditText etDescription, etMPPTReading;
+    private String MPPTReading = "0", itemCondition = "";
+    private String strMakeId = "0";
+    private Spinner itemStatusSpineer;
+    private TextView etYear, dateIcon;
+    private LinearLayout dateLayout;
+    private long datemilisec;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private Typeface materialdesignicons_font;
+    private SharedPreferences mpptSharedPrefpref, userPref;
+    private String strEqupId = "0";
     private String capcityId = "0";
     private String itemstatus;
-    ArrayList<EquipMakeDataModel> equipMakeList;
-    ArrayList<EquipMakeDataModel> equipList;
-    ArrayList<EquipCapacityDataModel> equipCapacityList;
-    AtmDatabase atmDatabase;
-    String[] arrMake;
-    String[] arrCapacity;
+    private ArrayList<EquipMakeDataModel> equipMakeList;
+    private ArrayList<EquipMakeDataModel> equipList;
+    private ArrayList<EquipCapacityDataModel> equipCapacityList;
+    private AtmDatabase atmDatabase;
+    private String[] arrMake;
+    private String[] arrCapacity;
+    private boolean isFaulty;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private TextView frontPhotolabl;
 
     @Override
     protected int fragmentLayout() {
@@ -124,6 +126,10 @@ public class MpptFragment extends MainFragment {
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
+        image1ImageCardview = findViewById(R.id.image1ImageCardview);
+        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image3ImageCardview = findViewById(R.id.image3ImageCardview);
+        frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
@@ -195,6 +201,14 @@ public class MpptFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
+
+                isFaulty = ASTObjectUtil.isEmptyStr(description) &&
+                        itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
+                        || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
+                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -330,14 +344,23 @@ public class MpptFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter MPPT Reading");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                if (isFaulty) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
+                } else {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                }
                 return false;
-            } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
-                return false;
-            } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
-                return false;
+            } else if (!isFaulty) {
+                if (openImgFile == null || !openImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    return false;
+                }
+
+            } else if (!isFaulty) {
+                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                }
             }
 
 
