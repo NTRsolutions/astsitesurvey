@@ -314,7 +314,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/bg_color"
                             android:padding="@dimen/_5dp"
-                            android:text="Front Photo"
+                            android:text="Photo With Equipment Specification"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -355,7 +355,7 @@
                             android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
                             android:padding="@dimen/_5dp"
-                            android:text="Open Photo"
+                            android:text="System Open Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />

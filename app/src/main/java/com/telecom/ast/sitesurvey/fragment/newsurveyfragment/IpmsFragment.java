@@ -329,10 +329,10 @@ public class IpmsFragment extends MainFragment {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter LCU Capacity");
                 return false;
             } else if (frontimgFile == null || !frontimgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo With Equipment Specification");
                 return false;
             } else if (openImgFile == null || !openImgFile.exists()) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
                 return false;
             } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr no Plate Photo");

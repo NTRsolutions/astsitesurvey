@@ -11,12 +11,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.CardView;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,19 +25,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
-import com.telecom.ast.sitesurvey.component.FNEditText;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.database.AtmDatabase;
-import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
-import com.telecom.ast.sitesurvey.filepicker.model.MediaFile;
 import com.telecom.ast.sitesurvey.fragment.MainFragment;
 import com.telecom.ast.sitesurvey.framework.FileUploaderHelper;
 import com.telecom.ast.sitesurvey.model.ContentData;
@@ -49,31 +42,23 @@ import com.telecom.ast.sitesurvey.model.EquipMakeDataModel;
 import com.telecom.ast.sitesurvey.utils.ASTObjectUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
-import com.telecom.ast.sitesurvey.utils.FNObjectUtil;
-import com.telecom.ast.sitesurvey.utils.FNReqResCode;
 import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class AirConditionerFragment extends MainFragment {
@@ -259,7 +244,7 @@ public class AirConditionerFragment extends MainFragment {
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
                 image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
-                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Photo With Equipment Specification");
 
             }
 
@@ -391,12 +376,12 @@ public class AirConditionerFragment extends MainFragment {
                 if (isFaulty) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Faulty Photo");
                 } else {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo");
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo With Equipment Specification");
                 }
                 return false;
             } else if (!isFaulty) {
                 if (openImgFile == null || !openImgFile.exists()) {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
                     return false;
                 }
 

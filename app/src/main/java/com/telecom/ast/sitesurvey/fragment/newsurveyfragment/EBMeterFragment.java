@@ -271,7 +271,7 @@ public class EBMeterFragment extends MainFragment {
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
                 image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
-                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Front Photo");
+                frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Photo With Equipment Specification");
 
             }
 
@@ -479,12 +479,12 @@ public class EBMeterFragment extends MainFragment {
                 if (isFaulty) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select  Faulty Photo");
                 } else {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Front Photo(EB meter reading image)");
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo With Equipment Specification(EB meter reading image)");
                 }
                 return false;
             } else if (!isFaulty) {
                 if (openImgFile == null || !openImgFile.exists()) {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Open Photo");
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
                     return false;
                 }
 
