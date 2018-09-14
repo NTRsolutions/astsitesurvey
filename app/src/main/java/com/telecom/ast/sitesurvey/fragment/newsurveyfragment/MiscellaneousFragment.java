@@ -831,37 +831,37 @@ public class MiscellaneousFragment extends MainFragment {
             String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image1);
+                compresImage(file, imageName, image1,imageName);
             }
         } else if (ismage4) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_MainGateSize.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image4);
+                compresImage(file, imageName, image4,imageName);
             }
         } else if (ismage5) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_Plot.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image5);
+                compresImage(file, imageName, image5,imageName);
             }
         } else if (ismage6) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image6);
+                compresImage(file, imageName, image6,imageName);
             }
         } else if (isDiagramImage) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_LayoutDiagram.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, DiagramImage);
+                compresImage(file, imageName, DiagramImage,imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_MiscItem_1_SiteHygiene.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, SiteHygieneImage);
+                compresImage(file, imageName, SiteHygieneImage,imageName);
             }
         }
 
@@ -870,7 +870,7 @@ public class MiscellaneousFragment extends MainFragment {
 
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+    private void compresImage(final File file, final String fileName, final ImageView imageView, final String imageName) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
             Uri uri;
@@ -888,7 +888,7 @@ public class MiscellaneousFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

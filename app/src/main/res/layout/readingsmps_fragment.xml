@@ -339,6 +339,7 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentTop="true"
                                     android:layout_weight="1"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/noimage" />
 
                                 <TextView

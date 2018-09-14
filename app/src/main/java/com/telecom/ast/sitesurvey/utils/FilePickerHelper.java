@@ -55,7 +55,7 @@ public class FilePickerHelper {
 
 
     //----------image compress
-    public static Bitmap compressImage(String imagePath, int imgOrientation, float maxWidth, float maxHeight) {
+    public static Bitmap compressImage(String imagePath, int imgOrientation, float maxWidth, float maxHeight, String imagename) {
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -113,7 +113,7 @@ public class FilePickerHelper {
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, paint);
-        setTimeStampIntoImage(canvas, paint, middleY);
+        setTimeStampIntoImage(canvas, paint, middleY, imagename);
         Matrix matrix = new Matrix();
         matrix.postRotate(getRotateDegreeFromOrientation(imgOrientation));
         scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
@@ -174,7 +174,7 @@ public class FilePickerHelper {
     }
 
     //set time stamp into image
-    private static void setTimeStampIntoImage(Canvas canvas, Paint paint, float middleY) {
+    private static void setTimeStampIntoImage(Canvas canvas, Paint paint, float middleY, String imagename) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
         String dateTime = sdf.format(Calendar.getInstance().getTime()); // reading local time in the system
         // paint.setAntiAlias(true);
@@ -183,7 +183,9 @@ public class FilePickerHelper {
         paint.setTextSize(30);
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(dateTime, 10, middleY / 3, paint);
+        canvas.drawText(imagename, 10, middleY / 4, paint);
     }
+
     // convert i/o stream into byte array
 
     public static byte[] getBytes(InputStream inputStream) throws IOException {

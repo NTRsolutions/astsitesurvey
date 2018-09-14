@@ -135,39 +135,40 @@ public class ReadingSmpsFragment extends MainFragment {
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.clampimage1) {
-            String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
-            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1clmp = true;
             isImage2clmp = false;
             isImage1 = false;
             isImage2 = false;
-        } else if (view.getId() == R.id.clampimage2) {
-            String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
+            String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.clampimage2) {
             isImage1clmp = false;
             isImage2clmp = true;
             isImage1 = false;
             isImage2 = false;
-        } else if (view.getId() == R.id.image1) {
-            String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
+            String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image1) {
             isImage1clmp = false;
             isImage2clmp = false;
             isImage1 = true;
             isImage2 = false;
-        } else if (view.getId() == R.id.image2) {
-            String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
+            String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image2) {
             isImage1clmp = false;
             isImage2clmp = false;
             isImage1 = false;
             isImage2 = true;
+            String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
             }
 
         }
+
     }
 
 
@@ -310,39 +311,38 @@ public class ReadingSmpsFragment extends MainFragment {
         }
     }
 
-
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
             String imageName = CurtomerSite_Id + "_SMPS_1_BattVoltImg.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, battVoltageImage);
+                compresImage(file, imageName, battVoltageImage,imageName);
             }
         } else if (isImage2) {
             String imageName = CurtomerSite_Id + "_SMPS_1_LoadCurrentImg.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, loadCurrentImage);
+                compresImage(file, imageName, loadCurrentImage,imageName);
             }
         } else if (isImage1clmp) {
             String imageName = CurtomerSite_Id + "_Clamp_1_BattVoltImg.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, clampimage1);
+                compresImage(file, imageName, clampimage1,imageName);
             }
         } else if (isImage2clmp) {
             String imageName = CurtomerSite_Id + "_Clamp_1_LoadCurrentImg.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, clampimage2);
+                compresImage(file, imageName, clampimage2,imageName);
             }
         }
     }
 
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+    private void compresImage(final File file, final String fileName, final ImageView imageView, final String imageName) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
             Uri uri;
@@ -360,7 +360,7 @@ public class ReadingSmpsFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

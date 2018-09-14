@@ -627,25 +627,25 @@ public class BatteryFragment extends MainFragment {
             String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, batteryimg);
+                compresImage(file, imageName, batteryimg,imageName);
             }
         } else if (isImage2) {
             String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, cellImg);
+                compresImage(file, imageName, cellImg,imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg);
+                compresImage(file, imageName, sNoPlateImg,imageName);
             }
         }
     }
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+    private void compresImage(final File file, final String fileName, final ImageView imageView, final String imageName) {
         new AsyncTask<Void, Void, Boolean>() {
             File finalimgFile;
             Uri uri;
@@ -663,7 +663,7 @@ public class BatteryFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

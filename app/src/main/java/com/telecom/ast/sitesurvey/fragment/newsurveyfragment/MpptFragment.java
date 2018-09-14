@@ -492,26 +492,26 @@ public class MpptFragment extends MainFragment {
             String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontImg);
+                compresImage(file, imageName, frontImg,imageName);
             }
         } else if (isImage2) {
             String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg);
+                compresImage(file, imageName, openImg,imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg);
+                compresImage(file, imageName, sNoPlateImg,imageName);
             }
         }
     }
 
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView) {
+    private void compresImage(final File file, final String fileName, final ImageView imageView, final String imageName) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
             Uri uri;
@@ -529,7 +529,7 @@ public class MpptFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
