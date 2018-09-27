@@ -18,10 +18,12 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -59,6 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -73,7 +76,8 @@ public class BatteryFragment extends MainFragment {
     private boolean isImage1, isImage2;
     private AppCompatAutoCompleteTextView etMake;
     private AppCompatEditText etDescription, etNoofCell, etCellVoltage, etNoofWeakCells, etBackUpinHrs,
-            etTightnessofBentCaps, etCellInterconnecting;
+            etCellInterconnecting;
+    AppCompatEditText etTorqueTightnes;
     private AppCompatAutoCompleteTextView etModel, etCapacity, etSerialNum;
     private String strUserId, strSiteId, itemCondition, CurtomerSite_Id;
     private String NoofItems = "0", NoofCell = "0", CellVoltage = "0", NoofWeakCells = "0", BackUpinHrs = "0",
@@ -88,12 +92,11 @@ public class BatteryFragment extends MainFragment {
     private Spinner itemConditionSpinner;
     private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "", description = "", currentDateTime = "";
     private LinearLayout descriptionLayout;
-    private Spinner itemStatusSpineer;
+    private Spinner itemStatusSpineer, etTightnessofBentCaps;
     private SharedPreferences userPref;
-    private TextView etYear, dateIcon, next, done, previous;
+    private TextView etYear, dateIcon;
     private Typeface materialdesignicons_font;
     private LinearLayout dateLayout;
-    private LinearLayout nextLayout;
     private long datemilisec;
     private String capcityId = "0";
     private boolean isLast = false;
@@ -103,6 +106,13 @@ public class BatteryFragment extends MainFragment {
     private boolean isFaulty;
     private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
     private TextView frontPhotolabl;
+    private LinearLayout lnrDynamicHolderBBCellsno;
+    private String nofoBBCellSno, NoofWeakCellssNo;
+    private List<EditText> allBBCELLSnoEditTextList;
+    private List<EditText> allBBWeakCELLSnoEditTextList;
+    private LinearLayout lnrDynamicHolderweKBBCellsno;
+    private String strTorqueTightnes;
+    private String SEPARATORComma = ",";
 
     @Override
     protected int fragmentLayout() {
@@ -134,20 +144,14 @@ public class BatteryFragment extends MainFragment {
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
-        previous = findViewById(R.id.previous);
-        previous.setTypeface(materialdesignicons_font);
-        previous.setText(Html.fromHtml("&#xf141;"));
-        nextLayout = findViewById(R.id.nextLayout);
-        TextView nextIcon = findViewById(R.id.nextIcon);
-        nextIcon.setTypeface(materialdesignicons_font);
-        nextIcon.setText(Html.fromHtml("&#xf142;"));
-        next = findViewById(R.id.next);
-        done = findViewById(R.id.done);
         btnSubmmit = findViewById(R.id.btnSubmmit);
         image1ImageCardview = findViewById(R.id.image1ImageCardview);
         image12ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
+        lnrDynamicHolderBBCellsno = findViewById(R.id.lnrDynamicHolderBBCellsno);
+        lnrDynamicHolderweKBBCellsno = findViewById(R.id.lnrDynamicHolderweKBBCellsno);
+        etTorqueTightnes = findViewById(R.id.etTorqueTightnes);
 
     }
 
@@ -158,9 +162,6 @@ public class BatteryFragment extends MainFragment {
         cellImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         dateLayout.setOnClickListener(this);
-        done.setOnClickListener(this);
-        previous.setOnClickListener(this);
-        nextLayout.setOnClickListener(this);
         btnSubmmit.setOnClickListener(this);
     }
 
@@ -286,6 +287,7 @@ public class BatteryFragment extends MainFragment {
                     etBackUpinHrs.setEnabled(false);
                     etTightnessofBentCaps.setEnabled(false);
                     etCellInterconnecting.setEnabled(false);
+                    etTorqueTightnes.setEnabled(false);
                 } else {
                     batteryimg.setEnabled(true);
                     cellImg.setEnabled(true);
@@ -304,12 +306,16 @@ public class BatteryFragment extends MainFragment {
                     etBackUpinHrs.setEnabled(true);
                     etTightnessofBentCaps.setEnabled(true);
                     etCellInterconnecting.setEnabled(true);
+                    etTorqueTightnes.setEnabled(true);
                 }
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        setnofBBCellSNo();
+        setnofBBweakCellSNo();
     }
 
     private void getUserPref() {
@@ -321,25 +327,20 @@ public class BatteryFragment extends MainFragment {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.nextLayout) {
-          /*  if (isValidate()) {
-                saveScreenData(true, false);
-            }*/
-        } else if (view.getId() == R.id.previous) {
-            //saveScreenData(false, false);
-        } else if (view.getId() == R.id.done) {
-            if (isValidate()) {
-                // saveScreenData(true, true);
-            }
-        } else if (view.getId() == R.id.dateLayout) {
+        if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_EquipmentSepcificationPhoto.jpg";
+            }
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_CompleteBatteryBankPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
@@ -374,9 +375,9 @@ public class BatteryFragment extends MainFragment {
             NoofCell = getTextFromView(this.etNoofCell);
             NoofWeakCells = getTextFromView(this.etNoofWeakCells);
             BackUpinHrs = getTextFromView(this.etBackUpinHrs);
-            TightnessofBentCaps = getTextFromView(this.etTightnessofBentCaps);
+            TightnessofBentCaps = etTightnessofBentCaps.getSelectedItem().toString();
             CellInterconnecting = getTextFromView(this.etCellInterconnecting);
-
+            strTorqueTightnes = getTextFromView(this.etTorqueTightnes);
 
 
 
@@ -410,10 +411,10 @@ public class BatteryFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(model)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Model");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
+            } /*else if (ASTObjectUtil.isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(capacity)) {
+            }*/ else if (ASTObjectUtil.isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
@@ -443,8 +444,11 @@ public class BatteryFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(CellInterconnecting)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cell Interconnecting Strip Tightness");
                 return false;
+            } else if (ASTObjectUtil.isEmptyStr(strTorqueTightnes)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter BB Bolts Torque Tightness (NM)");
+                return false;
             } else if (!CellVoltage.matches(twoDecimalRegExp)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid input like this xx.xx");
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid Cell Voltage input like this xx.xx");
                 return false;
             } else if (batteryimgFile == null || !batteryimgFile.exists()) {
                 if (isFaulty) {
@@ -516,12 +520,16 @@ public class BatteryFragment extends MainFragment {
             EquipmentData.put("MfgDate", datemilisec);
             EquipmentData.put("ItemCondition", itemCondition);
             EquipmentData.put("BB_NoofCell", NoofCell);
+            EquipmentData.put("BB_CellSerialNo", nofoBBCellSno);
             EquipmentData.put("BB_BattVoltage", CellVoltage);
             EquipmentData.put("BB_CellVoltage", 0);
             EquipmentData.put("BB_NoofWeakCells", NoofWeakCells);
+            EquipmentData.put("BB_WeakCellSerialNo", NoofWeakCellssNo);
             EquipmentData.put("BB_BackUp", BackUpinHrs);
             EquipmentData.put("BB_TightnessofBentCaps", TightnessofBentCaps);
             EquipmentData.put("BB_CellInterconnectingstriptightness", CellInterconnecting);
+            EquipmentData.put("BB_BoltsTorqueTightness", strTorqueTightnes);
+
             JSONArray equipArray = new JSONArray();
             equipArray.put(EquipmentData);
             mainObj.put("EquipmentData", equipArray);
@@ -550,6 +558,8 @@ public class BatteryFragment extends MainFragment {
     //save battery data into server
     public void saveBatteryDataonServer() {
         if (ASTUIUtil.isOnline(getContext())) {
+            getBBCellSno();
+            getBBweakCellSno();
             final ASTProgressBar progressBar = new ASTProgressBar(getContext());
             progressBar.show();
             String serviceURL = Constant.BASE_URL + Constant.SurveyDataSave;
@@ -624,22 +634,28 @@ public class BatteryFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_EquipmentSepcificationPhoto.jpg";
+            }
+
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, batteryimg,imageName);
+                compresImage(file, imageName, batteryimg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_CompleteBatteryBankPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, cellImg,imageName);
+                compresImage(file, imageName, cellImg, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_BB_" + screenPosition + "_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
             }
         }
     }
@@ -663,7 +679,7 @@ public class BatteryFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -727,12 +743,13 @@ public class BatteryFragment extends MainFragment {
         etCellVoltage.setText("");
         etNoofWeakCells.setText("");
         etBackUpinHrs.setText("");
-        etTightnessofBentCaps.setText("");
+        etTightnessofBentCaps.setSelection(0);
         etCellInterconnecting.setText("");
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(batteryimg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(cellImg);
         Picasso.with(ApplicationHelper.application().getContext()).load(R.drawable.noimage).into(sNoPlateImg);
         itemConditionSpinner.setSelection(0);
+        etTorqueTightnes.setText("");
     }
 
     @Override
@@ -763,5 +780,91 @@ public class BatteryFragment extends MainFragment {
         alertDialog.show();
         return isgoBack;
     }
+
+
+    /**
+     * make run time view for no of BB  Cell
+     */
+    public void setnofBBCellSNo() {
+        etNoofCell.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (etNoofCell.getText().toString().length() > 0) {
+                    allBBCELLSnoEditTextList = new ArrayList<EditText>();
+                    try {
+                        lnrDynamicHolderBBCellsno.removeAllViews();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                    int length = Integer.parseInt(etNoofCell.getText().toString());
+
+                    for (int i = 0; i < length; i++) {
+                        AppCompatEditText editText = new AppCompatEditText(getContext());
+                        allBBCELLSnoEditTextList.add(editText);
+                        editText.setId(i + 1);
+                        editText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        editText.setHint("BB cell  \t" + (i + 1) + "\t Serial No.");
+                        lnrDynamicHolderBBCellsno.addView(editText);
+                    }
+
+                }
+            }
+        });
+    }
+
+
+    /**
+     * make run time view for no of BB weak Cell
+     */
+    public void setnofBBweakCellSNo() {
+        etNoofWeakCells.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (etNoofWeakCells.getText().toString().length() > 0) {
+                    allBBWeakCELLSnoEditTextList = new ArrayList<EditText>();
+                    try {
+                        lnrDynamicHolderweKBBCellsno.removeAllViews();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                    int length = Integer.parseInt(etNoofWeakCells.getText().toString());
+
+                    for (int i = 0; i < length; i++) {
+                        AppCompatEditText editText = new AppCompatEditText(getContext());
+                        allBBWeakCELLSnoEditTextList.add(editText);
+                        editText.setId(i + 1);
+                        editText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        editText.setHint("BB Weak cell  \t" + (i + 1) + "\t Serial No.");
+                        lnrDynamicHolderweKBBCellsno.addView(editText);
+                    }
+
+                }
+            }
+        });
+    }
+
+    public void getBBCellSno() {
+        StringBuilder nofoBBCellSnoBuilder = new StringBuilder();
+        for (int i = 0; i < allBBCELLSnoEditTextList.size(); i++) {
+            nofoBBCellSnoBuilder.append(allBBCELLSnoEditTextList.get(i).getText().toString());
+            nofoBBCellSnoBuilder.append(SEPARATORComma);
+        }
+        nofoBBCellSno = nofoBBCellSnoBuilder.toString();
+        nofoBBCellSno = nofoBBCellSno.substring(0, nofoBBCellSno.length() - SEPARATORComma.length()); //Remove last comma
+
+    }
+
+    public void getBBweakCellSno() {
+        StringBuilder nofoBBWeakCellSnoBuilder = new StringBuilder();
+        for (int i = 0; i < allBBWeakCELLSnoEditTextList.size(); i++) {
+            nofoBBWeakCellSnoBuilder.append(allBBWeakCELLSnoEditTextList.get(i).getText().toString());
+            nofoBBWeakCellSnoBuilder.append(SEPARATORComma);
+        }
+        NoofWeakCellssNo = nofoBBWeakCellSnoBuilder.toString();
+        NoofWeakCellssNo = NoofWeakCellssNo.substring(0, NoofWeakCellssNo.length() - SEPARATORComma.length()); //Remove last comma
+
+
+    }
+
 }
 

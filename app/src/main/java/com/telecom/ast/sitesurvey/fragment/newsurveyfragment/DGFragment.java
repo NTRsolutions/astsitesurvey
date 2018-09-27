@@ -65,8 +65,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class DGFragment extends MainFragment {
-    private static ImageView frontImg, openImg, sNoPlateImg;
-    private static boolean isImage1, isImage2;
+    private static ImageView frontImg, openImg, sNoPlateImg, aMFPanelimg,
+            image5, image6, image7, image8;
+    private static boolean isImage1, isImage2, isImage3, isImage4, isImage5, isImage6, isImage7, isImage8;
     private AppCompatEditText etDescription;
     private AutoCompleteTextView etModel, etMake, etCapacity, etSerialNum;
     private SharedPreferences pref;
@@ -86,7 +87,7 @@ public class DGFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner;
-    private Spinner itemStatusSpineer;
+    private Spinner itemStatusSpineer, ebContacterSpinner;
 
     private String mCBStatus = "", dbAlternatermake = "", eSN = "0",
             dBCapacity = "", dgContacter = "", backCompressor = "", AutomationCondition = "", PowerPanelMake = "", PowerPanelCapacity = "",
@@ -109,19 +110,20 @@ public class DGFragment extends MainFragment {
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
     private long datemilisec;
-    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile, aMFPanelimgFile, image5File, image6File, image7File, image8File;
     private Typeface materialdesignicons_font;
     private SharedPreferences userPref;
     private SharedPreferences noofPhaseprf;
     private String strEqupId;
     private String capcityId = "0";
-    private String itemstatus;
+    private String itemstatus, strebContacterSpinner, strcanopyDoorLockSpinner;
     private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,
             etDGBatteryStatus, etConditionofwiring, etDGearthing, etConditionCANOPY, eTDGlowLUBEWire, etCableGroutingspinner,
             etDGFoundation, etDGCoolingtype, etDgintelpipe, etDgouttelpipe, etDGExhaustcondi, etDGEmergencyStopSwitch, etRentalDGChangeOver,
-            etDGPollutionCertificate, dGExhaustSmokecolour;
+            etDGPollutionCertificate, dGExhaustSmokecolour, canopyDoorLockSpinner;
     private boolean isFaulty;
-    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview,
+            image4ImageCardview, image5ImageCardview, image6ImageCardview, image7ImageCardview, image8ImageCardview;
     private TextView frontPhotolabl;
 
 
@@ -187,6 +189,19 @@ public class DGFragment extends MainFragment {
         image12ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
+        ebContacterSpinner = findViewById(R.id.ebContacterSpinner);
+        canopyDoorLockSpinner = findViewById(R.id.canopyDoorLockSpinner);
+
+        aMFPanelimg = findViewById(R.id.image4);
+        image5 = findViewById(R.id.image5);
+        image6 = findViewById(R.id.image6);
+        image7 = findViewById(R.id.image7);
+        image8 = findViewById(R.id.image8);
+        image4ImageCardview = findViewById(R.id.image4ImageCardview);
+        image5ImageCardview = findViewById(R.id.image5ImageCardview);
+        image6ImageCardview = findViewById(R.id.image6ImageCardview);
+        image7ImageCardview = findViewById(R.id.image7ImageCardview);
+        image8ImageCardview = findViewById(R.id.image8ImageCardview);
     }
 
     @Override
@@ -194,6 +209,11 @@ public class DGFragment extends MainFragment {
         openImg.setOnClickListener(this);
         frontImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
+        aMFPanelimg.setOnClickListener(this);
+        image5.setOnClickListener(this);
+        image6.setOnClickListener(this);
+        image7.setOnClickListener(this);
+        image8.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         dateLayout.setOnClickListener(this);
     }
@@ -227,12 +247,12 @@ public class DGFragment extends MainFragment {
         ArrayAdapter<String> etConditionofwiringad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etConditionofwiring_array);
         etConditionofwiring.setAdapter(etConditionofwiringad);
 
-        final String dgContacterSpinnerarray[] = {"CANOPY door lock", "door pannel", "ok", "not ok"};
+        final String dgContacterSpinnerarray[] = {"Ok", "Not Ok"};
         ArrayAdapter<String> dgContacterSpinnerad = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dgContacterSpinnerarray);
         dgContacterSpinner.setAdapter(dgContacterSpinnerad);
 
 
-        final String backCompressorSpinner_array[] = {"TOH", "MOH"};
+        final String backCompressorSpinner_array[] = {"TOH", "MOH", "Ok"};
         ArrayAdapter<String> backCompressorSpinnerada = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, backCompressorSpinner_array);
         backCompressorSpinner.setAdapter(backCompressorSpinnerada);
 
@@ -295,12 +315,12 @@ public class DGFragment extends MainFragment {
         ArrayAdapter<String> etDGExhaustcondi_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGExhaustcondi_array);
         etDGExhaustcondi.setAdapter(etDGExhaustcondi_adapter);
 
-        final String dGExhaustSmokecolour_array[] = {"Blue", "Black", "Grey", "White"};
+        final String dGExhaustSmokecolour_array[] = {"Blue", "Black", "Grey", "White", "Not Available"};
         ArrayAdapter<String> dGExhaustSmokecolour_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dGExhaustSmokecolour_array);
         dGExhaustSmokecolour.setAdapter(dGExhaustSmokecolour_adapter);
 
 
-        final String etDGEmergencyStopSwitch_array[] = {"Ok", "Not Ok"};
+        final String etDGEmergencyStopSwitch_array[] = {"Ok", "Not Ok", "Not Available"};
         ArrayAdapter<String> etDGEmergencyStopSwitch_adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, etDGEmergencyStopSwitch_array);
         etDGEmergencyStopSwitch.setAdapter(etDGEmergencyStopSwitch_adapter);
 
@@ -397,6 +417,12 @@ public class DGFragment extends MainFragment {
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
                 image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image4ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image5ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image6ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image7ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image8ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
                 frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "  Photo With Equipment Specification(DG run hr meter reading image");
 
             }
@@ -512,18 +538,95 @@ public class DGFragment extends MainFragment {
         if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_DG_1_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_DG_1_EquipmentSepcificationPhoto.jpg";
+            }
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             isImage1 = false;
             isImage2 = true;
-            String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
-
             isImage1 = false;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
+            isImage3 = true;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_CanopyPhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image4) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = true;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_AMFPanelPhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image5) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = true;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_EngineSNoPlatePhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image6) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = true;
+            isImage7 = false;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_ACAlternatorSNoPlatePhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image7) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = true;
+            isImage8 = false;
+            String imageName = CurtomerSite_Id + "_DG_1_BodyEarthingPhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image8) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            isImage6 = false;
+            isImage7 = false;
+            isImage8 = true;
+            String imageName = CurtomerSite_Id + "_DG_1_NeutralEarthingPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
@@ -576,6 +679,8 @@ public class DGFragment extends MainFragment {
             strnoofDGCylinderSpinner = noofDGCylinderSpinner.getSelectedItem().toString();
             itemCondition = itemConditionSpinner.getSelectedItem().toString();
             strdGExhaustSmokecolour = dGExhaustSmokecolour.getSelectedItem().toString();
+            strebContacterSpinner = ebContacterSpinner.getSelectedItem().toString();
+            strcanopyDoorLockSpinner = canopyDoorLockSpinner.getSelectedItem().toString();
             DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
             if (DGRunHourMer.equals("")) {
                 DGRunHourMer = "0";
@@ -743,14 +848,27 @@ public class DGFragment extends MainFragment {
                 if (openImgFile == null || !openImgFile.exists()) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
                     return false;
-                }
-
-            } else if (!isFaulty) {
-                if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
+                } else if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
+                    return false;
+                } else if (aMFPanelimgFile == null || !aMFPanelimgFile.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AMF Panel Photo");
+                    return false;
+                } else if (image5File == null || !image5File.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr. number plate of Engine");
+                    return false;
+                } else if (image6File == null || !image6File.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr. number plate of AC Alternator");
+                    return false;
+                } else if (image7File == null || !image7File.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo of DG Body Earthing ");
+                    return false;
+                } else if (image8File == null || !image8File.exists()) {
+                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please SelectPhoto of DG Neutral Earthing. ");
                     return false;
                 }
             }
+
         } else {
             ASTUIUtil.showToast("Item Not Available");
         }
@@ -853,6 +971,10 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
             EquipmentData.put("DG_AlternaterPhase", stralternaterPhaseSpinner);
             EquipmentData.put("DG_ExhaustSmokeColour", strdGExhaustSmokecolour);
+            EquipmentData.put("DG_EBContactor ", strebContacterSpinner);
+            EquipmentData.put("DG_CanopyDoorLock ", strcanopyDoorLockSpinner);
+
+
             JSONArray EquipmentDataa = new JSONArray();
             EquipmentDataa.put(EquipmentData);
             jsonObject.put("EquipmentData", EquipmentDataa);
@@ -876,7 +998,21 @@ public class DGFragment extends MainFragment {
         if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
-
+        if (aMFPanelimgFile != null && aMFPanelimgFile.exists()) {
+            multipartBody.addFormDataPart(aMFPanelimgFile.getName(), aMFPanelimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, aMFPanelimgFile));
+        }
+        if (image5File != null && image5File.exists()) {
+            multipartBody.addFormDataPart(image5File.getName(), image5File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image5File));
+        }
+        if (image6File != null && image6File.exists()) {
+            multipartBody.addFormDataPart(image6File.getName(), image6File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image6File));
+        }
+        if (image7File != null && image7File.exists()) {
+            multipartBody.addFormDataPart(image7File.getName(), image7File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image7File));
+        }
+        if (image8File != null && image8File.exists()) {
+            multipartBody.addFormDataPart(image8File.getName(), image8File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image8File));
+        }
         return multipartBody;
     }
 
@@ -919,22 +1055,58 @@ public class DGFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_DG_1_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_DG_1_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_DG_1_EquipmentSepcificationPhoto.jpg";
+            }
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontImg,imageName);
+                compresImage(file, imageName, frontImg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_DG_1_Open.jpg";
+            String imageName = CurtomerSite_Id + "_DG_1_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, openImg, imageName);
             }
-        } else {
-            String imageName = CurtomerSite_Id + "_DG_1_SerialNoPlate.jpg";
+        } else if (isImage3) {
+            String imageName = CurtomerSite_Id + "_DG_1_CanopyPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
+            }
+        } else if (isImage4) {
+            String imageName = CurtomerSite_Id + "_DG_1_AMFPanelPhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, aMFPanelimg, imageName);
+            }
+        } else if (isImage5) {
+            String imageName = CurtomerSite_Id + "_DG_1_EngineSNoPlatePhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image5, imageName);
+            }
+        } else if (isImage6) {
+            String imageName = CurtomerSite_Id + "_DG_1_ACAlternatorSNoPlatePhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image6, imageName);
+            }
+        } else if (isImage7) {
+            String imageName = CurtomerSite_Id + "_DG_1_BodyEarthingPhoto.jpg";
+
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image7, imageName);
+            }
+        } else if (isImage8) {
+            String imageName = CurtomerSite_Id + "_DG_1_NeutralEarthingPhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image8, imageName);
             }
         }
     }
@@ -959,7 +1131,7 @@ public class DGFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -994,8 +1166,18 @@ public class DGFragment extends MainFragment {
                     frontimgFile = imgFile;
                 } else if (isImage2) {
                     openImgFile = imgFile;
-                } else {
+                } else if (isImage3) {
                     sNoPlateImgFile = imgFile;
+                } else if (isImage4) {
+                    aMFPanelimgFile = imgFile;
+                } else if (isImage5) {
+                    image5File = imgFile;
+                } else if (isImage6) {
+                    image6File = imgFile;
+                } else if (isImage7) {
+                    image7File = imgFile;
+                } else if (isImage8) {
+                    image8File = imgFile;
                 }
                 imageView.setImageURI(uri);
                 if (progressBar.isShowing()) {

@@ -220,7 +220,6 @@
     <color name="header_gray">#E9EBED</color>
     <color name="new_gray_button">#F0F0F0</color>
     <color name="new_gray_row">#F0F0F0</color>
-
     <color name="button_bg">#DDEEFF</color>
     <color name="status_submitted">#6BBBFF</color>
     <!-- <color name="blue4">#4ACADB</color>-->
@@ -238,7 +237,7 @@
     <color name="blue_color_new">#4ac1ff</color>
     <color name="gray_new">#757b86</color>
     <color name="select_color">#3e4656</color>
-
+    <color name="transparentBlack">#64000000</color>
     <item name="purple" type="color">#FFAA66CC</item>
 
     <!-- <integer-array name="androidcolors">

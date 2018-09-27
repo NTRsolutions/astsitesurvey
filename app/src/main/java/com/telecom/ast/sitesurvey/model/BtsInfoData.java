@@ -85,4 +85,5 @@ public class BtsInfoData {
     public void setOperatorType(String operatorType) {
         OperatorType = operatorType;
     }
+
 }

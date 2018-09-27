@@ -303,12 +303,18 @@ public class PIUVoltageStablizerFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
+            }
+
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             isImage1 = false;
             isImage2 = true;
-            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             isImage1 = false;
@@ -555,13 +561,18 @@ public class PIUVoltageStablizerFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
+            }
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, frontimg,imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_" + strnameofNameofEquipment + "_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
                 compresImage(file, imageName, openImg,imageName);

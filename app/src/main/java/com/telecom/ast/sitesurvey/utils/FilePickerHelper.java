@@ -5,17 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+
+import com.telecom.ast.sitesurvey.ApplicationHelper;
+import com.telecom.ast.sitesurvey.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +56,64 @@ public class FilePickerHelper {
             context.grantUriPermission(packageName, fileUri,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
+    }
+
+
+    public static Bitmap drawTextToBitmap(String imagePath, int imgOrientation, float maxWidth, float maxHeight, String imagename) {
+        Bitmap scaledBitmap = null;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+
+        Resources resources = ApplicationHelper.application().getResources();
+        float scale = resources.getDisplayMetrics().density;
+        android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+        // set default bitmap config if none
+        if (bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        // resource bitmaps are imutable,
+        // so we need to convert it to mutable one
+        bitmap = bitmap.copy(bitmapConfig, true);
+
+        Canvas canvas = new Canvas(bitmap);
+        // new antialised Paint
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        // text color - #3D3D3D
+        paint.setColor(Color.WHITE);
+        // text size in pixels
+        paint.setTextSize((int) (25 * scale));
+        // text shadow
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+        // draw text to the Canvas center
+        Rect bounds = new Rect();
+
+        int noOfLines = 0;
+        for (String line : imagename.split("\n")) {
+            noOfLines++;
+        }
+
+        paint.getTextBounds(imagename, 0, imagename.length(), bounds);
+        int x = 20;
+        int y = (bitmap.getHeight() - bounds.height() * noOfLines);
+
+        Paint mPaint = new Paint();
+        mPaint.setColor(ASTUIUtil.getColor(R.color.transparentBlack));
+        int left = 0;
+        int top = (bitmap.getHeight() - bounds.height() * (noOfLines + 1));
+        int right = bitmap.getWidth();
+        int bottom = bitmap.getHeight();
+        canvas.drawRect(left, top, right, bottom, mPaint);
+
+        for (String line : imagename.split("\n")) {
+            canvas.drawText(line, x, y, paint);
+            y += paint.descent() - paint.ascent();
+        }
+
+        return bitmap;
+
     }
 
 
@@ -111,7 +174,6 @@ public class FilePickerHelper {
         Canvas canvas = new Canvas(scaledBitmap);
         canvas.setMatrix(scaleMatrix);
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, paint);
         setTimeStampIntoImage(canvas, paint, middleY, imagename);
         Matrix matrix = new Matrix();

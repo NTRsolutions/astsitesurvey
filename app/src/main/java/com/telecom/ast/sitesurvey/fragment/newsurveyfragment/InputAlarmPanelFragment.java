@@ -309,12 +309,12 @@ public class InputAlarmPanelFragment extends MainFragment {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
+            String imageName = CurtomerSite_Id + "_IAP_1_EquipmentSepcificationPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
             isImage2 = false;
         } else if (view.getId() == R.id.image2) {
-            String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
+            String imageName = CurtomerSite_Id + "_IAP_1_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
             isImage2 = true;
@@ -519,22 +519,28 @@ public class InputAlarmPanelFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_IAP_1_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_IAP_1__FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_IAP_1_EquipmentSepcificationPhoto.jpg";
+            }
+
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontimg,imageName);
+                compresImage(file, imageName, frontimg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_IAP_1_Open.jpg";
+            String imageName = CurtomerSite_Id + "_IAP_1_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, openImg, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_IAP_1_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
             }
         }
     }
@@ -559,7 +565,7 @@ public class InputAlarmPanelFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

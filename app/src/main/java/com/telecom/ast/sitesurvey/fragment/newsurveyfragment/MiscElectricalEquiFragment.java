@@ -54,7 +54,10 @@ public class MiscElectricalEquiFragment extends MainFragment {
     private LinearLayout ServoStabiliserCondiLayout, LampstatusLayout, LightningArresterstatusLayout,
             ServoStabilisercapacityLayout, ServoStabiliserMakeLayout;
     private String strStabiliserConditopnSpinner, stretServoStabilisermake, stretServoStabilisercapacity, strnumberofPhaseSpinner;
-    TextInputLayout spinnerElectricaltypeLayuot;
+    private TextInputLayout spinnerElectricaltypeLayuot;
+    private Spinner spinnerOilLeakage, spinnerOilLevel;
+    private LinearLayout layoutOilType;
+    private String strspinnerOilLeakage, strspinnerOilLevel;
 
     @Override
     protected int fragmentLayout() {
@@ -76,16 +79,18 @@ public class MiscElectricalEquiFragment extends MainFragment {
         ServoStabiliserCondiLayout = this.findViewById(R.id.ServoStabiliserCondiLayout);
         aviationLampworkingstatus = this.findViewById(R.id.aviationLampworkingstatus);
         LampstatusLayout = this.findViewById(R.id.LampstatusLayout);
-
         LightningArresterstatus = this.findViewById(R.id.LightningArresterstatus);
         LightningArresterstatusLayout = this.findViewById(R.id.LightningArresterstatusLayout);
-
         etServoStabilisermake = this.findViewById(R.id.etServoStabilisermake);
         etServoStabilisercapacity = this.findViewById(R.id.etServoStabilisercapacity);
         ServoStabilisercapacityLayout = this.findViewById(R.id.ServoStabilisercapacityLayout);
         ServoStabiliserMakeLayout = this.findViewById(R.id.ServoStabiliserMakeLayout);
         numberofPhaseSpinner = this.findViewById(R.id.numberofPhaseSpinner);
         spinnerElectricaltypeLayuot = this.findViewById(R.id.spinnerElectricaltypeLayuot);
+
+        spinnerOilLeakage = this.findViewById(R.id.spinnerOilLeakage);
+        spinnerOilLevel = this.findViewById(R.id.spinnerOilLevel);
+        layoutOilType = this.findViewById(R.id.layoutOilType);
     }
 
     @Override
@@ -174,6 +179,21 @@ public class MiscElectricalEquiFragment extends MainFragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        StabiliserTypeSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Oil")) {
+                    layoutOilType.setVisibility(View.VISIBLE);
+                } else {
+                    layoutOilType.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
     private void getUserPref() {
@@ -279,6 +299,9 @@ public class MiscElectricalEquiFragment extends MainFragment {
         stretServoStabilisercapacity = getTextFromView(this.etServoStabilisercapacity);
         strnumberofPhaseSpinner = numberofPhaseSpinner.getSelectedItem().toString();
 
+        strspinnerOilLeakage = spinnerOilLeakage.getSelectedItem().toString();
+        strspinnerOilLevel = spinnerOilLevel.getSelectedItem().toString();
+
 
         if (isEmptyStr(strEarthingvalue)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Earthing-Resistance Value");
@@ -324,6 +347,8 @@ public class MiscElectricalEquiFragment extends MainFragment {
                 MiscEEqpData.put("ServoStabiliserCapacity", stretServoStabilisercapacity);
                 MiscEEqpData.put("ServoStabiliserType", strStabiliserTypeSpinner);
                 MiscEEqpData.put("ServoStabiliserPhase", strnumberofPhaseSpinner);
+                MiscEEqpData.put("ServoStabiliser_OilLeakage", strspinnerOilLeakage);
+                MiscEEqpData.put("ServoStabiliser_OilLevel", strspinnerOilLevel);
                 jsonObject.put("MiscEEqpData", MiscEEqpData);
             } catch (JSONException e) {
                 e.printStackTrace();

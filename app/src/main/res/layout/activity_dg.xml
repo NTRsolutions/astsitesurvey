@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
-                        android:hint="@string/EnterSerial_Num"
+                        android:hint="Canopy Serial Number"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -718,6 +718,38 @@
                     android:background="@color/backgroundColor" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="EB Contactor"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/ebContacterSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/ebContacter"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -816,9 +848,39 @@
                     android:layout_marginRight="@dimen/_10dp"
                     android:background="@color/backgroundColor" />
 
-
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_30dp"
+                android:orientation="vertical"
+                android:padding="@dimen/_4dp">
+
+                <com.telecom.ast.sitesurvey.component.FNTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_2dp"
+                    android:gravity="center_vertical"
+                    android:text="Canopy Door Lock"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_14dp" />
+
+                <Spinner
+                    android:id="@+id/canopyDoorLockSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/ebContacter"
+                    android:minHeight="@dimen/_32dp"
+                    android:popupBackground="@color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1dp"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@color/backgroundColor" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -841,7 +903,6 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Dg Run Hour Meter Reading"
-                        android:inputType="numberDecimal"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -933,6 +994,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeTextType="uniform"
                         android:hint="Dg Fuel Tank Capacity"
+                        android:maxLength="3"
                         android:textSize="@dimen/_14dp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -1295,6 +1357,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/bg_color"
+                            android:ellipsize="end"
+                            android:maxLines="2"
                             android:padding="@dimen/_5dp"
                             android:text="Photo With Equipment Specification(DG run hr meter reading image)"
                             android:textAlignment="center"
@@ -1337,6 +1401,8 @@
                             android:layout_height="wrap_content"
                             android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
                             android:padding="@dimen/_5dp"
                             android:text="System Open Photo"
                             android:textAlignment="center"
@@ -1350,7 +1416,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/_150dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="@dimen/_4dp">
@@ -1366,13 +1432,13 @@
                     app:cardBackgroundColor="@android:color/white">
 
                     <LinearLayout
-                        android:layout_width="@dimen/_130dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/image3"
-                            android:layout_width="@dimen/_130dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
@@ -1385,8 +1451,10 @@
                             android:layout_height="wrap_content"
                             android:background="@color/bg_color"
                             android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
                             android:padding="@dimen/_5dp"
-                            android:text="Sr Number Plate Photo"
+                            android:text="Canopy Photo"
                             android:textAlignment="center"
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_13dp" />
@@ -1396,8 +1464,242 @@
 
                 </android.support.v7.widget.CardView>
 
+                <android.support.v7.widget.CardView
+                    android:id="@+id/image4ImageCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
+                            android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="@dimen/_5dp"
+                            android:text="AMF Panel Photo"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
             </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/image5ImageCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
+                            android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="@dimen/_5dp"
+                            android:text="Sr. number plate of Engine"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/image6ImageCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
+                            android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="@dimen/_5dp"
+                            android:text="Sr. number plate of AC Alternator"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4dp">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/image7ImageCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
+                            android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="@dimen/_5dp"
+                            android:text="Photo of DG Body Earthing"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/image8ImageCardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_130dp"
+                    android:layout_margin="@dimen/_8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:minHeight="@dimen/_28dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/noimage" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bg_color"
+                            android:elevation="@dimen/_6dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="@dimen/_5dp"
+                            android:text="Photo of DG Neutral Earthing"
+                            android:textAlignment="center"
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_13dp" />
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

@@ -71,9 +71,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class SmpsFragment extends MainFragment {
-    private static ImageView frontimg, openImg, sNoPlateImg;
-    private static File frontimgFile, openImgFile, sNoPlateImgFile;
-    private static boolean isImage1, isImage2;
+    private static ImageView frontimg, openImg, sNoPlateImg, image4, image5;
+    private static File frontimgFile, openImgFile, sNoPlateImgFile, image4File, image5File;
+    private static boolean isImage1, isImage2, isImage3, isImage4, isImage5;
     private AppCompatEditText etDescription, etnoofModule, etModuleCapacity, etRatingofCable;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     private SharedPreferences pref, smpsShrepreforrpiu;
@@ -111,8 +111,10 @@ public class SmpsFragment extends MainFragment {
     private ArrayList<EquipMakeDataModel> equipList;
     private ArrayList<EquipCapacityDataModel> equipCapacityList;
     private boolean isFaulty;
-    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview, image4ImageCardview, image5ImageCardview;
     private TextView frontPhotolabl;
+    Spinner etspdstatusSpinner;
+    String stretspdstatusSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -154,6 +156,11 @@ public class SmpsFragment extends MainFragment {
         image12ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
+        etspdstatusSpinner = findViewById(R.id.etspdstatusSpinner);
+        image4ImageCardview = findViewById(R.id.image4ImageCardview);
+        image5ImageCardview = findViewById(R.id.image5ImageCardview);
+        image4 = findViewById(R.id.image4);
+        image5 = findViewById(R.id.image5);
     }
 
     @Override
@@ -161,6 +168,8 @@ public class SmpsFragment extends MainFragment {
         openImg.setOnClickListener(this);
         frontimg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
+        image4.setOnClickListener(this);
+        image5.setOnClickListener(this);
         dateLayout.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
     }
@@ -256,12 +265,13 @@ public class SmpsFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
-
                 isFaulty = ASTObjectUtil.isEmptyStr(description) &&
                         itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
                 image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image4ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image5ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
                 frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Photo With Equipment Specification");
             }
 
@@ -278,18 +288,46 @@ public class SmpsFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_Front.jpg";
+            isImage3 = false;
+            isImage4 = false;
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
+            }
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
-
         } else if (view.getId() == R.id.image2) {
             isImage1 = false;
             isImage2 = true;
-            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_Open.jpg";
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = false;
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             isImage1 = false;
             isImage2 = false;
+            isImage3 = true;
+            isImage4 = false;
+            isImage5 = false;
             String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_SerialNoPlate.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image4) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = true;
+            isImage5 = false;
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_PPBodyEarthingPhoto.jpg";
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
+        } else if (view.getId() == R.id.image5) {
+            isImage1 = false;
+            isImage2 = false;
+            isImage3 = false;
+            isImage4 = false;
+            isImage5 = true;
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_PositiveBusbarEarthingPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
 
         } else if (view.getId() == R.id.btnSubmit) {
@@ -328,6 +366,7 @@ public class SmpsFragment extends MainFragment {
             PositiveEarthing = etPositiveEarthing.getSelectedItem().toString();
             NoofRMWorking = etNoofRMWorking.getText().toString();
             NoofRMFaulty = etNoofRMFaulty.getText().toString();
+            stretspdstatusSpinner = etPositiveEarthing.getSelectedItem().toString();
 
            /* RatingofCable = etRatingofCable.getText().toString();
             if (RatingofCable.equals("")) {
@@ -443,6 +482,8 @@ public class SmpsFragment extends MainFragment {
                 EquipmentDataa.put("PP_BattFuseStatus", SpareFuseStatus);
                 EquipmentDataa.put("SMPSModulesQt", nofModule);
                 EquipmentDataa.put("SMPSModuleCapacity", ModuleCapacity);
+                EquipmentDataa.put("PP_SPDStatus", stretspdstatusSpinner);
+
                 JSONArray EquipmentData = new JSONArray();
                 EquipmentData.put(EquipmentDataa);
                 jsonObject.put("EquipmentData", EquipmentData);
@@ -499,6 +540,13 @@ public class SmpsFragment extends MainFragment {
         }
         if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
+        }
+
+        if (image4File != null && image4File.exists()) {
+            multipartBody.addFormDataPart(image4File.getName(), image4File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image4File));
+        }
+        if (image5File != null && image5File.exists()) {
+            multipartBody.addFormDataPart(image5File.getName(), image5File.getName(), RequestBody.create(MEDIA_TYPE_PNG, image5File));
         }
 
         return multipartBody;
@@ -594,22 +642,40 @@ public class SmpsFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
+            }
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontimg,imageName);
+                compresImage(file, imageName, frontimg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, openImg, imageName);
             }
-        } else {
+        } else if (isImage3) {
             String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
+            }
+        } else if (isImage4) {
+
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_PPBodyEarthingPhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image4, imageName);
+            }
+        } else if (isImage5) {
+            String imageName = CurtomerSite_Id + "_SMPS_" + EquipmentSno + "_PositiveBusbarEarthingPhoto.jpg";
+            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
+            if (file.exists()) {
+                compresImage(file, imageName, image5, imageName);
             }
         }
     }
@@ -634,7 +700,7 @@ public class SmpsFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -672,8 +738,14 @@ public class SmpsFragment extends MainFragment {
                 } else if (isImage2) {
                     openImgFile = imgFile;
                     // Picasso.with(ApplicationHelper.application().getContext()).load(openImgFile).into(imageView);
-                } else {
+                } else if (isImage3) {
                     sNoPlateImgFile = imgFile;
+                    //Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                } else if (isImage4) {
+                    image4File = imgFile;
+                    //Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
+                } else if (isImage5) {
+                    image5File = imgFile;
                     //Picasso.with(ApplicationHelper.application().getContext()).load(sNoPlateImgFile).into(imageView);
                 }
                 imageView.setImageURI(uri);

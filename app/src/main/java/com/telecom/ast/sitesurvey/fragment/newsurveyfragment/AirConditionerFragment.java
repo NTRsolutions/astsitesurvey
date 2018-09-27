@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.telecom.ast.sitesurvey.ApplicationHelper;
@@ -44,9 +45,11 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 import com.telecom.ast.sitesurvey.utils.ASTUtil;
 import com.telecom.ast.sitesurvey.utils.FilePickerHelper;
 import com.telecom.ast.sitesurvey.utils.FontManager;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -55,9 +58,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
 import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
@@ -68,7 +73,7 @@ public class AirConditionerFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, etaCType, etACAlarms, etacACWorkingCondition;
-    private AppCompatEditText etDescription, etNumberOfAC;
+    private AppCompatEditText etDescription;
 
     private AutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     private SharedPreferences pref;
@@ -83,7 +88,7 @@ public class AirConditionerFragment extends MainFragment {
     private ArrayList<EquipDescriptionDataModel> equipDescriptionDataList;
     private ArrayList<EquipCapacityDataModel> equipCapacityDataList;
 
-    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime, numOfACs;
+    private String make, model, capacity, serialNumber, yearOfManufacturing, description, currentDateTime;
     private Spinner itemStatusSpineer;
     private String aCType, acACWorkingCondition, ACAlarms, itemCondition;
     private SharedPreferences userPref;
@@ -100,7 +105,7 @@ public class AirConditionerFragment extends MainFragment {
     private ArrayList<EquipMakeDataModel> equipList;
     private ArrayList<EquipCapacityDataModel> equipCapacityList;
     private boolean isFaulty;
-    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private CardView image1ImageCardview, image2ImageCardview, image3ImageCardview;
     private TextView frontPhotolabl;
 
     @Override
@@ -119,7 +124,6 @@ public class AirConditionerFragment extends MainFragment {
         etSerialNum = findViewById(R.id.etSerialNum);
         etYear = findViewById(R.id.etYear);
         etDescription = findViewById(R.id.etDescription);
-        etNumberOfAC = findViewById(R.id.etNumOfAC);
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
@@ -133,7 +137,7 @@ public class AirConditionerFragment extends MainFragment {
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
         image1ImageCardview = findViewById(R.id.image1ImageCardview);
-        image12ImageCardview = findViewById(R.id.image2ImageCardview);
+        image2ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
@@ -242,12 +246,12 @@ public class AirConditionerFragment extends MainFragment {
                 isFaulty = ASTObjectUtil.isEmptyStr(description) &&
                         itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
-                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
+                image2ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
+                image1ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
                 frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Photo With Equipment Specification");
 
             }
-
 
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -267,7 +271,6 @@ public class AirConditionerFragment extends MainFragment {
                     etSerialNum.setEnabled(false);
                     etYear.setEnabled(false);
                     etDescription.setEnabled(false);
-                    etNumberOfAC.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
                     etaCType.setEnabled(false);
@@ -284,7 +287,6 @@ public class AirConditionerFragment extends MainFragment {
                     etSerialNum.setEnabled(true);
                     etYear.setEnabled(true);
                     etDescription.setEnabled(true);
-                    etNumberOfAC.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
                     etaCType.setEnabled(true);
@@ -306,12 +308,12 @@ public class AirConditionerFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Front.jpg";
+            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             isImage2 = true;
             isImage1 = false;
-            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             isImage2 = false;
@@ -335,7 +337,6 @@ public class AirConditionerFragment extends MainFragment {
         yearOfManufacturing = etYear.getText().toString();
         description = etDescription.getText().toString();
         currentDateTime = String.valueOf(System.currentTimeMillis());
-        numOfACs = etNumberOfAC.getText().toString();
         aCType = etaCType.getSelectedItem().toString();
         acACWorkingCondition = etacACWorkingCondition.getSelectedItem().toString();
         ACAlarms = etACAlarms.getSelectedItem().toString();
@@ -351,17 +352,14 @@ public class AirConditionerFragment extends MainFragment {
             } else if (isEmptyStr(serialNumber)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Serial Number");
                 return false;
-            }  else if (isEmptyStr(capacity)) {
+            } else if (isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
-            }else if (isEmptyStr(yearOfManufacturing)) {
+            } else if (isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Manufacturing Year");
                 return false;
             } else if (isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
-                return false;
-            } else if (isEmptyStr(numOfACs)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter AC Quantity");
                 return false;
             } else if (isEmptyStr(aCType)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Type");
@@ -372,13 +370,12 @@ public class AirConditionerFragment extends MainFragment {
             } else if (isEmptyStr(ACAlarms)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Alarms");
                 return false;
-            } else if (frontimgFile == null || !frontimgFile.exists()) {
-                if (isFaulty) {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select AC Faulty Photo");
-                } else {
+            } else if (!isFaulty) {
+                if (frontimgFile == null || !frontimgFile.exists()) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo With Equipment Specification");
+                    return false;
                 }
-                return false;
+
             } else if (!isFaulty) {
                 if (openImgFile == null || !openImgFile.exists()) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
@@ -390,7 +387,8 @@ public class AirConditionerFragment extends MainFragment {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
                     return false;
                 }
-            }} else {
+            }
+        } else {
             ASTUIUtil.showToast("Item Not Available");
         }
         return true;
@@ -421,7 +419,6 @@ public class AirConditionerFragment extends MainFragment {
                 EquipmentDataa.put("MfgDate", datemilisec);
                 EquipmentDataa.put("ItemCondition", itemCondition);
                 EquipmentDataa.put("ACType", aCType);
-                EquipmentDataa.put("AIR_CON_Number", numOfACs);
                 EquipmentDataa.put("AC_WorkingCondition", acACWorkingCondition);
                 EquipmentDataa.put("AC_Alarms", ACAlarms);
                 JSONArray EquipmentData = new JSONArray();
@@ -516,7 +513,6 @@ public class AirConditionerFragment extends MainFragment {
         etSerialNum.setText("");
         etYear.setText("");
         etDescription.setText("");
-        etNumberOfAC.setText("");
         etaCType.setSelection(0);
         etacACWorkingCondition.setSelection(0);
         etACAlarms.setSelection(0);
@@ -567,22 +563,22 @@ public class AirConditionerFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Front.jpg";
+            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_EquipmentSepcificationPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontimg,imageName);
+                compresImage(file, imageName, frontimg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_Open.jpg";
+            String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, openImg, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_AC_" + EquipmentSno + "_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
             }
         }
     }
@@ -607,7 +603,7 @@ public class AirConditionerFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

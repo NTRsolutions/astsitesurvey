@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -43,7 +45,7 @@ public class OperatorNameFragment extends MainFragment {
     //Spinner btstyelSpinner ;
     String btsOperator, NofCab, btscurrentbtSide, btscurrent, btsvVoltagebtsside, btsvollatagesmpsside;
     String strbtsOperator, strNofCab, strbtscurrentbtSide, strbtscurrent, strbtsvVoltagebtsside, strbtsvollatagesmpsside, btstype;
-    String NoofDCDB, NofKroneBox, NoofRack, Microwave,operatorType;
+    String NoofDCDB, NofKroneBox, NoofRack, Microwave, operatorType;
     SharedPreferences pref;
     String strUserId, strSiteId;
     SharedPreferences userPref;
@@ -108,7 +110,10 @@ public class OperatorNameFragment extends MainFragment {
             NofKroneBox = btsInfoData.getNoofKroneBox();
             NoofRack = btsInfoData.getNoofTransmissionRack();
             Microwave = btsInfoData.getMicrowave();
-            operatorType=btsInfoData.getOperatorType();
+            operatorType = btsInfoData.getOperatorType();
+            // CabinetloadCurrent = new Gson().fromJson(CabinetloadCurren,new TypeToken<String>(){}.getType());
+
+
         }
 
 
@@ -202,8 +207,6 @@ public class OperatorNameFragment extends MainFragment {
                 BTSData.put("NoofTransmissionRack", NoofRack);
                 BTSData.put("Transmission_Media", Microwave);
                 BTSData.put("Operator_Type", operatorType);
-
-
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(BTSData);
                 jsonObject.put("BTSData", jsonArray);

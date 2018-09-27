@@ -173,6 +173,7 @@
         <item>No</item>
     </string-array>
     <string-array name="etOwnerIssues">
+        <item>No issue </item>
         <item>Night Access problem</item>
         <item>Owner agreement Issue</item>
         <item>Critical Owner issue </item>
@@ -221,8 +222,42 @@
         <item>Available</item>
         <item>Not Available</item>
     </string-array>
+    <string-array name="oillekage">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="oillevel">
+        <item>Low</item>
+        <item>OK</item>
+    </string-array>
 
 
+    <string-array name="shalterlockArray">
+        <item>Available</item>
+        <item>Not Available</item>
+    </string-array>
+    <string-array name="ventcap">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="ebContacter">
+        <item>Ok</item>
+        <item>Not OK</item>
+    </string-array>
+
+
+    <string-array name="spdstatus">
+        <item>Ok</item>
+        <item>Not OK</item>
+        <item> Not Available</item>
+
+    </string-array>
+
+    <string-array name="cabelcore">
+        <item>4 Core</item>
+        <item>2 Core</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

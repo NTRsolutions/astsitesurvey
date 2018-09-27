@@ -5,12 +5,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.AstAppUgradeDlgActivity;
@@ -35,6 +38,7 @@ import com.telecom.ast.sitesurvey.utils.GCM_Registration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 
@@ -44,19 +48,21 @@ import java.util.ArrayList;
  */
 
 public class SplashScreen extends AppCompatActivity {
-    String gcmRegId;
-    SharedPreferences pref;
-    GCM_Registration gcmClass;
-    AtmDatabase atmDatabase;
-    ASTProgressBar progrssBar;
-    boolean CircleMasterFlage = false;
-    boolean EquipmentFlage = false;
-    boolean SiteMasterFlage = false;
+    private String gcmRegId;
+    private SharedPreferences pref;
+    private GCM_Registration gcmClass;
+    private AtmDatabase atmDatabase;
+    private ASTProgressBar progrssBar;
+    private boolean CircleMasterFlage = false;
+    private boolean EquipmentFlage = false;
+    private boolean SiteMasterFlage = false;
+    private String currentVersion, latestVersion;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        getCurrentVersion();
         ApplicationHelper.application().initIcons();
         this.atmDatabase = new AtmDatabase(SplashScreen.this);
         pref = getApplicationContext().getSharedPreferences("SharedPref", MODE_PRIVATE);
@@ -381,5 +387,81 @@ public class SplashScreen extends AppCompatActivity {
                 progrssBar.dismiss();
             }
         }
+    }
+
+
+    private void getCurrentVersion() {
+        PackageManager pm = this.getPackageManager();
+        PackageInfo pInfo = null;
+        try {
+            pInfo = pm.getPackageInfo(this.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        currentVersion = pInfo.versionName;
+        new GetLatestVersion().execute();
+    }
+
+    private class GetLatestVersion extends AsyncTask<String, String, JSONObject> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            try {
+                String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.telecom.ast.sitesurvey";
+                Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
+                latestVersion = doc.getElementsByClass("htlgb").get(6).text();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return new JSONObject();
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (latestVersion != null) {
+                if (!currentVersion.equalsIgnoreCase(latestVersion)) {
+                    if (!isFinishing()) { //This would help to prevent Error : BinderProxy@45d459c0 is not valid; is your activity running? error
+                        AstAppUgradeDlgActivity fnAppUgradeDlgActivity = new AstAppUgradeDlgActivity(SplashScreen.this) {
+                            @Override
+                            public void onSkip() {
+                                Toast.makeText(SplashScreen.this, "Please Update your App", Toast.LENGTH_LONG).show();
+                            }
+                        };
+                        fnAppUgradeDlgActivity.show();
+                    }
+                }
+            } else
+                super.onPostExecute(jsonObject);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progrssBar != null && progrssBar.isShowing()) {
+            progrssBar.dismiss();
+        }
+    }
+
+/*    @Override
+    protected void onResume() {
+        super.onResume();
+        if (progrssBar != null && progrssBar.isShowing()) {
+            progrssBar.dismiss();
+        }
+    }*/
+
+
+    @Override
+    public void onDetachedFromWindow() {
+        if (progrssBar != null && progrssBar.isShowing())
+            progrssBar.dismiss();
+        super.onDetachedFromWindow();
     }
 }

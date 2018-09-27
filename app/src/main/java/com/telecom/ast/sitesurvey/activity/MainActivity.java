@@ -43,6 +43,7 @@ import com.telecom.ast.sitesurvey.utils.ASTUIUtil;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,8 +234,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bundle.putString("headerTxt", "Home");
             bundle.putInt("MENU_ID", 0);
         } else if (id == R.id.nav_tvComplaint) {
-            bundle.putString("headerTxt", "Complaint");
-            bundle.putString("headerTxt", "About");
+            //   bundle.putString("headerTxt", "Complaint");
+            // bundle.putString("headerTxt", "About");
+            Intent intent = new Intent(this, AttendanceReportActivity.class);
+            startActivity(intent);
+
         }
         DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -611,35 +615,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
- /*   //check app need force update or not
-    @SuppressLint("StaticFieldLeak")
-    public class checkForceUpdateStatus extends AsyncTask<String, String, JSONObject> {
+    String currentVersion, latestVersion;
 
-        private String latestVersion;
-        private String currentVersion;
-        private Context context;
+    private void getCurrentVersion() {
+        PackageManager pm = this.getPackageManager();
+        PackageInfo pInfo = null;
+        try {
+            pInfo = pm.getPackageInfo(this.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        currentVersion = pInfo.versionName;
+        new GetLatestVersion().execute();
+    }
 
-        public checkForceUpdateStatus(String currentVersion, Context context) {
-            this.currentVersion = currentVersion;
-            this.context = context;
+    private class GetLatestVersion extends AsyncTask<String, String, JSONObject> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
         @Override
         protected JSONObject doInBackground(String... params) {
-
             try {
-                latestVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + context.getPackageName() + "&hl=en")
-                        .timeout(30000)
-                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                        .referrer("http://www.google.com")
-                        .get()
-                        .select("div[itemprop=softwareVersion]")
-                        .first()
-                        .ownText();
-
-            } catch (IOException e) {
+                String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.apitechnosoft.mrhelper";
+                Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
+                latestVersion = doc.getElementsByClass("htlgb").get(6).text();
+            } catch (Exception e) {
                 e.printStackTrace();
+
             }
+
             return new JSONObject();
         }
 
@@ -647,36 +653,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(JSONObject jsonObject) {
             if (latestVersion != null) {
                 if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-                    // Toast.makeText(context,"update is available.",Toast.LENGTH_LONG).show();
-                    alertForForceUpdateApp();
-                }
-            }
-            super.onPostExecute(jsonObject);
-        }
-
-    }
-
-       *//* final String cureentVersion = ASTUIUtil.getAppVersionName(this);
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String latestVersion = null;
-                try {
-                    String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.telecom.ast.sitesurvey";
-                    org.jsoup.nodes.Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
-                    latestVersion = doc.getElementsByAttributeValue("itemprop", "softwareVersion").first().text();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return latestVersion;
-            }
-
-            @Override
-            protected void onPostExecute(String latestVersion) {
-                super.onPostExecute(latestVersion);
-                if (latestVersion != null) {
-                    if (!cureentVersion.equals(latestVersion)) {
+                    if (!isFinishing()) { //This would help to prevent Error : BinderProxy@45d459c0 is not valid; is your activity running? error
                         AstAppUgradeDlgActivity fnAppUgradeDlgActivity = new AstAppUgradeDlgActivity(MainActivity.this) {
                             @Override
                             public void onSkip() {
@@ -686,47 +663,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         fnAppUgradeDlgActivity.show();
                     }
                 }
-
-            }
-        }.execute(null, null, null);*//*
-
-
-    //alert for force update app from play store
-    public void alertForForceUpdateApp() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        //   builder.setIcon(R.mipmap.ic_launcher);
-        // builder.setTitle(R.string.app_name);
-        builder.setMessage("App New Version Update is Available");
-        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ASTUIUtil.getAppPackageName(getBaseContext()))));
-                dialog.cancel();
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
-
-
+            } else
+                super.onPostExecute(jsonObject);
+        }
     }
 
-    // check version on play store and force update
-    public void forceUpdate() {
-        PackageManager packageManager = this.getPackageManager();
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        String currentVersion = packageInfo.versionName;
-        new checkForceUpdateStatus(currentVersion, MainActivity.this).execute();
-    }*/
 }

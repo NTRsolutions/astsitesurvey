@@ -113,7 +113,7 @@ public class DieselFillingFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Diesel Filling Done by CareTaker/Technician/Filler");
             return false;
         }  else if (ASTObjectUtil.isEmptyStr(stretBitPlan)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Bit Plan (No. of Days)");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Beat Plan (No. of Days)");
             return false;
         }
 

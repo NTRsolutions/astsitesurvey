@@ -452,6 +452,84 @@
                         android:background="@color/backgroundColor" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layoutOilType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_30dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_30dp"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_4dp">
+
+                        <com.telecom.ast.sitesurvey.component.FNTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_2dp"
+                            android:gravity="center_vertical"
+                            android:text="Oil Leakage"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_14dp" />
+
+
+                        <Spinner
+                            android:id="@+id/spinnerOilLeakage"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:entries="@array/oillekage"
+                            android:minHeight="@dimen/_32dp"
+                            android:popupBackground="@color/white" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1dp"
+                            android:layout_marginRight="@dimen/_10dp"
+                            android:background="@color/backgroundColor" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_30dp"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_4dp">
+
+                        <com.telecom.ast.sitesurvey.component.FNTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_2dp"
+                            android:gravity="center_vertical"
+                            android:text="Oil Level "
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_14dp" />
+
+
+                        <Spinner
+                            android:id="@+id/spinnerOilLevel"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:entries="@array/oillevel"
+                            android:minHeight="@dimen/_32dp"
+                            android:popupBackground="@color/white" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1dp"
+                            android:layout_marginRight="@dimen/_10dp"
+                            android:background="@color/backgroundColor" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

@@ -80,12 +80,12 @@ public class EBMeterFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, meeterTypeSpinner, powerTypeSpinner, transformerTypeSpinner, waterseedpinner;
-    private String strUserId = "0", strSavedDateTime, meterreading = "0", strSiteId = "0", CurtomerSite_Id = "0";
+    private String strUserId = "0", strSavedDateTime, strSiteId = "0", CurtomerSite_Id = "0";
     private String make = "", model = "", capacity = "", serialNumber = "", yearOfManufacturing = "0", description = "", type, currentDateTime;
     private SharedPreferences noofebPhaseprf;
     private AppCompatAutoCompleteTextView etCapacity, etMake, etModel, etSerialNum;
     private AppCompatEditText etConnectionNo, etCableRating;
-    private AppCompatEditText etDescription, ebMeterreading;
+    private AppCompatEditText etDescription;
     private String strMakeId = "0", strModelId, strDescriptionId;
     private Spinner itemStatusSpineer;
     private String ConnectionNo = "", CableRating = "", TransformerEarthing = "", kitkatChangeover = "", TheftfromSite = "",
@@ -115,6 +115,9 @@ public class EBMeterFragment extends MainFragment {
     private boolean isFaulty;
     private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
     private TextView frontPhotolabl;
+    AppCompatEditText ebMeterreadingkvah, ebMeterreadingkwh;
+    String strebMeterreadingkvah = "0", strebMeterreadingkwh = "",stretCableCoreSpinner;
+    Spinner etCableCoreSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -135,9 +138,9 @@ public class EBMeterFragment extends MainFragment {
         itemConditionSpinner = findViewById(R.id.itemConditionSpinner);
         descriptionLayout = findViewById(R.id.descriptionLayout);
         btnSubmit = findViewById(R.id.btnSubmit);
-        ebMeterreading = findViewById(R.id.ebMeterreading);
+        ebMeterreadingkvah = findViewById(R.id.ebMeterreadingkvah);
+        ebMeterreadingkwh = findViewById(R.id.ebMeterreadingkwh);
         itemStatusSpineer = findViewById(R.id.itemStatusSpineer);
-
         etConnectionNo = findViewById(R.id.etConnectionNo);
         etCableRating = findViewById(R.id.etCableRating);
         etTransformerEarthing = findViewById(R.id.etTransformerEarthing);
@@ -159,6 +162,7 @@ public class EBMeterFragment extends MainFragment {
         image12ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
+        etCableCoreSpinner= findViewById(R.id.etCableCoreSpinner);
     }
 
     @Override
@@ -246,7 +250,6 @@ public class EBMeterFragment extends MainFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 String strMake = etMake.getText().toString();
-
                 if (!strMake.equals("") && strMake.length() > 1) {
                     equipCapacityList = atmDatabase.getEquipmentCapacityData("DESC", strMake);
                     if (equipCapacityList.size() > 0) {
@@ -265,7 +268,6 @@ public class EBMeterFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
-
                 isFaulty = ASTObjectUtil.isEmptyStr(description) &&
                         itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
@@ -294,7 +296,8 @@ public class EBMeterFragment extends MainFragment {
                     etDescription.setEnabled(false);
                     itemConditionSpinner.setEnabled(false);
                     descriptionLayout.setEnabled(false);
-                    ebMeterreading.setEnabled(false);
+                    ebMeterreadingkvah.setEnabled(false);
+                    ebMeterreadingkwh.setEnabled(false);
                     etConnectionNo.setEnabled(false);
                     etCableRating.setEnabled(false);
                     etTransformerEarthing.setEnabled(false);
@@ -307,7 +310,7 @@ public class EBMeterFragment extends MainFragment {
                     eBbillSpinner.setEnabled(false);
                     etMeterSerialNo.setEnabled(false);
                     etCableRatingPIU.setEnabled(false);
-
+                    etCableCoreSpinner.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -320,7 +323,8 @@ public class EBMeterFragment extends MainFragment {
                     etDescription.setEnabled(true);
                     itemConditionSpinner.setEnabled(true);
                     descriptionLayout.setEnabled(true);
-                    ebMeterreading.setEnabled(true);
+                    ebMeterreadingkvah.setEnabled(true);
+                    ebMeterreadingkwh.setEnabled(true);
                     etConnectionNo.setEnabled(true);
                     etCableRating.setEnabled(true);
                     etTransformerEarthing.setEnabled(true);
@@ -333,6 +337,7 @@ public class EBMeterFragment extends MainFragment {
                     eBbillSpinner.setEnabled(true);
                     etMeterSerialNo.setEnabled(true);
                     etCableRatingPIU.setEnabled(true);
+                    etCableCoreSpinner.setEnabled(true);
                 }
             }
 
@@ -349,12 +354,19 @@ public class EBMeterFragment extends MainFragment {
         } else if (view.getId() == R.id.image1) {
             isImage1 = true;
             isImage2 = false;
-            String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
+
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_EB_1_FaultyPhoto.jpg";
+            } else {
+                 imageName = CurtomerSite_Id + "_EB_1_EquipmentSepcificationPhoto.jpg";
+            }
+
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image2) {
             isImage1 = false;
             isImage2 = true;
-            String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
+            String imageName = CurtomerSite_Id + "_EB_1_SystemOpenPhoto.jpg";
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.image3) {
             isImage1 = false;
@@ -408,7 +420,11 @@ public class EBMeterFragment extends MainFragment {
             yearOfManufacturing = etYear.getText().toString();
             description = etDescription.getText().toString();
             currentDateTime = String.valueOf(System.currentTimeMillis());
-            meterreading = ebMeterreading.getText().toString();
+            strebMeterreadingkvah = ebMeterreadingkvah.getText().toString();
+            strebMeterreadingkwh = ebMeterreadingkwh.getText().toString();
+            ebMeterreadingkvah.setEnabled(true);
+            ebMeterreadingkwh.setEnabled(true);
+
             ConnectionNo = etConnectionNo.getText().toString();
             CableRating = etCableRating.getText().toString();
             TransformerEarthing = etTransformerEarthing.getSelectedItem().toString();
@@ -423,6 +439,7 @@ public class EBMeterFragment extends MainFragment {
             streBbillSpinner = eBbillSpinner.getSelectedItem().toString();
             stretMeterSerialNo = etMeterSerialNo.getText().toString();
             stretCableRatingPIU = etCableRatingPIU.getText().toString();
+            stretCableCoreSpinner=etCableCoreSpinner.getSelectedItem().toString();
 
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -454,8 +471,11 @@ public class EBMeterFragment extends MainFragment {
             } else if (isEmptyStr(stretCableRatingPIU)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Cable Rating ( EB Meter to PIU/IPMS/AMF))");
                 return false;
-            } else if (isEmptyStr(meterreading)) {
-                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading");
+            } else if (isEmptyStr(strebMeterreadingkvah)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading KVAH");
+                return false;
+            } else if (isEmptyStr(strebMeterreadingkwh)) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter EB meter Reading KWH");
                 return false;
             } else if (isEmptyStr(strpowerTypeSpinner)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Connection Type");
@@ -543,7 +563,11 @@ public class EBMeterFragment extends MainFragment {
                 EquipmentData.put("EB_BillingCycle", streBbillSpinner);
                 EquipmentData.put("EB_MeterSerialNo", stretMeterSerialNo);
                 EquipmentData.put("EB_CableRating_EB_PP", stretCableRatingPIU);
-                EquipmentData.put("EBMeterReading", meterreading);
+                EquipmentData.put("EB_MeterReading_KVAH", strebMeterreadingkvah);
+                EquipmentData.put("EB_MeterReading_KWH", strebMeterreadingkwh);
+                EquipmentData.put("EB_CableCore", stretCableCoreSpinner);
+
+
                 JSONArray EquipmentDataa = new JSONArray();
                 EquipmentDataa.put(EquipmentData);
                 jsonObject.put("EquipmentData", EquipmentDataa);
@@ -640,22 +664,28 @@ public class EBMeterFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_EB_1_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_EB_1_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_EB_1_EquipmentSepcificationPhoto.jpg";
+            }
+
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, frontImg,imageName);
+                compresImage(file, imageName, frontImg, imageName);
             }
         } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_EB_1_Open.jpg";
+            String imageName = CurtomerSite_Id + "_EB_1_SystemOpenPhoto.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, openImg, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_EB_1_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
             }
         }
     }
@@ -680,7 +710,7 @@ public class EBMeterFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location

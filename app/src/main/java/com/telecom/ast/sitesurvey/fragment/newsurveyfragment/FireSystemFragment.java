@@ -48,7 +48,7 @@ public class FireSystemFragment extends MainFragment {
     Spinner etfiredetectSpineer, etextinguiserSpineer;
     Spinner etstatusSpinner;
     AutoCompleteTextView etMake, etCapacity;
-    String strfiredetectSpineer, status, strextinguiserSpineer, stritemStatusSpineer, firedetectSpineer, extinguiserSpineer, itemStatus, make, capacity;
+    String strfiredetectSpineer, status, strextinguiserSpineer, stritemStatusSpineer, firedetectSpineer, extinguiserSpineer, itemStatus, make = "0", capacity = "0";
     LinearLayout fillEmptyLayout;
     Button btnSubmit;
     String strUserId, strSiteId;
@@ -64,7 +64,7 @@ public class FireSystemFragment extends MainFragment {
     AtmDatabase atmDatabase;
     String[] arrCapacity;
     Spinner firedetecttypeSpineer, extinguisertypeSpineer, etRefillingStatusSpinner;
-    LinearLayout ExtinguiserLayout, FireDetectSystemLayout, FilledDateLayout;
+    LinearLayout ExtinguiserLayout, FireDetectSystemLayout, FilledDateLayout, ExtinguiserAllLayout;
     String strfiredetecttypeSpineer, strextinguisertypeSpineer, stretRefillingStatusSpinner, strFilledDate;
     TextView FilledDate, dateIcon;
     private long datemilisec;
@@ -95,7 +95,8 @@ public class FireSystemFragment extends MainFragment {
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(getContext(), "fonts/materialdesignicons-webfont.otf");
         dateIcon.setTypeface(materialdesignicons_font);
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
-        FilledDate=findViewById(R.id.FilledDate);
+        FilledDate = findViewById(R.id.FilledDate);
+        ExtinguiserAllLayout = findViewById(R.id.ExtinguiserAllLayout);
     }
 
     @Override
@@ -146,10 +147,12 @@ public class FireSystemFragment extends MainFragment {
                 if (selectedItem.equalsIgnoreCase("Available")) {
                     fillEmptyLayout.setVisibility(View.VISIBLE);
                     ExtinguiserLayout.setVisibility(View.VISIBLE);
+                    ExtinguiserAllLayout.setVisibility(View.VISIBLE);
 
                 } else {
                     fillEmptyLayout.setVisibility(View.GONE);
                     ExtinguiserLayout.setVisibility(View.GONE);
+                    ExtinguiserAllLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -301,19 +304,18 @@ public class FireSystemFragment extends MainFragment {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Detect System");
             return false;
         } else if (isEmptyStr(extinguiserSpineer)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Extinguiser ");
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Fire Extinguisher  ");
             return false;
-        } else if (isEmptyStr(make)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter  Make ");
+        } else if (isEmptyStr(make) && etextinguiserSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Extinguisher  Make ");
             return false;
-        } else if (isEmptyStr(capacity)) {
-            ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter capacity ");
+        } else if (isEmptyStr(capacity) && etextinguiserSpineer.getSelectedItem().toString().equalsIgnoreCase("Available")) {
+            ASTUIUtil.shownewErrorIndicator(getContext(), "Fire extinguisher filling capacity (Kg)");
             return false;
         } else if (isEmptyStr(stretRefillingStatusSpinner)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Refilling Status ");
             return false;
         }
-
 
         return true;
     }

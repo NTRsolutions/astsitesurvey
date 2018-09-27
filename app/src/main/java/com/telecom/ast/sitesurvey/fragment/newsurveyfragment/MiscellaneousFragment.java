@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import com.telecom.ast.sitesurvey.ApplicationHelper;
 import com.telecom.ast.sitesurvey.R;
 import com.telecom.ast.sitesurvey.component.ASTProgressBar;
 import com.telecom.ast.sitesurvey.component.FNEditText;
+import com.telecom.ast.sitesurvey.component.FNTextView;
 import com.telecom.ast.sitesurvey.constants.Constant;
 import com.telecom.ast.sitesurvey.constants.Contants;
 import com.telecom.ast.sitesurvey.filepicker.FNFilePicker;
@@ -68,19 +70,20 @@ public class MiscellaneousFragment extends MainFragment {
     private String strUserId, strSiteId, CurtomerSite_Id,
             signagestatus, cablelebelling, stretOtherIssues,
             fSRCopy, ShelterCovered, SheltLeakage,
-            AnyOtherItem, dFCNOPY, bBCabinet, mainDoor, shelter, police,
+            AnyOtherItem, dFCNOPY, bBCabinet, mainDoor, shelter, shelterlock, police,
             ambulane, Technician, VisitRegister, powerPlant, fire, stretWaterLogging, stretOwnerIssues, stretCriticalOwnerissue;
-
+    private FNTextView fSRCopyspinner;
 
     private Spinner typeBoundarywall, signagestatusSpinner, cablelebellingSpinner, etOtherIssuesSpinner,
-            fSRCopyspinner, ShelterCoveredSpinner, SheltLeakageSpinner,
-            etAnyOtherItemSpinner, dFCNOPYSpinner, bBCabinetSpinner, mainDoorSpineer, shelterSpinner, policeSpinner,
+            ShelterCoveredSpinner, SheltLeakageSpinner,
+            etAnyOtherItemSpinner, dgCNOPYSpinner, bBCabinetSpinner, mainDoorSpineer, shelterSpinner, shelterlockSpinner, policeSpinner,
             ambulaneSpinner, TechnicianSpinner, powerPlantSpinner, fireSpinner, etWaterLogging, etVisitRegister, etOwnerIssues, etCriticalOwnerissue;
 
     private Button btnSubmit;
     private SharedPreferences userPref;
     private Spinner dangerSpinner, cautionSpinner, warningSpinner;
     private String strdangerSpinner, strcautionSpinner, strwarningSpinner;
+    private LinearLayout fSRCopyspinnerLayout;
 
     @Override
     protected int fragmentLayout() {
@@ -109,10 +112,11 @@ public class MiscellaneousFragment extends MainFragment {
         ShelterCoveredSpinner = findViewById(R.id.ShelterCoveredSpinner);
         SheltLeakageSpinner = findViewById(R.id.SheltLeakageSpinner);
         etAnyOtherItemSpinner = findViewById(R.id.etAnyOtherItemSpinner);
-        dFCNOPYSpinner = findViewById(R.id.dFCNOPYSpinner);
+        dgCNOPYSpinner = findViewById(R.id.dFCNOPYSpinner);
         bBCabinetSpinner = findViewById(R.id.bBCabinetSpinner);
         mainDoorSpineer = findViewById(R.id.mainDoorSpineer);
         shelterSpinner = findViewById(R.id.shelterSpinner);
+        shelterlockSpinner = findViewById(R.id.shelterlockSpinner);
         policeSpinner = findViewById(R.id.policeSpinner);
         ambulaneSpinner = findViewById(R.id.ambulaneSpinner);
         TechnicianSpinner = findViewById(R.id.TechnicianSpinner);
@@ -125,6 +129,7 @@ public class MiscellaneousFragment extends MainFragment {
         dangerSpinner = findViewById(R.id.dangerSpinner);
         cautionSpinner = findViewById(R.id.cautionSpinner);
         warningSpinner = findViewById(R.id.warningSpinner);
+        fSRCopyspinnerLayout = findViewById(R.id.fSRCopyspinnerLayout);
     }
 
     @Override
@@ -137,6 +142,8 @@ public class MiscellaneousFragment extends MainFragment {
 //        typeBoundarywall.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         SiteHygieneImage.setOnClickListener(this);
+        fSRCopyspinner.setOnClickListener(this);
+        fSRCopyspinnerLayout.setOnClickListener(this);
     }
 
     @Override
@@ -213,7 +220,7 @@ public class MiscellaneousFragment extends MainFragment {
             }
         }
 
-        final String fSRCopyspinner_array[] = {"DG ", "AC", "PM Report"};
+    /*    final String fSRCopyspinner_array[] = {"DG ", "AC", "PM Report"};
         ArrayAdapter<String> fSRCopyspinner_arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, fSRCopyspinner_array);
         fSRCopyspinner.setAdapter(fSRCopyspinner_arrayAdapter);
         if (fSRCopy != null && !fSRCopy.equals("")) {
@@ -224,7 +231,7 @@ public class MiscellaneousFragment extends MainFragment {
                     fSRCopyspinner.setSelection(0);
                 }
             }
-        }
+        }*/
 
         final String ShelterCoveredSpinner_array[] = {"Natural Cool", "Turbo Cool", "AirCon Cool"};
         ArrayAdapter<String> ShelterCoveredSpinnerAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, ShelterCoveredSpinner_array);
@@ -264,15 +271,15 @@ public class MiscellaneousFragment extends MainFragment {
             }
         }
 
-        final String dFCNOPYSpinner_array[] = {"Available", "Not Available"};
+        final String dFCNOPYSpinner_array[] = {"Available", "Damage/Leakage ", "Not Available"};
         ArrayAdapter<String> dFCNOPYSpinneradapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, dFCNOPYSpinner_array);
-        dFCNOPYSpinner.setAdapter(dFCNOPYSpinneradapter);
+        dgCNOPYSpinner.setAdapter(dFCNOPYSpinneradapter);
         if (!isEmptyStr(dFCNOPY)) {
             for (int i = 0; i < dFCNOPYSpinner_array.length; i++) {
                 if (dFCNOPY.equalsIgnoreCase(dFCNOPYSpinner_array[i])) {
-                    dFCNOPYSpinner.setSelection(i);
+                    dgCNOPYSpinner.setSelection(i);
                 } else {
-                    dFCNOPYSpinner.setSelection(0);
+                    dgCNOPYSpinner.setSelection(0);
                 }
             }
         }
@@ -438,6 +445,8 @@ public class MiscellaneousFragment extends MainFragment {
                 saveBasicDataonServer();
 
             }
+        } else if (view.getId() == R.id.fSRCopyspinnerLayout || view.getId() == R.id.fSRCopyspinner) {
+            showSelectFaultyItemDialog();
         }
 
     }
@@ -455,14 +464,15 @@ public class MiscellaneousFragment extends MainFragment {
         signagestatus = signagestatusSpinner.getSelectedItem().toString();
         cablelebelling = cablelebellingSpinner.getSelectedItem().toString();
         stretOtherIssues = etOtherIssuesSpinner.getSelectedItem().toString();
-        fSRCopy = fSRCopyspinner.getSelectedItem().toString();
+        fSRCopy = getTextFromView(this.fSRCopyspinner);
         ShelterCovered = ShelterCoveredSpinner.getSelectedItem().toString();
         SheltLeakage = SheltLeakageSpinner.getSelectedItem().toString();
         AnyOtherItem = etAnyOtherItemSpinner.getSelectedItem().toString();
-        dFCNOPY = dFCNOPYSpinner.getSelectedItem().toString();
+        dFCNOPY = dgCNOPYSpinner.getSelectedItem().toString();
         bBCabinet = bBCabinetSpinner.getSelectedItem().toString();
         mainDoor = mainDoorSpineer.getSelectedItem().toString();
         shelter = shelterSpinner.getSelectedItem().toString();
+        shelterlock = shelterlockSpinner.getSelectedItem().toString();
         police = policeSpinner.getSelectedItem().toString();
         Technician = TechnicianSpinner.getSelectedItem().toString();
         ambulane = ambulaneSpinner.getSelectedItem().toString();
@@ -639,7 +649,7 @@ public class MiscellaneousFragment extends MainFragment {
             JSONObject MiscItemData8 = new JSONObject();
             MiscItemData8.put("Code", "1");
             MiscItemData8.put("Item", "Site Keys");
-            MiscItemData8.put("Key", "DF CNOPY");
+            MiscItemData8.put("Key", "DG CNOPY");
             MiscItemData8.put("Status", dFCNOPY);
             MiscItemData8.put("Type", "");
             MiscItemData8.put("Size", "0");
@@ -668,6 +678,16 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemData11.put("Status", shelter);
             MiscItemData11.put("Type", "");
             MiscItemData11.put("Size", "0");
+
+            JSONObject MiscItemData20 = new JSONObject();
+            MiscItemData20.put("Code", "1");
+            MiscItemData20.put("Item", "Site Keys");
+            MiscItemData20.put("Key", "Shelter Lock");
+            MiscItemData20.put("Status", shelterlock);
+            MiscItemData20.put("Type", "");
+            MiscItemData20.put("Size", "0");
+
+
 
 
             JSONObject MiscItemData12 = new JSONObject();
@@ -763,6 +783,7 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemDataarray.put(MiscItemData9);
             MiscItemDataarray.put(MiscItemData10);
             MiscItemDataarray.put(MiscItemData11);
+            MiscItemDataarray.put(MiscItemData20);
             MiscItemDataarray.put(MiscItemData12);
             MiscItemDataarray.put(MiscItemData13);
             MiscItemDataarray.put(MiscItemData14);
@@ -831,37 +852,37 @@ public class MiscellaneousFragment extends MainFragment {
             String imageName = CurtomerSite_Id + "_MiscItem_1_Shelter.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image1,imageName);
+                compresImage(file, imageName, image1, imageName);
             }
         } else if (ismage4) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_MainGateSize.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image4,imageName);
+                compresImage(file, imageName, image4, imageName);
             }
         } else if (ismage5) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_Plot.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image5,imageName);
+                compresImage(file, imageName, image5, imageName);
             }
         } else if (ismage6) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_ApproachRoad.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, image6,imageName);
+                compresImage(file, imageName, image6, imageName);
             }
         } else if (isDiagramImage) {
             String imageName = CurtomerSite_Id + "_MiscItem_1_LayoutDiagram.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, DiagramImage,imageName);
+                compresImage(file, imageName, DiagramImage, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_MiscItem_1_SiteHygiene.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, SiteHygieneImage,imageName);
+                compresImage(file, imageName, SiteHygieneImage, imageName);
             }
         }
 
@@ -870,7 +891,8 @@ public class MiscellaneousFragment extends MainFragment {
 
 
     //compres image
-    private void compresImage(final File file, final String fileName, final ImageView imageView, final String imageName) {
+    private void compresImage(final File file, final String fileName,
+                              final ImageView imageView, final String imageName) {
         new AsyncTask<Void, Void, Boolean>() {
             File imgFile;
             Uri uri;
@@ -888,7 +910,7 @@ public class MiscellaneousFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -973,6 +995,49 @@ public class MiscellaneousFragment extends MainFragment {
         });
         alertDialog.show();
         return isgoBack;
+    }
+
+
+    protected CharSequence[] fcrselectItem = {"DG ", "AC", "PM Report"};
+    protected ArrayList<CharSequence> selectedfaulityItem = new ArrayList<CharSequence>();
+
+    protected void showSelectFaultyItemDialog() {
+        boolean[] checkedItems = new boolean[fcrselectItem.length];
+        int count = fcrselectItem.length;
+        for (int i = 0; i < count; i++)
+            checkedItems[i] = selectedfaulityItem.contains(fcrselectItem[i]);
+        DialogInterface.OnMultiChoiceClickListener coloursDialogListener = new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked)
+                    selectedfaulityItem.add(fcrselectItem[which]);
+                else
+                    selectedfaulityItem.remove(fcrselectItem[which]);
+                onChangeSelectedItem();
+
+            }
+
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Select FSR Copy");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setMultiChoiceItems(fcrselectItem, checkedItems, coloursDialogListener);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    protected void onChangeSelectedItem() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (CharSequence selectitem : selectedfaulityItem)
+            stringBuilder.append(selectitem + ",");
+        fSRCopyspinner.setText(stringBuilder.toString());
+
     }
 
 }

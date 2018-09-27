@@ -12,6 +12,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,6 +43,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -51,13 +54,13 @@ import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 public class BTSFragment extends MainFragment {
     private LinearLayout mContainerView;
     private Button btnSubmit;
-    AppCompatEditText etNofCab;
-    AppCompatEditText etNoofDCDB, etNofKroneBox, etNoofRack;
-    Spinner btstyelSpinner, etbtsOperator, etMicrowave, etOperatorType;
-    String btsOperator, NoofDCDB, NofKroneBox, NoofRack, Microwave, NofCab, btsty, stretOperatorType;
-    String strUserId, strSiteId;
-    SharedPreferences userPref;
-    int SNo = 1;
+    private AppCompatEditText etNofCab;
+    private AppCompatEditText etNoofDCDB, etNofKroneBox, etNoofRack;
+    private Spinner btstyelSpinner, etbtsOperator, etMicrowave, etOperatorType;
+    private String btsOperator, NoofDCDB, NofKroneBox, NoofRack, Microwave, NofCab, btsty, stretOperatorType;
+    private String strUserId, strSiteId;
+    private SharedPreferences userPref;
+    private int SNo = 1;
 
     @Override
     protected int fragmentLayout() {
@@ -84,7 +87,7 @@ public class BTSFragment extends MainFragment {
 
     @Override
     protected void setAccessibility() {
-
+        etNofCab.setEnabled(false);
     }
 
 
@@ -97,7 +100,6 @@ public class BTSFragment extends MainFragment {
     @Override
     protected void dataToView() {
         getUserPref();
-
     }
 
 
@@ -225,4 +227,6 @@ public class BTSFragment extends MainFragment {
         alertDialog.show();
         return isgoBack;
     }
+
+
 }

@@ -69,8 +69,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.telecom.ast.sitesurvey.utils.ASTObjectUtil.isEmptyStr;
 
 public class MpptFragment extends MainFragment {
-    private static ImageView frontImg, openImg, sNoPlateImg;
-    private static boolean isImage1, isImage2;
+    private static ImageView frontImg, sNoPlateImg;
+    private static boolean isImage1, isImage3;
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner;
@@ -84,7 +84,7 @@ public class MpptFragment extends MainFragment {
     private TextView etYear, dateIcon;
     private LinearLayout dateLayout;
     private long datemilisec;
-    private static File frontimgFile, openImgFile, sNoPlateImgFile;
+    private static File frontimgFile, sNoPlateImgFile;
     private Typeface materialdesignicons_font;
     private SharedPreferences mpptSharedPrefpref, userPref;
     private String strEqupId = "0";
@@ -97,7 +97,7 @@ public class MpptFragment extends MainFragment {
     private String[] arrMake;
     private String[] arrCapacity;
     private boolean isFaulty;
-    private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
+    private CardView image1ImageCardview, image3ImageCardview;
     private TextView frontPhotolabl;
 
     @Override
@@ -108,7 +108,6 @@ public class MpptFragment extends MainFragment {
     @Override
     protected void loadView() {
         frontImg = findViewById(R.id.image1);
-        openImg = findViewById(R.id.image2);
         sNoPlateImg = findViewById(R.id.image3);
         etMake = findViewById(R.id.etMake);
         etModel = findViewById(R.id.etModel);
@@ -127,14 +126,12 @@ public class MpptFragment extends MainFragment {
         dateIcon.setText(Html.fromHtml("&#xf0ed;"));
         dateLayout = findViewById(R.id.dateLayout);
         image1ImageCardview = findViewById(R.id.image1ImageCardview);
-        image12ImageCardview = findViewById(R.id.image2ImageCardview);
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
     }
 
     @Override
     protected void setClickListeners() {
-        openImg.setOnClickListener(this);
         frontImg.setOnClickListener(this);
         sNoPlateImg.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
@@ -201,11 +198,9 @@ public class MpptFragment extends MainFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getSelectedItem().toString();
                 descriptionLayout.setVisibility(selectedItem.equalsIgnoreCase("Fully Fault") ? View.VISIBLE : View.GONE);
-
                 isFaulty = ASTObjectUtil.isEmptyStr(description) &&
                         itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")
                         || itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Not Ok");
-                image12ImageCardview.setVisibility(isFaulty ? View.INVISIBLE : View.VISIBLE);
                 image3ImageCardview.setVisibility(isFaulty ? View.GONE : View.VISIBLE);
                 frontPhotolabl.setText(isFaulty ? "Faulty Photo" : "Photo With Equipment Specification");
 
@@ -221,7 +216,6 @@ public class MpptFragment extends MainFragment {
                 String selectedItem = parent.getSelectedItem().toString();
                 if (selectedItem.equalsIgnoreCase("Not Available")) {
                     frontImg.setEnabled(false);
-                    openImg.setEnabled(false);
                     sNoPlateImg.setEnabled(false);
                     etMake.setEnabled(false);
                     etModel.setEnabled(false);
@@ -234,7 +228,6 @@ public class MpptFragment extends MainFragment {
                     etMPPTReading.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
-                    openImg.setEnabled(true);
                     sNoPlateImg.setEnabled(true);
                     etMake.setEnabled(true);
                     etModel.setEnabled(true);
@@ -287,20 +280,21 @@ public class MpptFragment extends MainFragment {
         if (view.getId() == R.id.dateLayout) {
             setDateofSiteonAir();
         } else if (view.getId() == R.id.image1) {
-            String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = CurtomerSite_Id + "_MPPT_1_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_MPPT_1_EquipmentSepcificationPhoto.jpg";
+            }
             FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = true;
-            isImage2 = false;
-        } else if (view.getId() == R.id.image2) {
-            String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
-            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
-            isImage1 = false;
-            isImage2 = true;
+            isImage3 = false;
         } else if (view.getId() == R.id.image3) {
-            String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
-            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
             isImage1 = false;
-            isImage2 = false;
+            isImage3 = true;
+            String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
+
+            FilePickerHelper.cameraIntent(getHostActivity(), imageName);
         } else if (view.getId() == R.id.btnSubmit) {
             if (isValidate()) {
                 saveBasicDataonServer();
@@ -334,10 +328,10 @@ public class MpptFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(capacity)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Capacity");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
+            }/* else if (ASTObjectUtil.isEmptyStr(yearOfManufacturing)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Manufacturing Date");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+            }*/ else if (ASTObjectUtil.isEmptyStr(description) && itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Description");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(MPPTReading)) {
@@ -350,12 +344,6 @@ public class MpptFragment extends MainFragment {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Photo With Equipment Specification");
                 }
                 return false;
-            } else if (!isFaulty) {
-                if (openImgFile == null || !openImgFile.exists()) {
-                    ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select System Open Photo");
-                    return false;
-                }
-
             } else if (!isFaulty) {
                 if (sNoPlateImgFile == null || !sNoPlateImgFile.exists()) {
                     ASTUIUtil.shownewErrorIndicator(getContext(), "Please Select Sr Number Plate Photo");
@@ -439,9 +427,6 @@ public class MpptFragment extends MainFragment {
         if (frontimgFile != null && frontimgFile.exists()) {
             multipartBody.addFormDataPart(frontimgFile.getName(), frontimgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, frontimgFile));
         }
-        if (openImgFile != null && openImgFile.exists()) {
-            multipartBody.addFormDataPart(openImgFile.getName(), openImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, openImgFile));
-        }
         if (sNoPlateImgFile != null && sNoPlateImgFile.exists()) {
             multipartBody.addFormDataPart(sNoPlateImgFile.getName(), sNoPlateImgFile.getName(), RequestBody.create(MEDIA_TYPE_PNG, sNoPlateImgFile));
         }
@@ -489,22 +474,21 @@ public class MpptFragment extends MainFragment {
     //capture image compress
     private void onCaptureImageResult() {
         if (isImage1) {
-            String imageName = CurtomerSite_Id + "_MPPT_1_Front.jpg";
-            File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
-            if (file.exists()) {
-                compresImage(file, imageName, frontImg,imageName);
+            String imageName;
+            if (itemConditionSpinner.getSelectedItem().toString().equalsIgnoreCase("Fully Fault")) {
+                imageName = imageName = CurtomerSite_Id + "_MPPT_1_FaultyPhoto.jpg";
+            } else {
+                imageName = CurtomerSite_Id + "_MPPT_1_EquipmentSepcificationPhoto.jpg";
             }
-        } else if (isImage2) {
-            String imageName = CurtomerSite_Id + "_MPPT_1_Open.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, openImg,imageName);
+                compresImage(file, imageName, frontImg, imageName);
             }
         } else {
             String imageName = CurtomerSite_Id + "_MPPT_1_SerialNoPlate.jpg";
             File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
             if (file.exists()) {
-                compresImage(file, imageName, sNoPlateImg,imageName);
+                compresImage(file, imageName, sNoPlateImg, imageName);
             }
         }
     }
@@ -529,7 +513,7 @@ public class MpptFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -561,9 +545,7 @@ public class MpptFragment extends MainFragment {
                 super.onPostExecute(flag);
                 if (isImage1) {
                     frontimgFile = imgFile;
-                } else if (isImage2) {
-                    openImgFile = imgFile;
-                } else {
+                } else if (isImage3) {
                     sNoPlateImgFile = imgFile;
                 }
                 imageView.setImageURI(uri);

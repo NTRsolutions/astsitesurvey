@@ -71,9 +71,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:hint="Number of Shelter"
-                                android:maxLength="1"
+                                android:hint="Shelter Size(In meter)"
                                 android:inputType="numberDecimal"
+                                android:maxLength="4"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -287,7 +287,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:hint="Enter Main Gate size"
+                                android:hint="Enter Main Gate size(In Feet)"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -394,7 +395,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
-                                android:hint="Enter Site Plot Size"
+                                android:hint="Enter Site Plot Size(In Feet)"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -501,6 +503,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
+                                android:inputType="numberDecimal"
                                 android:hint="Enter Approach Road  width"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
@@ -608,6 +611,7 @@
                                 android:layout_height="wrap_content"
                                 android:autoSizeTextType="uniform"
                                 android:hint="Enter Boundary Wall Height"
+                                android:inputType="numberDecimal"
                                 android:textSize="@dimen/_14dp" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -684,7 +688,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center_vertical"
-                            android:text="Df Cnopy"
+                            android:text="DG Canopy "
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_14dp" />
 
@@ -793,6 +797,36 @@
                             android:background="@color/text_color" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_4dp"
+                        android:minHeight="@dimen/_30dp"
+                        android:orientation="vertical">
+
+                        <com.telecom.ast.sitesurvey.component.FNTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:text="Shelter Lock "
+                            android:textColor="@color/blackMedium"
+                            android:textSize="@dimen/_14dp" />
+
+
+                        <Spinner
+                            android:id="@+id/shelterlockSpinner"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/shalterlockArray"
+                            android:popupBackground="@color/white" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1dp"
+                            android:layout_marginRight="@dimen/_10dp"
+                            android:background="@color/text_color" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1440,7 +1474,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_4dp"
+                        android:layout_margin="@dimen/_8dp"
                         android:minHeight="@dimen/_30dp"
                         android:orientation="vertical">
 
@@ -1453,12 +1487,28 @@
                             android:textColor="@color/blackMedium"
                             android:textSize="@dimen/_14dp" />
 
+                        <LinearLayout
+                            android:id="@+id/fSRCopyspinnerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/_8dp"
+                            android:layout_marginRight="@dimen/_8dp"
+                            android:orientation="horizontal">
 
-                        <Spinner
-                            android:id="@+id/fSRCopyspinner"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:popupBackground="@color/white" />
+                            <com.telecom.ast.sitesurvey.component.FNTextView
+                                android:id="@+id/fSRCopyspinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Please Selct FSR Copy" />
+
+                            <ImageView
+                                android:layout_width="@dimen/_8dp"
+                                android:layout_height="@dimen/_8dp"
+                                android:src="@drawable/icon" />
+
+                        </LinearLayout>
+
 
                         <View
                             android:layout_width="match_parent"
