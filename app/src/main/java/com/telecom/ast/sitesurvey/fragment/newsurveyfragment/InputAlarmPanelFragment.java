@@ -171,10 +171,11 @@ public class InputAlarmPanelFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
             }
         });
     }

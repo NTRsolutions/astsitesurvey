@@ -81,8 +81,11 @@ public class MiscellaneousFragment extends MainFragment {
 
     private Button btnSubmit;
     private SharedPreferences userPref;
-    private Spinner dangerSpinner, cautionSpinner, warningSpinner;
-    private String strdangerSpinner, strcautionSpinner, strwarningSpinner;
+    private Spinner dangerSpinner, cautionSpinner, warningSpinner, ShelterFloorSpinner, ShelterRoofSpinner, ShelterFoundationSpinner,
+            boundarywallStatusSpinner, levelRoadwrtSpinner;
+    private String strdangerSpinner, strcautionSpinner, strwarningSpinner, strShelterFloorSpinner, strShelterRoofSpinner,
+            strShelterFoundationSpinner,
+            strboundarywallStatusSpinner, strlevelRoadwrtSpinner;
     private LinearLayout fSRCopyspinnerLayout;
 
     @Override
@@ -130,6 +133,12 @@ public class MiscellaneousFragment extends MainFragment {
         cautionSpinner = findViewById(R.id.cautionSpinner);
         warningSpinner = findViewById(R.id.warningSpinner);
         fSRCopyspinnerLayout = findViewById(R.id.fSRCopyspinnerLayout);
+
+        ShelterFloorSpinner = findViewById(R.id.ShelterFloorSpinner);
+        ShelterRoofSpinner = findViewById(R.id.ShelterRoofSpinner);
+        ShelterFoundationSpinner = findViewById(R.id.ShelterFoundationSpinner);
+        boundarywallStatusSpinner = findViewById(R.id.boundarywallStatusSpinner);
+        levelRoadwrtSpinner = findViewById(R.id.levelRoadwrtSpinner);
     }
 
     @Override
@@ -339,7 +348,7 @@ public class MiscellaneousFragment extends MainFragment {
         }
 
 
-        final String shelterSpinner_array[] = {"Available", "Not Available"};
+        final String shelterSpinner_array[] = {"Door Working", "Not Working", "Broken"};
         ArrayAdapter<String> shelterSpinnerApater = new ArrayAdapter<String>(getContext(), R.layout.spinner_row, shelterSpinner_array);
         shelterSpinner.setAdapter(shelterSpinnerApater);
         if (!isEmptyStr(shelter)) {
@@ -485,6 +494,12 @@ public class MiscellaneousFragment extends MainFragment {
         strcautionSpinner = cautionSpinner.getSelectedItem().toString();
         strwarningSpinner = warningSpinner.getSelectedItem().toString();
 
+        strShelterFloorSpinner = ShelterFloorSpinner.getSelectedItem().toString();
+        strShelterRoofSpinner = ShelterRoofSpinner.getSelectedItem().toString();
+        strShelterFoundationSpinner = ShelterFoundationSpinner.getSelectedItem().toString();
+        strboundarywallStatusSpinner = boundarywallStatusSpinner.getSelectedItem().toString();
+        strlevelRoadwrtSpinner = levelRoadwrtSpinner.getSelectedItem().toString();
+
         if (isEmptyStr(shater1size)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Shelter  Size");
             return false;
@@ -585,6 +600,10 @@ public class MiscellaneousFragment extends MainFragment {
             jsonObject.put("ShelterLeakage", SheltLeakage);
             jsonObject.put("AnyOtherItem", AnyOtherItem);
             jsonObject.put("WaterLogging", stretWaterLogging);
+            jsonObject.put("ShelterFloor", strShelterFloorSpinner);
+            jsonObject.put("ShelterRoof", strShelterRoofSpinner);
+            jsonObject.put("ShelterFoundation", strShelterFoundationSpinner);
+            jsonObject.put("LevelRoadwrt", strlevelRoadwrtSpinner);
             // jsonObject.put("SiteHygiene", siteHygiene);
 
             JSONObject MiscItemData1 = new JSONObject();
@@ -642,9 +661,10 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemData7.put("Code", "1");
             MiscItemData7.put("Item", "Boundrywall");
             MiscItemData7.put("Key", "");
-            MiscItemData7.put("Status", "");
+            MiscItemData7.put("Status", strboundarywallStatusSpinner);
             MiscItemData7.put("Type", Boundarywall);
             MiscItemData7.put("Size", boundryheight);
+
 
             JSONObject MiscItemData8 = new JSONObject();
             MiscItemData8.put("Code", "1");
@@ -686,8 +706,6 @@ public class MiscellaneousFragment extends MainFragment {
             MiscItemData20.put("Status", shelterlock);
             MiscItemData20.put("Type", "");
             MiscItemData20.put("Size", "0");
-
-
 
 
             JSONObject MiscItemData12 = new JSONObject();

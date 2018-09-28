@@ -56,12 +56,11 @@ public class TowerFragment extends MainFragment {
     private Button btnSubmit;
     private LinearLayout descriptionLayout;
     private Spinner itemConditionSpinner, typeTowerSpinner,
-            laEarthingStatusSpinner, towerTighteningSpinner;
+            laEarthingStatusSpinner, towerTighteningSpinner,etnoMicrowaveAntenna, etnoGSMAntenna;
     private String strUserId, strSiteId, CurtomerSite_Id,
             strtowerTighteningSpinner;
     private SharedPreferences userPref;
-    private AppCompatEditText etHeight, etDescription,
-            etnoMicrowaveAntenna, etnoGSMAntenna, TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
+    private AppCompatEditText etHeight, etDescription, TowerPolenoteConnectedDesc, etTowerAngleMissingSize;
     private String type, height, date, itemcondion, descreption,
             workingCondi, noMicrowaveAntenna, noGSMAntenna, EarthingofTower, EarthingofTowerstatus, stretAnyTowerAngleMissing,
             laEarthingStatus;
@@ -164,10 +163,11 @@ public class TowerFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
             }
         });
     }
@@ -430,8 +430,8 @@ public class TowerFragment extends MainFragment {
         date = etYear.getText().toString();
         descreption = etDescription.getText().toString();
         workingCondi = etworkingCondi.getSelectedItem().toString();
-        noMicrowaveAntenna = etnoMicrowaveAntenna.getText().toString();
-        noGSMAntenna = etnoGSMAntenna.getText().toString();
+        noMicrowaveAntenna = etnoMicrowaveAntenna.getSelectedItem().toString();
+        noGSMAntenna = etnoGSMAntenna.getSelectedItem().toString();
         EarthingofTower = etEarthingofTower.getSelectedItem().toString();
         EarthingofTowerstatus = TowerPolenoteConnectedDesc.getText().toString();
         stretAnyTowerAngleMissing = etAnyTowerAngleMissing.getSelectedItem().toString();

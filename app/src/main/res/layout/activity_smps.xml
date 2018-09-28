@@ -809,6 +809,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/postibebusEarthing"
                 android:layout_width="@dimen/_150dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

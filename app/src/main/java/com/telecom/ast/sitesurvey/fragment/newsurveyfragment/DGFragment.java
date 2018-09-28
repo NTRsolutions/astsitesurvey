@@ -114,7 +114,7 @@ public class DGFragment extends MainFragment {
     private Typeface materialdesignicons_font;
     private SharedPreferences userPref;
     private SharedPreferences noofPhaseprf;
-    private String strEqupId;
+    private String strEqupId,strpowertapping,strdgfoundationSpinner;
     private String capcityId = "0";
     private String itemstatus, strebContacterSpinner, strcanopyDoorLockSpinner;
     private Spinner aMFPanelSpinner, automationConditionSpiiner, noofDGCylinderSpinner, alternaterPhaseSpinner,
@@ -125,6 +125,7 @@ public class DGFragment extends MainFragment {
     private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview,
             image4ImageCardview, image5ImageCardview, image6ImageCardview, image7ImageCardview, image8ImageCardview;
     private TextView frontPhotolabl;
+    private Spinner powertappingSpinner,dgfoundationSpinner;
 
 
     @Override
@@ -202,6 +203,8 @@ public class DGFragment extends MainFragment {
         image6ImageCardview = findViewById(R.id.image6ImageCardview);
         image7ImageCardview = findViewById(R.id.image7ImageCardview);
         image8ImageCardview = findViewById(R.id.image8ImageCardview);
+        powertappingSpinner = findViewById(R.id.powertappingSpinner);
+        dgfoundationSpinner = findViewById(R.id.dgfoundationSpinner);
     }
 
     @Override
@@ -357,10 +360,11 @@ public class DGFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
             }
         });
     }
@@ -478,6 +482,8 @@ public class DGFragment extends MainFragment {
                     etDGPollutionCertificate.setEnabled(false);
                     etDGBatterySrNo.setEnabled(false);
                     dGExhaustSmokecolour.setEnabled(false);
+                    powertappingSpinner.setEnabled(false);
+                    dgfoundationSpinner.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -521,6 +527,8 @@ public class DGFragment extends MainFragment {
                     etDGPollutionCertificate.setEnabled(true);
                     etDGBatterySrNo.setEnabled(true);
                     dGExhaustSmokecolour.setEnabled(true);
+                    powertappingSpinner.setEnabled(true);
+                    dgfoundationSpinner.setEnabled(true);
                 }
             }
 
@@ -681,7 +689,9 @@ public class DGFragment extends MainFragment {
             strdGExhaustSmokecolour = dGExhaustSmokecolour.getSelectedItem().toString();
             strebContacterSpinner = ebContacterSpinner.getSelectedItem().toString();
             strcanopyDoorLockSpinner = canopyDoorLockSpinner.getSelectedItem().toString();
+            strpowertapping = powertappingSpinner.getSelectedItem().toString();
             DGRunHourMer = getTextFromView(this.etDGRunHourMeter);
+            strdgfoundationSpinner= dgfoundationSpinner.getSelectedItem().toString();
             if (DGRunHourMer.equals("")) {
                 DGRunHourMer = "0";
             }
@@ -971,8 +981,10 @@ public class DGFragment extends MainFragment {
             EquipmentData.put("DG_Cylinder", strnoofDGCylinderSpinner);
             EquipmentData.put("DG_AlternaterPhase", stralternaterPhaseSpinner);
             EquipmentData.put("DG_ExhaustSmokeColour", strdGExhaustSmokecolour);
-            EquipmentData.put("DG_EBContactor ", strebContacterSpinner);
-            EquipmentData.put("DG_CanopyDoorLock ", strcanopyDoorLockSpinner);
+            EquipmentData.put("DG_EBContactor", strebContacterSpinner);
+            EquipmentData.put("DG_CanopyDoorLock", strcanopyDoorLockSpinner);
+            EquipmentData.put("DG_strpowertapping", strpowertapping);
+            EquipmentData.put("DG_strdgfoundationSpinner", strdgfoundationSpinner);
 
 
             JSONArray EquipmentDataa = new JSONArray();
