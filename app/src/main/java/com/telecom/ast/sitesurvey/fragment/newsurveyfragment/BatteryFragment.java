@@ -171,6 +171,8 @@ public class BatteryFragment extends MainFragment {
 
     }
 
+    DatePickerDialog datePickerDialog;
+
     public void setDateofSiteonAir() {
         String myFormat = "yyyy-MM-dd"; //In which you need put here
         final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -180,6 +182,7 @@ public class BatteryFragment extends MainFragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
+
                 // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
@@ -191,10 +194,12 @@ public class BatteryFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
+
             }
         });
     }
@@ -432,8 +437,11 @@ public class BatteryFragment extends MainFragment {
             } else if (ASTObjectUtil.isEmptyStr(NoofCell)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of Cell");
                 return false;
-            } else if (ASTObjectUtil.isEmptyStr(NoofWeakCells)) {
+            }/* else if (ASTObjectUtil.isEmptyStr(NoofWeakCells)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No Of Weak Cells");
+                return false;
+            }*/ else if (ASTObjectUtil.isNonEmptyStr(NoofWeakCells) && !isMatchWeakCellSno()) {
+                ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Weak Cell Sno");
                 return false;
             } else if (ASTObjectUtil.isEmptyStr(BackUpinHrs)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Back Up in Hrs");
@@ -470,7 +478,6 @@ public class BatteryFragment extends MainFragment {
                     return false;
                 }
             }
-
 
         } else {
             ASTUIUtil.showToast("Item Not Available");
@@ -843,6 +850,8 @@ public class BatteryFragment extends MainFragment {
         });
     }
 
+
+
     public void getBBCellSno() {
         StringBuilder nofoBBCellSnoBuilder = new StringBuilder();
         for (int i = 0; i < allBBCELLSnoEditTextList.size(); i++) {
@@ -864,6 +873,17 @@ public class BatteryFragment extends MainFragment {
         NoofWeakCellssNo = NoofWeakCellssNo.substring(0, NoofWeakCellssNo.length() - SEPARATORComma.length()); //Remove last comma
 
 
+    }
+
+
+    public boolean isMatchWeakCellSno() {
+        for (int i = 0; i < allBBWeakCELLSnoEditTextList.size(); i++) {
+            for (int j = 0; j < allBBCELLSnoEditTextList.size(); j++) {
+                return allBBWeakCELLSnoEditTextList.get(i).getText().toString().contains(allBBCELLSnoEditTextList.get(j).getText().toString());
+            }
+
+        }
+        return false;
     }
 
 }

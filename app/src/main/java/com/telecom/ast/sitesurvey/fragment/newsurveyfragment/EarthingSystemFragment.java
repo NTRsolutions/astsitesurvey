@@ -59,10 +59,12 @@ public class EarthingSystemFragment extends MainFragment {
     private LinearLayout igbConnectedLayout, egbConnectedLayout;
     private LinearLayout ValueofEarthpitLayout1, ValueofEarthpitLayout2, ValueofEarthpitLayout3, ValueofEarthpitLayout4;
     private AppCompatEditText etValueofEarthpit1, etValueofEarthpit2, etValueofEarthpit3, etValueofEarthpit4;
-    private String stretValueofEarthpit1="0", stretValueofEarthpit2, stretValueofEarthpit3, stretValueofEarthpit4, stretvalueInterGrid;
-    private LinearLayout EarthPitsImageLayout;
+    private String stretValueofEarthpit1 = "0", stretValueofEarthpit2, stretValueofEarthpit3, stretValueofEarthpit4, stretvalueInterGrid;
+    private LinearLayout EarthPitsImageLayout, accessiblLayout;
     private ImageView EarthPitsImage;
     private static File EarthPitsFile;
+    private Spinner earthingPitSpinner, accessiblemeasureSpinner;
+    private String strearthingPitSpinner, accessiblemeasurestr;
 
     @Override
     protected int fragmentLayout() {
@@ -95,6 +97,9 @@ public class EarthingSystemFragment extends MainFragment {
         etValueofEarthpit4 = this.findViewById(R.id.etValueofEarthpit4);
         EarthPitsImageLayout = this.findViewById(R.id.EarthPitsImageLayout);
         EarthPitsImage = this.findViewById(R.id.EarthPitsImage);
+        earthingPitSpinner = this.findViewById(R.id.earthingPitSpinner);
+        accessiblemeasureSpinner = this.findViewById(R.id.accessiblemeasureSpinner);
+        accessiblLayout = this.findViewById(R.id.accessiblLayout);
     }
 
     @Override
@@ -226,6 +231,42 @@ public class EarthingSystemFragment extends MainFragment {
                 }
             }
         });*/
+
+
+        earthingPitSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("Visible")) {
+                    accessiblLayout.setVisibility(View.VISIBLE);
+                } else {
+                    accessiblLayout.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        accessiblemeasureSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                if (selectedItem.equalsIgnoreCase("yes")) {
+                    ValueofEarthpitLayout1.setVisibility(View.VISIBLE);
+                    ValueofEarthpitLayout2.setVisibility(View.VISIBLE);
+                    ValueofEarthpitLayout3.setVisibility(View.VISIBLE);
+                    ValueofEarthpitLayout4.setVisibility(View.VISIBLE);
+                } else {
+                    ValueofEarthpitLayout1.setVisibility(View.GONE);
+                    ValueofEarthpitLayout2.setVisibility(View.GONE);
+                    ValueofEarthpitLayout3.setVisibility(View.GONE);
+                    ValueofEarthpitLayout4.setVisibility(View.GONE);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
 
@@ -272,17 +313,19 @@ public class EarthingSystemFragment extends MainFragment {
         strIGBconnectedStatusSpinner = IGBconnectedStatusSpinner.getSelectedItem().toString();
         stregbconnectedStatusSpinner = egbconnectedStatusSpinner.getSelectedItem().toString();
         stretvalueInterGrid = etvalueInterGrid.getText().toString();
-
         stretValueofEarthpit1 = etValueofEarthpit1.getText().toString();
         stretValueofEarthpit2 = etValueofEarthpit2.getText().toString();
         stretValueofEarthpit3 = etValueofEarthpit3.getText().toString();
         stretValueofEarthpit4 = etValueofEarthpit4.getText().toString();
 
+        strearthingPitSpinner = earthingPitSpinner.getSelectedItem().toString();
+        accessiblemeasurestr = accessiblemeasureSpinner.getSelectedItem().toString();
+
 
         if (isEmptyStr(NoEarthPits)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter No of EarthPits");
             return false;
-        }  else if (isEmptyStr(interConEarthPits)) {
+        } else if (isEmptyStr(interConEarthPits)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Inter Connectivity of EarthPits");
             return false;
         } else if (isEmptyStr(VoltageEarth)) {
@@ -291,27 +334,25 @@ public class EarthingSystemFragment extends MainFragment {
         } else if (!VoltageEarth.matches(twoDecimalRegExp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please enter valid  Voltage between Earth and Neutral input like this xx.xx");
             return false;
-        }
-        else if (isEmptyStr(dgwireconnected)) {
+        } else if (isEmptyStr(dgwireconnected)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "DG neutral wire connected with earthing");
             return false;
         } else if (isEmptyStr(ebwireconnected)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "EB neutral wire connected with earthing");
             return false;
-        }else if (!stretValueofEarthpit1.matches(twoDecimalRegExp)) {
+        } else if (!stretValueofEarthpit1.matches(twoDecimalRegExp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit1 input like this xx.xx");
             return false;
-        }else if (!stretValueofEarthpit2.matches(twoDecimalRegExp)) {
+        } else if (!stretValueofEarthpit2.matches(twoDecimalRegExp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit2 input like this xx.xx");
             return false;
-        }else if (!stretValueofEarthpit3.matches(twoDecimalRegExp)) {
+        } else if (!stretValueofEarthpit3.matches(twoDecimalRegExp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit3 input like this xx.xx");
             return false;
-        }else if (!stretValueofEarthpit4.matches(twoDecimalRegExp)) {
+        } else if (!stretValueofEarthpit4.matches(twoDecimalRegExp)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Valid Earthpit4 input like this xx.xx");
             return false;
-        }
-        else if (ASTObjectUtil.isEmptyStr(stretvalueInterGrid)) {
+        } else if (ASTObjectUtil.isEmptyStr(stretvalueInterGrid)) {
             ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Value Of Inter/ Grid (Ohm)");
             return false;
         }
@@ -352,6 +393,11 @@ public class EarthingSystemFragment extends MainFragment {
                 EarthingData.put("EarthPit3Value", stretValueofEarthpit3);
                 EarthingData.put("EarthPit4Value", stretValueofEarthpit4);
                 EarthingData.put("InterGridValue", stretvalueInterGrid);
+
+                EarthingData.put("strearthingPitSpinner", strearthingPitSpinner);
+                EarthingData.put("accessiblemeasurestr", accessiblemeasurestr);
+
+
                 jsonObject.put("EarthingData", EarthingData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -409,7 +455,7 @@ public class EarthingSystemFragment extends MainFragment {
         String imageName = CurtomerSite_Id + "_Earthing_1_InterGridofEarthPits.jpg";
         File file = new File(ASTUtil.getExternalStorageFilePathCreateAppDirectory(getContext()) + File.separator + imageName);
         if (file.exists()) {
-            compresImage(file, imageName, EarthPitsImage,imageName);
+            compresImage(file, imageName, EarthPitsImage, imageName);
         }
 
     }
@@ -434,7 +480,7 @@ public class EarthingSystemFragment extends MainFragment {
 //compress file
                 Boolean flag = false;
                 int ot = FilePickerHelper.getExifRotation(file);
-                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f,imageName);
+                Bitmap bitmap = FilePickerHelper.compressImage(file.getAbsolutePath(), ot, 800.0f, 800.0f, imageName);
                 if (bitmap != null) {
                     uri = FilePickerHelper.getImageUri(getContext(), bitmap);
 //save compresed file into location
@@ -475,6 +521,7 @@ public class EarthingSystemFragment extends MainFragment {
         }.execute();
 
     }
+
     @Override
     public boolean onBackPressed() {
         return isGoBack();

@@ -113,8 +113,9 @@ public class SmpsFragment extends MainFragment {
     private boolean isFaulty;
     private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview, image4ImageCardview, image5ImageCardview;
     private TextView frontPhotolabl;
-    Spinner etspdstatusSpinner;
-    String stretspdstatusSpinner;
+    private Spinner etspdstatusSpinner;
+    private String stretspdstatusSpinner;
+    private LinearLayout postibebusEarthing;
 
     @Override
     protected int fragmentLayout() {
@@ -161,6 +162,7 @@ public class SmpsFragment extends MainFragment {
         image5ImageCardview = findViewById(R.id.image5ImageCardview);
         image4 = findViewById(R.id.image4);
         image5 = findViewById(R.id.image5);
+        postibebusEarthing = findViewById(R.id.postibebusEarthing);
     }
 
     @Override
@@ -211,10 +213,11 @@ public class SmpsFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
             }
         });
     }
@@ -278,6 +281,26 @@ public class SmpsFragment extends MainFragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        etBodyEarthing.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                image4ImageCardview.setVisibility(selectedItem.equalsIgnoreCase("Yes") ? View.VISIBLE : View.INVISIBLE);
+
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        etPositiveEarthing.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getSelectedItem().toString();
+                postibebusEarthing.setVisibility(selectedItem.equalsIgnoreCase("Yes") ? View.VISIBLE : View.GONE);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
 

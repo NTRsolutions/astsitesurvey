@@ -116,8 +116,8 @@ public class EBMeterFragment extends MainFragment {
     private CardView image1ImageCardview, image12ImageCardview, image3ImageCardview;
     private TextView frontPhotolabl;
     AppCompatEditText ebMeterreadingkvah, ebMeterreadingkwh;
-    String strebMeterreadingkvah = "0", strebMeterreadingkwh = "",stretCableCoreSpinner;
-    Spinner etCableCoreSpinner;
+    String strebMeterreadingkvah = "0", strebMeterreadingkwh = "",stretCableCoreSpinner,ebmeeterSealstr,ebpowertappingstr;
+    Spinner etCableCoreSpinner,ebmeeterSealSpinner,ebpowertappingSpinner;
 
     @Override
     protected int fragmentLayout() {
@@ -163,6 +163,9 @@ public class EBMeterFragment extends MainFragment {
         image3ImageCardview = findViewById(R.id.image3ImageCardview);
         frontPhotolabl = findViewById(R.id.frontPhotolabl);
         etCableCoreSpinner= findViewById(R.id.etCableCoreSpinner);
+        ebmeeterSealSpinner=findViewById(R.id.ebmeeterSealSpinner);
+        ebpowertappingSpinner=findViewById(R.id.ebpowertappingSpinner);
+
     }
 
     @Override
@@ -311,6 +314,8 @@ public class EBMeterFragment extends MainFragment {
                     etMeterSerialNo.setEnabled(false);
                     etCableRatingPIU.setEnabled(false);
                     etCableCoreSpinner.setEnabled(false);
+                    ebmeeterSealSpinner.setEnabled(false);
+                    ebpowertappingSpinner.setEnabled(false);
                 } else {
                     frontImg.setEnabled(true);
                     openImg.setEnabled(true);
@@ -338,6 +343,9 @@ public class EBMeterFragment extends MainFragment {
                     etMeterSerialNo.setEnabled(true);
                     etCableRatingPIU.setEnabled(true);
                     etCableCoreSpinner.setEnabled(true);
+                    ebmeeterSealSpinner.setEnabled(true);
+                    ebpowertappingSpinner.setEnabled(true);
+
                 }
             }
 
@@ -402,10 +410,11 @@ public class EBMeterFragment extends MainFragment {
         dateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), date, myCalendar
+                DatePickerDialog dpDialog = new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dpDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                dpDialog.show();
             }
         });
     }
@@ -440,6 +449,8 @@ public class EBMeterFragment extends MainFragment {
             stretMeterSerialNo = etMeterSerialNo.getText().toString();
             stretCableRatingPIU = etCableRatingPIU.getText().toString();
             stretCableCoreSpinner=etCableCoreSpinner.getSelectedItem().toString();
+            ebmeeterSealstr= ebmeeterSealSpinner.getSelectedItem().toString();
+            ebpowertappingstr= ebpowertappingSpinner.getSelectedItem().toString();
 
             if (isEmptyStr(make)) {
                 ASTUIUtil.shownewErrorIndicator(getContext(), "Please Enter Make");
@@ -566,6 +577,10 @@ public class EBMeterFragment extends MainFragment {
                 EquipmentData.put("EB_MeterReading_KVAH", strebMeterreadingkvah);
                 EquipmentData.put("EB_MeterReading_KWH", strebMeterreadingkwh);
                 EquipmentData.put("EB_CableCore", stretCableCoreSpinner);
+                EquipmentData.put("EB_MeeterSeal", ebmeeterSealstr);
+                EquipmentData.put("EB_ebpowertappingstr", ebpowertappingstr);
+
+
 
 
                 JSONArray EquipmentDataa = new JSONArray();
